@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('frontend.login');
 });
+
+
+Route::group(array('prefix' => 'front'), function() {
+
+    Route::get('/dashboard', function () {
+        return view('frontend.dashboard');
+    });
+});
+

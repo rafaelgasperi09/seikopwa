@@ -31,7 +31,7 @@
 
         <div class="login-form mt-1">
             <div class="section">
-                <img src="{{ url('front/assets/img/sample/photo/vector4.png') }}" alt="image" class="form-image">
+                <img src="{{ url('images/AppImages/android/icon-144x144.png') }}" alt="image" class="form-image">
             </div>
             <div class="section mt-1">
                 <h1>Get started</h1>
@@ -60,6 +60,7 @@
 
                     <div class="form-button-group">
                         <button type="submit" class="btn btn-primary btn-block btn-lg">Log in</button>
+                        <a href="{{ url('front/dashboard') }}" class="btn btn-primary btn-block btn-lg">Ver Dashboard</a>
                     </div>
 
                 </form>
@@ -71,7 +72,7 @@
     <!-- * App Capsule -->
 
 
-
+    <script src="{{ url('serviceworker.js') }}"></script>
     <!-- ///////////// Js Files ////////////////////  -->
     <!-- Jquery -->
     <script src="{{ url('front/assets/js/lib/jquery-3.4.1.min.js') }}"></script>
