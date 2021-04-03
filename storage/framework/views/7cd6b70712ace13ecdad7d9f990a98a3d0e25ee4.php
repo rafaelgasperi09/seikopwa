@@ -1,5 +1,5 @@
-@extends('frontend.main-layout')
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 <div class="header-large-title">
     <h1 class="title">Dashboard</h1>
     <h4 class="subtitle">Bienvenido a GMPCheck</h4>
@@ -112,4 +112,6 @@
         </div>
     </div>
 </div>
-@stop
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('frontend.main-layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /www/wwwroot/appgmp.entorno-virtual.com/resources/views/frontend/dashboard.blade.php ENDPATH**/ ?>

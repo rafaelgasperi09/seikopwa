@@ -12,8 +12,8 @@
                     <div class="in">
                         <strong>Julian Gruber</strong>
                         <div class="text-muted">
-                            <ion-icon name="business"></ion-icon>
-                            Empresa
+                            <ion-icon name="location"></ion-icon>
+                            California
                         </div>
                     </div>
                     <a href="javascript:;" class="close-sidebar-button" data-dismiss="modal">
@@ -24,22 +24,22 @@
 
                 <ul class="listview flush transparent no-line image-listview mt-2">
                     <li>
-                        <a href="{{ url('dashboard') }}" class="item">
+                        <a href="index.html" class="item">
                             <div class="icon-box bg-primary">
                                 <ion-icon name="home-outline"></ion-icon>
                             </div>
                             <div class="in">
-                                Dashboard
+                                Discover
                             </div>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('equipos') }}" class="item">
+                        <a href="app-components.html" class="item">
                             <div class="icon-box bg-primary">
-                                <ion-icon name="train-outline"></ion-icon>
+                                <ion-icon name="cube-outline"></ion-icon>
                             </div>
                             <div class="in">
-                                Equipos
+                                Components
                             </div>
                         </a>
                     </li>
@@ -49,17 +49,18 @@
                                 <ion-icon name="layers-outline"></ion-icon>
                             </div>
                             <div class="in">
-                                <div>Historial</div>
+                                <div>Pages</div>
                             </div>
                         </a>
                     </li>
                     <li>
                         <a href="page-chat.html" class="item">
                             <div class="icon-box bg-primary">
-                                <ion-icon name="alert-circle-outline"></ion-icon>
+                                <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
                             </div>
                             <div class="in">
-                                <div>Reporte de falla</div>
+                                <div>Chat</div>
+                                <span class="badge badge-danger">5</span>
                             </div>
                         </a>
                     </li>
@@ -149,3 +150,4 @@
     </div>
 </div>
 <!-- * App Sidebar -->
+<?php /**PATH C:\Server\www\seikopwa\resources\views/frontend/partials/sidebar.blade.php ENDPATH**/ ?>

@@ -11,10 +11,10 @@
     <title>GMP Check</title>
     <meta name="description" content="Mobilekit HTML Mobile UI Kit">
     <meta name="keywords" content="bootstrap 4, mobile template, cordova, phonegap, mobile, html" />
-    <link rel="icon" type="image/png" href="{{ url('assets/img/favicon.png') }}" sizes="32x32">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url('assets/img/icon/192x192.png') }}">
-    <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
-    <link rel="manifest" href="{{ url('front/__manifest.json') }}">
+    <link rel="icon" type="image/png" href="<?php echo e(url('assets/img/favicon.png')); ?>" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo e(url('assets/img/icon/192x192.png')); ?>">
+    <link rel="stylesheet" href="<?php echo e(url('assets/css/style.css')); ?>">
+    <link rel="manifest" href="<?php echo e(url('front/__manifest.json')); ?>">
 </head>
 
 <body>
@@ -41,3 +41,4 @@
     </div>
 </div>
 <!-- * App Header -->
+<?php /**PATH /www/wwwroot/appgmp.entorno-virtual.com/resources/views/frontend/partials/header.blade.php ENDPATH**/ ?>

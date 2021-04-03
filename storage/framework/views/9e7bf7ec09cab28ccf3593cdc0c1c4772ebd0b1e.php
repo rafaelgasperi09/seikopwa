@@ -86,21 +86,21 @@
 <!-- * welcome notification -->
 
 <!-- ///////////// Js Files ////////////////////  -->
-<script src="{{ url('serviceworker.js') }}"></script>
+<script src="<?php echo e(url('serviceworker.js')); ?>"></script>
 <!-- ///////////// Js Files ////////////////////  -->
 <!-- Jquery -->
-<script src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
+<script src="<?php echo e(url('assets/js/lib/jquery-3.4.1.min.js')); ?>"></script>
 <!-- Bootstrap-->
-<script src="{{ url('assets/js/lib/popper.min.js') }}"></script>
-<script src="{{ url('assets/js/lib/bootstrap.min.js') }}"></script>
+<script src="<?php echo e(url('assets/js/lib/popper.min.js')); ?>"></script>
+<script src="<?php echo e(url('assets/js/lib/bootstrap.min.js')); ?>"></script>
 <!-- Ionicons -->
 <script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"></script>
 <!-- Owl Carousel -->
-<script src="{{ url('assets/js/plugins/owl-carousel/owl.carousel.min.js') }}"></script>
+<script src="<?php echo e(url('assets/js/plugins/owl-carousel/owl.carousel.min.js')); ?>"></script>
 <!-- jQuery Circle Progress -->
-<script src="{{ url('assets/js/plugins/jquery-circle-progress/circle-progress.min.js') }}"></script>
+<script src="<?php echo e(url('assets/js/plugins/jquery-circle-progress/circle-progress.min.js')); ?>"></script>
 <!-- Base Js File -->
-<script src="{{ url('assets/js/base.js') }}"></script>
+<script src="<?php echo e(url('assets/js/base.js')); ?>"></script>
 
 
 <script>
@@ -114,3 +114,4 @@
 </body>
 
 </html>
+<?php /**PATH /www/wwwroot/appgmp.entorno-virtual.com/resources/views/frontend/partials/footer.blade.php ENDPATH**/ ?>
