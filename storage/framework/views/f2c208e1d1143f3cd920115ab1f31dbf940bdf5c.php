@@ -14,7 +14,6 @@
 
 <div class="header-large-title">
     <h1 class="title">Equipos</h1>
-    <h4 class="subtitle">Listado asignado</h4>
 </div>
 <div class="wide-block pt-2 pb-2">
     <form class="search-form">
@@ -26,29 +25,22 @@
         </div>
     </form>
 </div>
+
+
 <div class="section full mt mb">
         <ul class="listview image-listview media mb-2">
-            <?php $__currentLoopData = array(1,2,3,4,5,6,7); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-             <li class="multi-level">
-                 <a href="#" class="item">
-                     <div class="imageWrapper">
-                         <img src="assets/img/sample/photo/1.jpg" alt="image" class="imaged w64">
-                     </div>
-                     <div class="in">
-                         <div>Simple List</div>
-                     </div>
-                 </a>
-                 <!-- sub menu -->
-                 <ul class="listview simple-listview">
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                </ul>
-                <!-- * sub menu -->
-             </li>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
- 
+            <?php $__currentLoopData = $tipos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <li>
+                <a href="#" class="item">
+                    <img src="assets/img/mc.png" alt="image" class="image">
+                    <div class="in">
+                        <div><?php echo e($i->display_name); ?></div>
+                       
+                    </div>
+                </a>
+            </li>            
 
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
          </ul> 
 </div>
 <?php $__env->stopSection(); ?>

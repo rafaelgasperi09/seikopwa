@@ -23,8 +23,6 @@ Route::get('/', function () {
     Route::get('/dashboard', function () {
         return view('frontend.dashboard');
     });
-    Route::get('/equipos', function () {
-        return view('frontend.equipos');
-    });    
-
+    Route::get('/equipos', array('as' => 'equipos.index', 'uses' => 'EquiposController@index'));
+    Route::get('/equipos/tipo/{$id}', array('as' => 'equipos.index', 'uses' => 'EquiposController@index'));
 
