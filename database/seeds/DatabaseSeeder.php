@@ -11,6 +11,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+        \Illuminate\Support\Facades\DB::transaction(function (){
+            $this->command->info('Creando Roles...');
+            $this->call(CreateRolesSeed::class);
+            $this->command->info('Creando Administrador...');
+            $this->call(CreateAdminUserSeed::class);
+            $this->command->info('Creando Usuarios...');
+
+        });
     }
 }

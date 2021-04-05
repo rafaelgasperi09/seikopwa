@@ -15,6 +15,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url('assets/img/icon/192x192.png') }}">
     <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
     <link rel="manifest" href="{{ url('front/__manifest.json') }}">
+    @laravelPWA
 </head>
 
 <body>

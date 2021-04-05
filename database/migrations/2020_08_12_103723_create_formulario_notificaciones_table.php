@@ -13,12 +13,12 @@ class CreateFormularioNotificacionesTable extends Migration
      */
     public function up()
     {
-        Schema::create('app_formulario_notificaciones', function (Blueprint $table) {
+        Schema::create('formulario_notificaciones', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('formulario_id')->unsigned()->nullable()->index();
-            $table->foreign('formulario_id')->references('id')->on('app_formularios')->onDelete('cascade');
+            $table->foreign('formulario_id')->references('id')->on('formularios')->onDelete('cascade');
             $table->integer('user_id')->unsigned()->nullable()->index();
-            $table->foreign('user_id')->references('id')->on('app_users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -31,6 +31,6 @@ class CreateFormularioNotificacionesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('app_formulario_notificaciones');
+        Schema::dropIfExists('formulario_notificaciones');
     }
 }

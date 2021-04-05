@@ -13,16 +13,31 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::get('/welcome', function () {
+    return view('welcome');
+});
+
 Route::get('/', function () {
     return view('frontend.login');
 });
 
+Route::get('/dashboard', function () {
+    return view('frontend.dashboard');
+});
 
 
+Route::post('login', array('as' => 'login','uses' => 'LoginController@login'));
 
-    Route::get('/dashboard', function () {
-        return view('frontend.dashboard');
+Route::group(array('middleware' => 'sentinel.auth'), function() {
+
+    Route::group(array('prefix' => 'equipos'), function() {
+
+        Route::get('/', array('as' => 'equipos.index', 'uses' => 'EquiposController@tipos'));
+        Route::get('/tipo/{id}', array('as' => 'equipos.index', 'uses' => 'EquiposController@index'));
+
     });
-    Route::get('/equipos', array('as' => 'equipos.index', 'uses' => 'EquiposController@tipos'));
-    Route::get('/equipos/tipo/{id}', array('as' => 'equipos.index', 'uses' => 'EquiposController@index'));
+
+});
+
+
 

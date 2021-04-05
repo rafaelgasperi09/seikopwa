@@ -13,10 +13,10 @@ class CreateFormularioSeccionesTable extends Migration
      */
     public function up()
     {
-        Schema::create('app_formulario_secciones', function (Blueprint $table) {
+        Schema::create('formulario_secciones', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('formulario_id')->unsigned()->index();
-            $table->foreign('formulario_id')->references('id')->on('app_formularios')->onDelete('cascade');
+            $table->foreign('formulario_id')->references('id')->on('formularios')->onDelete('cascade');
             $table->text('titulo');
             $table->text('clase')->nullable();
             $table->text('descripcion')->nullable();
@@ -33,6 +33,6 @@ class CreateFormularioSeccionesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('app_formulario_secciones');
+        Schema::dropIfExists('formulario_secciones');
     }
 }

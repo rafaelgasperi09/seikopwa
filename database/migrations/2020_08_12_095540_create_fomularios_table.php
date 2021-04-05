@@ -13,7 +13,7 @@ class CreateFomulariosTable extends Migration
      */
     public function up()
     {
-        Schema::create('app_formularios', function (Blueprint $table) {
+        Schema::create('formularios', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',100);
             $table->string('nombre_menu',20);
@@ -21,7 +21,7 @@ class CreateFomulariosTable extends Migration
             $table->text('subtitulo')->nullable();
             $table->text('descripcion')->nullable();
             $table->integer('creado_por')->unsigned()->nullable()->index();
-            $table->foreign('creado_por')->references('id')->on('app_users')->onDelete('cascade');
+            $table->foreign('creado_por')->references('id')->on('users')->onDelete('cascade');
             $table->string('clase')->nullable();
             $table->string('tamano')->nullable();
             $table->softDeletes();
@@ -36,6 +36,6 @@ class CreateFomulariosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('app_formularios');
+        Schema::dropIfExists('formularios');
     }
 }

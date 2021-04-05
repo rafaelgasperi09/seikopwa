@@ -13,12 +13,12 @@ class CreateFomularioRegistroTable extends Migration
      */
     public function up()
     {
-        Schema::create('app_formulario_registro', function (Blueprint $table) {
+        Schema::create('formulario_registro', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('creado_por')->unsigned()->nullable()->index();
-            $table->foreign('creado_por')->references('id')->on('app_users')->onDelete('cascade');
+            $table->foreign('creado_por')->references('id')->on('users')->onDelete('cascade');
             $table->integer('formulario_id')->unsigned()->index();
-            $table->foreign('formulario_id')->references('id')->on('app_formularios')->onDelete('cascade');
+            $table->foreign('formulario_id')->references('id')->on('formularios')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -31,6 +31,6 @@ class CreateFomularioRegistroTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('app_formulario_registro');
+        Schema::dropIfExists('formulario_registro');
     }
 }

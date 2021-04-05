@@ -13,12 +13,12 @@ class CreateFomularioCamposTable extends Migration
      */
     public function up()
     {
-        Schema::create('app_formulario_campos', function (Blueprint $table) {
+        Schema::create('formulario_campos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('formulario_id')->unsigned()->index();
-            $table->foreign('formulario_id')->references('id')->on('app_formularios')->onDelete('cascade');
+            $table->foreign('formulario_id')->references('id')->on('formularios')->onDelete('cascade');
             $table->integer('formulario_seccion_id')->unsigned()->nullable()->index();
-            $table->foreign('formulario_seccion_id')->references('id')->on('app_formulario_secciones')->onDelete('cascade');
+            $table->foreign('formulario_seccion_id')->references('id')->on('formulario_secciones')->onDelete('cascade');
             $table->string('nombre',50);
             $table->string('etiqueta');
             $table->enum('tipo',['text','select','textarea','date','radio','checkbox','database','file','time','number','combo','api','firma']);
@@ -45,6 +45,6 @@ class CreateFomularioCamposTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('app_formulario_campos');
+        Schema::dropIfExists('formulario_campos');
     }
 }
