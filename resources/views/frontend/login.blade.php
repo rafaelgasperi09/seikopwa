@@ -16,62 +16,53 @@
     <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
     <link rel="manifest" href="{{ url('front/__manifest.json') }}">
 </head>
-
 <body class="bg-white">
-
     <!-- loader -->
     <div id="loader">
         <div class="spinner-border text-primary" role="status"></div>
     </div>
     <!-- * loader -->
-
-
     <!-- App Capsule -->
     <div id="appCapsule" class="pt-0">
-
         <div class="login-form mt-1">
             <div class="section">
                 <img src="{{ url('images/AppImages/android/icon-144x144.png?t=123') }}" alt="image" class="form-image">
             </div>
+
             <div class="section mt-1">
                 <h1>Check</h1>
                 <h4>Coloque sus datos para ingresar</h4>
             </div>
             <div class="section mt-1 mb-5">
-                <form action="app-pages.html">
+                {{Form::open(array("method" => "POST","action" => "LoginController@login","role" => "form",'class'=>'form-horizontal'))}}
                     <div class="form-group boxed">
                         <div class="input-wrapper">
-                            <input type="email" class="form-control" id="email1" placeholder="Email">
+                            {{ Form::email('login',null,array('class'=>'form-control','id'=>'email1','placeholder'=>'Correo Electronico')) }}
+
                             <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </i>
                         </div>
                     </div>
-
                     <div class="form-group boxed">
                         <div class="input-wrapper">
-                            <input type="password" class="form-control" id="password1" placeholder="Password">
+                            <input type="password" class="form-control" name="password" id="password1" placeholder="Contraseña">
                             <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </i>
                         </div>
                     </div>
-
-
+                    @include('frontend.partials.message')
                     <div class="form-button-group">
-                        <button type="submit" class="btn btn-primary btn-block btn-lg">Log in</button><br/>
-                        <a href="{{ url('dashboard') }}" class="btn btn-primary btn-block btn-lg">Ver Dashboard</a>
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">Ingresar</button><br/>
                     </div>
-
-                </form>
+                {{ Form::close() }}
             </div>
         </div>
 
 
     </div>
     <!-- * App Capsule -->
-
-
     <script src="{{ url('serviceworker.js') }}"></script>
     <!-- ///////////// Js Files ////////////////////  -->
     <!-- Jquery -->

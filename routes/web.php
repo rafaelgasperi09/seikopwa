@@ -13,22 +13,21 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/welcome', function () {
-    return view('welcome');
-});
-
 Route::get('/', function () {
     return view('frontend.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('frontend.dashboard');
-});
 
 
 Route::post('login', array('as' => 'login','uses' => 'LoginController@login'));
 
 Route::group(array('middleware' => 'sentinel.auth'), function() {
+
+    Route::get('/dashboard', function () {
+
+    });
+
+    Route::get('/dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
 
     Route::group(array('prefix' => 'equipos'), function() {
 
