@@ -25,22 +25,96 @@
         </div>
     </form>
 </div>
-
-
+@if(isset($subEquipos))
+    <div class="extraHeader">
+            <ul class="nav nav-tabs style1" role="tablist">
+            @php
+                $selected="true";$active="active";
+            @endphp
+            @foreach($subEquipos as $s)
+                <li class="nav-item ">
+                    <a class="nav-link {{$active}}" data-toggle="tab" href="#{{$s->name}}" role="tab" aria-selected="{{ $selected}}">
+                        {{$s->display_name}}
+                    </a>
+                </li>
+                @php
+                    $selected="false";$active="";
+                @endphp
+            @endforeach
+            </ul>
+    </div>
+    @foreach($subEquipos as $s)
+    <div class="tab-pane fade show active" id="{{$s->name}}" role="tabpanel">
+        <div class="section full mt-1">
+            
+        </div>
+    </div>
+    @endforeach
+@endif
 <div class="section full mt mb">
         <ul class="listview image-listview media mb-2">
-            @foreach($tipos as $i)
-            <li>
-                <a href="#" class="item">
-                    <img src="assets/img/mc.png" alt="image" class="image">
-                    <div class="in">
-                        <div>{{$i->display_name}}</div>
-                       
-                    </div>
-                </a>
-            </li>            
-
-            @endforeach
+            @if(isset($tipos))
+                @foreach($tipos as $t)
+                <li>
+                    <a href="{{route('equipos.index',$t->id)}}" class="item">
+                        <img src="{{url('assets/img/mc.svg')}}" alt="image" class="image">
+                        <div class="in">
+                            <div>{{$t->display_name}}</div>
+                        
+                        </div>
+                    </a>
+                </li>            
+                @endforeach
+            @elseif(isset($equipos))
+                @foreach($equipos as $e)
+                    <li class="multi-level">
+                        <a href="#" class="item">
+                            <div class="imageWrapper">
+                                <img src="{{url('assets/img/mc2.png')}}" alt="image" class="imaged w64">
+                            </div>
+                            <div class="in">
+                                <div>{{$e->numero_parte}}</div>
+                            </div>
+                        </a>
+                        <!-- sub menu -->
+                        <ul class="listview image-listview" style="display: none;">
+                            <li>
+                                <a href="#" class="item">
+                                    <div class="icon-box bg-primary">
+                                        <ion-icon name="create-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        Photos
+                                        <span class="badge badge-danger">10</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="item">
+                                    <div class="icon-box bg-secondary">
+                                        <ion-icon name="videocam-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        <div>Videos</div>
+                                        <span class="text-muted">None</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="item">
+                                    <div class="icon-box bg-danger">
+                                        <ion-icon name="musical-notes-outline" role="img" class="md hydrated" aria-label="musical notes outline"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        <div>Music</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- * sub menu -->
+                    </li>                   
+                @endforeach
+            @endif
          </ul> 
 </div>
 @stop

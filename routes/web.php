@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,6 +23,6 @@ Route::get('/', function () {
     Route::get('/dashboard', function () {
         return view('frontend.dashboard');
     });
-    Route::get('/equipos', array('as' => 'equipos.index', 'uses' => 'EquiposController@index'));
-    Route::get('/equipos/tipo/{$id}', array('as' => 'equipos.index', 'uses' => 'EquiposController@index'));
+    Route::get('/equipos', array('as' => 'equipos.index', 'uses' => 'EquiposController@tipos'));
+    Route::get('/equipos/tipo/{id}', array('as' => 'equipos.index', 'uses' => 'EquiposController@index'));
 
