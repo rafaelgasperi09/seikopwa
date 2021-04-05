@@ -13,39 +13,39 @@ return [
         'status_bar'=> 'black',
         'icons' => [
             '48x48' => [
-                'path' => '/images/AppImages/icon-48x48.png',
+                'path' => '/images/AppImages/android/icon-48x48.png',
                 'purpose' => 'any'
             ],
             '72x72' => [
-                'path' => '/images/AppImages/icon-72x72.png',
+                'path' => '/images/AppImages/android/icon-72x72.png',
                 'purpose' => 'any'
             ],
             '96x96' => [
-                'path' => '/images/AppImages/icon-96x96.png',
+                'path' => '/images/AppImages/android/icon-96x96.png',
                 'purpose' => 'any'
             ],
             '128x128' => [
-                'path' => '/images/AppImages/icon-128x128.png',
+                'path' => '/images/AppImages/android/icon-128x128.png',
                 'purpose' => 'any'
             ],
             '144x144' => [
-                'path' => '/images/AppImages/icon-144x144.png',
+                'path' => '/images/AppImages/android/icon-144x144.png',
                 'purpose' => 'any'
-            ],
+            ],/*
             '152x152' => [
                 'path' => '/images/AppImages/icon-152x152.png',
                 'purpose' => 'any'
-            ],
+            ],*/
             '192x192' => [
-                'path' => '/images/AppImages/icon-192x192.png',
+                'path' => '/images/AppImages/android/icon-192x192.png',
                 'purpose' => 'any'
             ],
-            '384x384' => [
+            /*'384x384' => [
                 'path' => '/images/AppImages/icon-384x384.png',
                 'purpose' => 'any'
-            ],
+            ],*/
             '512x512' => [
-                'path' => '/images/AppImages/icon-512x512.png',
+                'path' => '/images/AppImages/android/icon-512x512.png',
                 'purpose' => 'any'
             ],
         ],

@@ -23,17 +23,15 @@ Route::post('login', array('as' => 'login','uses' => 'LoginController@login'));
 
 Route::group(array('middleware' => 'sentinel.auth'), function() {
 
-    Route::get('/dashboard', function () {
-
-    });
-
     Route::get('/dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
 
     Route::group(array('prefix' => 'equipos'), function() {
-
         Route::get('/', array('as' => 'equipos.index', 'uses' => 'EquiposController@tipos'));
         Route::get('/tipo/{id}', array('as' => 'equipos.index', 'uses' => 'EquiposController@index'));
+    });
 
+    Route::group(array('prefix' => 'baterias'), function() {
+        Route::get('/', array('as' => 'baterias.index', 'uses' => 'BateriaController@index'));
     });
 
 });

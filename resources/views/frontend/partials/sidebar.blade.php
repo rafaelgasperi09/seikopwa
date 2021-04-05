@@ -24,7 +24,7 @@
 
                 <ul class="listview flush transparent no-line image-listview mt-2">
                     <li>
-                        <a href="{{ url('dashboard') }}" class="item">
+                        <a href="{{ route('dashboard') }}" class="item">
                             <div class="icon-box bg-primary">
                                 <ion-icon name="home-outline"></ion-icon>
                             </div>
@@ -34,7 +34,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('equipos') }}" class="item">
+                        <a href="{{ route('equipos.index') }}" class="item">
                             <div class="icon-box bg-primary">
                                 <ion-icon name="train-outline"></ion-icon>
                             </div>
@@ -44,12 +44,12 @@
                         </a>
                     </li>
                     <li>
-                        <a href="app-pages.html" class="item">
+                        <a href="{{ route('baterias.index') }}" class="item">
                             <div class="icon-box bg-primary">
-                                <ion-icon name="layers-outline"></ion-icon>
+                                <ion-icon name="battery-charging-outline"></ion-icon>
                             </div>
                             <div class="in">
-                                <div>Historial</div>
+                                <div>Baterias</div>
                             </div>
                         </a>
                     </li>
