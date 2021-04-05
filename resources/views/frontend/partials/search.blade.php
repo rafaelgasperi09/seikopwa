@@ -1,15 +1,15 @@
 <!-- Search Component -->
-<div id="search" class="appHeader">
-    <form class="search-form">
+<div class="wide-block pt-2 pb-2">
+    <form class="search-form" action="">
         <div class="form-group searchbox">
-            <input type="text" class="form-control" placeholder="Search...">
+            <input type="text" class="form-control" value="" placeholder="{{ $title }}">
             <i class="input-icon">
-                <ion-icon name="search-outline"></ion-icon>
+                <ion-icon name="search-outline" role="img" class="md hydrated" aria-label="search outline"></ion-icon>
             </i>
-            <a href="javascript:;" class="ml-1 close toggle-searchbox">
-                <ion-icon name="close-circle"></ion-icon>
-            </a>
         </div>
     </form>
 </div>
 <!-- * Search Component -->
+<script>
+
+</script>

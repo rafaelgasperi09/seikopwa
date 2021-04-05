@@ -1,16 +1,16 @@
 <div class="appBottomMenu">
-    <a href="/" class="item">
+    <a href="{{ route('equipos.index') }}" class="item">
         <div class="col">
             <ion-icon name="train-outline" role="img" class="md hydrated" aria-label="chatbubble ellipses outline"></ion-icon>
             <span class="badge badge-danger">5</span>
         </div>
     </a>
-    <a href="app-components.html" class="item">
+    <a href="{{ route('baterias.index') }}" class="item">
         <div class="col">
-            <ion-icon name="cube-outline" role="img" class="md hydrated" aria-label="cube outline"></ion-icon>
+            <ion-icon name="battery-charging-outline" role="img" class="md hydrated" aria-label="cube outline"></ion-icon>
         </div>
     </a>
-    <a href="page-chat.html" class="item">
+    <a href="{{ route('dashboard') }}" class="item">
         <div class="col">
             <ion-icon name="home-outline" role="img" class="md hydrated" aria-label="home outline"></ion-icon>
         </div>
@@ -85,8 +85,7 @@
 </div>
 <!-- * welcome notification -->
 
-<!-- ///////////// Js Files ////////////////////  -->
-<script src="{{ url('serviceworker.js') }}"></script>
+
 <!-- ///////////// Js Files ////////////////////  -->
 <!-- Jquery -->
 <script src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
