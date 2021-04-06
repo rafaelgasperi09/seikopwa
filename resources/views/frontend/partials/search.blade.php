@@ -1,5 +1,5 @@
 <!-- Search Component -->
-<div class="wide-block pt-2 pb-2">
+<div class="extraHeader">
     <form class="search-form" action="">
         <div class="form-group searchbox">
             <input name="q" type="text" class="form-control" value="" placeholder="{{ $title }}" id="searchButton">
@@ -13,7 +13,9 @@
 <script>
     let page_search =2
     var search_button = document.getElementById("searchButton");
+    var tope=false;
     search_button.onkeyup = () =>{
+        tope=false;
         cargando.removeAttribute('hidden')
         fetch('{{ $search_url }}?q='+search_button.value,{
             method:'get'
