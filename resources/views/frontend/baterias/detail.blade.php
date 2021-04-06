@@ -1,10 +1,11 @@
 @extends('frontend.main-layout')
+
 @section('content')
-@include('frontend.partials.title',array('title'=>$data->id_componente))
+@include('frontend.partials.title',array('title'=>'Detalle Bateria','subtitle'=>$data->id_componente))
 <div class="divider mt-2 mb-3"></div>
 <div class="section  full mt-2" data-toggle="collapse" href="#detail" aria-expanded="false">
     <div class="section-title">Detalles</div>
-    <div class="wide-block pt-2 pb-2" class="collapse" id="detail">
+    <div class="wide-block pt-2 pb-2" id="detail">
         <dl class="row">
             <dt class="col-sm-3">Marca</dt>
             <dd class="col-sm-9">{{ $data->marca }}</dd>
@@ -40,31 +41,51 @@
     </div>
 </div>
 <div class="divider  mt-2 mb-3"></div>
-<div class="section  full mt-2" data-toggle="collapse" href="#historial">
-    <div class="section-title">Historial de carga</div>
-    <div class="wide-block pt-2 pb-2" class="collapse" id="historial">
-        @foreach($data->formmularioRegistros() as $r)
-            @if($r->data(0->where))
-            <div class="section full mt-2">
-                <div class="section-title">Full Accordion</div>
-                <div class="accordion" id="accordionExample1">
-                    <div class="item">
-                        <div class="accordion-header">
-                            <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#accordion1" aria-expanded="false">
-                                About
-                            </button>
-                        </div>
-                        <div id="accordion1" class="accordion-body collapse" data-parent="#accordionExample1" style="">
-                            <div class="accordion-content">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at augue eleifend, lacinia
-                                ex quis, condimentum erat. Nullam a ipsum lorem.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endforeach
+<div class="section full mb-2">
+    <div class="section-title">Historial Cargas</div>
+    <div class="wide-block p-0" id="historial">
+        <div class="table-responsive">
+            <table class="table dataTables table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col">H Sal.</th>
+                    <th scope="col">%Carga Sal.</th>
+                    <th scope="col">H Ent.</th>
+                    <th scope="col">%Carga Ent.</th>
+                    <th scope="col">H Uso.</th>
+                    <th scope="col">H2O</th>
+                    <th scope="col">ECU</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($data->formmularioRegistros() as $r)
+                    <tr  scope="row">
+                    @foreach($r->data()->whereNotIn('tipo',['select','textarea'])->get() as $campo)
+                        <th>{{ $campo->valor }}</th>
+                    @endforeach
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        var table = $('.dataTables').DataTable( {
+            rowReorder: {
+                selector: 'td:nth-child(2)'
+            },
+            responsive: true
+        } );
+    } );
+</script>
+@stop
 
+@section('post_scripts')
+    <script src="{{ url('/plugins/jquery-datatable/js/datatable.js') }}"></script>
+    <script src="{{ url('/plugins/jquery-datatable/js/roworder.js') }}"></script>
+    <script src="{{ url('/plugins/jquery-datatable/js/responsive.js') }}"></script>
 @stop

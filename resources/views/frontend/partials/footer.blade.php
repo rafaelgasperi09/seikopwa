@@ -30,7 +30,7 @@
 <div class="appFooter">
     <img src="{{ url('images/AppImages/android/icon-192x192.png') }}" alt="icon" class="footer-logo mb-2">
     <div class="footer-title">
-        Copyright © Mobilekit 2021. All Rights Reserved.
+        Copyright © GMP Panama 2021. All Rights Reserved.
     </div>
 </div>
 <!-- * app footer -->
@@ -72,7 +72,8 @@
 <script src="{{ url('assets/js/plugins/jquery-circle-progress/circle-progress.min.js') }}"></script>
 <!-- Base Js File -->
 <script src="{{ url('assets/js/base.js') }}"></script>
-
+<!-- ///////////// CUSTOM SCRIPTS ////////////////////  -->
+@yield('post_scripts')
 
 <script>
 /*
