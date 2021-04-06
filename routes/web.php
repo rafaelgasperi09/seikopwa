@@ -45,7 +45,7 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
 
         Route::get('/{id}/registrar_entrada_salida', array('as' => 'baterias.registrar_entrada_salida', 'uses' => 'BateriaController@registrarEntradaSalida'));
 
-        Route::post('/{id}/guardar_entrada_salida', array('as' => 'baterias.guardar_entrada_salida', 'uses' => 'BateriaController@guardarEntredaSalida'));
+        Route::post('/guardar_entrada_salida', array('as' => 'baterias.guardar_entrada_salida', 'uses' => 'BateriaController@guardarEntredaSalida'));
     });
 
 });

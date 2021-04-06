@@ -10,15 +10,6 @@ class FormularioRegistro extends BaseModel
     protected $table = 'formulario_registro';
     protected $guarded = ['id','typeheadA'];
     protected $creator_field_name = 'creado_por';
-    use FilterDataTrait;
-
-    public static function getPermissionName(){
-        return "formulario_registro";
-    }
-
-    public static function getPermissionRelatedUserName(){
-        return "creado_por";
-    }
 
     public function creador(){
         return $this->belongsTo('App\User','creado_por');
