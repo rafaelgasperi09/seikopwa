@@ -19,6 +19,12 @@ class BateriaController extends Controller
         return view('frontend.baterias.page',compact('data'));
     }
 
+    public function search(Request $request){
+
+        $data = Componente::whereTipoComponenteId(2)->where('id_componente','LIKE',"%".$request->q."%")->paginate(10);
+        return view('frontend.baterias.page',compact('data'));
+    }
+
 
     protected function detail($id){
 

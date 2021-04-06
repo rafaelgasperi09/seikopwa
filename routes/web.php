@@ -30,6 +30,7 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
 
     Route::group(array('prefix' => 'equipos'), function() {
         Route::get('/', array('as' => 'equipos.index', 'uses' => 'EquiposController@tipos'));
+        Route::get('/page', array('as' => 'equipos.page', 'uses' => 'EquiposController@page'));
         Route::get('/tipo/{id}', array('as' => 'equipos.tipo.index', 'uses' => 'EquiposController@index'));
     });
 
@@ -37,6 +38,8 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
         Route::get('/', array('as' => 'baterias.index', 'uses' => 'BateriaController@index'));
 
         Route::get('/page', array('as' => 'baterias.page', 'uses' => 'BateriaController@page'));
+
+        Route::get('/search', array('as' => 'baterias.search', 'uses' => 'BateriaController@search'));
 
         Route::get('/{id}', array('as' => 'baterias.detail', 'uses' => 'BateriaController@detail'));
 
