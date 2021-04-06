@@ -28,7 +28,7 @@
 </div>
 <!-- app footer -->
 <div class="appFooter">
-    <img src="assets/img/logo.png" alt="icon" class="footer-logo mb-2">
+    <img src="{{ url('images/AppImages/android/icon-192x192.png') }}" alt="icon" class="footer-logo mb-2">
     <div class="footer-title">
         Copyright © Mobilekit 2021. All Rights Reserved.
     </div>
@@ -60,11 +60,7 @@
     </div>
 </div>
 <!-- * welcome notification -->
-
-
 <!-- ///////////// Js Files ////////////////////  -->
-<!-- Jquery -->
-<script src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
 <!-- Bootstrap-->
 <script src="{{ url('assets/js/lib/popper.min.js') }}"></script>
 <script src="{{ url('assets/js/lib/bootstrap.min.js') }}"></script>

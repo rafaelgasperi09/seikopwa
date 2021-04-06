@@ -17,4 +17,8 @@ class Componente extends Model
     public function equipos(){
         return $this->hasMany(ComponenteEquipo::class);
     }
+
+    public function formmularioRegistros(){
+        return FormularioRegistro::whereComponenteId($this->id)->get();
+    }
 }
