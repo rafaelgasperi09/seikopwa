@@ -17,6 +17,8 @@
     @laravelPWA
     <!-- Jquery -->
     <script src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
+
+    @yield('css')
 </head>
 
 <body>

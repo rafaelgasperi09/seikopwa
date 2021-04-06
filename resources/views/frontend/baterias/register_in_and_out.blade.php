@@ -1,6 +1,6 @@
 @extends('frontend.main-layout')
 @section('content')
-    @include('frontend.partials.title',array('title'=>$data->id_componente))
+    @include('frontend.partials.title',array('title'=>'Registrar Carga Bateria','subtitle'=>$data->id_componente))
     <div class="section full mt-2 mb-2">
         <div class="section-title">Bateria : {{ $data->voltaje }}V</div>
         <div class="wide-block pb-1 pt-2">
