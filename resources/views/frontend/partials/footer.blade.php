@@ -28,7 +28,7 @@
 </div>
 <!-- app footer -->
 <div class="appFooter">
-    <img src="assets/img/logo.png" alt="icon" class="footer-logo mb-2">
+    <img src="{{ url('assets/img/logo.png')}}" alt="icon" class="footer-logo mb-2">
     <div class="footer-title">
         Copyright © Mobilekit 2021. All Rights Reserved.
     </div>
@@ -40,7 +40,7 @@
     <div class="notification-dialog android-style">
         <div class="notification-header">
             <div class="in">
-                <img src="assets/img/icon/72x72.png" alt="image" class="imaged w24">
+                <img src="{{ url('assets/img/icon/72x72.png')}}" alt="image" class="imaged w24">
                 <strong>Mobilekit</strong>
                 <span>just now</span>
             </div>
