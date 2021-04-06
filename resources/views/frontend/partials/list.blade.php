@@ -8,14 +8,20 @@
     let page =2
     const cargando    =     document.getElementById("cargando")
     window.onscroll = () =>{
-        cargando.removeAttribute('hidden')
+
         if((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight){
-            fetch('{{ $page_url }}?page='+page,{
+            if(!tope)
+                cargando.removeAttribute('hidden')
+            fetch('{{ $page_url }}?q='+search_button.value+'&page='+page,{
                 method:'get'
             })
             .then(response => response.text())
             .then( html => {
-
+                if(html.length==0){
+                    cargando.setAttribute('hidden','');
+                    tope=true;
+                }
+                else{
                 cargando.setAttribute('hidden','')
                 document.getElementById("list-block").innerHTML += html;
                 page++;
@@ -33,6 +39,8 @@
                         $(this).parent(".multi-level").addClass("active");
                     }
                 });
+                }
+
             })
             .catch(error => console.log(error))
         }

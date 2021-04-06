@@ -40,7 +40,7 @@
     <div class="notification-dialog android-style">
         <div class="notification-header">
             <div class="in">
-                <img src="assets/img/icon/72x72.png" alt="image" class="imaged w24">
+                <img src="{{ url('assets/img/icon/72x72.png')}}" alt="image" class="imaged w24">
                 <strong>Mobilekit</strong>
                 <span>just now</span>
             </div>

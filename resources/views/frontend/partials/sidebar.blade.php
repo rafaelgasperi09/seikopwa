@@ -7,7 +7,7 @@
                 <!-- profile box -->
                 <div class="profileBox">
                     <div class="image-wrapper">
-                        <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="imaged rounded">
+                        <img src="{{ url('assets/img/sample/avatar/avatar1.jpg')}}" alt="image" class="imaged rounded">
                     </div>
                     <div class="in">
                         <strong>Julian Gruber</strong>
@@ -86,7 +86,7 @@
                 <ul class="listview image-listview flush transparent no-line">
                     <li>
                         <a href="page-chat.html" class="item">
-                            <img src="assets/img/sample/avatar/avatar7.jpg" alt="image" class="image">
+                            <img src="{{ url('assets/img/sample/avatar/avatar7.jpg')}}" alt="image" class="image">
                             <div class="in">
                                 <div>Sophie Asveld</div>
                             </div>
@@ -94,7 +94,7 @@
                     </li>
                     <li>
                         <a href="page-chat.html" class="item">
-                            <img src="assets/img/sample/avatar/avatar3.jpg" alt="image" class="image">
+                            <img src="{{ url('assets/img/sample/avatar/avatar3.jpg')}}" alt="image" class="image">
                             <div class="in">
                                 <div>Sebastian Bennett</div>
                                 <span class="badge badge-danger">6</span>
@@ -103,7 +103,7 @@
                     </li>
                     <li>
                         <a href="page-chat.html" class="item">
-                            <img src="assets/img/sample/avatar/avatar10.jpg" alt="image" class="image">
+                            <img src="{{ url('assets/img/sample/avatar/avatar10.jpg')}}" alt="image" class="image">
                             <div class="in">
                                 <div>Beth Murphy</div>
                             </div>
@@ -111,7 +111,7 @@
                     </li>
                     <li>
                         <a href="page-chat.html" class="item">
-                            <img src="assets/img/sample/avatar/avatar2.jpg" alt="image" class="image">
+                            <img src="{{ url('assets/img/sample/avatar/avatar2.jpg')}}" alt="image" class="image">
                             <div class="in">
                                 <div>Amelia Cabal</div>
                             </div>
@@ -119,7 +119,7 @@
                     </li>
                     <li>
                         <a href="page-chat.html" class="item">
-                            <img src="assets/img/sample/avatar/avatar5.jpg" alt="image" class="image">
+                            <img src="{{ url('assets/img/sample/avatar/avatar5.jpg')}}" alt="image" class="image">
                             <div class="in">
                                 <div>Henry Doe</div>
                             </div>

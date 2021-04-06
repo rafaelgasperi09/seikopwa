@@ -23,4 +23,20 @@ function getFormularioSelectOpciones($opciones){
     return $arr;
 }
 
+function getSubEquipo($name,$campo=null){
+    $sub=\App\SubEquipo::where('name',$name)->first();
+    if($sub){
+        if($campo=='name')
+            return $sub->display_name;
+
+        return $sub->id;
+    }
+}
+function getTipoEquipo($id){
+    if($id=='todos')
+      return 'Todos';
+    $tipo=\App\TipoEquipo::findOrFail($id)->first();
+    return $tipo->display_name;
+    
+}
 ?>
