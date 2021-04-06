@@ -1,16 +1,16 @@
 <div class="appBottomMenu">
-    <a href="/" class="item">
+    <a href="{{ route('equipos.index') }}" class="item">
         <div class="col">
             <ion-icon name="train-outline" role="img" class="md hydrated" aria-label="chatbubble ellipses outline"></ion-icon>
             <span class="badge badge-danger">5</span>
         </div>
     </a>
-    <a href="app-components.html" class="item">
+    <a href="{{ route('baterias.index') }}" class="item">
         <div class="col">
-            <ion-icon name="cube-outline" role="img" class="md hydrated" aria-label="cube outline"></ion-icon>
+            <ion-icon name="battery-charging-outline" role="img" class="md hydrated" aria-label="cube outline"></ion-icon>
         </div>
     </a>
-    <a href="page-chat.html" class="item">
+    <a href="{{ route('dashboard') }}" class="item">
         <div class="col">
             <ion-icon name="home-outline" role="img" class="md hydrated" aria-label="home outline"></ion-icon>
         </div>
@@ -32,30 +32,6 @@
     <div class="footer-title">
         Copyright © Mobilekit 2021. All Rights Reserved.
     </div>
-    <div>Mobilekit is PWA ready Mobile UI Kit Template.</div>
-    Great way to start your mobile websites and pwa projects.
-
-    <div class="mt-2">
-        <a href="javascript:;" class="btn btn-icon btn-sm btn-facebook">
-            <ion-icon name="logo-facebook"></ion-icon>
-        </a>
-        <a href="javascript:;" class="btn btn-icon btn-sm btn-twitter">
-            <ion-icon name="logo-twitter"></ion-icon>
-        </a>
-        <a href="javascript:;" class="btn btn-icon btn-sm btn-linkedin">
-            <ion-icon name="logo-linkedin"></ion-icon>
-        </a>
-        <a href="javascript:;" class="btn btn-icon btn-sm btn-instagram">
-            <ion-icon name="logo-instagram"></ion-icon>
-        </a>
-        <a href="javascript:;" class="btn btn-icon btn-sm btn-whatsapp">
-            <ion-icon name="logo-whatsapp"></ion-icon>
-        </a>
-        <a href="#" class="btn btn-icon btn-sm btn-secondary goTop">
-            <ion-icon name="arrow-up-outline"></ion-icon>
-        </a>
-    </div>
-
 </div>
 <!-- * app footer -->
 
@@ -85,8 +61,7 @@
 </div>
 <!-- * welcome notification -->
 
-<!-- ///////////// Js Files ////////////////////  -->
-<script src="{{ url('serviceworker.js') }}"></script>
+
 <!-- ///////////// Js Files ////////////////////  -->
 <!-- Jquery -->
 <script src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
