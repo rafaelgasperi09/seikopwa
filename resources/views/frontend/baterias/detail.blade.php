@@ -43,7 +43,27 @@
 <div class="section  full mt-2" data-toggle="collapse" href="#historial">
     <div class="section-title">Historial de carga</div>
     <div class="wide-block pt-2 pb-2" class="collapse" id="historial">
-
+        @foreach($data->formmularioRegistros() as $r)
+            @if($r->data(0->where))
+            <div class="section full mt-2">
+                <div class="section-title">Full Accordion</div>
+                <div class="accordion" id="accordionExample1">
+                    <div class="item">
+                        <div class="accordion-header">
+                            <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#accordion1" aria-expanded="false">
+                                About
+                            </button>
+                        </div>
+                        <div id="accordion1" class="accordion-body collapse" data-parent="#accordionExample1" style="">
+                            <div class="accordion-content">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at augue eleifend, lacinia
+                                ex quis, condimentum erat. Nullam a ipsum lorem.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
     </div>
 </div>
 
