@@ -19,6 +19,6 @@ class Componente extends Model
     }
 
     public function formmularioRegistros(){
-        return FormularioRegistro::whereComponenteId($this->id)->get();
+        return FormularioRegistro::whereComponenteId($this->id)->orderBy('created_at','DESC')->take(5000)->get();
     }
 }
