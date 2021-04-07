@@ -37,6 +37,8 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
     Route::group(array('prefix' => 'baterias'), function() {
         Route::get('/', array('as' => 'baterias.index', 'uses' => 'BateriaController@index'));
 
+        Route::get('/datatable/{id}', array('as' => 'baterias.datatable', 'uses' => 'BateriaController@datatable'));
+
         Route::get('/page', array('as' => 'baterias.page', 'uses' => 'BateriaController@page'));
 
         Route::get('/search', array('as' => 'baterias.search', 'uses' => 'BateriaController@search'));
