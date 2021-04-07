@@ -6,9 +6,12 @@ use App\Componente;
 use App\Formulario;
 use App\FormularioData;
 use App\FormularioRegistro;
+use App\PatientAbsence;
+use Carbon\Carbon;
 use Sentinel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class BateriaController extends Controller
 {
@@ -91,5 +94,14 @@ class BateriaController extends Controller
 
         $request->session()->flash('message.success','Registro creado con exito');
         return redirect(route('baterias.detail',$componente_id));
+    }
+
+    public function datatable($id){
+
+        $data = DB::table('form_carga_bateria_view')
+            ->where('componente_id',$id)
+            ->get();
+
+        return DataTables::of($data)->make(true);
     }
 }

@@ -8350,4 +8350,16 @@ td.dataTables_empty {
     opacity: 0.1;
     filter: alpha(opacity = 10);
 }
+.dataTables_wrapper .dataTables_processing {
+    position: relative;
+    top: 30%;
+    left: 50%;
+    width: 30%;
+    height: 40px;
+    margin-left: -20%;
+    padding-top: 20px;
+    text-align: center;
+    font-size: 1.2em;
+    background:none;
+}
 /* eof Datatables */

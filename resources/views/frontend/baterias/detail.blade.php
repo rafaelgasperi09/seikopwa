@@ -61,31 +61,43 @@
                     <th>Horas de Uso.</th>
                     <th>H2O</th>
                     <th>ECU</th>
-                    <th>Obs</th>
                 </tr>
                 </thead>
-                <tbody>
-                @foreach($data->formmularioRegistros() as $r)
-                    <tr>
-                    @foreach($r->data()->get() as $campo)
-                        <td>{{ $campo->valor }}</td>
-                    @endforeach
-                    </tr>
-                @endforeach
-                </tbody>
             </table>
         </div>
     </div>
 </div>
 <script>
     $(document).ready(function() {
-        var table = $('.dataTables').DataTable( {
-            rowReorder: {
-                selector: 'td:nth-child(2)'
+
+        $('.dataTables').DataTable( {
+            "language": {
+                processing: '<div id="cargando"  align="center"><img src="{{ url("/assets/img/Spinner-3.gif") }}"></div>'
             },
-            responsive: true
+            "columnDefs": [
+                { "visible": false, "targets": [2] },
+            ],
+            "responsive": true,
+            "order": [[ 2, "desc" ]],
+            "processing": true,
+            "serverSide": true,
+            "autoWidth": false,
+            "ajax": "{{ route('baterias.datatable',array('id'=>$data->id)) }}",
+            "columns":[
+                {data:'accion'},
+                {data:'fecha'},
+                {data:'hora_entrada'},
+                {data:'horometro_salida_cuarto'},
+                {data:'carga_salida_cuarto'},
+                {data:'horometro_entrada_cuarto'},
+                {data:'carga_entrada_cuarto'},
+                {data:'horas_uso_bateria'},
+                {data:'h2o'},
+                {data:'ecu'},
+            ]
         } );
     } );
+
 </script>
 @stop
 
