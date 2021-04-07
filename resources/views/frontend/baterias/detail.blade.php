@@ -51,6 +51,7 @@
             <table class="table dataTables table-bordered table-striped table-actions">
                 <thead>
                 <tr>
+                    <th>Accion</th>
                     <th>Fecha</th>
                     <th>Hora</th>
                     <th>Horometro Salida.</th>
@@ -60,13 +61,14 @@
                     <th>Horas de Uso.</th>
                     <th>H2O</th>
                     <th>ECU</th>
+                    <th>Obs</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($data->formmularioRegistros() as $r)
-                    <tr  scope="row">
-                    @foreach($r->data()->whereNotIn('tipo',['select','textarea'])->get() as $campo)
-                        <th>{{ $campo->valor }}</th>
+                    <tr>
+                    @foreach($r->data()->get() as $campo)
+                        <td>{{ $campo->valor }}</td>
                     @endforeach
                     </tr>
                 @endforeach
