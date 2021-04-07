@@ -1,7 +1,10 @@
 @extends('frontend.main-layout')
-
+@section('css')
+    <link rel="stylesheet" href="{{ url('/plugins/jquery-datatable/css/roworder.css') }}">
+    <link rel="stylesheet" href="{{ url('/plugins/jquery-datatable/css/responsive.css') }}">
+@stop
 @section('content')
-@include('frontend.partials.title',array('title'=>'Detalle Bateria','subtitle'=>$data->id_componente))
+@include('frontend.partials.title',array('title'=>'Detalle bateria','subtitle'=>$data->id_componente))
 <div class="divider mt-2 mb-3"></div>
 <div class="section  full mt-2" data-toggle="collapse" href="#detail" aria-expanded="false">
     <div class="section-title">Detalles</div>
@@ -43,20 +46,20 @@
 <div class="divider  mt-2 mb-3"></div>
 <div class="section full mb-2">
     <div class="section-title">Historial Cargas</div>
-    <div class="wide-block p-0" id="historial">
+    <div class="wide-block p-1" id="historial">
         <div class="table-responsive">
-            <table class="table dataTables table-striped">
+            <table class="table dataTables table-bordered table-striped table-actions">
                 <thead>
                 <tr>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Hora</th>
-                    <th scope="col">H Sal.</th>
-                    <th scope="col">%Carga Sal.</th>
-                    <th scope="col">H Ent.</th>
-                    <th scope="col">%Carga Ent.</th>
-                    <th scope="col">H Uso.</th>
-                    <th scope="col">H2O</th>
-                    <th scope="col">ECU</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Horometro Salida.</th>
+                    <th>%Carga Salida.</th>
+                    <th>Horometro Entrada.</th>
+                    <th>%Carga Entrada.</th>
+                    <th>Horas de Uso.</th>
+                    <th>H2O</th>
+                    <th>ECU</th>
                 </tr>
                 </thead>
                 <tbody>

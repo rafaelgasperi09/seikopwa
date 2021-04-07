@@ -1142,13 +1142,10 @@
             ],
             "description": "HTML and Form Builders for the Laravel Framework",
             "homepage": "https://laravelcollective.com",
-<<<<<<< HEAD
-=======
             "support": {
                 "issues": "https://github.com/LaravelCollective/html/issues",
                 "source": "https://github.com/LaravelCollective/html"
             },
->>>>>>> ba1ecffefd379f00e8806444308402667ae66cb3
             "time": "2020-12-15T20:20:05+00:00"
         },
         {
