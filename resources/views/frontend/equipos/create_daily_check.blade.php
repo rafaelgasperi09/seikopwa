@@ -66,6 +66,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-4">
+                    <div class="form-group basic">
+                        <div class="input-wrapper">
+                            <label class="label" for="name1">Turno</label>
+                            {{ Form::text('dayofweek',getDayOfWeek(date('N')),array('class'=>'form-control','readonly')) }}
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="section-title">NOTA:Este formulario debe hacerse por el operdor del equipo diariamente al comienzo del turno. Ciertos articulos enumerados no son incluidos en algunos modelos. Compruebe todos los articulos aplicables a su unidad.</div>
             <div class="section-title">OK => Buen Estado , M => Mal Estado , R => Revisar</div>
