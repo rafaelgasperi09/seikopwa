@@ -42,6 +42,8 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
         Route::get('/create_daily_check/{id}', array('as' => 'equipos.create_daily_check', 'uses' => 'EquiposController@createDailyCheck'));
 
         Route::post('/store_daily_check', array('as' => 'equipos.store_daily_check', 'uses' => 'EquiposController@storeDailyCheck'));
+        
+        Route::get('/tecnical_support/{id}', array('as' => 'equipos.create_tecnical_support', 'uses' => 'EquiposController@createTecnicalSupport'));
     });
 
     Route::group(array('prefix' => 'baterias'), function() {

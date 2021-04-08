@@ -12,7 +12,9 @@ class Equipo extends BaseModel
     protected $table = 'equipos';
 
     public function tipo(){
-        return $this->belongsTo(TipoEquipo::class,'tipo_equipos_id');
+        return $this->belongsTo(TipoEquipo::class,'tipo_equipos_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);;
     }
 
     public function subTipo(){
@@ -23,9 +25,13 @@ class Equipo extends BaseModel
         return $this->belongsTo(Marca::class,'marca_id');
     }
 
+    public function estado(){
+        return $this->belongsTo(Estado::class,'estado_id');
+    }
     public function cliente(){
         return $this->belongsTo(Cliente::class,'cliente_id')->withDefault([
             'nombre'=>'N/A'
         ]);
     }
+
 }

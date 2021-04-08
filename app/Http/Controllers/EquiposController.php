@@ -145,4 +145,13 @@ class EquiposController extends BaseController
 
 
     }
+
+    public function createTecnicalSupport($id){
+
+        $data = Equipo::findOrFail($id);
+        $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
+        return view('frontend.equipos.create_tecnical_support_report')->with('data',$data)->with('formulario',$formulario);
+    }
+
+
 }
