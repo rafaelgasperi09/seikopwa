@@ -22,4 +22,11 @@ class FormularioCampo extends BaseModel
     public function data(){
         return $this->hasMany(FormularioData::class);
     }
+
+    public function getPermisoAttribute($value)
+    {
+        if($value == null) return 'edit';
+        return ucfirst($value);
+    }
+
 }
