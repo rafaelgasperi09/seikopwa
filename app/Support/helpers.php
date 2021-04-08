@@ -1,6 +1,6 @@
 <?php
 function current_user(){
-    if(Sentry::check()){
+    if(Sentinel::check()){
         return \App\User::find(\Sentinel::getUser()->id);
     }else{
         return redirect(route('login'));
@@ -37,6 +37,6 @@ function getTipoEquipo($id){
       return 'Todos';
     $tipo=\App\TipoEquipo::findOrFail($id)->first();
     return $tipo->display_name;
-    
+
 }
 ?>

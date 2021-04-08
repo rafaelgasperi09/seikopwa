@@ -10,7 +10,7 @@
                         <img src="{{ url('assets/img/sample/avatar/avatar1.jpg')}}" alt="image" class="imaged rounded">
                     </div>
                     <div class="in">
-                        <strong>Julian Gruber</strong>
+                        <strong>{{ current_user()->getFullName() }}</strong>
                         <div class="text-muted">
                             <ion-icon name="business"></ion-icon>
                             Empresa
@@ -140,7 +140,7 @@
                 <a href="javascript:;" class="button">
                     <ion-icon name="settings-outline"></ion-icon>
                 </a>
-                <a href="javascript:;" class="button">
+                <a href="{{ route('logout') }}" class="button">
                     <ion-icon name="log-out-outline"></ion-icon>
                 </a>
             </div>
