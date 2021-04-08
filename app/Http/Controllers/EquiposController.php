@@ -51,5 +51,12 @@ class EquiposController extends BaseController
             $equipos=Equipo::where('sub_equipos_id',getSubEquipo($sub))->where('tipo_equipos_id',$id)->where('numero_parte','like',"%".$request->q."%")->paginate(10);
 
         return view('frontend.equipos.page')->with('data',$equipos); 
-    }          
+    }      
+    
+    
+    public function detail($id){
+
+        $data = Equipo::findOrFail($id);
+        return view('frontend.equipos.detail')->with('data',$data);
+    }
 }

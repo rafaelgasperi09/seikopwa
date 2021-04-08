@@ -11,7 +11,7 @@
                     <!-- sub menu -->
                     <ul class="listview image-listview" style="display: none;">
                         <li>
-                            <a href="#" class="item">
+                            <a href="{{route('equipos.detail',['id'=>$e->id])}}" class="item">
                                 <div class="icon-box bg-primary">
                                     <ion-icon name="eye-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
                                 </div>

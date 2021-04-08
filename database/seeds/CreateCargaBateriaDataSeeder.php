@@ -16,7 +16,7 @@ class CreateCargaBateriaDataSeeder extends Seeder
         //$faker = new Faker();
         if($form){
 
-            for($i=1;$i<=3000;$i++){
+            for($i=1;$i<=300;$i++){
 
                 $bateria =  \App\Componente::whereTipoComponenteId(2)->get()->random(1)->first();
 
