@@ -21,7 +21,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="item">
+                            <a href="{{ route('equipos.create_daily_check',$e->id) }}" class="item">
                                 <div class="icon-box bg-secondary">
                                     <ion-icon name="list-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
                                 </div>
@@ -54,5 +54,5 @@
                         </li>
                     </ul>
                     <!-- * sub menu -->
-                </li>                   
+                </li>
             @endforeach

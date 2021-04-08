@@ -39,4 +39,34 @@ function getTipoEquipo($id){
     return $tipo->display_name;
 
 }
+
+function getDayOfWeek($day){
+    $day_week = '';
+    switch ($day){
+        case 1:
+            $day_week = 'Lunes';
+            break;
+        case 2:
+            $day_week = 'Martes';
+            break;
+        case 3:
+            $day_week = 'Miercoles';
+            break;
+        case 4:
+            $day_week = 'Jueves';
+            break;
+        case 5:
+            $day_week = 'Viernes';
+            break;
+        case 6:
+            $day_week = 'Sabado';
+            break;
+        case 7:
+            $day_week = 'Domingo';
+            break;
+
+    }
+
+  return $day_week;
+}
 ?>
