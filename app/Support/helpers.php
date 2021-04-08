@@ -23,6 +23,15 @@ function getFormularioSelectOpciones($opciones){
     return $arr;
 }
 
+function getFormularioRadioOpciones($opciones){
+
+    foreach (explode(',',$opciones) as $opt){
+        $arr[$opt] = $opt;
+    }
+
+    return $arr;
+}
+
 function getSubEquipo($name,$campo=null){
     $sub=\App\SubEquipo::where('name',$name)->first();
     if($sub){

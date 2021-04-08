@@ -82,7 +82,7 @@
     {{Form::open(array("method" => "POST","action" => "EquiposController@storeDailyCheck","role" => "form",'class'=>'form-horizontal'))}}
     {{ Form::hidden('equipo_id',$data->id) }}
     {{ Form::hidden('formulario_id',$formulario->id) }}
-    @foreach($formulario->secciones()->where('id','<>',3)->get() as $seccion)
+    @foreach($formulario->secciones()->get() as $seccion)
         <div class="section full mt-2 mb-2">
             <div class="section-title">{{ strtoupper($seccion->titulo) }}</div>
             <div class="wide-block pb-1 pt-2">
@@ -122,6 +122,19 @@
                                 <label class="switch">
                                     <input type="checkbox" name="{{ $campo->nombre }}"/><span></span>
                                 </label>
+                            @elseif($campo->tipo == 'radio')
+                                <div class="wide-block pt-2 pb-2">
+                                    @php
+                                        $i=0;
+                                    @endphp
+                                    @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
+                                        {{$o}}
+                                        <div class="custom-control custom-radio d-inline">
+                                            <input type="radio" id="{{ $campo->nombre }}{{++$i}}" name="{{ $campo->nombre }}" value="{{$o}}" class="custom-control-input">
+                                            <label class="custom-control-label p-0" for="{{ $campo->nombre }}{{$i}}"></label>
+                                        </div>
+                                    @endforeach
+                                </div>
                             @elseif($campo->tipo == 'firma')
                                 {{ Form::text($campo->nombre,null,array('class'=>'form-control',$requerido)) }}
                             @endif
