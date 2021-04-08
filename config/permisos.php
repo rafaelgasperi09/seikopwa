@@ -22,5 +22,11 @@ return [
        "role.edit"=>"Editar Rol",
        "role.update"=>"Actualizar Rol",
    ),
+  "Equipos"=>array(
+     "equipos.index"=>"Listar Equipos",
+     "equipos.create"=>"Crear Rol",
+     "equipos.create_daily_check"=>"Crear Daily Check",
+     "equipos.show"=>"Mostrar Equipo",
+  ),
 
 )];

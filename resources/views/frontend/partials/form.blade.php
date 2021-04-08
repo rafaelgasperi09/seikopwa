@@ -4,6 +4,7 @@
         <div class="wide-block pb-1 pt-2">
             <div class="row">
                 @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->whereNotIn('nombre',['semana','dia_semana'])->get() as $campo)
+                   @if(\Sentinel::getUser()->hasAccess([$campo->permiso]) or $campo->permiso=='edit')
                     <?php
                     $requerido ='';
                     if($campo->requerido) $requerido = 'required';
@@ -61,6 +62,7 @@
                             </i>
                         </div>
                     </div>
+                    @endif
                 @endforeach
             </div>
         </div>
