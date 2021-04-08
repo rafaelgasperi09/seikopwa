@@ -42,5 +42,6 @@
             <ion-icon name="search-outline"></ion-icon>
         </a>
     </div>
+    @include('frontend.partials.message')
 </div>
 <!-- * App Header -->
