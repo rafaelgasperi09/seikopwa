@@ -55,4 +55,10 @@ class LoginController extends Controller
         }
     }
 
+    public function logout(){
+
+        Sentinel::logout();
+        return redirect(route('login'));
+    }
+
 }

@@ -64,4 +64,8 @@ class User extends Authenticatable
         $group = Sentinel::findRoleByName($group_name);
         return $sentryUser->inRole($group);
     }
+
+    public function getFullName(){
+        return $this->first_name.' '.$this->last_name;
+    }
 }
