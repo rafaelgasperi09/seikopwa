@@ -20,5 +20,10 @@ class Equipo extends BaseModel
     public function marca(){
         return $this->belongsTo(Marca::class,'marca_id');
     }
-
+    
+    public function cliente(){
+        return $this->belongsTo(Cliente::class,'cliente_id')->withDefault([
+            'nombre'=>'N/A'
+        ]);
+    }
 }
