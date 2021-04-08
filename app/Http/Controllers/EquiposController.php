@@ -56,7 +56,7 @@ class EquiposController extends BaseController
     
     public function detail($id){
 
-        $data = Componente::findOrFail($id);
-        return view('frontend.baterias.detail')->with('data',$data);
+        $data = Equipo::findOrFail($id);
+        return view('frontend.equipos.detail')->with('data',$data);
     }
 }

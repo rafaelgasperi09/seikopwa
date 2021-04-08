@@ -36,6 +36,8 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
         Route::get('/{sub}/tipo/{id}', array('as' => 'equipos.tipo', 'uses' => 'EquiposController@tipo'));
         
         Route::get('/search/{sub}/{id}', array('as' => 'equipos.search', 'uses' => 'EquiposController@search'));
+
+        Route::get('/detail/{id}', array('as' => 'equipos.detail', 'uses' => 'EquiposController@detail'));
     });
 
     Route::group(array('prefix' => 'baterias'), function() {
