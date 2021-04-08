@@ -13,7 +13,9 @@
                         <div class="input-wrapper">
                             <label class="label" for="{{ $campo->nombre }}">{{ $campo->etiqueta }}</label>
                             <small>{{ $campo->subetiqueta }}</small>
-                            @if($campo->tipo == 'text')
+                            @if($campo->tipo == 'hidden')
+                                {{ Form::hidden($campo->nombre,null) }}
+                            @elseif($campo->tipo == 'text')
                                 {{ Form::text($campo->nombre,null,array('class'=>'form-control',$requerido)) }}
                             @elseif($campo->tipo == 'textarea')
                                 {{ Form::textarea($campo->nombre,null,array('class'=>'form-control',$requerido)) }}
