@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FormularioCampo extends BaseModel
 {
+    use SoftDeletes;
     protected $table = 'formulario_campos';
     protected $guarded = ['id','typeheadA'];
 

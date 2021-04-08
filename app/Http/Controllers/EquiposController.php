@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Formulario;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -20,17 +21,17 @@ class EquiposController extends BaseController
                                 ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
                                 ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id')
                                 ->get();
-                                
+
         $tipoEquiposArray=array();
         foreach($tipoEquipos as $t){
             $tipoEquiposArray[$t->sub_equipos_id][$t->tipo_equipos_id]=$t->display_name;
         }
         return view('frontend.equipos.index')->with('tipos',$tipoEquiposArray)->with('subEquipos',$subEquipos);
-  
+
     }
 
     public function tipo($sub,$id){
- 
+
         $datos=array('sub'=>$sub,
                      'tipo'=>$id,
                      'subName'=>getSubEquipo($sub,'name'),
@@ -40,9 +41,9 @@ class EquiposController extends BaseController
         else
             $equipos=Equipo::where('sub_equipos_id',getSubEquipo($sub))->where('tipo_equipos_id',$id)->paginate(10);
 
-            
-        return view('frontend.equipos.index')->with('equipos',$equipos)->with('datos',$datos); 
-    }  
+
+        return view('frontend.equipos.index')->with('equipos',$equipos)->with('datos',$datos);
+    }
 
     public function search(Request $request,$sub,$id){
         if($id=='todos')
@@ -50,13 +51,30 @@ class EquiposController extends BaseController
         else
             $equipos=Equipo::where('sub_equipos_id',getSubEquipo($sub))->where('tipo_equipos_id',$id)->where('numero_parte','like',"%".$request->q."%")->paginate(10);
 
-        return view('frontend.equipos.page')->with('data',$equipos); 
-    }      
-    
-    
+        return view('frontend.equipos.page')->with('data',$equipos);
+    }
+
+
     public function detail($id){
 
         $data = Equipo::findOrFail($id);
         return view('frontend.equipos.detail')->with('data',$data);
+    }
+
+    public function createDailyCheck($id){
+
+        $data = Equipo::findOrFail($id);
+        $formulario = Formulario::whereNombre('form_montacarga_daily_check')->first();
+        return view('frontend.equipos.create_daily_check')->with('data',$data)->with('formulario',$formulario);
+    }
+
+    public function storeDailyCheck(Request $request){
+
+        $this->validate($request, [
+            'equipo_id'  => 'required',
+            'formulario_id'  => 'required',
+        ]);
+
+        dd($request->all());
     }
 }

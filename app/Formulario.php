@@ -4,12 +4,13 @@ namespace App;
 
 use App\Http\Traits\FilterDataTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Formulario extends BaseModel
 {
+    use SoftDeletes;
     protected $table = 'formularios';
     protected $guarded = ['id'];
-    protected $creator_field_name = 'creado_por';
 
     public function creador(){
         return $this->belongsTo('App\User','creado_por');

@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Equipo extends BaseModel
 {
+    use SoftDeletes;
     protected $connection='crm';
     protected $table = 'equipos';
 
@@ -20,7 +22,7 @@ class Equipo extends BaseModel
     public function marca(){
         return $this->belongsTo(Marca::class,'marca_id');
     }
-    
+
     public function cliente(){
         return $this->belongsTo(Cliente::class,'cliente_id')->withDefault([
             'nombre'=>'N/A'

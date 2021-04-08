@@ -3070,10 +3070,7 @@ a.badge-dark {
 .inset .accordion .item:last-child .btn {
   border-radius: 0 0 6px 6px !important;
 }
-.accordion-body{
-  background:#eee;
-  background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(241,241,241,1) 97%, rgba(194,194,194,1) 100%);
-}
+
 .modal.action-sheet {
   z-index: 9999;
 }

@@ -30,14 +30,18 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
     Route::get('/dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
 
     Route::group(array('prefix' => 'equipos'), function() {
-        
+
         Route::get('/', array('as' => 'equipos.index', 'uses' => 'EquiposController@index'));
-        
+
         Route::get('/{sub}/tipo/{id}', array('as' => 'equipos.tipo', 'uses' => 'EquiposController@tipo'));
-        
+
         Route::get('/search/{sub}/{id}', array('as' => 'equipos.search', 'uses' => 'EquiposController@search'));
 
         Route::get('/detail/{id}', array('as' => 'equipos.detail', 'uses' => 'EquiposController@detail'));
+
+        Route::get('/create_daily_check/{id}', array('as' => 'equipos.create_daily_check', 'uses' => 'EquiposController@createDailyCheck'));
+
+        Route::post('/store_daily_check', array('as' => 'equipos.store_daily_check', 'uses' => 'EquiposController@storeDailyCheck'));
     });
 
     Route::group(array('prefix' => 'baterias'), function() {
