@@ -56,6 +56,7 @@ class EquiposController extends BaseController
         else
             $equipos=Equipo::where('sub_equipos_id',getSubEquipo($sub))->where('tipo_equipos_id',$id)->where('numero_parte','like',"%".$request->q."%")->paginate(10);
 
+
         return view('frontend.equipos.page')->with('data',$equipos);
     }
 
@@ -145,4 +146,73 @@ class EquiposController extends BaseController
 
 
     }
+
+    public function createMantPrev($id,$tipo){
+
+        $data = Equipo::findOrFail($id);
+        $forms = [4=>'form_montacarga_counter_sc'];
+
+        $formulario = Formulario::whereNombre($forms[$tipo])->first();
+
+        return view('frontend.equipos.create_mant_prev')->with('data',$data)->with('formulario',$formulario);
+    }
+
+    public function storeMantPrev(Request $request){
+
+        $this->validate($request, [
+            'equipo_id'  => 'required',
+            'formulario_id'  => 'required',
+            'horometro'=> 'required'
+        ]);
+
+        try{
+            $equipo_id = $request->equipo_id;
+            $formulario_id = $request->formulario_id;
+            $formulario = Formulario::find($formulario_id);
+            $equipo = Equipo::find($equipo_id);
+            $model = new FormularioRegistro();
+
+            DB::transaction(function() use($model,$request,$formulario,$equipo){
+
+                $model->formulario_id = $formulario->id;
+                $model->creado_por = Sentinel::getUser()->id;
+                $model->equipo_id = $request->equipo_id;
+                $model->cliente_id = $equipo->cliente_id;
+
+                if($model->save())
+                {
+                    foreach ($formulario->campos()->get() as $campo)
+                    {
+                        $valor =  $request->get($campo->nombre);
+                        $api_descripcion = '';
+                        $form_data = FormularioData::create([
+                            'formulario_registro_id' => $model->id,
+                            'formulario_campo_id'=>$campo->id,
+                            'valor' =>$valor,
+                            'tipo' => $campo->tipo,
+                            'api_descripcion'=>$api_descripcion,
+                        ]);
+
+                        if(!$form_data)
+                        {
+                            Throw new \Exception('Hubo un problema y no se guardar el campo :'.$campo->nombre);
+                        }
+                    }
+                }else{
+                    Throw new \Exception('Hubo un problema y no se creo el registro!');
+                }
+            });
+
+            $request->session()->flash('message.success','Registro creado con exito');
+            return redirect(route('equipos.detail',$equipo_id));
+
+        }catch (\Exception $e){
+            $request->session()->flash('message.error',$e->getMessage());
+            return redirect(route('equipos.create_mant_prev',$equipo->id,$equipo->tipo_equipos_id));
+        }
+
+
+    }
+
+
 }
