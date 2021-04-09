@@ -1268,10 +1268,6 @@
             ],
             "description": "HTML and Form Builders for the Laravel Framework",
             "homepage": "https://laravelcollective.com",
-            "support": {
-                "issues": "https://github.com/LaravelCollective/html/issues",
-                "source": "https://github.com/LaravelCollective/html"
-            },
             "time": "2020-12-15T20:20:05+00:00"
         },
         {
@@ -5069,6 +5065,10 @@
                 "jquery",
                 "laravel"
             ],
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> e3d6a1ba75c380b2b44a2ec3dc4fd606b7d54861
             "support": {
                 "issues": "https://github.com/yajra/laravel-datatables/issues",
                 "source": "https://github.com/yajra/laravel-datatables/tree/v9.17.1"
@@ -5083,6 +5083,11 @@
                     "type": "patreon"
                 }
             ],
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> cd5d17aa23951dcd87b1641583522a4c840359f7
+>>>>>>> e3d6a1ba75c380b2b44a2ec3dc4fd606b7d54861
             "time": "2021-03-23T01:32:51+00:00"
         }
     ],
@@ -7807,6 +7812,5 @@
     "platform": {
         "php": "^7.2.5|^8.0"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "platform-dev": []
 }
