@@ -20,7 +20,7 @@ class CreateFormularioDataTable extends Migration
             $table->integer('formulario_campo_id')->unsigned()->index();
             $table->foreign('formulario_campo_id')->references('id')->on('formulario_campos')->onDelete('cascade');
             $table->text('valor')->nullable();
-            $table->enum('tipo',['text','select','textarea','date','radio','checkbox','database','file','time','number','combo','api','firma']);
+            $table->enum('tipo',['text','select','textarea','date','radio','checkbox','database','file','time','number','combo','api','firma','otro']);
             $table->text('file_path')->nullable();
             $table->softDeletes();
             $table->timestamps();
