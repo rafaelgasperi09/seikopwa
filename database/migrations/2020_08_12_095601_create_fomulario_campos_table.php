@@ -19,7 +19,7 @@ class CreateFomularioCamposTable extends Migration
             $table->foreign('formulario_id')->references('id')->on('formularios')->onDelete('cascade');
             $table->integer('formulario_seccion_id')->unsigned()->nullable()->index();
             $table->foreign('formulario_seccion_id')->references('id')->on('formulario_secciones')->onDelete('cascade');
-            $table->string('nombre',50);
+            $table->string('nombre',150);
             $table->string('etiqueta');
             $table->enum('tipo',['text','select','textarea','date','radio','checkbox','database','file','time','number','combo','api','firma','otro']);
             $table->text('opciones')->nullable();

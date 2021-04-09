@@ -52,7 +52,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
                 \App\FormularioCampo::create([
                     'formulario_id'=>$form->id,
                     'formulario_seccion_id'=>$form_sec->id,
-                    'nombre'=>trim($nombre),
+                    'nombre'=>trim($nombre).'_'.$form_sec->id,
                     'etiqueta'=>$cam,
                     'tipo'=>'radio',
                     'opciones'=>'C,A,R,U',
@@ -78,7 +78,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre),
+                'nombre'=>trim($nombre).'_'.$form_sec->id,
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -105,7 +105,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre),
+                'nombre'=>trim($nombre).'_'.$form_sec->id,
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -123,7 +123,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             'descripcion'=>''
         ]);
 
-        $campos = ['Montaje Fijo','Estato de mangueras y conectores','Fugas','Estado del inducido y de la escobilla','Limpiar con aire a presión el polvo de la escobilla del motor',
+        $campos = ['Montaje Fijo','Estato de mangueras y conectores','Fugas1','Estado del inducido y de la escobilla','Limpiar con aire a presión el polvo de la escobilla del motor',
             'Conexiones de los cables','Funcionamiento de la bomba'];
 
         foreach ($campos as $cam){
@@ -131,7 +131,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre),
+                'nombre'=>trim($nombre).'_'.$form_sec->id,
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -149,7 +149,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             'descripcion'=>''
         ]);
 
-        $campos = ['Nivel del fluido','Fugas','Fijar los montajes del motor','Estado del inducido y de la escobilla','Pernos de agarraderas de la rueda',
+        $campos = ['Nivel del fluido','Fugas2','Fijar los montajes del motor','Estado del inducido y de la escobilla','Pernos de agarraderas de la rueda',
             'Limpiar con aire a presión el polvo de la escobilla del motor'];
 
         foreach ($campos as $cam){
@@ -157,7 +157,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre),
+                'nombre'=>trim($nombre).'_'.$form_sec->id,
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -182,7 +182,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre),
+                'nombre'=>trim($nombre).'_'.$form_sec->id,
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -207,7 +207,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre),
+                'nombre'=>trim($nombre).'_'.$form_sec->id,
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -233,7 +233,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre),
+                'nombre'=>trim($nombre).'_'.$form_sec->id,
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -259,7 +259,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre),
+                'nombre'=>trim($nombre).'_'.$form_sec->id,
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -284,7 +284,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id' => $form->id,
                 'formulario_seccion_id' => $form_sec->id,
-                'nombre' => trim($nombre),
+                'nombre' => trim($nombre).'_'.$form_sec->id,
                 'etiqueta' => $cam,
                 'tipo' => 'radio',
                 'opciones' => 'C,A,R,U',
@@ -302,14 +302,14 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             'descripcion'=>''
         ]);
 
-        $campos = ['Estado y nivel de aceite','Fugas','Tapa del respiradero','Mamgueras y conectores','Filtros'];
+        $campos = ['Estado y nivel de aceite','Fugas3','Tapa del respiradero','Mamgueras y conectores','Filtros'];
 
         foreach ($campos as $cam) {
             $nombre = strtolower(str_replace(' ', '_', $cam));
             \App\FormularioCampo::create([
                 'formulario_id' => $form->id,
                 'formulario_seccion_id' => $form_sec->id,
-                'nombre' => trim($nombre),
+                'nombre' => trim($nombre).'_'.$form_sec->id,
                 'etiqueta' => $cam,
                 'tipo' => 'radio',
                 'opciones' => 'C,A,R,U',
@@ -335,7 +335,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id' => $form->id,
                 'formulario_seccion_id' => $form_sec->id,
-                'nombre' => trim($nombre),
+                'nombre' => trim($nombre).'_'.$form_sec->id,
                 'etiqueta' => $cam,
                 'tipo' => 'radio',
                 'opciones' => 'C,A,R,U',
@@ -360,7 +360,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id' => $form->id,
                 'formulario_seccion_id' => $form_sec->id,
-                'nombre' => trim($nombre),
+                'nombre' => trim($nombre).'_'.$form_sec->id,
                 'etiqueta' => $cam,
                 'tipo' => 'radio',
                 'opciones' => 'C,A,R,U',
@@ -388,7 +388,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id' => $form->id,
                 'formulario_seccion_id' => $form_sec->id,
-                'nombre' => trim($nombre),
+                'nombre' => trim($nombre).'_'.$form_sec->id,
                 'etiqueta' => $cam,
                 'tipo' => 'radio',
                 'opciones' => 'C,A,R,U',

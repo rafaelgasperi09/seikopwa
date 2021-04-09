@@ -100,14 +100,16 @@ class EquiposController extends BaseController
             $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;
             $formulario = Formulario::find($formulario_id);
+            $equipo = Equipo::find($equipo_id);
             $model = new FormularioRegistro();
 
-            DB::transaction(function() use($model,$request,$formulario){
+            DB::transaction(function() use($model,$request,$formulario,$equipo){
 
                 $model->formulario_id = $formulario->id;
                 $model->creado_por = Sentinel::getUser()->id;
                 $model->equipo_id = $request->equipo_id;
                 $model->turno_chequeo_diario = $request->turno_chequeo_diario;
+                $model->cliente_id = $equipo->cliente_id;
 
                 if($model->save())
                 {

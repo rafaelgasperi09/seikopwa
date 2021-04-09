@@ -45,7 +45,7 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
 
         Route::get('/create_mant_prev/{id}/tipo/{tipo}', array('as' => 'equipos.create_mant_prev', 'uses' => 'EquiposController@createMantPrev'));
 
-        Route::post('/create_mant_prev_counter_sc', array('as' => 'equipos.store_mant_prev_counter_sc', 'uses' => 'EquiposController@storeMantPrevCounterSc'));
+        Route::post('/store_mant_prev', array('as' => 'equipos.store_mant_prev', 'uses' => 'EquiposController@storeMantPrev'));
 
         Route::get('/tecnical_support/{id}', array('as' => 'equipos.create_tecnical_support', 'uses' => 'EquiposController@createTecnicalSupport'));
 
