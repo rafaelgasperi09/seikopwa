@@ -42,6 +42,10 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
         Route::get('/create_daily_check/{id}', array('as' => 'equipos.create_daily_check', 'uses' => 'EquiposController@createDailyCheck'));
 
         Route::post('/store_daily_check', array('as' => 'equipos.store_daily_check', 'uses' => 'EquiposController@storeDailyCheck'));
+
+        Route::get('/create_mant_prev/{id}/tipo/{tipo}', array('as' => 'equipos.create_mant_prev', 'uses' => 'EquiposController@createMantPrev'));
+
+        Route::post('/create_mant_prev_counter_sc', array('as' => 'equipos.store_mant_prev_counter_sc', 'uses' => 'EquiposController@storeMantPrevCounterSc'));
     });
 
     Route::group(array('prefix' => 'baterias'), function() {

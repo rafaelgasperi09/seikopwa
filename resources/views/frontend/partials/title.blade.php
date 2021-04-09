@@ -11,5 +11,5 @@
 </div>
 
 <div class="header-large-title">
-    <h1 class="title">{{ $subtitle }}</h1>
+    <h5 class="title">{{ $subtitle }}</h5>
 </div>
