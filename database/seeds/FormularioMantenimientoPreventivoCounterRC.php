@@ -49,7 +49,7 @@ class FormularioMantenimientoPreventivoCounterRC extends Seeder
             'Sistema Hidráulico',
             'Montaje del mástil',
             'Entornos frigoríficos',
-            'Acondicionador de prueba y verificación del funcionamiento'];
+            'Accionador de prueba y verificación del funcionamiento'];
 
         $i=1;
         foreach ($seeciones as $sec){

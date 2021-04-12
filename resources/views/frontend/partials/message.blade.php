@@ -42,7 +42,7 @@
                 </div>
                 <button type="button" class="btn btn-sm btn-text-success close-button">CLOSE</button>
             </div>
-            <script>toastbox('toast-2', 14000)</script>
+            <script>toastbox('toast-2', 10000)</script>
         @endif
     </div>
 </div>
