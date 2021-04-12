@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Formulario;
 use App\FormularioData;
 use App\FormularioRegistro;
+use App\Http\Requests\SaveFormEquipoRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -87,14 +88,7 @@ class EquiposController extends BaseController
         return view('frontend.equipos.create_daily_check')->with('data',$data)->with('formulario',$formulario)->with('turno',$turno);
     }
 
-    public function storeDailyCheck(Request $request){
-
-
-        $this->validate($request, [
-            'equipo_id'  => 'required',
-            'formulario_id'  => 'required',
-            'turno_chequeo_diario' => 'required'
-        ]);
+    public function storeDailyCheck(SaveFormEquipoRequest $request){
 
         try{
             $equipo_id = $request->equipo_id;
@@ -160,15 +154,8 @@ class EquiposController extends BaseController
         return view('frontend.equipos.create_mant_prev')->with('data',$data)->with('formulario',$formulario);
     }
 
-    public function storeMantPrev(Request $request)
+    public function storeMantPrev(SaveFormEquipoRequest $request)
     {
-
-        $this->validate($request, [
-            'equipo_id' => 'required',
-            'formulario_id' => 'required',
-            'horometro' => 'required'
-        ]);
-
         try {
             $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;

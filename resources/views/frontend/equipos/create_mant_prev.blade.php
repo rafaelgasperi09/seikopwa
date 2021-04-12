@@ -61,8 +61,8 @@
         </div>
     </div>
     {{Form::open(array("method" => "POST","action" => "EquiposController@storeMantPrev","role" => "form",'class'=>'form-horizontal'))}}
-    {{ Form::hidden('equipo_id',$data->id) }}
-    {{ Form::hidden('formulario_id',$formulario->id) }}
+    {{ Form::hidden('equipo_id',$data->id,array('required')) }}
+    {{ Form::hidden('formulario_id',$formulario->id,array('required')) }}
     @include('frontend.partials.form',array('formulario'=>$formulario))
     <button type="submit" class="btn btn-primary btn-sm btn-block">GUARDAR</button>
     {{ Form::close() }}

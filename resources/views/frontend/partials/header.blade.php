@@ -18,6 +18,8 @@
     @laravelPWA
     <!-- Jquery -->
     <script src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url('assets/js/toast.js') }}"></script>
+
 </head>
 
 <body>
@@ -43,7 +45,8 @@
             <ion-icon name="search-outline"></ion-icon>
         </a>
     </div>
-    @include('frontend.partials.message')
+
 </div>
 <!-- * App Header -->
+@include('frontend.partials.message')
 @endif

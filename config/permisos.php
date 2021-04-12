@@ -24,9 +24,11 @@ return [
    ),
   "Equipos"=>array(
      "equipos.index"=>"Listar Equipos",
-     "equipos.create"=>"Crear Rol",
+     "equipos.create"=>"Crear Equipo",
      "equipos.create_daily_check"=>"Crear Daily Check",
-     "equipos.show"=>"Mostrar Equipo",
+     "equipos.create_mant_prev"=>"Crear Ticket Mantenimiento Preventivo",
+     "equipos.create_tecnical_support"=>"Crear Ticket Soporte Tecnico",
+     "equipos.detail"=>"Ver Detalle Equipo",
   ),
 
 )];
