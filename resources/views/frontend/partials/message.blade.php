@@ -29,7 +29,7 @@
                 </div>
                 <button type="button" class="btn btn-sm btn-text-danger close-button">CLOSE</button>
             </div>
-            <script>toastbox('toast-1', 4000)</script>
+            <script>toastbox('toast-1', 14000)</script>
             <!-- * toast top iconed -->
         @endif
         @if (Session::has('message.success'))
@@ -42,7 +42,7 @@
                 </div>
                 <button type="button" class="btn btn-sm btn-text-success close-button">CLOSE</button>
             </div>
-            <script>toastbox('toast-2', 2000)</script>
+            <script>toastbox('toast-2', 14000)</script>
         @endif
     </div>
 </div>
