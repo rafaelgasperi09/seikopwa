@@ -27,6 +27,7 @@
     <div class="spinner-border text-primary" role="status"></div>
 </div>
 <!-- * loader -->
+@if(\Sentinel::check())
 <!-- App Header -->
 <div class="appHeader bg-primary scrolled">
     <div class="left">
@@ -45,3 +46,4 @@
     @include('frontend.partials.message')
 </div>
 <!-- * App Header -->
+@endif

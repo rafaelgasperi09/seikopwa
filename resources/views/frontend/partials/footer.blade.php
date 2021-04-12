@@ -1,3 +1,4 @@
+@if(\Sentinel::check())
 <div class="appBottomMenu">
     <a href="{{ route('equipos.index') }}" class="item">
         <div class="col">
@@ -59,6 +60,7 @@
         </div>
     </div>
 </div>
+@endif
 <!-- * welcome notification -->
 <!-- ///////////// Js Files ////////////////////  -->
 <!-- Bootstrap-->

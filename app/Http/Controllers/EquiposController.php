@@ -153,7 +153,7 @@ class EquiposController extends BaseController
     public function createMantPrev($id,$tipo){
 
         $data = Equipo::findOrFail($id);
-        $forms = [4=>'form_montacarga_counter_sc'];
+        $forms = [1=>'form_montacarga_counter_rc',2=>'form_montacarga_combustion',3=>'form_montacarga_counter_fc',4=>'form_montacarga_counter_sc',5=>'form_montacarga_counter_pallet_pe',6=>'form_montacarga_counter_reach',7=>'form_montacarga_counter_stock_picker'];
 
         $formulario = Formulario::whereNombre($forms[$tipo])->first();
 

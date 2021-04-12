@@ -1,3 +1,4 @@
+@if(\Sentinel::check())
 <!-- App Sidebar -->
 <div class="modal fade panelbox panelbox-left" id="sidebarPanel" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -149,3 +150,4 @@
     </div>
 </div>
 <!-- * App Sidebar -->
+@endif
