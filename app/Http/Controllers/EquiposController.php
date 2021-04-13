@@ -7,6 +7,7 @@ use App\FormularioRegistro;
 use App\Http\Requests\SaveFormEquipoRequest;
 use App\MontacargaConsecutivo;
 use App\MontacargaCopiaSolicitud;
+use App\MontacargaImagen;
 use App\MontacargaSolicitud;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -191,6 +192,7 @@ class EquiposController extends BaseController
                         }
                     }
 
+
                     // despues de crear la data cear una solicitud de mantenimiento preventivo en la base de dato de montacarga
                     $solicitud = new MontacargaSolicitud();
                     $consecutivo = MontacargaConsecutivo::where('consecutivo_opcion','mantenimiento-preventivo')->first();
@@ -198,8 +200,8 @@ class EquiposController extends BaseController
                     $solicitud->cliente_id = $equipo->cliente_id;
                     $solicitud->tipo_servicio_id = 3; //mantenimiento-preventivo
                     $solicitud->equipo_id = $equipo->id;
-                    $solicitud->usuario_creado_id = 1; // crear un app_user
-                    $solicitud->usuario_id = 1;
+                    $solicitud->usuario_creado_id = 1; // crear un app_user debe ser  el usuario actual pero tendriamos que cazarlo con uno de la bd de montacarga
+                    $solicitud->usuario_id = 1; //
                     $solicitud->departamento_id =9; // servicio-tecnico
                     $solicitud->horometro =  $request->get('horometro');
                     $solicitud->estado_id = 1; // abierta
@@ -223,6 +225,15 @@ class EquiposController extends BaseController
                         $copia_sol->save();
                         $model->solicitud_id = $solicitud->id;
                         $model->save();
+                        // creams el pdf de la solicitud
+                        $path = $model->savePdf();
+                        MontacargaImagen::create([
+                            'name' =>$path,
+                            'directory'=>'app/public/pdf',
+                            'solicitud_id'=>$solicitud->id,
+                            'calidad'=>'original',
+                            'usuario_id'=>1,
+                        ]);
                     }
 
                 } else {

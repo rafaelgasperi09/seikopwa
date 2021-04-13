@@ -67,6 +67,11 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
         Route::post('/guardar_entrada_salida', array('as' => 'baterias.guardar_entrada_salida', 'uses' => 'BateriaController@guardarEntredaSalida'));
     });
 
+    Route::group(array('prefix' => 'exportar'), function() {
+
+        Route::get('mantenimiento_preventivo/{formulario_registro_id}', array('as' => 'exportar.mantenimiento_preventivo', 'uses' => 'PdfController@exportarMantPrev'));
+    });
+
 });
 
 

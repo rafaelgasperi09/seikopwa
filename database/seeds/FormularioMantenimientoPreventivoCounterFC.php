@@ -52,7 +52,7 @@ class FormularioMantenimientoPreventivoCounterFC extends Seeder
             'Sistema Hidráulico',
             'Conjunto del Mástil y Misc.',
             'Sistema de Enfriamiento.',
-            'Sistema de enfriamiento','Accesorios'];
+            'Accesorios'];
 
         $i=1;
         foreach ($seeciones as $sec){

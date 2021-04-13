@@ -205,7 +205,6 @@ class FormularioMantenimientoPreventivoStockpicker extends Seeder
                         'Alarma de desplazamiento (opcional)',
                         'Velocidades de desplazamiento',
                         'Funcionamiento de la altura de ECR4 (opcional)',
-                        'Funcionamiento de los interruptores limitadores del mástil (opcional)',
                         'Funcionamiento de la dirección del ECR1',
                         'Funcionamiento de la dirección del ECR2',
                         'Funcionamiento del interruptor direccional',

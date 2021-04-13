@@ -1,42 +1,23 @@
 <?php
 
-namespace App;
+namespace App\Http\Controllers;
 
-use App\Http\Traits\FilterDataTrait;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class FormularioRegistro extends BaseModel
+
+use App\Equipo;
+use App\Formulario;
+use App\FormularioRegistro;
+use App\MontacargaSolicitud;
+use App\TCPDF;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
+class PdfController extends Controller
 {
-    use SoftDeletes;
-    protected $table = 'formulario_registro';
-    protected $guarded = ['id','typeheadA'];
-    protected $creator_field_name = 'creado_por';
-
-    public function creador(){
-        return $this->belongsTo('App\User','creado_por');
-    }
-
-    public function formulario(){
-        return $this->belongsTo(Formulario::class);
-    }
-
-    public function data(){
-        return $this->hasMany(FormularioData::class);
-    }
-
-    public function cliente(){
-        return Cliente::find($this->cliente_id);
-    }
-
-    public function equipo(){
-        return Equipo::find($this->equipo_id);
-    }
-
-    public function savePdf()
+    public function exportarMantPrev($formulario_registro_id)
     {
-        $formularioRegistro = FormularioRegistro::find($this->id);
+        $formularioRegistro = FormularioRegistro::find($formulario_registro_id);
         $formulario = Formulario::find($formularioRegistro->formulario_id);
         $equipo = Equipo::find($formularioRegistro->equipo_id);
         $solicitud = MontacargaSolicitud::findOrFail($formularioRegistro->solicitud_id);
@@ -129,8 +110,8 @@ class FormularioRegistro extends BaseModel
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x + 3, $y);
-        //$modelo = $solicitud->equipos ? $solicitud->equipos->modelo : "";
-        $pdf->Cell(50, 6,  html_entity_decode($equipo->modelo), 0, 0, 'L');
+        $modelo = $solicitud->equipos ? $solicitud->equipos->modelo : "";
+        $pdf->Cell(50, 6,  html_entity_decode($modelo), 0, 0, 'L');
         $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderDashed()));
 
         $pdf->SetTextColor(153, 153, 153);
@@ -144,8 +125,8 @@ class FormularioRegistro extends BaseModel
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x + 3, $y);
-        //$serie = $solicitud->equipos ? $solicitud->equipos->serie : "";
-        $pdf->Cell(60, 6,  html_entity_decode($equipo->serie), 0, 0, 'L');
+        $serie = $solicitud->equipos ? $solicitud->equipos->serie : "";
+        $pdf->Cell(60, 6,  html_entity_decode($serie), 0, 0, 'L');
         $pdf->Rect($x + 3, $y, 60, 6, 'D', array('all' => $pdf->borderDashed()));
         $pdf->Ln();
 
@@ -235,16 +216,16 @@ class FormularioRegistro extends BaseModel
                 $sigla = "";
 
                 if ($isInforme == 1) {
-                    /* foreach ($informes_solicitud as $informe_marcado) {
-                         if (($informe_marcado->id == $informe->id) && ($informe_marcado->pivot)) {
-                             $pivot = $informe_marcado->pivot;
-                             $evaluacion_trabajo = $informe_marcado->evaluacion_trabajos()
-                                 ->where('id', $pivot->evaluacion_id)
-                                 ->first();
+                   /* foreach ($informes_solicitud as $informe_marcado) {
+                        if (($informe_marcado->id == $informe->id) && ($informe_marcado->pivot)) {
+                            $pivot = $informe_marcado->pivot;
+                            $evaluacion_trabajo = $informe_marcado->evaluacion_trabajos()
+                                ->where('id', $pivot->evaluacion_id)
+                                ->first();
 
-                             $sigla = $evaluacion_trabajo->sigla;
-                         }
-                     }*/
+                            $sigla = $evaluacion_trabajo->sigla;
+                        }
+                    }*/
 
                     foreach ($formulario_data as $data){
 
@@ -336,6 +317,5 @@ class FormularioRegistro extends BaseModel
 
         $pdf->Output($path, 'F');
 
-        return $path;
     }
 }
