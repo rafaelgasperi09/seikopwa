@@ -16,11 +16,19 @@
             <ion-icon name="home-outline" role="img" class="md hydrated" aria-label="home outline"></ion-icon>
         </div>
     </a>
-    <a href="app-pages.html" class="item active">
-        <div class="col">
-            <ion-icon name="layers-outline" role="img" class="md hydrated" aria-label="layers outline"></ion-icon>
-        </div>
-    </a>
+    @if(current_user()->isOnGroup('administradores'))
+        <a href="{{ route('usuarios.index') }}" class="item active">
+            <div class="col">
+                <ion-icon name="people-outline" role="img" class="md hydrated" aria-label="layers outline"></ion-icon>
+            </div>
+        </a>
+    @else
+        <a href="{{ route('usuarios.profile',current_user()->id) }}" class="item active">
+            <div class="col">
+                <ion-icon name="person-outline" role="img" class="md hydrated" aria-label="layers outline"></ion-icon>
+            </div>
+        </a>
+    @endif
     <a href="javascript:;" class="item" data-toggle="modal" data-target="#sidebarPanel">
         <div class="col">
             <ion-icon name="menu-outline" role="img" class="md hydrated" aria-label="menu outline"></ion-icon>

@@ -72,6 +72,31 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
         Route::get('mantenimiento_preventivo/{formulario_registro_id}', array('as' => 'exportar.mantenimiento_preventivo', 'uses' => 'PdfController@exportarMantPrev'));
     });
 
+    Route::group(array('prefix' => 'usuarios'), function() {
+
+        Route::get('/', array('as' => 'usuarios.index', 'uses' => 'UserController@index'));
+
+        Route::get('/create', array('as' => 'usuarios.create', 'uses' => 'UserController@create'));
+
+        Route::get('/search', array('as' => 'usuarios.search', 'uses' => 'UserController@search'));
+
+        Route::get('/import', array('as' => 'usuarios.import', 'uses' => 'UserController@import'));
+
+        Route::get('/{id}', array('as' => 'usuarios.detail', 'uses' => 'UserController@detail'));
+
+        Route::get('/{id}/profile', array('as' => 'usuarios.profile', 'uses' => 'UserController@profile'));
+
+        Route::post('/store', array('as' => 'usuarios.store', 'uses' => 'UserController@store'));
+
+        Route::put('/{id}/edit', array('as' => 'usuarios.update', 'uses' => 'UserController@update'));
+
+        Route::put('/{id}/password', array('as' => 'usuarios.update_password', 'uses' => 'UserController@updatePassword'));
+
+        Route::put('/{id}/photo', array('as' => 'usuarios.update_photo', 'uses' => 'UserController@updatePhoto'));
+
+
+    });
+
 });
 
 

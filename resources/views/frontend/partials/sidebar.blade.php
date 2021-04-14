@@ -4,17 +4,20 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body p-0">
-
                 <!-- profile box -->
                 <div class="profileBox">
                     <div class="image-wrapper">
-                        <img src="{{ url('assets/img/sample/avatar/avatar1.jpg')}}" alt="image" class="imaged rounded">
+                        @empty($data->photo)
+                            <img src="{{url('assets/img/user.png')}}" alt="image" class="imaged rounded">
+                        @else
+                            <img src="{{ \Storage::url($data->photo)}}" alt="image" class="imaged rounded">
+                        @endif
                     </div>
                     <div class="in">
                         <strong>{{ current_user()->getFullName() }}</strong>
                         <div class="text-muted">
                             <ion-icon name="business"></ion-icon>
-                            Empresa
+                            {{ current_user()->roles()->first()->name }}
                         </div>
                     </div>
                     <a href="javascript:;" class="close-sidebar-button" data-dismiss="modal">
@@ -55,12 +58,12 @@
                         </a>
                     </li>
                     <li>
-                        <a href="page-chat.html" class="item">
+                        <a href="{{ route('usuarios.index') }}" class="item">
                             <div class="icon-box bg-primary">
-                                <ion-icon name="alert-circle-outline"></ion-icon>
+                                <ion-icon name="people-circle-outline"></ion-icon>
                             </div>
                             <div class="in">
-                                <div>Reporte de falla</div>
+                                <div>Usuarios</div>
                             </div>
                         </a>
                     </li>
@@ -132,7 +135,7 @@
 
             <!-- sidebar buttons -->
             <div class="sidebar-buttons">
-                <a href="javascript:;" class="button">
+                <a href="{{ route('usuarios.profile',Sentinel::getUser()->id) }}" class="button">
                     <ion-icon name="person-outline"></ion-icon>
                 </a>
                 <a href="javascript:;" class="button">

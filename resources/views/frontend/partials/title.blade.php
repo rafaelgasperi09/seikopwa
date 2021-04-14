@@ -9,7 +9,8 @@
 
     </div>
 </div>
-
+@empty(!$subtitle)
 <div class="header-large-title">
     <h5 class="title">{{ $subtitle }}</h5>
 </div>
+@endempty
