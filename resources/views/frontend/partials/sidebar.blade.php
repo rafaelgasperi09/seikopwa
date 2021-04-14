@@ -83,54 +83,6 @@
                         </div>
                     </li>
                 </ul>
-
-                <div class="listview-title mt-2 mb-1">
-                    <span>Friends</span>
-                </div>
-                <ul class="listview image-listview flush transparent no-line">
-                    <li>
-                        <a href="page-chat.html" class="item">
-                            <img src="{{ url('assets/img/sample/avatar/avatar7.jpg')}}" alt="image" class="image">
-                            <div class="in">
-                                <div>Sophie Asveld</div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="page-chat.html" class="item">
-                            <img src="{{ url('assets/img/sample/avatar/avatar3.jpg')}}" alt="image" class="image">
-                            <div class="in">
-                                <div>Sebastian Bennett</div>
-                                <span class="badge badge-danger">6</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="page-chat.html" class="item">
-                            <img src="{{ url('assets/img/sample/avatar/avatar10.jpg')}}" alt="image" class="image">
-                            <div class="in">
-                                <div>Beth Murphy</div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="page-chat.html" class="item">
-                            <img src="{{ url('assets/img/sample/avatar/avatar2.jpg')}}" alt="image" class="image">
-                            <div class="in">
-                                <div>Amelia Cabal</div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="page-chat.html" class="item">
-                            <img src="{{ url('assets/img/sample/avatar/avatar5.jpg')}}" alt="image" class="image">
-                            <div class="in">
-                                <div>Henry Doe</div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-
             </div>
 
             <!-- sidebar buttons -->
