@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Rol;
 use App\User;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Sentinel;
 use Illuminate\Http\Request;
 
@@ -122,15 +124,18 @@ class UserController extends Controller
     public function updatePhoto(Request $request,$id){
 
         $this->validate($request, [
-            'password'         => 'required',
-            'password_confirmation' => 'required|same:password'
+            'file'  => 'required',
         ]);
 
         $user = User::findOrFail($id);
-        $user->password = $request->password;
-
-        if($user->save()){
-            session()->flash('message.success', 'Cambio de contrasena exitosa.');
+        $file = $request->file('file');
+        $ext =  $file->getClientOriginalExtension();
+        $filename = 'user_'.$user->id.'_'.Str::random(6).".".$ext;
+        $upload = Storage::disk('public')->putFileAs('profile',$file,$filename);
+        if($upload){
+            $user->photo = $upload;
+            $user->save();
+            session()->flash('message.success', 'Foto subida con exito.');
         }else{
             session()->flash('message.error', 'Hubo un error y no se pudo modificar.');
         }

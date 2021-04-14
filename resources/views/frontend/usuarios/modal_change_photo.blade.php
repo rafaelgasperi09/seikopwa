@@ -3,13 +3,13 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Actulizar foto</h5>
+                <h5 class="modal-title">Actualizar foto</h5>
             </div>
             {{ Form::model($data, array( 'method' => 'PUT' , 'role' => 'form','class'=>'form-horizontal','id'=>'form_change_photo','files'=>true)) }}
             <div class="modal-body text-left mb-2">
                 <div class="custom-file-upload">
-                    {{ Form::file('file',null,array('id'=>'fileuploadInput','accept'=>'.png, .jpg, .jpeg')) }}
-                    <label for="fileuploadInput">
+                    {{ Form::file('file',array('id'=>'fileuploadInput','accept'=>'.png, .jpg, .jpeg')) }}
+                    <label for="fileuploadInput" id="profile_photo">
                             <span>
                                 <strong>
                                     <ion-icon name="cloud-upload-outline" role="img" class="md hydrated" aria-label="cloud upload outline"></ion-icon>
@@ -29,10 +29,20 @@
         </div>
     </div>
 </div>
+
 <script>
     $('#modal_change_photo').on('show.bs.modal', function (e) {
         var action = $(e.relatedTarget).attr('data-action');
+        var photo = $(e.relatedTarget).attr('data-photo');
         $("#form_change_photo").attr('action',action);
+        console.log('photo : '+photo)
+        /*if(photo != ''){
+
+            $("#profile_photo").attr('class','file-uploaded');
+            $("#profile_photo").attr('style','"background-image: url(&quot;blob:'+photo+'&quot;);');
+            //$("$profile_photo").
+
+        }*/
     });
 </script>
 <!-- * Modal Form -->
