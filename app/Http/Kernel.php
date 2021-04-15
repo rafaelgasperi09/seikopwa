@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
         'sentinel.guest' => \App\Http\Middleware\SentinelGuest::class,
         'sentinel.admin' => \App\Http\Middleware\SentinelAdminAccess::class,
         'hasAccess' => \App\Http\Middleware\HasAccess::class,
+        'passwordIsValid' => \App\Http\Middleware\CheckIfPasswordIsValid::class,
+
     ];
 }

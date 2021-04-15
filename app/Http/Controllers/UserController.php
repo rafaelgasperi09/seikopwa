@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Cliente;
+use App\MontacargaUser;
+use App\Notifications\NewUser;
 use App\Rol;
 use App\User;
 use Illuminate\Support\Facades\Storage;
@@ -24,7 +27,7 @@ class UserController extends Controller
         $data=User::where('first_name','like',"%".$request->q."%")->orWhere('last_name','like',"%".$request->q."%")->paginate(10);
 
 
-        return view('frontend.equipos.page')->with('data',$data);
+        return view('frontend.usuarios.page')->with('data',$data);
     }
 
     public function detail($id){
@@ -32,6 +35,12 @@ class UserController extends Controller
         $data = User::findOrFail($id);
         return view('frontend.usuarios.detail',compact('data'));
 
+    }
+
+    public function updatePasswordView($id){
+
+        $data = User::findOrFail($id);
+        return view('frontend.usuarios.update_password',compact('data'));
     }
 
     public function profile($id){
@@ -44,7 +53,6 @@ class UserController extends Controller
     public function create(){
 
         $roles = Rol::pluck('name','id');
-
         return view('frontend.usuarios.create',compact('roles'));
 
     }
@@ -60,8 +68,6 @@ class UserController extends Controller
             'password_confirmation' => 'required|same:password'
         ]);
 
-        //dd($request->all());
-
         $user = Sentinel::registerAndActivate(array(
             'email' => $request->get('email'),
             'first_name' => $request->get('first_name'),
@@ -72,10 +78,28 @@ class UserController extends Controller
         $role = Sentinel::findRoleById($request->get('rol_id'));
         $role->users()->attach($user);
         $user->crm_user_id = $request->crm_user_id;
-        $user->save();
-        //$user->notify(new NewUser($user));
+        $user->have_to_change_password = 1;
+        // si el el rol es cliente buscarlo en la tabla de contactos del crm para sacar su id
+        if($role->slug =='clientes'){
+            $cliente = Cliente::where('correo','like',"'".$request->email."'")->first();
+            if($cliente) $user->crm_cliente_id = $cliente->id;
+        }else{ // buscar si esta en la tabla de usuarios
+            // si el el rol es cliente buscarlo en la tabla de contactos del crm para sacar su id
+            $crmuser = MontacargaUser::whereEmail($request->email)->first();
+            if($crmuser) $user->crm_user_id = $crmuser->id;
+        }
 
-        session()->flash('message.success', 'Usuario creado con exito.');
+        if($user->save()){
+            $u = User::find($user->id);
+            $u->notify(new NewUser($u,$request->password));
+            session()->flash('message.success', 'Usuario creado con éxito. Se ha enviado un correo con los datos de acceso.');
+
+        }else{
+
+            session()->flash('message.success', 'Hubo un error y no se pudo crear.');
+        }
+
+
         return redirect(route('usuarios.detail',$user->id));
 
     }
@@ -92,7 +116,7 @@ class UserController extends Controller
         $user->fill($request->all());
 
         if($user->save()){
-            session()->flash('message.success', 'Usuario creado con exito.');
+            session()->flash('message.success', 'Usuario creado con éxito.');
         }else{
             session()->flash('message.error', 'Hubo un error y no se pudo modificar.');
         }
@@ -110,9 +134,11 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
         $user->password = $request->password;
+        $user->have_to_change_password = 0;
+        $user->date_last_password_changed = date('Y-m-d');
 
         if($user->save()){
-            session()->flash('message.success', 'Cambio de contrasena exitosa.');
+            session()->flash('message.success', 'Cambio de contraseña éxitoso.');
         }else{
             session()->flash('message.error', 'Hubo un error y no se pudo modificar.');
         }
@@ -135,7 +161,7 @@ class UserController extends Controller
         if($upload){
             $user->photo = $upload;
             $user->save();
-            session()->flash('message.success', 'Foto subida con exito.');
+            session()->flash('message.success', 'Foto subida con éxito.');
         }else{
             session()->flash('message.error', 'Hubo un error y no se pudo modificar.');
         }
@@ -144,5 +170,12 @@ class UserController extends Controller
 
     }
 
+
+    public function import($id){
+
+        $data = User::findOrFail($id);
+        return view('frontend.usuarios.detail',compact('data'));
+
+    }
 
 }

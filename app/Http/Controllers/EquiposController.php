@@ -136,7 +136,7 @@ class EquiposController extends BaseController
                 }
             });
 
-            $request->session()->flash('message.success','Registro creado con exito');
+            $request->session()->flash('message.success','Registro creado con éxito');
             return redirect(route('equipos.detail',$equipo_id));
 
         }catch (\Exception $e){
@@ -243,7 +243,7 @@ class EquiposController extends BaseController
 
             //aqui hay que ver a quien notificar
 
-            $request->session()->flash('message.success', 'Registro creado con exito');
+            $request->session()->flash('message.success', 'Registro creado con éxito');
             return redirect(route('equipos.detail', $equipo_id));
 
         } catch (\Exception $e) {

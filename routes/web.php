@@ -17,14 +17,16 @@ Route::get('/', function () {
     return view('frontend.login');
 });
 
+/*************** USERS LOGIN PASSWORD ROUTES **************************************/
 Route::get('/login', function () {
     return view('frontend.login');
 });
-
-
 Route::post('login', array('as' => 'login','uses' => 'LoginController@login'));
+Route::get('usuarios/{id}/update_password_view', array('as' => 'usuarios.update_password_view', 'uses' => 'UserController@updatePasswordView'))->middleware('sentinel.auth');
+Route::put('usuarios/{id}/password', array('as' => 'usuarios.update_password', 'uses' => 'UserController@updatePassword'))->middleware('sentinel.auth');
+/************************************************************************************/
 
-Route::group(array('middleware' => 'sentinel.auth'), function() {
+Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), function() {
 
     Route::get('logout', array('as' => 'logout','uses' => 'LoginController@logout'));
     Route::get('/dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
@@ -89,8 +91,6 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
         Route::post('/store', array('as' => 'usuarios.store', 'uses' => 'UserController@store'));
 
         Route::put('/{id}/edit', array('as' => 'usuarios.update', 'uses' => 'UserController@update'));
-
-        Route::put('/{id}/password', array('as' => 'usuarios.update_password', 'uses' => 'UserController@updatePassword'));
 
         Route::put('/{id}/photo', array('as' => 'usuarios.update_photo', 'uses' => 'UserController@updatePhoto'));
 

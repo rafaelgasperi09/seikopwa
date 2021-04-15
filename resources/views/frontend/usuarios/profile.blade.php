@@ -6,7 +6,7 @@
                 @empty(!$data->photo)
                     <img src="{{\Storage::url($data->photo)}}" alt="avatar" class="imaged w64 rounded">
                 @else
-                    <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded">
+                    <img src="{{ url('assets/img/user.png') }}" alt="avatar" class="imaged w64 rounded">
                 @endempty
             </div>
             <div class="in">
@@ -73,6 +73,7 @@
                         </i>
                     </div>
                 </div>
+                @if(current_user()->isOnGroup('administradores'))
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="label" for="crm_user_id">CRM ID</label>
@@ -83,8 +84,11 @@
                     </div>
                     <small style="color: red;">Este es el identificador unico del usuario con el mismo correo en el CRM</small>
                 </div>
+                @endif
             </div>
-            <button type="submit" class="btn btn-primary btn-sm btn-block">GUARDAR</button>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-sm btn-block">GUARDAR</button>
+            </div>
             {{ Form::close() }}
         </div>
     </div>
