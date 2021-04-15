@@ -24,7 +24,11 @@ class UserController extends Controller
 
     public function search(Request $request){
 
-        $data=User::where('first_name','like',"%".$request->q."%")->orWhere('last_name','like',"%".$request->q."%")->paginate(10);
+        $data=User::where('first_name','like',"%".$request->q."%")->orWhere('last_name','like',"%".$request->q."%")
+            ->orWhereHas('roles',function ($q) use($request){
+                $q->where('name','like',"%".$request->q."%");
+            })
+            ->paginate(10);
 
 
         return view('frontend.usuarios.page')->with('data',$data);

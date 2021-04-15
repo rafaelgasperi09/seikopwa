@@ -9,7 +9,9 @@
                 @endif
             </div>
             <div class="in">
-                <div>{{$dato->getFullName()}}</div>
+                <div>{{$dato->getFullName()}}<br/><small>{{ $dato->email }}</small> </div>
+                <br/>
+                <small>({{ $dato->roles()->first()->name }})</small>
             </div>
         </a>
         <!-- sub menu -->

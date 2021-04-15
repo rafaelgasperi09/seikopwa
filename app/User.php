@@ -72,4 +72,8 @@ class User extends Authenticatable
     public function getFullName(){
         return $this->first_name.' '.$this->last_name;
     }
+
+    public function cliente(){
+        return Cliente::find($this->crm_cliente_id);
+    }
 }
