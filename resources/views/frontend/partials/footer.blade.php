@@ -1,29 +1,29 @@
 @if(\Sentinel::check())
 <div class="appBottomMenu">
-    <a href="{{ route('equipos.index') }}" class="item">
+    <a href="{{ route('equipos.index') }}" class="item  @if(Request::is('equipos') or Request::is('equipos/*')) active @endif">
         <div class="col">
             <ion-icon name="train-outline" role="img" class="md hydrated" aria-label="chatbubble ellipses outline"></ion-icon>
             <span class="badge badge-danger">5</span>
         </div>
     </a>
-    <a href="{{ route('baterias.index') }}" class="item">
+    <a href="{{ route('baterias.index') }}" class="item @if(Request::is('baterias') or Request::is('baterias/*')) active @endif">
         <div class="col">
             <ion-icon name="battery-charging-outline" role="img" class="md hydrated" aria-label="cube outline"></ion-icon>
         </div>
     </a>
-    <a href="{{ route('dashboard') }}" class="item">
+    <a href="{{ route('dashboard') }}" class="item @if(Request::is('dashboard')) active @endif">
         <div class="col">
             <ion-icon name="home-outline" role="img" class="md hydrated" aria-label="home outline"></ion-icon>
         </div>
     </a>
     @if(current_user()->isOnGroup('administradores'))
-        <a href="{{ route('usuarios.index') }}" class="item active">
+        <a href="{{ route('usuarios.index') }}" class="item @if(Request::is('usuarios') or Request::is('usuarios/*')) active @endif">
             <div class="col">
                 <ion-icon name="people-outline" role="img" class="md hydrated" aria-label="layers outline"></ion-icon>
             </div>
         </a>
     @else
-        <a href="{{ route('usuarios.profile',current_user()->id) }}" class="item active">
+        <a href="{{ route('usuarios.profile',current_user()->id) }}" class="item @if(Request::is('usuarios') or Request::is('usuarios/*')) active @endif">
             <div class="col">
                 <ion-icon name="person-outline" role="img" class="md hydrated" aria-label="layers outline"></ion-icon>
             </div>
@@ -68,8 +68,10 @@
         </div>
     </div>
 </div>
-@endif
 <!-- * welcome notification -->
+@endif
+
+@include('frontend.partials.message')
 <!-- ///////////// Js Files ////////////////////  -->
 <!-- Bootstrap-->
 <script src="{{ url('assets/js/lib/popper.min.js') }}"></script>

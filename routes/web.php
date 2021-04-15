@@ -18,10 +18,15 @@ Route::get('/', function () {
 });
 
 /*************** USERS LOGIN PASSWORD ROUTES **************************************/
-Route::get('/login', function () {
-    return view('frontend.login');
-});
+Route::get('/login', function () { return view('frontend.login');});
 Route::post('login', array('as' => 'login','uses' => 'LoginController@login'));
+
+
+Route::get('forgot_password/create', function () { return view('frontend.forgot_password'); });
+Route::post('forgot_password/store', array('as' => 'forgot_password.store','uses' => 'ForgotPasswordController@store'));
+Route::get('recovery_password/{id}/{token}', array('as' => 'forgot_password.edit', 'uses' => 'ForgotPasswordController@edit'));
+Route::put('recovery_password/{id}/{token}', array('as' => 'forgot_password.update', 'uses' => 'ForgotPasswordController@update'));
+
 Route::get('usuarios/{id}/update_password_view', array('as' => 'usuarios.update_password_view', 'uses' => 'UserController@updatePasswordView'))->middleware('sentinel.auth');
 Route::put('usuarios/{id}/password', array('as' => 'usuarios.update_password', 'uses' => 'UserController@updatePassword'))->middleware('sentinel.auth');
 /************************************************************************************/

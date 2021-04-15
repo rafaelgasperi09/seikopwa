@@ -1,11 +1,12 @@
+<!-- messages toast  -->
 <div class="row">
     <div class="col-md-12">
         @if (count($errors->all()) > 0)
             <!-- toast top iconed -->
-            <div id="toast-0" class="toast-box toast-bottom">
+            <div id="toast-0" class="toast-box toast-top">
                 <div class="in">
                     <ion-icon name="checkmark-circle" class="text-danger"></ion-icon>
-                    <div class="text">
+                    <div class="text-danger">
                         <ul>
                             @foreach($errors->all() as $e)
                                 <li/>{{ $e }}</li>
@@ -20,10 +21,10 @@
         @endif
         @if (Session::has('message.error'))
             <!-- toast top iconed -->
-            <div id="toast-1" class="toast-box toast-bottom">
+            <div id="toast-1" class="toast-box toast-top">
                 <div class="in">
                     <ion-icon name="checkmark-circle" class="text-danger"></ion-icon>
-                    <div class="text">
+                    <div class="text-danger">
                         {{ Session::get('message.error') }}
                     </div>
                 </div>
@@ -33,10 +34,10 @@
             <!-- * toast top iconed -->
         @endif
         @if (Session::has('message.success'))
-            <div id="toast-2" class="toast-box toast-bottom">
+            <div id="toast-2" class="toast-box toast-top">
                 <div class="in">
                     <ion-icon name="checkmark-circle" class="text-success"></ion-icon>
-                    <div class="text">
+                    <div class="text-success">
                         {{ Session::get('message.success') }}
                     </div>
                 </div>
@@ -46,4 +47,4 @@
         @endif
     </div>
 </div>
-
+<!-- end messages toast  -->

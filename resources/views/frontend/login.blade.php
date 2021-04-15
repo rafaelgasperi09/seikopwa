@@ -8,19 +8,6 @@
     <div class="section mt-1">
         <h1>Check</h1>
         <h4>Coloque sus datos para ingresar</h4>
-        @if (Session::has('message.error'))
-            <div class="alert alert-danger">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                {!! nl2br(Session::get('message.error')) !!}
-            </div>
-        @endif
-        @if (Session::has('message.success'))
-            <div class="alert alert-success">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                {!! nl2br(Session::get('message.success')) !!}
-            </div>
-        @endif
-
     </div>
     <div class="section mt-1 mb-5">
         {{Form::open(array("method" => "POST","action" => "LoginController@login","role" => "form",'class'=>'form-horizontal'))}}
@@ -41,7 +28,9 @@
                     </i>
                 </div>
             </div>
-
+            <div class="form-links mt-2">
+                <div><a href="{{ url('forgot_password/create') }}" class="text-muted">Olvido su contrasena?</a></div>
+            </div>
             <div class="form-button-group">
                 <button type="submit" class="btn btn-primary btn-block btn-lg">Ingresar</button><br/>
             </div>

@@ -38,7 +38,7 @@
         </a>
     </div>
     <div class="pageTitle">
-        Discover
+
     </div>
     <div class="right">
         <a href="javascript:;" class="headerButton toggle-searchbox">
@@ -48,5 +48,4 @@
 
 </div>
 <!-- * App Header -->
-@include('frontend.partials.message')
 @endif
