@@ -2,7 +2,7 @@
 <div class="extraHeader">
     <form class="search-form" action="">
         <div class="form-group searchbox">
-            <input name="q" type="text" class="form-control" value="" placeholder="{{ $title }}" id="searchButton">
+            <input name="q" type="text" class="form-control" value="" placeholder="{{ $title }}" id="searchButton" autocomplete="off">
             <i class="input-icon">
                 <ion-icon name="search-outline" role="img" class="md hydrated" aria-label="search outline"></ion-icon>
             </i>

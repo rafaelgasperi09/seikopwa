@@ -9,7 +9,7 @@
     const cargando    =     document.getElementById("cargando")
     window.onscroll = () =>{
 
-        if((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight){
+        if((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight-15){
             if(!tope)
                 cargando.removeAttribute('hidden')
             fetch('{{ $page_url }}?q='+search_button.value+'&page='+page,{

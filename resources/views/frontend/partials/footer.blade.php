@@ -35,6 +35,7 @@
         </div>
     </a>
 </div>
+{{--}}
 <!-- app footer -->
 <div class="appFooter">
     <img src="{{ url('images/AppImages/android/icon-192x192.png') }}" alt="icon" class="footer-logo mb-2">
@@ -45,6 +46,7 @@
 <!-- * app footer -->
 
 <!-- welcome notification  -->
+
 <div id="notification-welcome" class="notification-box">
     <div class="notification-dialog android-style">
         <div class="notification-header">
@@ -68,6 +70,7 @@
         </div>
     </div>
 </div>
+{{--}}
 <!-- * welcome notification -->
 @endif
 
