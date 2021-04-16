@@ -102,6 +102,23 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
     });
 
+    Route::group(array('prefix' => 'roles'), function() {
+        /* LISTA DE ROLES */
+        Route::get('/', array('as' => 'rolees.index','uses' => 'RolController@index'))->middleware('hasAccess');
+        /* CREACION ROLES */
+        Route::get('/create', array('as' => 'role.create','uses' => 'RolController@create'))->middleware('hasAccess');
+        /* CREANDO ROLES */
+        Route::post('/', array('as' => 'role.store','uses' => 'RolController@store'))->middleware('hasAccess');
+        /* DETALLE ROLES */
+        Route::get('/{id}', array('as' => 'role.show','uses' => 'RolController@show'))->where('id', '[0-9]+')->middleware('hasAccess');
+        /* EDICION ROLES */
+        Route::get('/{id}/edit/', array('as' => 'role.edit','uses' => 'RolController@edit'))->where('id', '[0-9]+')->middleware('hasAccess');
+        /* EDITANDO ROLES */
+        Route::put('/{id}/update', array('as' => 'role.update','uses' => 'RolController@update'))->where('id', '[0-9]+')->middleware('hasAccess');
+        /* ELIMINANDO ROLES */
+        Route::delete('/{id}', array('as' => 'role.destroy','uses' => 'RolController@destroy'))->where('id', '[0-9]+')->middleware('hasAccess');
+    });
+
 });
 
 
