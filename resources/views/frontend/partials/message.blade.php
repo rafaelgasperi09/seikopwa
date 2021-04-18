@@ -30,19 +30,11 @@
                 </div>
                 <button type="button" class="btn btn-sm btn-text-danger close-button">Cerrar</button>
             </div>
-<<<<<<< HEAD
-            <script>toastbox('msgerror',4000)</script>
-            <!-- * toast top iconed -->
-        @endif
-        @if (Session::has('message.success'))
-            <div id="msgsuccess" class="toast-box toast-top">
-=======
             <script>toastbox('toast-1', 14000)</script>
             <!-- * toast top iconed -->
         @endif
         @if (Session::has('message.success'))
             <div id="toast-2" class="toast-box toast-top">
->>>>>>> 7c2ccd158acc9eb7399afdcbe7ef99f3f64e6a3e
                 <div class="in">
                     <ion-icon name="checkmark-circle" class="text-success"></ion-icon>
                     <div class="text-success">
@@ -53,9 +45,6 @@
             </div>
             <script>toastbox('toast-2', 10000)</script>
         @endif
-<<<<<<< HEAD
-=======
     </div>
 </div>
 <!-- end messages toast  -->
->>>>>>> 7c2ccd158acc9eb7399afdcbe7ef99f3f64e6a3e
