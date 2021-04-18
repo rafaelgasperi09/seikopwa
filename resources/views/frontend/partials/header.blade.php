@@ -16,8 +16,22 @@
     @yield('css')
     <link rel="stylesheet" href="{{ url('assets/css/style.css?time='.time()) }}">
     @laravelPWA
-    <!-- Jquery -->
-    <script src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
+  <!-- Jquery -->
+  <script async   src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
+   <!-- * welcome notification -->
+    <!-- ///////////// Js Files ////////////////////  -->
+    <!-- Bootstrap-->
+    <script async   src="{{ url('assets/js/lib/popper.min.js') }}"></script>
+    <script async   src="{{ url('assets/js/lib/bootstrap.min.js') }}"></script>
+    <!-- Ionicons -->
+    <script async   type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"></script>
+    <!-- Owl Carousel -->
+    <script async   src="{{ url('assets/js/plugins/owl-carousel/owl.carousel.min.js') }}"></script>
+    <!-- jQuery Circle Progress -->
+    <script async   src="{{ url('assets/js/plugins/jquery-circle-progress/circle-progress.min.js') }}"></script>
+    <!-- Base Js File -->
+    <script async   src="{{ url('assets/js/base.js?time=') }}"></script>
+    <!-- ///////////// CUSTOM SCRIPTS ////////////////////  -->
 </head>
 
 <body>
@@ -42,6 +56,6 @@
             <ion-icon name="search-outline"></ion-icon>
         </a>
     </div>
-    @include('frontend.partials.message')
+
 </div>
 <!-- * App Header -->

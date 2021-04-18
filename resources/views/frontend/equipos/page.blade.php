@@ -43,7 +43,7 @@
                         </li>
                         </li>
                         <li>
-                            <a href="#" class="item">
+                            <a href="{{ route('equipos.create_tecnical_support',$e->id) }}" class="item">
                                 <div class="icon-box bg-warning">
                                     <ion-icon name="alert-circle-outline" role="img" class="md hydrated" aria-label="alert-circle-outline"></ion-icon>
                                 </div>

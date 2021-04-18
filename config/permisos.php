@@ -28,5 +28,7 @@ return [
      "equipos.create_daily_check"=>"Crear Daily Check",
      "equipos.show"=>"Mostrar Equipo",
   ),
-
+  "Taller"=>array(
+    "taller"=>"Permisos personal de MORESA",
+  ),
 )];

@@ -1,0 +1,91 @@
+
+.sigPad {
+	width: 90%;
+    max-width:720px;
+	margin: 0 auto;
+}
+.signed {
+	width: 275px;
+	margin: 0 auto;
+}
+.sigPad #submit {
+	float: left;
+	margin-top: 15px;
+}
+.sigPad #clear {
+	float: right;
+	margin-top: 15px;
+}
+.sigPad .sig.sigWrapper .pad {
+	border: 1px dotted rgb(55, 73, 107)
+}
+.error { padding: 5px; background-color:#C00; color: #fff; width: 275px; }
+.current .pad {
+	cursor: url("/images/pen.png") 8 8, crosshair;
+}
+.signButtons{
+    width: 100%;
+    height: 18vw;
+    max-height: 90px;
+    border-radius: 15px;
+    margin: 10px 0;
+    display: inline-block;
+    float: left;
+    margin-right: 1px;
+}
+.signText{
+    display:block;
+    position:absolute;
+    width:90%;
+    text-align:center;
+    padding-top:10px;
+    border-top: 1px solid #3e74fd;
+    bottom:8%;
+    margin-left: 4%;
+}
+.signRequest{
+  width:100%;
+  padding:20px;
+  border-radius:15px;
+}
+.signRequest span{
+  margin-bottom:5px;
+}
+.signModal .modal-dialog{
+  width: 98%;
+  max-width: inherit !important;
+  margin: 1%;
+}
+.signModal .modal-content {
+  background: #F9F9F9;
+  height: 97vh;
+}
+.signModal .modal-body{
+  height:99%;
+}
+.container-iframe {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+}
+
+/* Then style the iframe to fit in the container div with full height and width */
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 98%;
+  height: 95vh;
+  border:none;
+}
+
+@media screen and (max-width: 768px){
+  .signModal .modal-dialog{
+    width: 98%;
+    max-width: inherit !important;
+    margin: 1%;
+  }
+}

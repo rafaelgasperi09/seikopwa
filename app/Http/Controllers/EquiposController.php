@@ -15,6 +15,7 @@ use App\Equipo;
 use App\SubEquipo;
 use Illuminate\Support\Facades\DB;
 use Sentinel;
+use Illuminate\Support\Facades\Storage;
 
 class EquiposController extends BaseController
 {
@@ -88,7 +89,7 @@ class EquiposController extends BaseController
 
     public function storeDailyCheck(Request $request){
 
-
+        
         $this->validate($request, [
             'equipo_id'  => 'required',
             'formulario_id'  => 'required',
@@ -153,5 +154,70 @@ class EquiposController extends BaseController
         return view('frontend.equipos.create_tecnical_support_report')->with('data',$data)->with('formulario',$formulario);
     }
 
+    public function editTecnicalSupport($id){
 
+        $data = Equipo::findOrFail($id);
+        $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
+        return view('frontend.equipos.create_tecnical_support_report')->with('data',$data)->with('formulario',$formulario);
+    }
+    public function storeTecnicalSupport(Request $request){
+
+        $this->validate($request, [
+            'equipo_id'  => 'required',
+            'formulario_id'  => 'required',
+            'fecha'          => 'required|date',
+        ]);
+        $equipo_id = $request->equipo_id;
+        $formulario_id = $request->formulario_id;
+        $tipo_equipos_id = $request->tipo_equipos_id;
+        $formulario = Formulario::find($formulario_id);
+        $model = new FormularioRegistro();
+
+        DB::transaction(function() use($model,$request,$formulario){
+
+            $model->formulario_id = $formulario->id;
+            $model->creado_por = Sentinel::getUser()->id;
+            $model->equipo_id = $request->equipo_id;
+            $model->cliente_id = $request->cliente_id;
+
+            if($model->save())
+            {
+                foreach ($formulario->campos()->get() as $campo)
+                {
+                    $valor =  $request->get($campo->nombre);
+                    if($campo->tipo=='firma'){
+                        $filename = time().'.png';
+                        $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $request->firma));
+                        Storage::put($filename,$data);  
+                        $valor =  $filename;                     
+                    }
+                    
+                    $api_descripcion = '';
+                    $form_data = FormularioData::create([
+                        'formulario_registro_id' => $model->id,
+                        'formulario_campo_id'=>$campo->id,
+                        'valor' =>$valor,
+                        'tipo' => $campo->tipo,
+                        'api_descripcion'=>$api_descripcion,
+                    ]);
+
+                    if(!$form_data)
+                    {
+                        Throw new \Exception('Hubo un problema y no se guardar el campo :'.$campo->nombre);
+                    }
+                }
+            }else{
+                Throw new \Exception('Hubo un problema y no se creo el registro!');
+            }
+        });
+
+        $request->session()->flash('message.success','Registro creado con exito');
+        return redirect(route('equipos.detail',$equipo_id));
+    }
+    public function firma(Request $request){
+        $filename = time().'.png';
+        $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $request->firma));
+        Storage::put($filename,$data);
+        dd( $request->firma);
+    }
 }

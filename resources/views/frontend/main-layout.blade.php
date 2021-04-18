@@ -1,6 +1,7 @@
 @include('frontend.partials.header')
 <!-- App Capsule -->
 <div id="appCapsule">
+    @include('frontend.partials.message')
     @yield('content')
 </div>
 <!-- * App Capsule -->

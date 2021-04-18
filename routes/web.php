@@ -44,6 +44,10 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
         Route::post('/store_daily_check', array('as' => 'equipos.store_daily_check', 'uses' => 'EquiposController@storeDailyCheck'));
         
         Route::get('/tecnical_support/{id}', array('as' => 'equipos.create_tecnical_support', 'uses' => 'EquiposController@createTecnicalSupport'));
+
+        Route::get('/tecnical_support/edit/{id}', array('as' => 'equipos.edit_tecnical_support', 'uses' => 'EquiposController@editTecnicalSupport'));
+
+        Route::post('/store_tecnical_support', array('as' => 'equipos.store_tecnical_support', 'uses' => 'EquiposController@storeTecnicalSupport'));
     });
 
     Route::group(array('prefix' => 'baterias'), function() {
@@ -61,8 +65,17 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
 
         Route::post('/guardar_entrada_salida', array('as' => 'baterias.guardar_entrada_salida', 'uses' => 'BateriaController@guardarEntredaSalida'));
     });
-
+    Route::get("/firma", function(){
+        return View::make("frontend.partials.firma1");
+     });
+     Route::post("/firma", function(){
+        return View::make("frontend.partials.firma1");
+     });     
+     Route::post('/firma/send', array('as' => 'firma.store', 'uses' => 'EquiposController@firma'));
+     
 });
-
+Route::get('/offline', function () {
+    return view('offline');
+});
 
 

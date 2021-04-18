@@ -59,22 +59,10 @@
         </div>
     </div>
 </div>
-<!-- * welcome notification -->
-<!-- ///////////// Js Files ////////////////////  -->
-<!-- Bootstrap-->
-<script src="{{ url('assets/js/lib/popper.min.js') }}"></script>
-<script src="{{ url('assets/js/lib/bootstrap.min.js') }}"></script>
-<!-- Ionicons -->
-<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"></script>
-<!-- Owl Carousel -->
-<script src="{{ url('assets/js/plugins/owl-carousel/owl.carousel.min.js') }}"></script>
-<!-- jQuery Circle Progress -->
-<script src="{{ url('assets/js/plugins/jquery-circle-progress/circle-progress.min.js') }}"></script>
-<!-- Base Js File -->
-<script src="{{ url('assets/js/base.js?time=') }}"></script>
-<!-- ///////////// CUSTOM SCRIPTS ////////////////////  -->
-@yield('post_scripts')
 
+  
+ 
+    @yield('post_scripts')
 <script>
 /*
     setTimeout(() => {
