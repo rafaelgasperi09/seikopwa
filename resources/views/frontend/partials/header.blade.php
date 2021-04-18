@@ -14,24 +14,12 @@
     <link rel="icon" type="image/png" href="{{ url('assets/img/favicon.png') }}" sizes="32x32">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url('assets/img/icon/192x192.png') }}">
     @yield('css')
-    <link rel="stylesheet" href="{{ url('assets/css/style.css?time='.time()) }}">
+    <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
     @laravelPWA
-  <!-- Jquery -->
-  <script async   src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
-   <!-- * welcome notification -->
-    <!-- ///////////// Js Files ////////////////////  -->
-    <!-- Bootstrap-->
-    <script async   src="{{ url('assets/js/lib/popper.min.js') }}"></script>
-    <script async   src="{{ url('assets/js/lib/bootstrap.min.js') }}"></script>
-    <!-- Ionicons -->
-    <script async   type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"></script>
-    <!-- Owl Carousel -->
-    <script async   src="{{ url('assets/js/plugins/owl-carousel/owl.carousel.min.js') }}"></script>
-    <!-- jQuery Circle Progress -->
-    <script async   src="{{ url('assets/js/plugins/jquery-circle-progress/circle-progress.min.js') }}"></script>
-    <!-- Base Js File -->
-    <script async   src="{{ url('assets/js/base.js?time=') }}"></script>
-    <!-- ///////////// CUSTOM SCRIPTS ////////////////////  -->
+    <!-- Jquery -->
+    <script src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url('assets/js/toast.js') }}"></script>
+
 </head>
 
 <body>
@@ -41,6 +29,7 @@
     <div class="spinner-border text-primary" role="status"></div>
 </div>
 <!-- * loader -->
+@if(\Sentinel::check())
 <!-- App Header -->
 <div class="appHeader bg-primary scrolled">
     <div class="left">
@@ -49,7 +38,7 @@
         </a>
     </div>
     <div class="pageTitle">
-        Discover
+        Dashboard
     </div>
     <div class="right">
         <a href="javascript:;" class="headerButton toggle-searchbox">
@@ -59,3 +48,4 @@
 
 </div>
 <!-- * App Header -->
+@endif

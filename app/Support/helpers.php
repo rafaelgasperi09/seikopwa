@@ -44,7 +44,7 @@ function getSubEquipo($name,$campo=null){
 function getTipoEquipo($id){
     if($id=='todos')
       return 'Todos';
-    $tipo=\App\TipoEquipo::findOrFail($id)->first();
+    $tipo=\App\TipoEquipo::findOrFail($id);
     return $tipo->display_name;
 }
 function mostrarCampo($tipo){

@@ -21,7 +21,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('baterias.registrar_entrada_salida',$dato->id) }}" class="item">
+            <a href="{{ route('baterias.register_in_and_out',$dato->id) }}" class="item">
                 <div class="icon-box bg-secondary">
                     <ion-icon name="list-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
                 </div>

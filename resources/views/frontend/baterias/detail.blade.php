@@ -4,10 +4,10 @@
     <link rel="stylesheet" href="{{ url('/plugins/jquery-datatable/css/responsive.css') }}">
 @stop
 @section('content')
-@include('frontend.partials.title',array('title'=>'Detalle bateria','subtitle'=>$data->id_componente))
+@include('frontend.partials.title',array('title'=>'Baterias','subtitle'=>'Bateria :'.$data->id_componente))
 <div class="divider mt-2 mb-3"></div>
 <div class="section  full mt-2" data-toggle="collapse" href="#detail" aria-expanded="false">
-    <div class="section-title">Detalles</div>
+    <div class="section-title">Detalle</div>
     <div class="wide-block pt-2 pb-2" id="detail">
         <dl class="row">
             <dt class="col-sm-3">Marca</dt>

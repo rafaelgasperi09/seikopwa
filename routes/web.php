@@ -17,14 +17,21 @@ Route::get('/', function () {
     return view('frontend.login');
 });
 
-Route::get('/login', function () {
-    return view('frontend.login');
-});
-
-
+/*************** USERS LOGIN PASSWORD ROUTES **************************************/
+Route::get('/login', function () { return view('frontend.login');});
 Route::post('login', array('as' => 'login','uses' => 'LoginController@login'));
 
-Route::group(array('middleware' => 'sentinel.auth'), function() {
+
+Route::get('forgot_password/create', function () { return view('frontend.forgot_password'); });
+Route::post('forgot_password/store', array('as' => 'forgot_password.store','uses' => 'ForgotPasswordController@store'));
+Route::get('recovery_password/{id}/{token}', array('as' => 'forgot_password.edit', 'uses' => 'ForgotPasswordController@edit'));
+Route::put('recovery_password/{id}/{token}', array('as' => 'forgot_password.update', 'uses' => 'ForgotPasswordController@update'));
+
+Route::get('usuarios/{id}/update_password_view', array('as' => 'usuarios.update_password_view', 'uses' => 'UserController@updatePasswordView'))->middleware('sentinel.auth');
+Route::put('usuarios/{id}/password', array('as' => 'usuarios.update_password', 'uses' => 'UserController@updatePassword'))->middleware('sentinel.auth');
+/************************************************************************************/
+
+Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), function() {
 
     Route::get('logout', array('as' => 'logout','uses' => 'LoginController@logout'));
     Route::get('/dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
@@ -42,7 +49,11 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
         Route::get('/create_daily_check/{id}', array('as' => 'equipos.create_daily_check', 'uses' => 'EquiposController@createDailyCheck'));
 
         Route::post('/store_daily_check', array('as' => 'equipos.store_daily_check', 'uses' => 'EquiposController@storeDailyCheck'));
-        
+
+        Route::get('/create_mant_prev/{id}/tipo/{tipo}', array('as' => 'equipos.create_mant_prev', 'uses' => 'EquiposController@createMantPrev'));
+
+        Route::post('/store_mant_prev', array('as' => 'equipos.store_mant_prev', 'uses' => 'EquiposController@storeMantPrev'));
+
         Route::get('/tecnical_support/{id}', array('as' => 'equipos.create_tecnical_support', 'uses' => 'EquiposController@createTecnicalSupport'));
 
         Route::get('/tecnical_support/edit/{id}', array('as' => 'equipos.edit_tecnical_support', 'uses' => 'EquiposController@editTecnicalSupport'));
@@ -61,9 +72,54 @@ Route::group(array('middleware' => 'sentinel.auth'), function() {
 
         Route::get('/{id}', array('as' => 'baterias.detail', 'uses' => 'BateriaController@detail'));
 
-        Route::get('/{id}/registrar_entrada_salida', array('as' => 'baterias.registrar_entrada_salida', 'uses' => 'BateriaController@registrarEntradaSalida'));
+        Route::get('/{id}/register_in_and_out', array('as' => 'baterias.register_in_and_out', 'uses' => 'BateriaController@registrarEntradaSalida'));
 
-        Route::post('/guardar_entrada_salida', array('as' => 'baterias.guardar_entrada_salida', 'uses' => 'BateriaController@guardarEntredaSalida'));
+        Route::post('/store_in_and_out', array('as' => 'baterias.store_in_and_out', 'uses' => 'BateriaController@guardarEntredaSalida'));
+    });
+
+    Route::group(array('prefix' => 'exportar'), function() {
+
+        Route::get('mantenimiento_preventivo/{formulario_registro_id}', array('as' => 'exportar.mantenimiento_preventivo', 'uses' => 'PdfController@exportarMantPrev'));
+    });
+
+    Route::group(array('prefix' => 'usuarios'), function() {
+
+        Route::get('/', array('as' => 'usuarios.index', 'uses' => 'UserController@index'));
+
+        Route::get('/create', array('as' => 'usuarios.create', 'uses' => 'UserController@create'));
+
+        Route::get('/search', array('as' => 'usuarios.search', 'uses' => 'UserController@search'));
+
+        Route::get('/import', array('as' => 'usuarios.import', 'uses' => 'UserController@import'));
+
+        Route::get('/{id}', array('as' => 'usuarios.detail', 'uses' => 'UserController@detail'));
+
+        Route::get('/{id}/profile', array('as' => 'usuarios.profile', 'uses' => 'UserController@profile'));
+
+        Route::post('/store', array('as' => 'usuarios.store', 'uses' => 'UserController@store'));
+
+        Route::put('/{id}/edit', array('as' => 'usuarios.update', 'uses' => 'UserController@update'));
+
+        Route::put('/{id}/photo', array('as' => 'usuarios.update_photo', 'uses' => 'UserController@updatePhoto'));
+
+
+    });
+
+    Route::group(array('prefix' => 'roles'), function() {
+        /* LISTA DE ROLES */
+        Route::get('/', array('as' => 'rolees.index','uses' => 'RolController@index'))->middleware('hasAccess');
+        /* CREACION ROLES */
+        Route::get('/create', array('as' => 'role.create','uses' => 'RolController@create'))->middleware('hasAccess');
+        /* CREANDO ROLES */
+        Route::post('/', array('as' => 'role.store','uses' => 'RolController@store'))->middleware('hasAccess');
+        /* DETALLE ROLES */
+        Route::get('/{id}', array('as' => 'role.show','uses' => 'RolController@show'))->where('id', '[0-9]+')->middleware('hasAccess');
+        /* EDICION ROLES */
+        Route::get('/{id}/edit/', array('as' => 'role.edit','uses' => 'RolController@edit'))->where('id', '[0-9]+')->middleware('hasAccess');
+        /* EDITANDO ROLES */
+        Route::put('/{id}/update', array('as' => 'role.update','uses' => 'RolController@update'))->where('id', '[0-9]+')->middleware('hasAccess');
+        /* ELIMINANDO ROLES */
+        Route::delete('/{id}', array('as' => 'role.destroy','uses' => 'RolController@destroy'))->where('id', '[0-9]+')->middleware('hasAccess');
     });
     Route::get("/firma", function(){
         return View::make("frontend.partials.firma1");

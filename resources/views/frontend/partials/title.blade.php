@@ -1,6 +1,6 @@
 <div class="appHeader bg-primary text-light">
     <div class="left">
-        <a href="javascript:;" class="headerButton goBack">
+        <a href="{{ URL::previous() }}" class="headerButton goBack">
             <ion-icon name="chevron-back-outline" role="img" class="md hydrated" aria-label="chevron back outline"></ion-icon>
         </a>
     </div>
@@ -9,7 +9,8 @@
 
     </div>
 </div>
-
 <div class="header-large-title">
-    <h1 class="title">{{ $subtitle }}</h1>
+@empty(!$subtitle)
+<h3 class="title">{{ $subtitle }}</h3>
+@endempty
 </div>

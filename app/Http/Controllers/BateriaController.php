@@ -92,7 +92,7 @@ class BateriaController extends Controller
             }
         });
 
-        $request->session()->flash('message.success','Registro creado con exito');
+        $request->session()->flash('message.success','Registro creado con éxito');
         return redirect(route('baterias.detail',$componente_id));
     }
 

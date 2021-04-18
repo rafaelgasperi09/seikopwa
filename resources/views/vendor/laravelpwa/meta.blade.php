@@ -38,6 +38,7 @@
         }).then(function (registration) {
             // Registration was successful
             console.log('Laravel PWA: ServiceWorker registration successful with scope: ', registration.scope);
+            console.log('aquiiiiiiiiiiiiiiiiiii');
         }, function (err) {
             // registration failed :(
             console.log('Laravel PWA: ServiceWorker registration failed: ', err);

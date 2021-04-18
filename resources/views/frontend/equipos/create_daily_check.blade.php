@@ -85,7 +85,9 @@
     {{ Form::hidden('formulario_id',$formulario->id) }}
     {{ Form::hidden('turno_chequeo_diario',$turno) }}
     @include('frontend.partials.form',array('formulario'=>$formulario))
-    <button type="submit" class="btn btn-primary btn-sm btn-block">GUARDAR</button>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm btn-block">GUARDAR</button>
+    </div>
     {{ Form::close() }}
 
 <script>

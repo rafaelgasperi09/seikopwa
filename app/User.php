@@ -58,6 +58,10 @@ class User extends Authenticatable
 
     }
 
+    public function roles(){
+        return $this->belongsToMany(Rol::class,'role_users','user_id','role_id');
+    }
+
     public function isOnGroup($group_name)
     {
         $sentryUser = Sentinel::findUserById($this->id);
@@ -67,5 +71,9 @@ class User extends Authenticatable
 
     public function getFullName(){
         return $this->first_name.' '.$this->last_name;
+    }
+
+    public function cliente(){
+        return Cliente::find($this->crm_cliente_id);
     }
 }
