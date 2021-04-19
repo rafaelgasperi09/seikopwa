@@ -5826,9 +5826,13 @@ textarea,
 }
 
 .toast-box.toast-top.show {
-  top: 0px;
-  z-index:9999;
+  top: 56px;
 }
+.show-nologued{
+  top: 0px  !important;
+  z-index:9999  !important;
+}
+
 
 .toast-box.toast-bottom {
   top: auto;

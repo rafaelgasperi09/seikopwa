@@ -14,22 +14,12 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', function () {
-<<<<<<< HEAD
-    if(Sentinel::check()){
-        return  redirect(route('dashboard'));
-        
-    }else{
-        return view('frontend.login');
-    }
-   
-=======
 
     if(\Sentinel::check()){
         return redirect(route('dashboard'));
     }
 
     return view('frontend.login');
->>>>>>> e747e2442f9cf09776fde89d4357e8ea84547b32
 });
 
 /*************** USERS LOGIN PASSWORD ROUTES **************************************/

@@ -3,7 +3,7 @@
     <div class="col-md-12">
         @if (count($errors->all()) > 0)
             <!-- toast top iconed -->
-            <div id="toast-0" class="toast-box toast-top">
+            <div id="toast-0" class="toast-box toast-top  @if(!\Sentinel::check()) show-nologued @endif">
                 <div class="in">
                     <ion-icon name="checkmark-circle" class="text-danger"></ion-icon>
                     <div class="text-danger">
@@ -21,7 +21,7 @@
         @endif
         @if (Session::has('message.error'))
             <!-- toast top iconed -->
-            <div id="toast-1" class="toast-box toast-top">
+            <div id="toast-1" class="toast-box toast-top  @if(!\Sentinel::check()) show-nologued @endif">
                 <div class="in">
                     <ion-icon name="checkmark-circle" class="text-danger"></ion-icon>
                     <div class="text-danger">
@@ -34,7 +34,7 @@
             <!-- * toast top iconed -->
         @endif
         @if (Session::has('message.success'))
-            <div id="toast-2" class="toast-box toast-top">
+            <div id="toast-2" class="toast-box toast-top  @if(!\Sentinel::check()) show-nologued @endif">
                 <div class="in">
                     <ion-icon name="checkmark-circle" class="text-success"></ion-icon>
                     <div class="text-success">
