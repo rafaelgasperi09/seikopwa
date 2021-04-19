@@ -37,6 +37,7 @@
                             </div>
                         </a>
                     </li>
+                    @if(\Sentinel::hasAccess('equipos.index'))
                     <li>
                         <a href="{{ route('equipos.index') }}" class="item">
                             <div class="icon-box bg-primary">
@@ -47,6 +48,8 @@
                             </div>
                         </a>
                     </li>
+                    @endif
+                    @if(\Sentinel::hasAccess('baterias.index'))
                     <li>
                         <a href="{{ route('baterias.index') }}" class="item">
                             <div class="icon-box bg-primary">
@@ -57,6 +60,8 @@
                             </div>
                         </a>
                     </li>
+                    @endif
+                    @if(\Sentinel::hasAccess('usuarios.index'))
                     <li>
                         <a href="{{ route('usuarios.index') }}" class="item">
                             <div class="icon-box bg-primary">
@@ -67,6 +72,19 @@
                             </div>
                         </a>
                     </li>
+                    @endif
+                    @if(\Sentinel::hasAccess('role.index'))
+                    <li>
+                        <a href="{{ route('role.index') }}" class="item">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="settings-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                <div>Roles</div>
+                            </div>
+                        </a>
+                    </li>
+                    @endif
                     <li>
                         <div class="item">
                             <div class="icon-box bg-primary">
@@ -87,15 +105,19 @@
 
             <!-- sidebar buttons -->
             <div class="sidebar-buttons">
+                @if(\Sentinel::hasAccess('usuarios.profile'))
                 <a href="{{ route('usuarios.profile',Sentinel::getUser()->id) }}" class="button">
                     <ion-icon name="person-outline"></ion-icon>
                 </a>
+                @endif
                 <a href="javascript:;" class="button">
                     <ion-icon name="archive-outline"></ion-icon>
                 </a>
-                <a href="javascript:;" class="button">
+                @if(\Sentinel::hasAccess('role.index'))
+                <a href="{{ route('role.index') }}" class="button">
                     <ion-icon name="settings-outline"></ion-icon>
                 </a>
+                @endif
                 <a href="{{ route('logout') }}" class="button">
                     <ion-icon name="log-out-outline"></ion-icon>
                 </a>

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'name' => 'LaravelPWA',
+    'name' => 'GMP PWA',
     'manifest' => [
         'name' => env('APP_NAME', 'GMP App'),
         'short_name' => 'GMP',
@@ -14,23 +14,28 @@ return [
         'icons' => [
             '48x48' => [
                 'path' => '/images/AppImages/android/icon-48x48.png',
-                'purpose' => 'any'
+                'purpose' => 'any',
+                "sizes"=> "48x48",
             ],
             '72x72' => [
                 'path' => '/images/AppImages/android/icon-72x72.png',
-                'purpose' => 'any'
+                'purpose' => 'any',
+                "sizes"=> "72x72",
             ],
             '96x96' => [
                 'path' => '/images/AppImages/android/icon-96x96.png',
-                'purpose' => 'any'
+                'purpose' => 'any',
+                "sizes"=> "96x96",
             ],
             '128x128' => [
                 'path' => '/images/AppImages/android/icon-128x128.png',
-                'purpose' => 'any'
+                'purpose' => 'any',
+                "sizes"=> "128x128",
             ],
             '144x144' => [
                 'path' => '/images/AppImages/android/icon-144x144.png',
-                'purpose' => 'any'
+                'purpose' => 'any',
+                "sizes"=> "144x144",
             ],/*
             '152x152' => [
                 'path' => '/images/AppImages/icon-152x152.png',
@@ -38,7 +43,8 @@ return [
             ],*/
             '192x192' => [
                 'path' => '/images/AppImages/android/icon-192x192.png',
-                'purpose' => 'any'
+                'purpose' => 'any',
+                "sizes"=> "192x192",
             ],
             /*'384x384' => [
                 'path' => '/images/AppImages/icon-384x384.png',
@@ -46,7 +52,8 @@ return [
             ],*/
             '512x512' => [
                 'path' => '/images/AppImages/android/icon-512x512.png',
-                'purpose' => 'any'
+                'purpose' => 'any',
+                "sizes"=> "512x512",
             ],
         ],
         'splash' => [
@@ -63,18 +70,19 @@ return [
         ],
         'shortcuts' => [
             [
-                'name' => 'Shortcut Link 1',
+                'name' => 'Ingresar al app',
                 'description' => 'Shortcut Link 1 Description',
-                'url' => '/shortcutlink1',
+                'url' => '/login',
                 'icons' => [
-                    "src" => "/images/icons/icon-72x72.png",
+                    "src" => "/images/AppImages/android/icon-72x72.png",
+
                     "purpose" => "any"
                 ]
             ],
             [
-                'name' => 'Shortcut Link 2',
-                'description' => 'Shortcut Link 2 Description',
-                'url' => '/shortcutlink2'
+                'name' => 'Mis equipos',
+                'description' => 'Ver la lista de mis equipos',
+                'url' => '/equipos'
             ]
         ],
         'custom' => []

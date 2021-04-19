@@ -10,6 +10,7 @@
     </a>
     <!-- sub menu -->
     <ul class="listview image-listview" style="display: none;">
+        @if(\Sentinel::hasAccess('baterias.detail'))
         <li>
             <a href="{{ route('baterias.detail',$dato->id) }}" class="item">
                 <div class="icon-box bg-primary">
@@ -20,6 +21,8 @@
                 </div>
             </a>
         </li>
+        @endif
+        @if(\Sentinel::hasAccess('baterias.register_in_and_out'))
         <li>
             <a href="{{ route('baterias.register_in_and_out',$dato->id) }}" class="item">
                 <div class="icon-box bg-secondary">
@@ -30,6 +33,7 @@
                 </div>
             </a>
         </li>
+        @endif
     </ul>
     <!-- * sub menu -->
 </li>
