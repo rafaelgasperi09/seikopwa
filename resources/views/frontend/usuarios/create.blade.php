@@ -8,7 +8,7 @@
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="label" for="rol_id">Rol</label>
-                        {{ Form::select('rol_id',$roles,null,array('class'=>'form-control','placeholder'=>'Selecionar rol','required')) }}
+                        {{ Form::select('rol_id',$roles,null,array('class'=>'form-control','placeholder'=>'Seleccionar rol','required','id'=>'rol')) }}
                         <i class="clear-input">
                             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                         </i>
@@ -41,7 +41,7 @@
                         </i>
                     </div>
                 </div>
-                <div class="form-group boxed">
+                <div class="form-group boxed" id="crm_user_id" style="display: none;">
                     <div class="input-wrapper">
                         <label class="label" for="crm_user_id">CRM ID</label>
                         {{ Form::number('crm_user_id',null, array("class" => "form-control",'placeholder'=>'CRM ID'))  }}
@@ -50,6 +50,16 @@
                         </i>
                     </div>
                     <small style="color: red;">Este es el identificador unico del usuario con el mismo correo en el CRM</small>
+                </div>
+                <div class="form-group boxed" id="crm_cliente_id" style="display: none;">
+                    <div class="input-wrapper">
+                        <label class="label" for="crm_user_id">CRM ID</label>
+                        {{ Form::number('crm_cliente_id',null, array("class" => "form-control",'placeholder'=>'CRM ID'))  }}
+                        <i class="clear-input">
+                            <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                        </i>
+                    </div>
+                    <small style="color: red;">Este es el identificador unico del cliente con el mismo correo en el CRM , para crear este clinete debe estar creado primero en el CRM.</small>
                 </div>
                 <div class="divider  mt-2 mb-3"></div>
                 <div class="form-group boxed">
@@ -75,4 +85,20 @@
             {{ Form::close() }}
         </div>
     </div>
+    <script>
+        $("#rol").change(function (){
+
+            console.log('Rol :'+$(this).val())
+            if($(this).val() == 1){
+                $('#crm_user_id').hide();
+                $('#crm_cliente_id').hide();
+            }else if($(this).val() == 2){ // operador
+                $('#crm_user_id').show();
+                $('#crm_cliente_id').hide();
+            }else if($(this).val() == 3){ // cliente
+                $('#crm_user_id').hide();
+                $('#crm_cliente_id').show();
+            }
+        });
+    </script>
 @stop
