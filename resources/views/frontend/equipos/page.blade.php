@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
             @foreach($data as $e)
                 <li class="multi-level">
                     <a href="#" class="item">
@@ -57,7 +57,7 @@
                     <!-- * sub menu -->
                 </li>
             @endforeach
-=======
+
 @foreach($data as $e)
     <li class="multi-level">
         <a href="#" class="item">
@@ -118,4 +118,4 @@
         <!-- * sub menu -->
     </li>
 @endforeach
->>>>>>> 7c2ccd158acc9eb7399afdcbe7ef99f3f64e6a3e
+
