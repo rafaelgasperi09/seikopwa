@@ -1,16 +1,20 @@
 @if(\Sentinel::check())
 <div class="appBottomMenu">
+    @if(\Sentinel::hasAccess('equipos.index'))
     <a href="{{ route('equipos.index') }}" class="item  @if(Request::is('equipos') or Request::is('equipos/*')) active @endif">
         <div class="col">
             <ion-icon name="train-outline" role="img" class="md hydrated" aria-label="chatbubble ellipses outline"></ion-icon>
             {{--}}<span class="badge badge-danger">5</span>{{--}}
         </div>
     </a>
+    @endif
+    @if(\Sentinel::hasAccess('baterias.index'))
     <a href="{{ route('baterias.index') }}" class="item @if(Request::is('baterias') or Request::is('baterias/*')) active @endif">
         <div class="col">
             <ion-icon name="battery-charging-outline" role="img" class="md hydrated" aria-label="cube outline"></ion-icon>
         </div>
     </a>
+    @endif
     <a href="{{ route('dashboard') }}" class="item @if(Request::is('dashboard')) active @endif">
         <div class="col">
             <ion-icon name="home-outline" role="img" class="md hydrated" aria-label="home outline"></ion-icon>

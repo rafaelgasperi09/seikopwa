@@ -70,6 +70,7 @@
         </a>
         <!-- sub menu -->
         <ul class="listview image-listview" style="display: none;">
+            @if(\Sentinel::hasAccess('equipos.detail'))
             <li>
                 <a href="{{route('equipos.detail',['id'=>$e->id])}}" class="item">
                     <div class="icon-box bg-primary">
@@ -80,6 +81,8 @@
                     </div>
                 </a>
             </li>
+            @endif
+            @if(\Sentinel::hasAccess('equipos.create_daily_check'))
             <li>
                 <a href="{{ route('equipos.create_daily_check',$e->id) }}" class="item">
                     <div class="icon-box bg-secondary">
@@ -90,8 +93,8 @@
                     </div>
                 </a>
             </li>
-            </li>
-            @empty(!$e->tipo_equipos_id)
+            @endif
+            @empty(!$e->tipo_equipos_id && \Sentinel::hasAccess('equipos.create_mant_prev'))
             <li>
                 <a href="{{ route('equipos.create_mant_prev',[$e->id,$e->tipo_equipos_id]) }}" class="item">
                     <div class="icon-box bg-info">
@@ -103,7 +106,7 @@
                 </a>
             </li>
             @endempty
-            </li>
+            @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
             <li>
                 <a href="#" class="item">
                     <div class="icon-box bg-warning">
@@ -114,6 +117,7 @@
                     </div>
                 </a>
             </li>
+            @endif
         </ul>
         <!-- * sub menu -->
     </li>
