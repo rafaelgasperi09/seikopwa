@@ -96,8 +96,9 @@ class EquiposController extends BaseController
         return view('frontend.equipos.create_daily_check')->with('data',$data)->with('formulario',$formulario)->with('turno',$turno);
     }
 
-    public function storeDailyCheck(SaveFormEquipoRequest $request){
+    public function storeDailyCheck(Request $request){
 
+        dd($request->all());
         try{
             $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;
@@ -121,6 +122,12 @@ class EquiposController extends BaseController
                         $valor =  $request->get($campo->nombre);
                         if($campo->nombre == 'semana') $valor = Carbon::now()->startOfWeek()->format('d-m-Y');
                         if($campo->nombre == 'dia_semana') $valor = getDayOfWeek(date('N'));
+                        if($campo->tipo=='firma'){
+                            $filename = time().'.png';
+                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $request->firma));
+                            Storage::put($filename,$data);
+                            $valor =  $filename;
+                        }
                         $api_descripcion = '';
                         $form_data = FormularioData::create([
                             'formulario_registro_id' => $model->id,
@@ -129,6 +136,8 @@ class EquiposController extends BaseController
                             'tipo' => $campo->tipo,
                             'api_descripcion'=>$api_descripcion,
                         ]);
+
+
 
                         if(!$form_data)
                         {

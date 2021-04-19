@@ -34,7 +34,7 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'fecha',
             'database_nombre'=>'nombre',
             'formato_fecha'=>'Y-m-d',
-            'requerido'=>1,
+            'requerido'=>0,
             'tamano'=>'col-12'
         ]);
 
@@ -48,7 +48,7 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'fecha',
             'database_nombre'=>'nombre',
             'formato_fecha'=>'Y-m-d',
-            'requerido'=>1,
+            'requerido'=>0,
             'tamano'=>'col-12'
         ]);
 

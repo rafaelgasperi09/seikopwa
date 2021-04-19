@@ -100,6 +100,7 @@ class RolController extends Controller
      */
     public function edit($id)
     {
+        dd(config('permisos.permissions'));
         //
         $data = Rol::findOrFail($id);
         $sentryrol = Sentinel::findRoleById($id);

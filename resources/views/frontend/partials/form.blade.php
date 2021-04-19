@@ -67,6 +67,7 @@
                                                 <ion-icon name="pencil-outline" size="large"></ion-icon>
                                                 <span>Haga clic para colocar firma </span>
                                             </button>
+                                            {{ Form::hidden($campo_nombre,'',['id'=>$campo_nombre]) }}
                                         </div>
                                         @if($firmas==1)
                                             @include('frontend.partials.firma',array('campo_nombre'=>$campo->nombre,'requerido'=>$requerido))
