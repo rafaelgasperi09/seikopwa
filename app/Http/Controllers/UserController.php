@@ -116,6 +116,7 @@ class UserController extends Controller
             'email'      => 'required|email|max:255',
         ]);
 
+
         $user = User::findOrFail($id);
         $user->fill($request->all());
 

@@ -35,4 +35,18 @@ class Equipo extends BaseModel
         ]);
     }
 
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFiltroCliente($query)
+    {
+        if(current_user()->isCliente())
+             return $query->where('cliente_id', current_user()->crm_cliente_id);
+
+        return $query;
+    }
+
 }
