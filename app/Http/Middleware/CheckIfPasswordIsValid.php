@@ -30,10 +30,6 @@ class CheckIfPasswordIsValid
             $fechaLastUpdatePassword = Carbon::parse($data->date_last_password_changed);
             $diasDiferencia = $today->diffInDays($fechaLastUpdatePassword);
 
-            if($diasDiferencia >= env('VALID_PASSWORD_DAYS')){
-                return redirect(route('usuarios.update_password_view',current_user()->id));
-            }
-
         }
 
 

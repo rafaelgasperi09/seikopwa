@@ -14,7 +14,7 @@
     <link rel="icon" type="image/png" href="{{ url('assets/img/favicon.png') }}" sizes="32x32">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url('assets/img/icon/192x192.png') }}">
     @yield('css')
-    <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ url('assets/css/style.css') }}?t=1904">
     @laravelPWA
     <!-- Jquery -->
     <script src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>

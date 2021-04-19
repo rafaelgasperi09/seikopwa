@@ -5826,7 +5826,8 @@ textarea,
 }
 
 .toast-box.toast-top.show {
-  top: 56px;
+  top: 0px;
+  z-index:9999;
 }
 
 .toast-box.toast-bottom {
