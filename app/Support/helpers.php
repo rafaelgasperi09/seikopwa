@@ -46,7 +46,13 @@ function getTipoEquipo($id){
       return 'Todos';
     $tipo=\App\TipoEquipo::findOrFail($id);
     return $tipo->display_name;
-
+}
+function mostrarCampo($tipo){
+    $ocultar=['otros'];
+    if(in_array($tipo,$ocultar))
+        return false;
+    else
+        return true;
 }
 
 function getDayOfWeek($day){

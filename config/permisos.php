@@ -26,6 +26,9 @@ return [
      "equipos.create_tecnical_support"=>"Crear Ticket Soporte Tecnico",
      "equipos.detail"=>"Ver Detalle Equipo",
   ),
+  "Taller"=>array(
+    "taller"=>"Permisos personal de MORESA",
+  ),
  "Baterias"=>array(
      "baterias.index"=>"Listar Baterias",
      "baterias.detail"=>"Detalle Bateria",

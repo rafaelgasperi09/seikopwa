@@ -28,7 +28,7 @@
                         {{ Session::get('message.error') }}
                     </div>
                 </div>
-                <button type="button" class="btn btn-sm btn-text-danger close-button">CLOSE</button>
+                <button type="button" class="btn btn-sm btn-text-danger close-button">Cerrar</button>
             </div>
             <script>toastbox('toast-1', 14000)</script>
             <!-- * toast top iconed -->
@@ -41,7 +41,7 @@
                         {{ Session::get('message.success') }}
                     </div>
                 </div>
-                <button type="button" class="btn btn-sm btn-text-success close-button">CLOSE</button>
+                <button type="button" class="btn btn-sm btn-text-success close-button">Cerrar</button>
             </div>
             <script>toastbox('toast-2', 10000)</script>
         @endif

@@ -1,7 +1,7 @@
 @extends('frontend.main-layout')
 @section('content')
     @include('frontend.partials.title',array('title'=>'Servicio tecnico','subtitle'=>$data->numero_parte))
-
+    {{Form::open(array("method" => "POST","action" => "EquiposController@storeTecnicalSupport","role" => "form",'class'=>'form-horizontal',"autocomplete"=>"off"))}}
     <div class="section full mt-2 mb-2">
         <div class="section-title">{{$formulario->titulo}}</div>
         <div class="wide-block pb-3 pt-2">
@@ -11,6 +11,7 @@
                         <div class="input-wrapper">
                             <label class="label" for="name1">Cliente</label>
                             {{ Form::text('cliente',$data->cliente->nombre,array('class'=>'form-control','readonly')) }}
+                            {{ Form::hidden('cliente_id',$data->id) }}
                         </div>
                     </div>
                 </div>
@@ -51,33 +52,75 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Persona encargada</label>
-                            {{ Form::text('nombre',Sentinel::getUser()->first_name.' '.Sentinel::getUser()->last_name,array('class'=>'form-control','readonly')) }}
+                            {{ Form::text('nombre',Sentinel::getUser()->first_name.' '.Sentinel::getUser()->last_name,array('class'=>'form-control')) }}
                         </div>
                     </div>
                 </div>
-
-
                 <div class="col-md-4 col-sm-6 col-12">
                     <div class="form-group basic">
                         <div class="input-wrapper">
-                            <label class="label" for="name1">Serie</label>
+                            <label class="label" for="name1">N° de Serie</label>
                             {{ Form::text('serie',$data->serie,array('class'=>'form-control','readonly')) }}
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="form-group basic">
+                        <div class="input-wrapper">
+                            <label class="label" for="name1">Voltaje/Combustible</label>
+                            {{ Form::text('voltaje_combustible',null,array('class'=>'form-control')) }}
+                        </div>
+                    </div>
+                </div>                                           
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="form-group basic">
+                        <div class="input-wrapper">
+                            <label class="label" for="name1">Hora de entrada</label>
+                            {{ Form::time('hora_entrada',null,array('class'=>'form-control')) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="form-group basic">
+                        <div class="input-wrapper">
+                            <label class="label" for="name1">Hora de salida</label>
+                            {{ Form::time('hora_salida',null,array('class'=>'form-control')) }}
+                        </div>
+                    </div>
+                </div>     
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="form-group basic">
+                        <div class="input-wrapper">
+                            <label class="label" for="name1">Horometro</label>
+                            {{ Form::number('horometro',null,array('class'=>'form-control','required')) }}
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="form-group basic">
+                        <div class="input-wrapper">
+                            <label class="label" for="name1">Equipo</label>
+                            {{ Form::text('numero_parte',$data->numero_parte,array('class'=>'form-control','readonly')) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="form-group basic">
+                        <div class="input-wrapper">
+                            <label class="label" for="name1">Capacidad</label>
+                            {{ Form::text('numero_parte',$data->voltaje,array('class'=>'form-control','readonly')) }}
+                        </div>
+                    </div>
+                </div>                                 
             </div>
             <div class="section-title"></div>
             <div class="section-title"></div>
         </div>
     </div>
-    {{Form::open(array("method" => "POST","action" => "EquiposController@storeDailyCheck","role" => "form",'class'=>'form-horizontal'))}}
+
     {{ Form::hidden('equipo_id',$data->id) }}
     {{ Form::hidden('formulario_id',$formulario->id) }}
     @include('frontend.partials.form',array('formulario'=>$formulario))
     <button type="submit" class="btn btn-primary btn-sm btn-block">GUARDAR</button>
     {{ Form::close() }}
-
-<script>
-
-</script>
 @stop
