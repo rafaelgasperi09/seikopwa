@@ -47,18 +47,6 @@
                 </li>
             @endif
             @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
-<<<<<<< HEAD
-            <li>
-                <a href="{{route('equipos.create_tecnical_support',$e->id)}}" class="item">
-                    <div class="icon-box bg-warning">
-                        <ion-icon name="alert-circle-outline" role="img" class="md hydrated" aria-label="alert-circle-outline"></ion-icon>
-                    </div>
-                    <div class="in">
-                        <div>Informe de servicio tecnico</div>
-                    </div>
-                </a>
-            </li>
-=======
                 <li>
                     <a href="{{ route('equipos.create_tecnical_support',$e->id) }}" class="item">
                         <div class="icon-box bg-warning">
@@ -69,7 +57,6 @@
                         </div>
                     </a>
                 </li>
->>>>>>> 39d396c6790248e7e08570ea83af850229997232
             @endif
         </ul>
         <!-- * sub menu -->

@@ -1,6 +1,4 @@
 {{ Form::hidden('firma_base','',['id'=>'firma_base']) }}
-{{ Form::hidden($campo_nombre,'',['id'=>$campo_nombre]) }}
-
 <div class="modal fade signModal" id="signModal" role="dialog" aria-labelledby="signModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
