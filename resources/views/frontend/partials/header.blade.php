@@ -40,11 +40,7 @@
     <div class="pageTitle">
         Dashboard
     </div>
-    <div class="right">
-        <a href="javascript:;" class="headerButton toggle-searchbox">
-            <ion-icon name="search-outline"></ion-icon>
-        </a>
-    </div>
+
 
 </div>
 <!-- * App Header -->

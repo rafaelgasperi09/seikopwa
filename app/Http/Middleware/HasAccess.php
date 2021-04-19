@@ -22,7 +22,7 @@ class HasAccess
             {
                 //$request->session()->flash('message.error', 'Su usuario no tiene acceso para ver esta seccion.');
                // return view('front.auth.login');
-                return response()->view('noaccess', [], 403);
+                return response()->view('frontend.noaccess', [], 403);
             }
         }
 
