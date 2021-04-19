@@ -3,7 +3,7 @@
     <a href="{{ route('equipos.index') }}" class="item  @if(Request::is('equipos') or Request::is('equipos/*')) active @endif">
         <div class="col">
             <ion-icon name="train-outline" role="img" class="md hydrated" aria-label="chatbubble ellipses outline"></ion-icon>
-            <span class="badge badge-danger">5</span>
+            {{--}}<span class="badge badge-danger">5</span>{{--}}
         </div>
     </a>
     <a href="{{ route('baterias.index') }}" class="item @if(Request::is('baterias') or Request::is('baterias/*')) active @endif">

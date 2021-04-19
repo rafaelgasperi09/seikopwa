@@ -16,5 +16,5 @@
             {{--}}
         </div>
     </div>
-    @include('frontend.partials.list',array('data'=>$data,'page_view'=>'usuarios.page','page_url'=>'/usuarios/page','search_url'=>'/ususarios/search'))
+    @include('frontend.partials.list',array('data'=>$data,'page_view'=>'usuarios.page','page_url'=>'/usuarios/search','search_url'=>'/ususarios/search'))
 @stop
