@@ -44,27 +44,29 @@ class notificarChequeoDiario extends Command
         $notificados = array();
         foreach (User::whereNotNull('crm_cliente_id')->get() as $user){
 
-            $cliente = $user->cliente();
-            $form = Formulario::whereNombre('form_montacarga_daily_check')->first();
-            // verificar si el cliente tiene al menos un equipo en su poder
-            if($cliente->equipos()->count()> 0){  //tiene al menos un equipo verificar si ya hizo el chequeo diario de todos
-                //
-                foreach ($cliente->equipos()->get() as $equipo){
+            if(date('D') == 'Sun'){
+                $cliente = $user->cliente();
+                $form = Formulario::whereNombre('form_montacarga_daily_check')->first();
+                // verificar si el cliente tiene al menos un equipo en su poder
+                if($cliente->equipos()->count()> 0){  //tiene al menos un equipo verificar si ya hizo el chequeo diario de todos
+                    //
+                    foreach ($cliente->equipos()->get() as $equipo){
 
-                    if(!FormularioRegistro::whereRaw("date_format(created_at,'%Y-%m-%d') = '".date('Y-m-d')."'")
-                                          ->whereClienteId($cliente->id)
-                                          ->whereEquipoId($equipo->id)
-                                         ->whereFormularioId($form->id)
-                                         ->first()){
+                        if(!FormularioRegistro::whereRaw("date_format(created_at,'%Y-%m-%d') = '".date('Y-m-d')."'")
+                            ->whereClienteId($cliente->id)
+                            ->whereEquipoId($equipo->id)
+                            ->whereFormularioId($form->id)
+                            ->first()){
 
-                        $notificados['users'][$user->id]['id'] =$user->id;
-                        $notificados['users'][$user->id]['cliente_id'] =$cliente->id;
-                        $notificados['users'][$user->id]['cliente'] =$cliente->nombre;
-                        $notificados['users'][$user->id]['equipos'][$equipo->id]['equipo_id'] =$equipo->id;
-                        $notificados['users'][$user->id]['equipos'][$equipo->id]['equipo'] =$equipo->numero_parte;
+                            $notificados['users'][$user->id]['id'] =$user->id;
+                            $notificados['users'][$user->id]['cliente_id'] =$cliente->id;
+                            $notificados['users'][$user->id]['cliente'] =$cliente->nombre;
+                            $notificados['users'][$user->id]['equipos'][$equipo->id]['equipo_id'] =$equipo->id;
+                            $notificados['users'][$user->id]['equipos'][$equipo->id]['equipo'] =$equipo->numero_parte;
+                        }
                     }
-                }
 
+                }
             }
         }
 
