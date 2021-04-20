@@ -1,6 +1,5 @@
 var staticCacheName = "pwa-v" + new Date().getTime();
 var filesToCache = [
-    '/offline',
     '/assets/css/style.css',
     'assets/js/lib/jquery-3.4.1.min.js',
     'assets/js/toast.js',
@@ -55,4 +54,21 @@ self.addEventListener("fetch", event => {
                 return caches.match('offline');
             })
     )
+});
+
+self.addEventListener('push', function (e) {
+    if (!(self.Notification && self.Notification.permission === 'granted')) {
+        //notifications aren't supported or permission not granted!
+        return;
+    }
+
+    if (e.data) {
+        var msg = e.data.json();
+        console.log(msg)
+        e.waitUntil(self.registration.showNotification(msg.title, {
+            body: msg.body,
+            icon: msg.icon,
+            actions: msg.actions
+        }));
+    }
 });
