@@ -16,7 +16,9 @@
     @yield('css')
     <link rel="stylesheet" href="{{ url('assets/css/style.css?time='.time()) }}">
     <link rel="stylesheet" href="{{ url('assets/css/style.css') }}?t=1904">
+    @if(\Sentinel::check())
     @laravelPWA
+    @endif
     <!-- Jquery -->
     <script src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
     <script src="{{ url('assets/js/toast.js') }}"></script>

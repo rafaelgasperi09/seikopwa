@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\ImportarClienteCrm::class,
+        \App\Console\Commands\notificarChequeoDiario::class,
     ];
 
     /**

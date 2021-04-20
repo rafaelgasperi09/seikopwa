@@ -129,6 +129,7 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::delete('/{id}', array('as' => 'role.destroy','uses' => 'RolController@destroy'))->where('id', '[0-9]+')->middleware('hasAccess');
     });
 
+
     Route::get("/firma", function(){
         return View::make("frontend.partials.firma1");
      });
@@ -136,6 +137,9 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         return View::make("frontend.partials.firma1");
      });
      Route::post('/firma/send', array('as' => 'firma.store', 'uses' => 'EquiposController@firma'));
+
+     Route::post('/push','PushController@store');
+
 
 });
 
