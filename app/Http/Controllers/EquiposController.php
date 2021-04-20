@@ -98,7 +98,7 @@ class EquiposController extends BaseController
 
     public function storeDailyCheck(Request $request){
 
-        dd($request->all());
+
         try{
             $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;
