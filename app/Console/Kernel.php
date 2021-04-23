@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\ImportarClienteCrm::class,
+        \App\Console\Commands\notificarChequeoDiario::class,
     ];
 
     /**
@@ -24,7 +25,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+         $fec = date('d');
+
+         $schedule->command('notificar:chequeo_diario')
+             ->dailyAt('11:00')
+             ->sendOutputTo(storage_path('logs/notificar_chequeo_diario-'.$fec.'.log'));
     }
 
     /**

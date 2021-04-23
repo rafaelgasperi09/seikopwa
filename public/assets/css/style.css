@@ -5829,6 +5829,11 @@ textarea,
 .toast-box.toast-top.show {
   top: 56px;
 }
+.show-nologued{
+  top: 0px  !important;
+  z-index:9999  !important;
+}
+
 
 .show-nologued {
   top: 0px !important;

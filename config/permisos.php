@@ -18,13 +18,14 @@ return [
        "role.edit"=>"Editar Rol",
        "role.update"=>"Actualizar Rol",
    ),
-  "Equipos"=>array(
+   "Equipos"=>array(
      "equipos.index"=>"Listar Equipos",
      "equipos.create"=>"Crear Equipo",
      "equipos.create_daily_check"=>"Crear Daily Check",
      "equipos.create_mant_prev"=>"Crear Ticket Mantenimiento Preventivo",
      "equipos.create_tecnical_support"=>"Crear Ticket Soporte Tecnico",
      "equipos.detail"=>"Ver Detalle Equipo",
+<<<<<<< HEAD
   ),
  "Baterias"=>array(
      "baterias.index"=>"Listar Baterias",
@@ -36,3 +37,15 @@ return [
   "taller"=>"Permisos personal de MORESA",
 ),
 )];
+=======
+   ),
+   "Taller"=>array(
+    "taller"=>"Permisos personal de MORESA",
+   ),
+   "Baterias"=>array(
+     "baterias.index"=>"Listar Baterias",
+     "baterias.detail"=>"Detalle Bateria",
+     "baterias.register_in_and_out"=>"Registrar entrada y salida de cuarto de maquinas",
+   ),
+ )];
+>>>>>>> fd842eca21498f1851945114747e18cfb98becd0

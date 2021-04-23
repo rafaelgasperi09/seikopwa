@@ -97,6 +97,10 @@ class EquiposController extends BaseController
 
     public function storeDailyCheck(Request $request){
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> fd842eca21498f1851945114747e18cfb98becd0
         try{
             $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;

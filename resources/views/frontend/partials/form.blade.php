@@ -1,10 +1,10 @@
-@php $remove=''; @endphp 
+@php $remove=''; @endphp
 @foreach($formulario->secciones()->get() as $key=>$seccion)
     <div class="section full mt-2 mb-2" id='seccion{{$key}}'>
         <div class="section-title">{{ strtoupper($seccion->titulo) }}</div>
         <div class="wide-block pb-1 pt-2">
             <div class="row">
-                @php $campos=false;$firmas=0; @endphp 
+                @php $campos=false;$firmas=0; @endphp
                 @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->whereNotIn('nombre',['semana','dia_semana'])->get() as $campo)
                    @if(\Sentinel::getUser()->hasAccess(['taller']) or $campo->permiso=='edit')
                         @if(mostrarCampo($campo->tipo))
@@ -20,9 +20,9 @@
                                     @if($campo->tipo == 'hidden')
                                         {{ Form::hidden($campo->nombre,null) }}
                                     @elseif($campo->tipo == 'text')
-                                        {{ Form::text($campo->nombre,null,array('class'=>'form-control',$requerido)) }}
+                                        {{ Form::text($campo->nombre,null,array('class'=>'form-control',$requerido,'id'=>$campo->nombre)) }}
                                     @elseif($campo->tipo == 'textarea')
-                                        {{ Form::textarea($campo->nombre,null,array('class'=>'form-control',$requerido)) }}
+                                        {{ Form::textarea($campo->nombre,null,array('class'=>'form-control',$requerido,'id'=>$campo->nombre)) }}
                                     @elseif($campo->tipo == 'select')
                                         {{ Form::select($campo->nombre,getFormularioSelectOpciones($campo->opciones),null,array('class'=>'form-control','id'=>$campo->nombre,$requerido)) }}
                                     @elseif($campo->tipo == 'combo')
@@ -33,18 +33,21 @@
                                         <?php $api = new \App\HcaApi($campo->api_endpoint);?>
                                         @include('partials.typehead_field',array('field_label'=>$campo->etiqueta,'field_name'=>$campo->nombre,'items'=>$api->result()))
                                     @elseif($campo->tipo == 'date')
-                                        {{ Form::date($campo->nombre,null,array('class'=>'form-control date',$requerido,'date-format'=>$campo->formato_fecha)) }}
+                                        {{ Form::date($campo->nombre,null,array('class'=>'form-control date',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre)) }}
                                     @elseif($campo->tipo == 'file')
-                                        {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido)) }}
+                                        {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre)) }}
                                         <div id="errorBlock" class="help-block"></div>
                                     @elseif($campo->tipo == 'time')
-                                        {{ Form::time($campo->nombre,null,array('class'=>'form-control',$requerido)) }}
+                                        {{ Form::time($campo->nombre,null,array('class'=>'form-control',$requerido,'id'=>$campo->nombre)) }}
                                     @elseif($campo->tipo == 'number')
-                                        {{ Form::number($campo->nombre,null,array('class'=>'form-control',$requerido)) }}
+                                        {{ Form::number($campo->nombre,null,array('class'=>'form-control',$requerido,'id'=>$campo->nombre)) }}
                                     @elseif($campo->tipo == 'checkbox')
-                                        <label class="switch">
-                                            <input type="checkbox" name="{{ $campo->nombre }}"/><span></span>
-                                        </label>
+
+                                        <div class="custom-control custom-switch col-4">
+                                            <input name="{{ $campo->nombre }}" type="checkbox" class="custom-control-input" id="customSwitch_{{ $campo->nombre }}">
+                                            <label class="custom-control-label" for="customSwitch_{{ $campo->nombre }}"></label>
+                                        </div>
+
                                     @elseif($campo->tipo == 'radio')
                                         <div class="wide-block pt-2 pb-2">
                                             @php
@@ -80,7 +83,7 @@
                             </div>
                             @php $campos=true; @endphp
                             @endif
-                    @endif           
+                    @endif
                 @endforeach
             </div>
         </div>

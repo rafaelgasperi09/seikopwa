@@ -27,11 +27,11 @@ return [
                 'purpose' => 'any',
                 "sizes"=> "96x96",
             ],
-            '128x128' => [
+            /*'128x128' => [
                 'path' => '/images/AppImages/android/icon-128x128.png',
                 'purpose' => 'any',
                 "sizes"=> "128x128",
-            ],
+            ],*/
             '144x144' => [
                 'path' => '/images/AppImages/android/icon-144x144.png',
                 'purpose' => 'any',

@@ -7,7 +7,9 @@
 @include('frontend.partials.title',array('title'=>'Baterias','subtitle'=>'Bateria :'.$data->id_componente))
 <div class="divider mt-2 mb-3"></div>
 <div class="section  full mt-2" data-toggle="collapse" href="#detail" aria-expanded="false">
-    <div class="section-title">Detalle</div>
+    <div class="section-title">Detalle
+
+    </div>
     <div class="wide-block pt-2 pb-2" id="detail">
         <dl class="row">
             <dt class="col-sm-3">Marca</dt>
@@ -45,7 +47,11 @@
 </div>
 <div class="divider  mt-2 mb-3"></div>
 <div class="section full mb-2">
-    <div class="section-title">Historial Cargas</div>
+    <div class="section-title">Historial Cargas (Cuarto de maquinas)
+        <div class="right">
+            <a href="{{ route('baterias.register_in_and_out',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
+        </div>
+    </div>
     <div class="wide-block p-1" id="historial">
         <div class="table-responsive">
             <table class="table dataTables table-bordered table-striped table-actions">

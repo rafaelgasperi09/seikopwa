@@ -14,11 +14,12 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
+        "laravel-notification-channels/webpush": "^5.1",
         "laravel/framework": "^7.29",
         "laravel/tinker": "^2.5",
-        "tecnickcom/tcpdf": "^6.4.1",
         "laravelcollective/html": "^6.2",
         "silviolleite/laravelpwa": "^2.0",
+        "tecnickcom/tcpdf": "^6.4.1",
         "yajra/laravel-datatables-oracle": "^9.17.4"
     },
     "require-dev": {
