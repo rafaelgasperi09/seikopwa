@@ -4363,7 +4363,8 @@ textarea,
   width: 100%;
   border-radius: 6px;
   padding: 6px 10px;
-  height: 30px;
+  /*height: 30px;*/
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5827,6 +5828,10 @@ textarea,
 
 .toast-box.toast-top.show {
   top: 56px;
+}
+
+.show-nologued {
+  top: 0px !important;
 }
 
 .toast-box.toast-bottom {

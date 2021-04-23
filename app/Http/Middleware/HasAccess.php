@@ -19,7 +19,7 @@ class HasAccess
         if(Sentinel::check())
         {
 
-            if(!( Sentinel::getUser()->hasAccess(\Route::currentRouteName()) or Sentinel::getUser()->isOnGroup(1)) )
+            if(!Sentinel::getUser()->hasAccess(\Route::currentRouteName())  )
             {
                 //$request->session()->flash('message.error', 'Su usuario no tiene acceso para ver esta seccion.');
                // return view('front.auth.login');

@@ -51,11 +51,11 @@
                                                 $i=0;
                                             @endphp
                                             @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
-                                                {{$o}}
+                                               
+                                               
                                                 <div class="custom-control custom-radio d-inline">
-                                                    {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i)) }}
-
-                                                    <label class="custom-control-label p-0" for="{{ $campo->nombre }}{{$i}}"></label>
+                                                {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i)) }}
+                                                <label class="custom-control-label p-0" for="{{ $campo->nombre }}{{$i}}">{{$o}}</label>
                                                 </div>
                                                 <?php $i++ ?>
                                             @endforeach

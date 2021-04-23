@@ -71,7 +71,6 @@ class EquiposController extends BaseController
 
 
     public function detail($id){
-
         $data = Equipo::findOrFail($id);
         return view('frontend.equipos.detail')->with('data',$data);
     }
@@ -98,7 +97,6 @@ class EquiposController extends BaseController
 
     public function storeDailyCheck(Request $request){
 
-        dd($request->all());
         try{
             $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;
@@ -337,6 +335,5 @@ class EquiposController extends BaseController
         $filename = time().'.png';
         $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $request->firma));
         Storage::put($filename,$data);
-        dd( $request->firma);
     }
 }

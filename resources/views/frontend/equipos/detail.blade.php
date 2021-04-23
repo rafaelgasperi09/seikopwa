@@ -6,22 +6,6 @@
     <div class="accordion" id="detalle">
         <div class="item">
             <div class="accordion-header">
-                <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#accordion001" aria-expanded="false">
-                    <ion-icon name="help-circle-outline" role="img" class="md hydrated" aria-label="help circle outline"></ion-icon>
-                    About
-                </button>
-            </div>
-            <div id="accordion001" class="accordion-body collapse" data-parent="#detalle" style="">
-                <div class="accordion-content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at augue eleifend,
-                    lacinia
-                    ex quis, condimentum erat. Nullam a ipsum lorem.
-                </div>
-            </div>
-        </div>
-
-        <div class="item">
-            <div class="accordion-header">
                 <button class="btn" type="button" data-toggle="collapse" data-target="#accordion002" aria-expanded="false">
                     <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="document outline"></ion-icon>
                     Detalles
@@ -78,10 +62,76 @@
                 </button>
             </div>
             <div id="accordion003" class="accordion-body collapse" data-parent="#detalle" style="">
-                <div class="accordion-content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at augue eleifend,
-                    lacinia
-                    ex quis, condimentum erat. Nullam a ipsum lorem.
+                    <div class="accordion-content">
+                        <ul class="nav nav-tabs style1 iconed" role="tablist">
+                            @if(\Sentinel::hasAccess('equipos.create_daily_check'))
+                            <li class="nav-item">
+                                <a class="nav-link active " data-toggle="tab" href="#dailycheck" role="tab" aria-selected="true">
+                                        <ion-icon name="list-outline" class="text-primary" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
+                                        Daily Check
+                                </a>
+                            </li>
+                            @endif
+                            @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev'))
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#mant_prev" role="tab" aria-selected="true">
+                                        <ion-icon name="hammer-outline" class="text-info" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
+                                        Mantenimiento Preventivo
+                                </a>
+                            </li>
+                            @endif
+                            @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#serv_tec" role="tab" aria-selected="true">
+                                        <ion-icon name="alert-circle-outline" class="text-warning" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
+                                        Informe de Servicio Tecnico
+                                </a>
+                            </li>
+                            @endif
+                        </ul>
+                        <div class="tab-content mt-1">
+                        @if(\Sentinel::hasAccess('equipos.create_daily_check'))
+                        <div class="tab-pane fade active show" id="dailycheck" role="tabpanel">
+                            <div class="section full mt-1">
+                                <h3>Daily Check</h3>
+                                <div class="wide-block p-0">
+
+                                    <div class="table-responsive">
+                                    @include('frontend.partials.tabla_detalle',array('form_name'=>'form_montacarga_daily_check'))
+                                    </div>
+
+                                </div>                            
+                            </div>
+                        </div>
+                        @endif
+                        @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev'))
+                        <div class="tab-pane fade " id="mant_prev" role="tabpanel">
+                            <div class="section full mt-1">
+                                <h3>{{$data->tipo_equipos_id}}Mantenimiento Preventivo</h3>
+                                <div class="wide-block p-0">
+
+                                <div class="table-responsive">
+                                @include('frontend.partials.tabla_detalle',array('form_name'=>'form_montacarga_daily_check'))
+                                </div>
+
+                                </div>                                
+                            </div>
+                        </div>
+                        @endif
+                        @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
+                        <div class="tab-pane fade " id="serv_tec" role="tabpanel">
+                            <div class="section full mt-1">
+                                <h3>Reporte de Servicio Tecnico</h3>
+                                <div class="wide-block p-0">
+                                    <div class="table-responsive">
+                                    @include('frontend.partials.tabla_detalle',array('form_name'=>'form_montacarga_servicio_tecnico'))
+                                    </div>
+
+                                </div>                                
+                            </div>
+                        </div>
+                        @endif
+                    </div>                    
                 </div>
             </div>
         </div>
