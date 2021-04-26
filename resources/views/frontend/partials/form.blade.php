@@ -52,15 +52,17 @@
                                         <div class="wide-block pt-2 pb-2">
                                             @php
                                                 $i=0;
+                                                $checked='checked';
                                             @endphp
                                             @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
                                                
                                                
                                                 <div class="custom-control custom-radio d-inline">
-                                                {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i)) }}
+                                                {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$checked)) }}
                                                 <label class="custom-control-label p-0" for="{{ $campo->nombre }}{{$i}}">{{$o}}</label>
                                                 </div>
-                                                <?php $i++ ?>
+                                                <?php $i++;
+                                                $checked=''; ?>
                                             @endforeach
                                         </div>
                                     @elseif($campo->tipo == 'firma' and ++$firmas)

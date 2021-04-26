@@ -21,6 +21,7 @@ use App\SubEquipo;
 use Illuminate\Support\Facades\DB;
 use Sentinel;
 use Illuminate\Support\Facades\Storage;
+use PDF;
 
 class EquiposController extends BaseController
 {
@@ -72,7 +73,19 @@ class EquiposController extends BaseController
 
     public function detail($id){
         $data = Equipo::findOrFail($id);
-        return view('frontend.equipos.detail')->with('data',$data);
+
+        
+        $form['dc']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
+                                        ->where('equipo_id',$id)->where('formularios.nombre','form_montacarga_daily_check')->get();
+                                        
+        $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
+                                        ->where('equipo_id',$id)->where('formularios.nombre','form_montacarga_servicio_tecnico')->get();
+                                        
+        $form['mp']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
+                                        ->where('equipo_id',$id)->where('formularios.nombre_menu','like',$data->tipo->name)->get();
+
+        
+        return view('frontend.equipos.detail')->with('data',$data)->with('form',$form);
     }
 
     public function createDailyCheck($id){
@@ -171,6 +184,7 @@ class EquiposController extends BaseController
 
     public function storeMantPrev(SaveFormEquipoRequest $request)
     {
+        dd($request->all());
         try {
             $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;
@@ -278,7 +292,7 @@ class EquiposController extends BaseController
         return view('frontend.equipos.create_tecnical_support_report')->with('data',$data)->with('formulario',$formulario);
     }
     public function storeTecnicalSupport(Request $request){
-
+        
         $this->validate($request, [
             'equipo_id'  => 'required',
             'formulario_id'  => 'required',
@@ -303,9 +317,9 @@ class EquiposController extends BaseController
                 {
                     $valor =  $request->get($campo->nombre);
                     if($campo->tipo=='firma'){
-                        $filename = time().'.png';
-                        $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $request->firma));
-                        Storage::put($filename,$data);
+                        $filename = $campo->nombre.time().'.png';
+                        $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
+                        Storage::put('public/'.$filename,$data);
                         $valor =  $filename;
                     }
 
@@ -331,9 +345,13 @@ class EquiposController extends BaseController
         $request->session()->flash('message.success','Registro creado con exito');
         return redirect(route('equipos.detail',$equipo_id));
     }
-    public function firma(Request $request){
-        $filename = time().'.png';
-        $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $request->firma));
-        Storage::put($filename,$data);
+    public function reportes($id){
+        $datos['cab']=FormularioRegistro::find($id);
+        
+        $datos['det']=getFormData($datos['cab']->formulario->nombre,0,0,$id);
+
+        $pdf = PDF::loadView('frontend.equipos.reportes.form_montacarga_servicio_tecnico',compact('datos'));
+        return $pdf->stream('pdfview.pdf');
+        return view('frontend.equipos.reportes.form_montacarga_servicio_tecnico')->with('datos',$datos);
     }
 }

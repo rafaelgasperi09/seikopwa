@@ -19,7 +19,7 @@ class FormularioRegistro extends BaseModel
     }
 
     public function formulario(){
-        return $this->belongsTo(Formulario::class);
+        return $this->belongsTo('App\Formulario','formulario_id');
     }
 
     public function data(){
