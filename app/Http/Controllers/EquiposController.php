@@ -198,7 +198,7 @@ class EquiposController extends BaseController
                 $model->creado_por = Sentinel::getUser()->id;
                 $model->equipo_id = $request->equipo_id;
                 $model->cliente_id = $equipo->cliente_id;
-                $model->status = 'P';
+                $model->estatus = 'P';
 
                 if ($model->save()) {
                     foreach ($formulario->campos()->get() as $campo) {
