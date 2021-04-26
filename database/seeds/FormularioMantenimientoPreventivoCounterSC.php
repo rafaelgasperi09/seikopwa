@@ -52,7 +52,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
                 \App\FormularioCampo::create([
                     'formulario_id'=>$form->id,
                     'formulario_seccion_id'=>$form_sec->id,
-                    'nombre'=>trim($nombre).'_'.$form_sec->id,
+                    'nombre'=>Str::slug($nombre.'_'.$form_sec->id),
                     'etiqueta'=>$cam,
                     'tipo'=>'radio',
                     'opciones'=>'C,A,R,U',
@@ -78,7 +78,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre).'_'.$form_sec->id,
+                'nombre'=>Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -105,7 +105,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre).'_'.$form_sec->id,
+                'nombre'=>Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -131,7 +131,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre).'_'.$form_sec->id,
+                'nombre'=>Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -157,7 +157,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre).'_'.$form_sec->id,
+                'nombre'=>Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -182,7 +182,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre).'_'.$form_sec->id,
+                'nombre'=>Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -207,7 +207,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre).'_'.$form_sec->id,
+                'nombre'=>Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -233,7 +233,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre).'_'.$form_sec->id,
+                'nombre'=>Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -259,7 +259,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id'=>$form->id,
                 'formulario_seccion_id'=>$form_sec->id,
-                'nombre'=>trim($nombre).'_'.$form_sec->id,
+                'nombre'=>Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta'=>$cam,
                 'tipo'=>'radio',
                 'opciones'=>'C,A,R,U',
@@ -284,7 +284,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id' => $form->id,
                 'formulario_seccion_id' => $form_sec->id,
-                'nombre' => trim($nombre).'_'.$form_sec->id,
+                'nombre' => Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta' => $cam,
                 'tipo' => 'radio',
                 'opciones' => 'C,A,R,U',
@@ -309,7 +309,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id' => $form->id,
                 'formulario_seccion_id' => $form_sec->id,
-                'nombre' => trim($nombre).'_'.$form_sec->id,
+                'nombre' => Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta' => $cam,
                 'tipo' => 'radio',
                 'opciones' => 'C,A,R,U',
@@ -335,7 +335,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id' => $form->id,
                 'formulario_seccion_id' => $form_sec->id,
-                'nombre' => trim($nombre).'_'.$form_sec->id,
+                'nombre' => Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta' => $cam,
                 'tipo' => 'radio',
                 'opciones' => 'C,A,R,U',
@@ -360,7 +360,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id' => $form->id,
                 'formulario_seccion_id' => $form_sec->id,
-                'nombre' => trim($nombre).'_'.$form_sec->id,
+                'nombre' => Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta' => $cam,
                 'tipo' => 'radio',
                 'opciones' => 'C,A,R,U',
@@ -388,7 +388,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             \App\FormularioCampo::create([
                 'formulario_id' => $form->id,
                 'formulario_seccion_id' => $form_sec->id,
-                'nombre' => trim($nombre).'_'.$form_sec->id,
+                'nombre' => Str::slug($nombre.'_'.$form_sec->id),
                 'etiqueta' => $cam,
                 'tipo' => 'radio',
                 'opciones' => 'C,A,R,U',
