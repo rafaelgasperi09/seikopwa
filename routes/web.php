@@ -64,6 +64,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::get('/tecnical_support/edit/{id}', array('as' => 'equipos.edit_tecnical_support', 'uses' => 'EquiposController@editTecnicalSupport'));
 
         Route::post('/store_tecnical_support', array('as' => 'equipos.store_tecnical_support', 'uses' => 'EquiposController@storeTecnicalSupport'));
+
+        Route::get('/reportes/form_montacarga_servicio_tecnico/{id}', array('as' => 'reporte.form_montacarga_servicio_tecnico', 'uses' => 'EquiposController@reportes'));
     });
 
     Route::group(array('prefix' => 'baterias'), function() {

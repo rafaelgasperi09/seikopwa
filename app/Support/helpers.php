@@ -85,29 +85,32 @@ function getDayOfWeek($day){
   return $day_week;
 }
 
-function getFormData($formName){
-    $baseQuery="select 'SELECT  fd.formulario_registro_id,MAX(fd.created_at) as creado,' as campo
-                union
-                select concat(' MAX(CASE fd.formulario_campo_id WHEN ',
-                id,' THEN fd.valor ELSE \'\' END) AS ',
-                nombre,',') as campo 
-                from formulario_campos where formulario_id =(select max(id) from formularios where nombre='$formName' ) and deleted_at is null
-                UNION 
-                select concat('now() as fecha_crea FROM formulario_data AS fd ,formulario_registro fr
-                WHERE fd.`formulario_registro_id`=fr.`id`
-                AND fr.`formulario_id`=',id,'
-                GROUP BY fd.formulario_registro_id;') from formularios where nombre='$formName' ";
-    
-  $resultQuery=\DB::select(DB::raw($baseQuery));
-
+function getFormData($formName,$equipo_id=0,$componente_id=0,$registro_id=0){
  
-  $returnQuery='';
-    foreach($resultQuery as $r){
-        $returnQuery.=$r->campo.'
-        ';
+    $baseQuery='SELECT  fd.formulario_registro_id,MAX(fd.created_at) as creado,';
+    $fc=\App\FormularioCampo::whereRaw(" formulario_id=(select id from formularios where nombre='$formName')")->get();
+    foreach($fc as $f){
+        $baseQuery.="
+                    MAX(CASE fd.formulario_campo_id WHEN $f->id THEN fd.valor ELSE '' END) AS $f->nombre,";
     }
+    
+    $baseQuery=substr($baseQuery,0,strlen($baseQuery)-1); //elimina la ultima coma
+    $equipoFilter='';
+    
+    if($equipo_id>0)
+        $equipoFilter=" AND fr.equipo_id=$equipo_id";
+    if($componente_id>0)
+        $equipoFilter=" AND fr.componente_id=$componente_id";
+    if($registro_id>0)
+        $equipoFilter=" AND fr.id=$registro_id";
+    $baseQuery.=" FROM formulario_data AS fd ,formulario_registro fr
+                    WHERE fd.`formulario_registro_id`=fr.`id`
+                    AND fr.`formulario_id`=(select id from formularios where nombre='$formName')
+                    $equipoFilter
+                    GROUP BY fd.formulario_registro_id;";
 
-    $returnData=\DB::select(DB::raw($returnQuery));
+
+    $returnData=\DB::select(DB::raw($baseQuery));
     return $returnData;
 
 }
@@ -115,6 +118,14 @@ function getFormData($formName){
 function getFormFields($formName){
     $campos=\App\Formulario::select('formulario_campos.nombre')->where('formularios.nombre',$formName)->join('formulario_campos','formularios.id','=','formulario_campos.formulario_id')->get()->pluck(['nombre']);
     return $campos;
+}
+
+function getStatusHtml($status){
+
+    $estados=array('P'=>'Pendiente','A'=>'Abierto','C'=>'Cerrado',''=>'N/A');
+    $colores=array('P'=>'warning','A'=>'success','C'=>'secondary','ligth');
+    $html='<span class="badge badge-'.$colores[$status].'">'.$estados[$status].'</span>';
+    return $html;
 }
 
 ?>
