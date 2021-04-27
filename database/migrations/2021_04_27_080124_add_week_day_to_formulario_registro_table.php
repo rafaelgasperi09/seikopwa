@@ -17,7 +17,7 @@ class AddWeekDayToFormularioRegistroTable extends Migration
             $table->string('dia_semana',20)->nullable();
             $table->integer('semana')->nullable();
             $table->integer('ano')->nullable();
-            $table->integer('nombre_archivo')->nullable();
+            $table->string('nombre_archivo')->nullable();
         });
     }
 
