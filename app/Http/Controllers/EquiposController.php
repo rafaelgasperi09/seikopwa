@@ -124,6 +124,9 @@ class EquiposController extends BaseController
                 $model->equipo_id = $request->equipo_id;
                 $model->turno_chequeo_diario = $request->turno_chequeo_diario;
                 $model->cliente_id = $equipo->cliente_id;
+                $model->dia_semana = getDayOfWeek(date('N'));
+                $model->semana = date('w');
+                $model->ano = date('Y');
 
                 if($model->save())
                 {
