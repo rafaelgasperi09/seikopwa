@@ -21,7 +21,7 @@
                             <dl class="row">
                                 <dt class="col-sm-3">Tipo</dt>
                                 <dd class="col-sm-9">{{ $data->tipo->display_name }}</dd>
-                            </dl>                            
+                            </dl>
                             <dl class="row">
                                 <dt class="col-sm-3">Marca</dt>
                                 <dd class="col-sm-9">{{ $data->marca->display_name }}</dd>
@@ -72,7 +72,7 @@
                                 </a>
                             </li>
                             @endif
-                            @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev'))
+                            @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev']))
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#mant_prev" role="tab" aria-selected="true">
                                         <ion-icon name="hammer-outline" class="text-info" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
@@ -100,11 +100,11 @@
                                     @include('frontend.partials.listado_reportes',array('data'=>$form['dc']))
                                     </div>
 
-                                </div>                            
+                                </div>
                             </div>
                         </div>
                         @endif
-                        @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev'))
+                        @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev']))
                         <div class="tab-pane fade " id="mant_prev" role="tabpanel">
                             <div class="section full mt-1">
                                 <h3>{{$data->tipo_equipos_id}}Mantenimiento Preventivo</h3>
@@ -114,7 +114,7 @@
                                  @include('frontend.partials.listado_reportes',array('data'=>$form['mp']))
                                 </div>
 
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                         @endif
@@ -127,17 +127,17 @@
                                     @include('frontend.partials.listado_reportes',array('data'=>$form['st']))
                                     </div>
 
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                         @endif
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>
 
 
-    </div>    
+    </div>
 </div>
 
 @stop

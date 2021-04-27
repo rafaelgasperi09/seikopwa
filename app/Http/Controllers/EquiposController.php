@@ -185,6 +185,18 @@ class EquiposController extends BaseController
         return view('frontend.equipos.create_mant_prev')->with('data',$data)->with('formulario',$formulario);
     }
 
+    public function editMantPrev($id){
+
+        $data = FormularioRegistro::findOrFail($id);
+        $equipo = Equipo::findOrFail($data->equipo_id);
+        $formulario = Formulario::findOrFail($data->formulario_id);
+
+        return view('frontend.equipos.edit_mant_prev')
+            ->with('equipo',$equipo)
+            ->with('formulario',$formulario)
+            ->with('data',$data);
+    }
+
     public function storeMantPrev(SaveFormEquipoRequest $request)
     {
         try {
@@ -221,8 +233,55 @@ class EquiposController extends BaseController
                         }
                     }
 
+                } else {
+                    throw new \Exception('Hubo un problema y no se creo el registro!');
+                }
+            });
 
-                    // despues de crear la data cear una solicitud de mantenimiento preventivo en la base de dato de montacarga
+            //aqui hay que ver a quien notificar
+
+            $request->session()->flash('message.success', 'Registro creado con éxito');
+            return redirect(route('equipos.detail', $equipo_id));
+
+        } catch (\Exception $e) {
+            $request->session()->flash('message.error', $e->getMessage());
+            return redirect(route('equipos.create_mant_prev', ['id'=>$equipo->id, 'tipo'=>$equipo->tipo_equipos_id]))->withInput($request->all());
+        }
+    }
+
+    public function updateMantPrev(Request $request)
+    {
+        try {
+
+            $this->validate($request, [
+                'equipo_id'              => 'required',
+                'formulario_id'          => 'required',
+                'formulario_registro_id' => 'required',
+                'trabajo_recibido_por'  => 'required',
+            ]);
+
+            $equipo_id = $request->equipo_id;
+            $formulario_id = $request->formulario_id;
+            $formulario = Formulario::find($formulario_id);
+            $equipo = Equipo::find($equipo_id);
+            $model = FormularioRegistro::findOrFail($request->formulario_registro_id);
+
+            DB::transaction(function () use ($model, $request, $formulario, $equipo) {
+
+                foreach ($formulario->campos()->get() as $campo) {
+
+                    $valor = $request->get($campo->nombre);
+                    $form_data = FormularioData::whereFormularioRegistroId($model->id)->whereFormularioCampoId($campo->id)->first();
+                    $form_data->valor = $valor;
+
+                    if (!$form_data->save()) {
+                        throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
+                    }
+                }
+
+                if($model->estatus == 'C'){ //si el estatus cambio a C esto pasa en el observer de FormularioDataObserver
+
+                    // crear una solicitud de mantenimiento preventivo en la base de dato de montacarga
                     $solicitud = new MontacargaSolicitud();
                     $consecutivo = MontacargaConsecutivo::where('consecutivo_opcion','mantenimiento-preventivo')->first();
                     $next_values_consecutivo = $consecutivo->numero_consecutivo+1;
@@ -263,11 +322,12 @@ class EquiposController extends BaseController
                             'calidad'=>'original',
                             'usuario_id'=>1,
                         ]);
-                    }
 
-                } else {
-                    throw new \Exception('Hubo un problema y no se creo el registro!');
+                        $model->nombre_archivo = $path;
+                        $model->save();
+                    }
                 }
+
             });
 
             //aqui hay que ver a quien notificar
@@ -277,7 +337,7 @@ class EquiposController extends BaseController
 
         } catch (\Exception $e) {
             $request->session()->flash('message.error', $e->getMessage());
-            return redirect(route('equipos.create_mant_prev', ['id'=>$equipo->id, 'tipo'=>$equipo->tipo_equipos_id]))->withInput($request->all());
+            return redirect(route('equipos.create_mant_prev', ['id'=>$equipo_id, 'tipo'=>$equipo->tipo_equipos_id]))->withInput($request->all());
         }
     }
 
@@ -295,6 +355,7 @@ class EquiposController extends BaseController
         $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
         return view('frontend.equipos.create_tecnical_support_report')->with('data',$data)->with('formulario',$formulario);
     }
+
     public function storeTecnicalSupport(Request $request){
 
         $this->validate($request, [
@@ -349,6 +410,7 @@ class EquiposController extends BaseController
         $request->session()->flash('message.success','Registro creado con exito');
         return redirect(route('equipos.detail',$equipo_id));
     }
+
     public function reportes($id){
         $datos['cab']=FormularioRegistro::find($id);
 
