@@ -20,7 +20,7 @@
                <td>{{$d->updated_at}}</td>
                <td>{!!getStatusHtml($d->estatus)!!}</td>
                <td>
-                    <a href="{{url('equipos/reportes/form_montacarga_servicio_tecnico/'.$d->id)}}" target="_blank" class="btn btn-primary btn-sm mr-1 ">
+                    <a href="{{url('equipos/reportes/'.$nombre.'/'.$d->id)}}" target="_blank" class="btn btn-primary btn-sm mr-1 ">
                     <ion-icon name="list-outline" title="Ver detalle"></ion-icon>Detalle
                     </a>
                     

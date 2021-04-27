@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Sentinel;
 use Illuminate\Support\Facades\Storage;
 use PDF;
-
+use Response;
 class EquiposController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -124,7 +124,7 @@ class EquiposController extends BaseController
                 $model->equipo_id = $request->equipo_id;
                 $model->turno_chequeo_diario = $request->turno_chequeo_diario;
                 $model->cliente_id = $equipo->cliente_id;
-
+                $model->estatus = 'P';
                 if($model->save())
                 {
                     foreach ($formulario->campos()->get() as $campo)
@@ -134,11 +134,12 @@ class EquiposController extends BaseController
                         if($campo->nombre == 'semana') $valor = Carbon::now()->startOfWeek()->format('d-m-Y');
                         if($campo->nombre == 'dia_semana') $valor = getDayOfWeek(date('N'));
                         if($campo->tipo=='firma'){
-                            $filename = time().'.png';
-                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $request->firma));
-                            Storage::put($filename,$data);
+                            $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
+                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
+                            Storage::put('public/firmas/'.$filename,$data);
                             $valor =  $filename;
                         }
+    
                         $api_descripcion = '';
                         $form_data = FormularioData::create([
                             'formulario_registro_id' => $model->id,
@@ -184,7 +185,6 @@ class EquiposController extends BaseController
 
     public function storeMantPrev(SaveFormEquipoRequest $request)
     {
-        dd($request->all());
         try {
             $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;
@@ -199,11 +199,18 @@ class EquiposController extends BaseController
                 $model->creado_por = Sentinel::getUser()->id;
                 $model->equipo_id = $request->equipo_id;
                 $model->cliente_id = $equipo->cliente_id;
-
+                $model->estatus = 'P';
                 if ($model->save()) {
                     foreach ($formulario->campos()->get() as $campo) {
                         $valor = $request->get($campo->nombre);
                         $api_descripcion = '';
+                        if($campo->tipo=='firma'){
+                            $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
+                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
+                            Storage::put('public/'.$filename,$data);
+                            $valor =  $filename;
+                        }
+    
                         $form_data = FormularioData::create([
                             'formulario_registro_id' => $model->id,
                             'formulario_campo_id' => $campo->id,
@@ -310,6 +317,7 @@ class EquiposController extends BaseController
             $model->creado_por = Sentinel::getUser()->id;
             $model->equipo_id = $request->equipo_id;
             $model->cliente_id = $request->cliente_id;
+            $model->estatus = 'P';
 
             if($model->save())
             {
@@ -317,9 +325,9 @@ class EquiposController extends BaseController
                 {
                     $valor =  $request->get($campo->nombre);
                     if($campo->tipo=='firma'){
-                        $filename = $campo->nombre.time().'.png';
+                        $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
                         $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
-                        Storage::put('public/'.$filename,$data);
+                        Storage::put('public/firmas/'.$filename,$data);
                         $valor =  $filename;
                     }
 
@@ -345,13 +353,25 @@ class EquiposController extends BaseController
         $request->session()->flash('message.success','Registro creado con exito');
         return redirect(route('equipos.detail',$equipo_id));
     }
-    public function reportes($id){
-        $datos['cab']=FormularioRegistro::find($id);
-        
-        $datos['det']=getFormData($datos['cab']->formulario->nombre,0,0,$id);
+    public function reportes($reporte,$id){
+       $datos['cab']=FormularioRegistro::find($id);
 
-        $pdf = PDF::loadView('frontend.equipos.reportes.form_montacarga_servicio_tecnico',compact('datos'));
-        return $pdf->stream('pdfview.pdf');
-        return view('frontend.equipos.reportes.form_montacarga_servicio_tecnico')->with('datos',$datos);
+      
+       if($reporte=='form_montacarga_servicio_tecnico'){
+            $datos['det']=getFormData($datos['cab']->formulario->nombre,0,0,$id);
+            $pdf = PDF::loadView('frontend.equipos.reportes.form_montacarga_servicio_tecnico',compact('datos'));
+            return $pdf->stream('pdfview.pdf');
+            return view('frontend.equipos.reportes.form_montacarga_servicio_tecnico')->with('datos',$datos);
+       }
+       if($reporte=='mantenimiento_preventivo'){
+            $file= $datos['cab']->savePdf();
+
+            return Response::make(file_get_contents($file), 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; prevew.pdf',
+            ]);
+       }
+
+
     }
 }
