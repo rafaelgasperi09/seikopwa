@@ -74,17 +74,17 @@ class EquiposController extends BaseController
     public function detail($id){
         $data = Equipo::findOrFail($id);
 
-        
+
         $form['dc']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)->where('formularios.nombre','form_montacarga_daily_check')->get();
-                                        
+
         $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)->where('formularios.nombre','form_montacarga_servicio_tecnico')->get();
-                                        
+
         $form['mp']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)->where('formularios.nombre_menu','like',$data->tipo->name)->get();
 
-        
+
         return view('frontend.equipos.detail')->with('data',$data)->with('form',$form);
     }
 
@@ -125,6 +125,10 @@ class EquiposController extends BaseController
                 $model->turno_chequeo_diario = $request->turno_chequeo_diario;
                 $model->cliente_id = $equipo->cliente_id;
                 $model->estatus = 'P';
+                $model->dia_semana = getDayOfWeek(date('N'));
+                $model->semana = date('w');
+                $model->ano = date('Y');
+
                 if($model->save())
                 {
                     foreach ($formulario->campos()->get() as $campo)
@@ -217,6 +221,7 @@ class EquiposController extends BaseController
                             'valor' => $valor,
                             'tipo' => $campo->tipo,
                             'api_descripcion' => $api_descripcion,
+                            'user_id'=>current_user()->id
                         ]);
 
                         if (!$form_data) {
@@ -299,7 +304,7 @@ class EquiposController extends BaseController
         return view('frontend.equipos.create_tecnical_support_report')->with('data',$data)->with('formulario',$formulario);
     }
     public function storeTecnicalSupport(Request $request){
-        
+
         $this->validate($request, [
             'equipo_id'  => 'required',
             'formulario_id'  => 'required',

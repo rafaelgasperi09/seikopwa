@@ -55,8 +55,8 @@
                                                 $checked='checked';
                                             @endphp
                                             @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
-                                               
-                                               
+
+
                                                 <div class="custom-control custom-radio d-inline">
                                                 {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$checked)) }}
                                                 <label class="custom-control-label p-0" for="{{ $campo->nombre }}{{$i}}">{{$o}}</label>
@@ -77,6 +77,7 @@
                                         @if($firmas==1)
                                             @include('frontend.partials.firma',array('campo_nombre'=>$campo->nombre,'requerido'=>$requerido))
                                         @endif
+
                                     @endif
                                     <i class="clear-input">
                                         <ion-icon name="{{ $campo->icono }}"></ion-icon>

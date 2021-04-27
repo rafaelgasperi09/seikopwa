@@ -24,6 +24,7 @@ class SaveFormEquipoRequest extends FormRequest
      */
     public function rules()
     {
+        //dd(request()->all());
         $formulario = Formulario::find($this->input('formulario_id'));
         $rules['formulario_id']='required';
         $rules['equipo_id']='required';
