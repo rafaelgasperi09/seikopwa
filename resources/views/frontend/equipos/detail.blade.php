@@ -97,7 +97,7 @@
                                 <div class="wide-block p-0">
 
                                     <div class="table-responsive">
-                                    @include('frontend.partials.listado_reportes',array('data'=>$form['dc']))
+                                    @include('frontend.partials.listado_reportes',array('data'=>$form['dc'],'nombre'=>'form_montacarga_daily_check'))
                                     </div>
 
                                 </div>
@@ -111,7 +111,7 @@
                                 <div class="wide-block p-0">
 
                                 <div class="table-responsive">
-                                 @include('frontend.partials.listado_reportes',array('data'=>$form['mp']))
+                                 @include('frontend.partials.listado_reportes',array('data'=>$form['mp'],'nombre'=>'mantenimiento_preventivo'))
                                 </div>
 
                                 </div>
@@ -124,7 +124,7 @@
                                 <h3>Reporte de Servicio Tecnico</h3>
                                 <div class="wide-block p-0">
                                     <div class="table-responsive">
-                                    @include('frontend.partials.listado_reportes',array('data'=>$form['st']))
+                                    @include('frontend.partials.listado_reportes',array('data'=>$form['st'],'nombre'=>'form_montacarga_servicio_tecnico'))
                                     </div>
 
                                 </div>
