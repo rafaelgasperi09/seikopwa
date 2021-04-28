@@ -6,6 +6,7 @@
             <div class="row">
                 @php $campos=false;$firmas=0; @endphp
                 @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->whereNotIn('nombre',['semana','dia_semana'])->get() as $campo)
+
                     @if(mostrarCampo($campo->tipo))
                         @php
                         $requerido ='';
@@ -64,6 +65,7 @@
                                             $i=0;
                                             $checked='checked';
                                         @endphp
+
                                         @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
 
                                             <div class="custom-control custom-radio d-inline">
@@ -95,6 +97,7 @@
                                 </i>
                             </div>
                         </div>
+
                         @php $campos=true; @endphp
                     @endif
                 @endforeach

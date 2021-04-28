@@ -20,15 +20,21 @@
        <td>{{$d->updated_at}}</td>
        <td>{!!getStatusHtml($d->estatus)!!}</td>
        <td>
-            @if(\Sentinel::getUser()->hasAccess('equipos.edit_mant_prev'))
-               <a href="{{ route('equipos.edit_mant_prev',$d->id) }}" target="_blank" class="btn btn-success btn-sm mr-1 ">
-                   <ion-icon name="pencil-outline" title="Ver detalle"></ion-icon>Editar
+            @if(\Sentinel::getUser()->hasAccess('equipos.edit_mant_prev') && $d->estatus <> 'C')
+               <a href="{{ route('equipos.edit_mant_prev',$d->id) }}" class="btn btn-success btn-sm mr-1 ">
+                   <ion-icon name="create-outline" title="Ver detalle"></ion-icon>Editar
                </a>
             @endif
            @if($d->estatus  == 'C')
-            <a href="{{url('equipos/reportes/form_montacarga_servicio_tecnico/'.$d->id)}}" target="_blank" class="btn btn-primary btn-sm mr-1 ">
-            <ion-icon name="print-outline" title="Ver detalle"></ion-icon>Imprimir
-            </a>
+               @if($nombre == 'mantenimiento_preventivo')
+                    <a href="{{ Storage::url($d->nombre_archivo) }}" target="_blank" class="btn btn-primary btn-sm mr-1 ">
+                        <ion-icon name="print-outline" title="Ver detalle"></ion-icon>Imprimir
+                    </a>
+               @elseif($nombre == 'form_montacarga_servicio_tecnico')
+                    <a href="{{url('equipos/reportes/form_montacarga_servicio_tecnico/'.$d->id)}}" target="_blank" class="btn btn-primary btn-sm mr-1 ">
+                        <ion-icon name="print-outline" title="Ver detalle"></ion-icon>Imprimir
+                    </a>
+               @endif
            @endif
         </td>
     </tr>
