@@ -101,11 +101,9 @@
                                     @endif
                                 </div>
                                 <div class="wide-block p-0">
-
                                     <div class="table-responsive">
-                                    @include('frontend.partials.listado_reportes',array('data'=>$form['dc'],'nombre'=>'form_montacarga_daily_check'))
+                                    @include('frontend.equipos.daily_check_table',array('data'=>$form['dc'],'equipo'=>$data))
                                     </div>
-
                                 </div>
                             </div>
                         </div>

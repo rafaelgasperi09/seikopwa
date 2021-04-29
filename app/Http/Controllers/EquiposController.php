@@ -73,9 +73,26 @@ class EquiposController extends BaseController
     public function detail($id){
         $data = Equipo::findOrFail($id);
 
+        $form['dc'] =FormularioRegistro::selectRaw("formulario_registro.semana,formulario_registro.ano,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes1' THEN formulario_registro.id ELSE '' END) AS Lunes1,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes2' THEN formulario_registro.id ELSE '' END) AS Lunes2,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Martes1' THEN formulario_registro.id ELSE '' END) AS Martes1,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Martes2' THEN formulario_registro.id ELSE '' END) AS Martes2,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Miercoles1' THEN formulario_registro.id ELSE '' END) AS Miercoles1,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Miercoles2' THEN formulario_registro.id ELSE '' END) AS Miercoles2,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Jueves1' THEN formulario_registro.id ELSE '' END) AS Jueves1,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Jueves2' THEN formulario_registro.id ELSE '' END) AS Jueves2,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Viernes1' THEN formulario_registro.id ELSE '' END) AS Viernes1,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Viernes2' THEN formulario_registro.id ELSE '' END) AS Viernes2,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Sabado1' THEN formulario_registro.id ELSE '' END) AS Sabado1,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Sabado2' THEN formulario_registro.id ELSE '' END) AS Sabado2")
+                                        ->join('formularios','formulario_registro.formulario_id','=','formularios.id')
+                                        ->where('equipo_id',$id)
+                                        ->where('formularios.nombre','form_montacarga_daily_check')
+                                        ->groupBy('formulario_registro.semana','formulario_registro.ano')
+                                        ->get();
 
-        $form['dc']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
-                                        ->where('equipo_id',$id)->where('formularios.nombre','form_montacarga_daily_check')->get();
+      // dd($form['dc']);
 
         $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)->where('formularios.nombre','form_montacarga_servicio_tecnico')->get();
@@ -92,14 +109,14 @@ class EquiposController extends BaseController
         $data = Equipo::findOrFail($id);
         $formulario = Formulario::whereNombre('form_montacarga_daily_check')->first();
 
-         $fr = FormularioRegistro::whereEquipoId($id)
+         $formulario_registro = FormularioRegistro::whereEquipoId($id)
              ->whereFormularioId($formulario->id)
              ->whereRaw('created_at >= CURDATE()')
              ->orderBy('id','DESC')
              ->first();
 
-         if($fr){
-             $turno = $fr->turno_chequeo_diario+1;
+         if($formulario_registro){
+             $turno = $formulario_registro->turno_chequeo_diario+1;
          }else{
              $turno=1;
          }
