@@ -49,6 +49,7 @@
 <div class="section full mb-2">
     <div class="section-title">Historial Cargas (Cuarto de maquinas)
         <div class="right">
+            <a href="{{ route('baterias.download',$data->id) }}" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar</a>
             <a href="{{ route('baterias.register_in_and_out',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
         </div>
     </div>

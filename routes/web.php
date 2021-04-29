@@ -83,6 +83,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         Route::get('/{id}', array('as' => 'baterias.detail', 'uses' => 'BateriaController@detail'))->middleware('hasAccess');
 
+        Route::get('/{id}/download', array('as' => 'baterias.download', 'uses' => 'BateriaController@download'));
+
         Route::get('/{id}/register_in_and_out', array('as' => 'baterias.register_in_and_out', 'uses' => 'BateriaController@registrarEntradaSalida'))->middleware('hasAccess');
 
         Route::post('/store_in_and_out', array('as' => 'baterias.store_in_and_out', 'uses' => 'BateriaController@guardarEntredaSalida'));
