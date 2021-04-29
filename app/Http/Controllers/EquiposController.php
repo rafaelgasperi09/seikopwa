@@ -76,7 +76,7 @@ class EquiposController extends BaseController
             return redirect(route('equipos.index'));
         }
 
-        $form['dc'] =FormularioRegistro::selectRaw("formulario_registro.semana,formulario_registro.ano,
+        $form['dc'] =FormularioRegistro::selectRaw("formulario_registro.semana,formulario_registro.ano,max(formulario_registro.id) as id,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes1' THEN formulario_registro.id ELSE '' END) AS Lunes1,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes2' THEN formulario_registro.id ELSE '' END) AS Lunes2,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Martes1' THEN formulario_registro.id ELSE '' END) AS Martes1,
@@ -94,8 +94,6 @@ class EquiposController extends BaseController
                                         ->where('formularios.nombre','form_montacarga_daily_check')
                                         ->groupBy('formulario_registro.semana','formulario_registro.ano')
                                         ->get();
-
-
 
         $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)->where('formularios.nombre','form_montacarga_servicio_tecnico')->get();
