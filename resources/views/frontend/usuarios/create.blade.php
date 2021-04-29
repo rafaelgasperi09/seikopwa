@@ -3,7 +3,7 @@
     @include('frontend.partials.title',array('title'=>'Usuario','subtitle'=>'Crear Nuevo'))
     <div class="section full mt-2 mb-2">
         <div class="wide-block pb-1 pt-2">
-            {{Form::open(array("method" => "POST","action" => "UserController@store","role" => "form",'class'=>'form-horizontal'))}}
+            {{Form::open(array("method" => "POST","action" => "UserController@store","role" => "form",'class'=>'form-horizontal','autocomplete'=>'off'))}}
             <div class="section mt-2 mb-5">
                 <div class="form-group boxed">
                     <div class="input-wrapper">

@@ -151,7 +151,7 @@ class EquiposController extends BaseController
                 $model->cliente_id = $equipo->cliente_id;
                 $model->estatus = 'P';
                 $model->dia_semana = getDayOfWeek(date('N'));
-                $model->semana = date('w');
+                $model->semana = date('W');
                 $model->ano = date('Y');
 
                 if($model->save())
