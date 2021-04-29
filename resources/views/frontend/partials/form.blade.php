@@ -1,12 +1,11 @@
-@php $remove=''; if(!isset($parte)) $parte='parteA'; @endphp
+@php $remove='';@endphp
 @foreach($formulario->secciones()->get() as $key=>$seccion)
     <div class="section full mt-2 mb-2" id='seccion{{$key}}'>
         <div class="section-title">{{ strtoupper($seccion->titulo) }}</div>
         <div class="wide-block pb-1 pt-2">
             <div class="row">
                 @php $campos=false;$firmas=0; @endphp
-                @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->whereNotIn('nombre',['semana','dia_semana'])->get() as $campo)
-
+                @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->get() as $campo)
                     @if(mostrarCampo($campo->tipo))
                         @php
                         $requerido ='';

@@ -56,7 +56,6 @@ class EquiposController extends BaseController
         else
             $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->where('tipo_equipos_id',$id)->paginate(10);
 
-
         return view('frontend.equipos.index')->with('equipos',$equipos)->with('datos',$datos);
     }
 
@@ -72,6 +71,10 @@ class EquiposController extends BaseController
 
     public function detail($id){
         $data = Equipo::findOrFail($id);
+
+        if(!current_user()->can('see',$data)){
+            return redirect(route('equipos.index'));
+        }
 
         $form['dc'] =FormularioRegistro::selectRaw("formulario_registro.semana,formulario_registro.ano,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes1' THEN formulario_registro.id ELSE '' END) AS Lunes1,
@@ -92,10 +95,11 @@ class EquiposController extends BaseController
                                         ->groupBy('formulario_registro.semana','formulario_registro.ano')
                                         ->get();
 
-      // dd($form['dc']);
+
 
         $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)->where('formularios.nombre','form_montacarga_servicio_tecnico')->get();
+
 
         $form['mp']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)->where('formularios.nombre_menu','like',$data->tipo->name)->get();
@@ -107,6 +111,12 @@ class EquiposController extends BaseController
     public function createDailyCheck($id){
 
         $data = Equipo::findOrFail($id);
+
+        if(!current_user()->can('see',$data)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
+            return redirect(route('equipos.index'));
+        }
+
         $formulario = Formulario::whereNombre('form_montacarga_daily_check')->first();
 
          $formulario_registro = FormularioRegistro::whereEquipoId($id)
@@ -120,6 +130,7 @@ class EquiposController extends BaseController
          }else{
              $turno=1;
          }
+
 
         return view('frontend.equipos.create_daily_check')->with('data',$data)->with('formulario',$formulario)->with('turno',$turno);
     }
@@ -195,6 +206,10 @@ class EquiposController extends BaseController
     public function createMantPrev($id,$tipo){
 
         $data = Equipo::findOrFail($id);
+        if(!current_user()->can('see',$data)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
+            return redirect(route('equipos.index'));
+        }
         $forms = [1=>'form_montacarga_counter_rc',2=>'form_montacarga_combustion',3=>'form_montacarga_counter_fc',4=>'form_montacarga_counter_sc',5=>'form_montacarga_pallet',6=>'form_montacarga_reach',7=>'form_montacarga_stock_picker'];
 
         $formulario = Formulario::whereNombre($forms[$tipo])->first();
@@ -332,6 +347,10 @@ class EquiposController extends BaseController
     public function createTecnicalSupport($id){
 
         $data = Equipo::findOrFail($id);
+        if(!current_user()->can('see',$data)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
+            return redirect(route('equipos.index'));
+        }
         $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
         return view('frontend.equipos.create_tecnical_support_report')->with('data',$data)->with('formulario',$formulario);
 
@@ -418,8 +437,6 @@ class EquiposController extends BaseController
                 'Content-Disposition' => 'inline; prevew.pdf',
             ]);
        }
-
-
 
     }
 }

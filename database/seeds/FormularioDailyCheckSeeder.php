@@ -35,7 +35,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'database_nombre'=>'nombre',
             'formato_fecha'=>'Y-m-d',
             'requerido'=>0,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -49,7 +50,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'database_nombre'=>'nombre',
             'formato_fecha'=>'Y-m-d',
             'requerido'=>0,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         $form_sec = \App\FormularioSeccion::create([
@@ -70,7 +72,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -85,7 +88,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>0,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -100,7 +104,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -115,7 +120,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -130,7 +136,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -145,7 +152,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -160,7 +168,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -175,7 +184,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -190,7 +200,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -205,7 +216,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -220,7 +232,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>0,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -235,7 +248,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -250,7 +264,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>0,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         $form_sec = \App\FormularioSeccion::create([
@@ -271,7 +286,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -286,7 +302,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -301,7 +318,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -316,7 +334,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -331,7 +350,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -346,7 +366,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -361,7 +382,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -376,7 +398,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -391,7 +414,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -406,7 +430,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -421,7 +446,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'check',
             'database_nombre'=>'nombre',
             'requerido'=>0,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         $form_sec = \App\FormularioSeccion::create([
@@ -441,7 +467,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'number',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -455,7 +482,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'firma',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -469,7 +497,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'firma',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -483,7 +512,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'tipo_validacion'=>'text',
             'database_nombre'=>'nombre',
             'requerido'=>0,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -498,6 +528,7 @@ class FormularioDailyCheckSeeder extends Seeder
             'database_nombre'=>'nombre',
             'requerido'=>0,
             'tamano'=>'col-12',
+            'permiso'=>'parteA',
             'deleted_at'=>now()
         ]);
 
