@@ -87,8 +87,8 @@
                         valor = value.valor;
                         if(index == 1) valor = value.valor+' (Turno '+turno+')';
                         html +='<dl class="row">\n' +
-                                    '<dt class="col-sm-4" style="text-align: right;">'+value.campo.etiqueta+' :</dt>\n' +
-                                    '<dd class="col-sm-8">'+valor+'</dd>\n' +
+                                    '<dt class="col-sm-3">'+value.campo.etiqueta+' :</dt>\n' +
+                                    '<dd class="col-sm-9">'+valor+'</dd>\n' +
                                '</dl>'
                     });
 

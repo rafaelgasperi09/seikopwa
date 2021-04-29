@@ -23,13 +23,15 @@
             </div>
         </div>
         {{--}}
-        @if(count($data['equipos_sin_daily_check_hoy']) > 0 && current_user()->i)
+        @if(count($data['equipos_sin_daily_check_hoy']) > 0)
         <div class="row">
-            <div class=" alert alert-warning mb-1" role="alert">
-               Esto equipos no tienen ningun chequeo diaro el dia de hoy :
-                @foreach($data['equipos_sin_daily_check_hoy'] as $key=>$value)
-                    <a href="{{ route('equipos.create_daily_check',$key) }}">{{ $value }}</a>
-                @endforeach
+            <div class="col-12">
+                <div class=" alert alert-warning mb-1" role="alert">
+                    Esto equipos no tienen ningun chequeo diaro el dia de hoy :
+                    @foreach($data['equipos_sin_daily_check_hoy'] as $key=>$value)
+                        <a href="{{ route('equipos.create_daily_check',$key) }}">{{ $value }}</a>
+                    @endforeach
+                </div>
             </div>
         </div>
         @endif
