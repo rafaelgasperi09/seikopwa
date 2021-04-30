@@ -112,9 +112,9 @@ class BateriaController extends Controller
         $data = DB::table('form_carga_bateria_view')
             ->where('componente_id',$id)
             ->orderBy('fecha','DESC')
-            ->get()->take(200);
+            ->get()->take(100);
         $pdf = PDF::loadView('frontend.baterias.pdf',compact('bateria','data'));
         $pdf->setPaper('a4', 'landscape');
-        return $pdf->download('historial_cargas.pdf');
+        return $pdf->stream('historial_cargas.pdf');
     }
 }
