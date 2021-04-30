@@ -28,24 +28,54 @@ class CreateRolesSeed extends Seeder
         }
 
         $adminRole = [
-            'name' => 'Administradores',
-            'slug' => 'administradores',
+            'name' => 'Programador',
+            'slug' => 'programador',
+            'tipo'=>'all',
             'permissions' => $permisos_admin
         ];
 
         Sentinel::getRoleRepository()->createModel()->fill($adminRole)->save();
 
         $userRole = [
-            'name' => 'Operadores',
-            'slug' => 'operadores',
+            'name' => 'Administrador',
+            'slug' => 'administrador',
+            'tipo'=>'gmp',
             'permissions' => $permisos_user
         ];
 
         Sentinel::getRoleRepository()->createModel()->fill($userRole)->save();
 
         $clienteRole = [
-            'name' => 'Cliente',
-            'slug' => 'clientes',
+            'name' => 'OperadorC',
+            'slug' => 'supervisor-c',
+            'tipo'=>'cliente',
+            'permissions' => $permisos_user
+        ];
+
+        Sentinel::getRoleRepository()->createModel()->fill($clienteRole)->save();
+
+        $clienteRole = [
+            'name' => 'SupervisorC',
+            'slug' => 'operador-c',
+            'tipo'=>'cliente',
+            'permissions' => $permisos_user
+        ];
+
+        Sentinel::getRoleRepository()->createModel()->fill($clienteRole)->save();
+
+        $clienteRole = [
+            'name' => 'Supervisor',
+            'slug' => 'supervisor',
+            'tipo'=>'gmp',
+            'permissions' => $permisos_user
+        ];
+
+        Sentinel::getRoleRepository()->createModel()->fill($clienteRole)->save();
+
+        $clienteRole = [
+            'name' => 'Tecnico',
+            'slug' => 'tecnico',
+            'tipo'=>'gmp',
             'permissions' => $permisos_user
         ];
 

@@ -10,6 +10,7 @@ return [
        "usuarios.update"=>"Actualizar Usuario",
        "usuarios.profile"=>"Ver Perfil",
    ),
+   /*
    "Roles"=>array(
        "role.index"=>"Listar Roles",
        "role.create"=>"Crear Rol",
@@ -17,7 +18,7 @@ return [
        "role.show"=>"Mostrar Rol",
        "role.edit"=>"Editar Rol",
        "role.update"=>"Actualizar Rol",
-   ),
+   ),*/
    "Equipos"=>array(
      "equipos.index"=>"Listar Equipos",
      "equipos.create"=>"Crear Equipo",
