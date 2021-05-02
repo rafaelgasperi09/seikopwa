@@ -13,6 +13,13 @@
                             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                         </i>
                     </div>
+                    <div class="input-wrapper">
+                        <label class="label" for="email">Tipo</label>
+                        {{ Form::text('tipo',$data->tipo,array('class'=>'form-control','disabled')) }}
+                        <i class="clear-input">
+                            <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                        </i>
+                    </div>
                 </div>
                 @foreach(array_chunk(Config::get('permisos.permissions'),2,true) as $block)
                     <div class="row">

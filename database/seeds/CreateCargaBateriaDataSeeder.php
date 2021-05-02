@@ -40,7 +40,7 @@ class CreateCargaBateriaDataSeeder extends Seeder
                             }
                             break;
                         case 'fecha':
-                            $date = $faker->dateTimeBetween($startDate = '-420 days', $endDate = 'now', $timezone = null);
+                            $date = $faker->dateTimeBetween($startDate = '-160 days', $endDate = 'now', $timezone = null);
                             $valor = $date->format('Y-m-d');
                             break;
                         case 'hora_entrada':

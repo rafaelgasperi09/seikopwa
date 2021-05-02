@@ -10,7 +10,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Cliente</label>
-                            {{ Form::text('cliente',$data->cliente->nombre,array('class'=>'form-control','readonly')) }}
+                            {{ Form::text('cliente',$equipo->cliente->nombre,array('class'=>'form-control','readonly')) }}
                         </div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Fecha</label>
-                            {{ Form::text('fecha',\Carbon\Carbon::now()->format('d-m-Y'),array('class'=>'form-control','readonly')) }}
+                            {{ Form::text('fecha',$data->created_at,array('class'=>'form-control','readonly')) }}
                         </div>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Marca</label>
-                            {{ Form::text('marca',$data->marca->display_name,array('class'=>'form-control','readonly')) }}
+                            {{ Form::text('marca',$equipo->marca->display_name,array('class'=>'form-control','readonly')) }}
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Modelo</label>
-                            {{ Form::text('modelo',$data->modelo,array('class'=>'form-control','readonly')) }}
+                            {{ Form::text('modelo',$equipo->modelo,array('class'=>'form-control','readonly')) }}
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Serie</label>
-                            {{ Form::text('serie',$data->serie,array('class'=>'form-control','readonly')) }}
+                            {{ Form::text('serie',$equipo->serie,array('class'=>'form-control','readonly')) }}
                         </div>
                     </div>
                 </div>
@@ -60,16 +60,13 @@
             <div class="section-title">C => Correcto , A => Ajustar , R => Reparar , U => Urgente</div>
         </div>
     </div>
-    {{Form::open(array("method" => "POST","action" => "EquiposController@storeMantPrev","role" => "form",'class'=>'form-horizontal'))}}
-    {{ Form::hidden('equipo_id',$data->id,array('required')) }}
+    {{ Form::model($data, array('route' => array('equipos.update_mant_prev', $data->id), 'method' => 'PUT' , 'role' => 'form','class'=>'form-horizontal')) }}
+    {{ Form::hidden('equipo_id',$equipo->id,array('required')) }}
     {{ Form::hidden('formulario_id',$formulario->id,array('required')) }}
-    @include('frontend.partials.form',array('formulario'=>$formulario,'parte'=>'parteA'))
+    {{ Form::hidden('formulario_registro_id',$data->id,array('required')) }}
+    @include('frontend.partials.form',array('formulario'=>$formulario,'datos'=>$data))
     <div class="modal-footer">
         <button type="submit" class="btn btn-primary btn-sm btn-block">GUARDAR</button>
     </div>
     {{ Form::close() }}
-
-    <script>
-
-    </script>
 @stop

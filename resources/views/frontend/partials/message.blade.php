@@ -5,7 +5,7 @@
             <!-- toast top iconed -->
             <div id="toast-0" class="toast-box toast-top  @git @if(!\Sentinel::check()) show-nologued @endif">
                 <div class="in">
-                    <ion-icon name="checkmark-circle" class="text-danger"></ion-icon>
+                    <ion-icon name="close-circle" class="text-danger"></ion-icon>
                     <div class="text-danger">
                         <ul>
                             @foreach($errors->all() as $e)
@@ -14,7 +14,7 @@
                         </ul>
                     </div>
                 </div>
-                <button type="button" class="btn btn-sm btn-text-danger close-button">CLOSE</button>
+                <button type="button" class="btn btn-sm btn-text-danger close-button">CERRAR</button>
             </div>
             <script>toastbox('toast-0', 14000)</script>
             <!-- * toast top iconed -->

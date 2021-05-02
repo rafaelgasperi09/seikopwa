@@ -56,7 +56,6 @@ class EquiposController extends BaseController
         else
             $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->where('tipo_equipos_id',$id)->paginate(10);
 
-
         return view('frontend.equipos.index')->with('equipos',$equipos)->with('datos',$datos);
     }
 
@@ -70,16 +69,35 @@ class EquiposController extends BaseController
         return view('frontend.equipos.page')->with('data',$equipos);
     }
 
-
     public function detail($id){
         $data = Equipo::findOrFail($id);
 
+        if(!current_user()->can('see',$data)){
+            return redirect(route('equipos.index'));
+        }
 
-        $form['dc']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
-                                        ->where('equipo_id',$id)->where('formularios.nombre','form_montacarga_daily_check')->get();
+        $form['dc'] =FormularioRegistro::selectRaw("formulario_registro.semana,formulario_registro.ano,max(formulario_registro.id) as id,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes1' THEN formulario_registro.id ELSE '' END) AS Lunes1,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes2' THEN formulario_registro.id ELSE '' END) AS Lunes2,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Martes1' THEN formulario_registro.id ELSE '' END) AS Martes1,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Martes2' THEN formulario_registro.id ELSE '' END) AS Martes2,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Miercoles1' THEN formulario_registro.id ELSE '' END) AS Miercoles1,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Miercoles2' THEN formulario_registro.id ELSE '' END) AS Miercoles2,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Jueves1' THEN formulario_registro.id ELSE '' END) AS Jueves1,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Jueves2' THEN formulario_registro.id ELSE '' END) AS Jueves2,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Viernes1' THEN formulario_registro.id ELSE '' END) AS Viernes1,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Viernes2' THEN formulario_registro.id ELSE '' END) AS Viernes2,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Sabado1' THEN formulario_registro.id ELSE '' END) AS Sabado1,
+                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Sabado2' THEN formulario_registro.id ELSE '' END) AS Sabado2")
+                                        ->join('formularios','formulario_registro.formulario_id','=','formularios.id')
+                                        ->where('equipo_id',$id)
+                                        ->where('formularios.nombre','form_montacarga_daily_check')
+                                        ->groupBy('formulario_registro.semana','formulario_registro.ano')
+                                        ->get();
 
         $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)->where('formularios.nombre','form_montacarga_servicio_tecnico')->get();
+
 
         $form['mp']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)->where('formularios.nombre_menu','like',$data->tipo->name)->get();
@@ -91,19 +109,26 @@ class EquiposController extends BaseController
     public function createDailyCheck($id){
 
         $data = Equipo::findOrFail($id);
+
+        if(!current_user()->can('see',$data)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
+            return redirect(route('equipos.index'));
+        }
+
         $formulario = Formulario::whereNombre('form_montacarga_daily_check')->first();
 
-         $fr = FormularioRegistro::whereEquipoId($id)
+         $formulario_registro = FormularioRegistro::whereEquipoId($id)
              ->whereFormularioId($formulario->id)
              ->whereRaw('created_at >= CURDATE()')
              ->orderBy('id','DESC')
              ->first();
 
-         if($fr){
-             $turno = $fr->turno_chequeo_diario+1;
+         if($formulario_registro){
+             $turno = $formulario_registro->turno_chequeo_diario+1;
          }else{
              $turno=1;
          }
+
 
         return view('frontend.equipos.create_daily_check')->with('data',$data)->with('formulario',$formulario)->with('turno',$turno);
     }
@@ -126,7 +151,7 @@ class EquiposController extends BaseController
                 $model->cliente_id = $equipo->cliente_id;
                 $model->estatus = 'P';
                 $model->dia_semana = getDayOfWeek(date('N'));
-                $model->semana = date('w');
+                $model->semana = date('W');
                 $model->ano = date('Y');
 
                 if($model->save())
@@ -143,7 +168,7 @@ class EquiposController extends BaseController
                             Storage::put('public/firmas/'.$filename,$data);
                             $valor =  $filename;
                         }
-    
+
                         $api_descripcion = '';
                         $form_data = FormularioData::create([
                             'formulario_registro_id' => $model->id,
@@ -176,15 +201,30 @@ class EquiposController extends BaseController
 
     }
 
-
     public function createMantPrev($id,$tipo){
 
         $data = Equipo::findOrFail($id);
+        if(!current_user()->can('see',$data)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
+            return redirect(route('equipos.index'));
+        }
         $forms = [1=>'form_montacarga_counter_rc',2=>'form_montacarga_combustion',3=>'form_montacarga_counter_fc',4=>'form_montacarga_counter_sc',5=>'form_montacarga_pallet',6=>'form_montacarga_reach',7=>'form_montacarga_stock_picker'];
 
         $formulario = Formulario::whereNombre($forms[$tipo])->first();
 
         return view('frontend.equipos.create_mant_prev')->with('data',$data)->with('formulario',$formulario);
+    }
+
+    public function editMantPrev($id){
+
+        $data = FormularioRegistro::findOrFail($id);
+        $equipo = Equipo::findOrFail($data->equipo_id);
+        $formulario = Formulario::findOrFail($data->formulario_id);
+
+        return view('frontend.equipos.edit_mant_prev')
+            ->with('equipo',$equipo)
+            ->with('formulario',$formulario)
+            ->with('data',$data);
     }
 
     public function storeMantPrev(SaveFormEquipoRequest $request)
@@ -211,10 +251,10 @@ class EquiposController extends BaseController
                         if($campo->tipo=='firma'){
                             $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
                             $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
-                            Storage::put('public/'.$filename,$data);
+                            Storage::put('public/firmas/'.$filename,$data);
                             $valor =  $filename;
                         }
-    
+
                         $form_data = FormularioData::create([
                             'formulario_registro_id' => $model->id,
                             'formulario_campo_id' => $campo->id,
@@ -227,50 +267,6 @@ class EquiposController extends BaseController
                         if (!$form_data) {
                             throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
                         }
-                    }
-
-
-                    // despues de crear la data cear una solicitud de mantenimiento preventivo en la base de dato de montacarga
-                    $solicitud = new MontacargaSolicitud();
-                    $consecutivo = MontacargaConsecutivo::where('consecutivo_opcion','mantenimiento-preventivo')->first();
-                    $next_values_consecutivo = $consecutivo->numero_consecutivo+1;
-                    $solicitud->cliente_id = $equipo->cliente_id;
-                    $solicitud->tipo_servicio_id = 3; //mantenimiento-preventivo
-                    $solicitud->equipo_id = $equipo->id;
-                    $solicitud->usuario_creado_id = 1; // crear un app_user debe ser  el usuario actual pero tendriamos que cazarlo con uno de la bd de montacarga
-                    $solicitud->usuario_id = 1; //
-                    $solicitud->departamento_id =9; // servicio-tecnico
-                    $solicitud->horometro =  $request->get('horometro');
-                    $solicitud->estado_id = 1; // abierta
-                    $solicitud->descripcion = $request->get('observacion');
-                    $solicitud->consecutivo_exportable = $next_values_consecutivo;
-
-                    if($solicitud->save()){
-                        $consecutivo->numero_consecutivo = $next_values_consecutivo;
-                        $consecutivo->save();
-                        // salvar la copia
-                        $copia_sol =new MontacargaCopiaSolicitud();
-                        $copia_sol->fill($solicitud->toArray());
-                        $copia_sol->usuario_creado_id = 1; // crear un app_user
-                        $copia_sol->usuario_id = 1;
-                        $copia_sol->nombre_servicio = 'Mantenimiento Preventivo';
-                        $copia_sol->nombre_contacto = $equipo->cliente->nombre;
-                        $copia_sol->nombre_departamento = 'Servicio técnico';
-                        $copia_sol->nombre_estado = 'Abierto';
-                        $copia_sol->nombre_usuario_crea = 'GMC APP';
-                        $copia_sol->equipo = $equipo->numero_parte;
-                        $copia_sol->save();
-                        $model->solicitud_id = $solicitud->id;
-                        $model->save();
-                        // creams el pdf de la solicitud
-                        $path = $model->savePdf();
-                        MontacargaImagen::create([
-                            'name' =>$path,
-                            'directory'=>'app/public/pdf',
-                            'solicitud_id'=>$solicitud->id,
-                            'calidad'=>'original',
-                            'usuario_id'=>1,
-                        ]);
                     }
 
                 } else {
@@ -289,9 +285,70 @@ class EquiposController extends BaseController
         }
     }
 
+    public function updateMantPrev(Request $request)
+    {
+        try {
+
+            $this->validate($request, [
+                'equipo_id'              => 'required',
+                'formulario_id'          => 'required',
+                'formulario_registro_id' => 'required',
+                'trabajo_recibido_por'  => 'required',
+            ]);
+
+            $formulario_registro_id = $request->formulario_registro_id;
+            $equipo_id = $request->equipo_id;
+            $formulario_id = $request->formulario_id;
+            $formulario = Formulario::find($formulario_id);
+            $equipo = Equipo::find($equipo_id);
+            $model = FormularioRegistro::findOrFail($formulario_registro_id);
+
+            DB::transaction(function () use ($model, $request, $formulario, $equipo) {
+
+                foreach ($formulario->campos()->get() as $campo) {
+
+                    $valor = $request->get($campo->nombre);
+
+                    if(!empty($valor)){
+
+                        if($campo->tipo=='firma'){
+
+                            $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
+                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
+                            Storage::put('public/firmas/'.$filename,$data);
+                            $valor =  $filename;
+                        }
+                        $form_data = FormularioData::whereFormularioRegistroId($model->id)->whereFormularioCampoId($campo->id)->first();
+                        $form_data->valor = $valor;
+                        $form_data->user_id = current_user()->id;
+
+                        if (!$form_data->save()) {
+                            throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
+                        }
+                    }
+
+                }
+
+            });
+
+            //aqui hay que ver a quien notificar
+
+            $request->session()->flash('message.success', 'Registro creado con éxito');
+            return redirect(route('equipos.detail', $equipo_id));
+
+        } catch (\Exception $e) {
+            $request->session()->flash('message.error', $e->getMessage());
+            return redirect(route('equipos.edit_mant_prev',$formulario_registro_id))->withInput($request->all());
+        }
+    }
+
     public function createTecnicalSupport($id){
 
         $data = Equipo::findOrFail($id);
+        if(!current_user()->can('see',$data)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
+            return redirect(route('equipos.index'));
+        }
         $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
         return view('frontend.equipos.create_tecnical_support_report')->with('data',$data)->with('formulario',$formulario);
 
@@ -303,6 +360,7 @@ class EquiposController extends BaseController
         $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
         return view('frontend.equipos.create_tecnical_support_report')->with('data',$data)->with('formulario',$formulario);
     }
+
     public function storeTecnicalSupport(Request $request){
 
         $this->validate($request, [
@@ -358,10 +416,11 @@ class EquiposController extends BaseController
         $request->session()->flash('message.success','Registro creado con exito');
         return redirect(route('equipos.detail',$equipo_id));
     }
+
     public function reportes($reporte,$id){
        $datos['cab']=FormularioRegistro::find($id);
 
-      
+
        if($reporte=='form_montacarga_servicio_tecnico'){
             $datos['det']=getFormData($datos['cab']->formulario->nombre,0,0,$id);
             $pdf = PDF::loadView('frontend.equipos.reportes.form_montacarga_servicio_tecnico',compact('datos'));

@@ -41,12 +41,13 @@ class notificarChequeoDiario extends Command
      */
     public function handle()
     {
-        $notificados = array();
+        $notificados['users'] = array();
         foreach (User::whereNotNull('crm_cliente_id')->get() as $user){
 
-            if(date('D') == 'Sun'){
+            if(date('D') <> 'Sun'){
                 $cliente = $user->cliente();
                 $form = Formulario::whereNombre('form_montacarga_daily_check')->first();
+
                 // verificar si el cliente tiene al menos un equipo en su poder
                 if($cliente->equipos()->count()> 0){  //tiene al menos un equipo verificar si ya hizo el chequeo diario de todos
                     //

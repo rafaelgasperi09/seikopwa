@@ -56,7 +56,7 @@ class UserController extends Controller
 
     public function create(){
 
-        $roles = Rol::pluck('name','id');
+        $roles = Rol::where('id','<>',1)->pluck('name','id');
         return view('frontend.usuarios.create',compact('roles'));
 
     }

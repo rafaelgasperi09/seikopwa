@@ -48,7 +48,7 @@ function getTipoEquipo($id){
     return $tipo->display_name;
 }
 function mostrarCampo($tipo){
-    $ocultar=['otros'];
+    $ocultar=['otro'];
     if(in_array($tipo,$ocultar))
         return false;
     else
@@ -86,17 +86,17 @@ function getDayOfWeek($day){
 }
 
 function getFormData($formName,$equipo_id=0,$componente_id=0,$registro_id=0){
- 
+
     $baseQuery='SELECT  fd.formulario_registro_id,MAX(fd.created_at) as creado,';
     $fc=\App\FormularioCampo::whereRaw(" formulario_id=(select id from formularios where nombre='$formName')")->get();
     foreach($fc as $f){
         $baseQuery.="
                     MAX(CASE fd.formulario_campo_id WHEN $f->id THEN fd.valor ELSE '' END) AS $f->nombre,";
     }
-    
+
     $baseQuery=substr($baseQuery,0,strlen($baseQuery)-1); //elimina la ultima coma
     $equipoFilter='';
-    
+
     if($equipo_id>0)
         $equipoFilter=" AND fr.equipo_id=$equipo_id";
     if($componente_id>0)

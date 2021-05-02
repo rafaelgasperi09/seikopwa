@@ -22,6 +22,8 @@ class CreateFormularioDataTable extends Migration
             $table->text('valor')->nullable();
             $table->enum('tipo',['text','select','textarea','date','radio','checkbox','database','file','time','number','combo','api','firma','otros','hidden']);
             $table->text('file_path')->nullable();
+            $table->integer('user_id')->unsigned()->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

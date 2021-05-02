@@ -13,7 +13,8 @@ class Equipo extends BaseModel
 
     public function tipo(){
         return $this->belongsTo(TipoEquipo::class,'tipo_equipos_id')->withDefault([
-            'display_name'=>'N/A'
+            'display_name'=>'N/A',
+            'name'=>'N/A'
         ]);;
     }
 

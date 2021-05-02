@@ -5,7 +5,7 @@
             <img src="{{url('assets/img/settings.png')}}" alt="image" class="imaged w64">
         </div>
         <div class="in">
-            <div>{{$dato->name}}</div>
+            <div>{{$dato->name}} ({{ $dato->tipo }})</div>
         </div>
     </a>
     <!-- sub menu -->

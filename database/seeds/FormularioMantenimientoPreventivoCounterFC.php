@@ -136,7 +136,8 @@ class FormularioMantenimientoPreventivoCounterFC extends Seeder
                     'tipo_validacion' => 'radio',
                     'database_nombre' => 'nombre',
                     'requerido' => 1,
-                    'tamano' => 'col-12'
+                    'tamano' => 'col-12',
+                    'permiso'=>'parteA'
                 ]);
             }
            $i++;
@@ -157,8 +158,10 @@ class FormularioMantenimientoPreventivoCounterFC extends Seeder
             'icono'=>'pencil-outline',
             'tipo_validacion'=>'firma',
             'database_nombre'=>'nombre',
-            'requerido'=>1,
-            'tamano'=>'col-12'
+            'requerido'=>0,
+            'tamano'=>'col-12',
+            'permiso'=>'parteB',
+            'cambio_estatus'=>1,
         ]);
 
         \App\FormularioCampo::create([
@@ -171,7 +174,8 @@ class FormularioMantenimientoPreventivoCounterFC extends Seeder
             'tipo_validacion'=>'firma',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -184,7 +188,8 @@ class FormularioMantenimientoPreventivoCounterFC extends Seeder
             'tipo_validacion'=>'text',
             'database_nombre'=>'nombre',
             'requerido'=>0,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
     }

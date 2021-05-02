@@ -14,21 +14,21 @@
     $(document).ready(function () {
 
         $('.signRequest').on('click', function(event){
-            campo_firma=$(this).attr('data-field');           
+            campo_firma=$(this).attr('data-field');
         });
 
         window.closeModal = function(){
             $('.signModal').modal('hide');
         };
         window.setImage = function(){
-            
+
             $('#btn'+campo_firma).hide();
             $('#'+campo_firma).val($('#firma_base').val());
             $('#img_'+campo_firma).attr('src',$('#firma_base').val());
             $('#img_'+campo_firma).show();
-        }; 
+        };
         var vancho=window.innerWidth;
-        var valto=window.innerHeight;            
+        var valto=window.innerHeight;
     });
 
 </script>

@@ -21,7 +21,7 @@
                             <dl class="row">
                                 <dt class="col-sm-3">Tipo</dt>
                                 <dd class="col-sm-9">{{ $data->tipo->display_name }}</dd>
-                            </dl>                            
+                            </dl>
                             <dl class="row">
                                 <dt class="col-sm-3">Marca</dt>
                                 <dd class="col-sm-9">{{ $data->marca->display_name }}</dd>
@@ -72,9 +72,9 @@
                                 </a>
                             </li>
                             @endif
-                            @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev'))
+                            @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev']))
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#mant_prev" role="tab" aria-selected="true">
+                                <a class="nav-link  @if(!\Sentinel::hasAccess('equipos.create_daily_check')) active @endif" data-toggle="tab" href="#mant_prev" role="tab" aria-selected="true">
                                         <ion-icon name="hammer-outline" class="text-info" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
                                         Mantenimiento Preventivo
                                 </a>
@@ -93,51 +93,68 @@
                         @if(\Sentinel::hasAccess('equipos.create_daily_check'))
                         <div class="tab-pane fade active show" id="dailycheck" role="tabpanel">
                             <div class="section full mt-1">
-                                <h3>Daily Check</h3>
-                                <div class="wide-block p-0">
-
-                                    <div class="table-responsive">
-                                    @include('frontend.partials.listado_reportes',array('data'=>$form['dc'],'nombre'=>'form_montacarga_daily_check'))
+                                <div class="section-title">Daily Check
+                                    @if(\Sentinel::hasAccess('equipos.create_daily_check'))
+                                    <div class="right">
+                                        <a href="{{ route('equipos.create_daily_check',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                                     </div>
-
-                                </div>                            
+                                    @endif
+                                </div>
+                                <div class="wide-block p-0">
+                                    <div class="table-responsive">
+                                    @include('frontend.equipos.daily_check_table',array('data'=>$form['dc'],'equipo'=>$data))
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         @endif
-                        @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev'))
-                        <div class="tab-pane fade " id="mant_prev" role="tabpanel">
+                        @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev']))
+                        <div class="tab-pane @if(!\Sentinel::hasAccess('equipos.create_daily_check'))  active show @else fade @endif" id="mant_prev" role="tabpanel">
                             <div class="section full mt-1">
-                                <h3>Mantenimiento Preventivo</h3>
+                                <div class="section-title">Mantenimiento Preventivo
+                                    @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev'))
+                                    <div class="right">
+                                        <a href="{{ route('equipos.create_mant_prev',[$data->id,$data->tipo_equipos_id])}}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
+                                    </div>
+                                    @endif
+                                </div>
+
                                 <div class="wide-block p-0">
 
                                 <div class="table-responsive">
                                  @include('frontend.partials.listado_reportes',array('data'=>$form['mp'],'nombre'=>'mantenimiento_preventivo'))
                                 </div>
 
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                         @endif
                         @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
                         <div class="tab-pane fade " id="serv_tec" role="tabpanel">
                             <div class="section full mt-1">
-                                <h3>Reporte de Servicio Tecnico</h3>
+                                <div class="section-title">Reporte Servicio Técnico
+                                    @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
+                                    <div class="right">
+                                        <a href="{{ route('equipos.create_tecnical_support',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
+                                    </div>
+                                    @endif
+                                </div>
                                 <div class="wide-block p-0">
                                     <div class="table-responsive">
                                     @include('frontend.partials.listado_reportes',array('data'=>$form['st'],'nombre'=>'form_montacarga_servicio_tecnico'))
                                     </div>
 
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                         @endif
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>
 
 
-    </div>    
+    </div>
 </div>
 
 @stop

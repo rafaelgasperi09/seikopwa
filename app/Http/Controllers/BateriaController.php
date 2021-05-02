@@ -7,6 +7,7 @@ use App\Formulario;
 use App\FormularioData;
 use App\FormularioRegistro;
 use App\PatientAbsence;
+use PDF;
 use Carbon\Carbon;
 use Sentinel;
 use Illuminate\Http\Request;
@@ -103,5 +104,17 @@ class BateriaController extends Controller
             ->get();
 
         return DataTables::of($data)->make(true);
+    }
+
+    public function download($id){
+
+        $bateria = Componente::findOrFail($id);
+        $data = DB::table('form_carga_bateria_view')
+            ->where('componente_id',$id)
+            ->orderBy('fecha','DESC')
+            ->get()->take(100);
+        $pdf = PDF::loadView('frontend.baterias.pdf',compact('bateria','data'));
+        $pdf->setPaper('a4', 'landscape');
+        return $pdf->stream('historial_cargas.pdf');
     }
 }

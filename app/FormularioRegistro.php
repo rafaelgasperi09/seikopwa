@@ -34,16 +34,13 @@ class FormularioRegistro extends BaseModel
         return Equipo::find($this->equipo_id);
     }
 
-    public function savePdf()
+    public function savePdf($equipo,$solicitud)
     {
-        $formularioRegistro = FormularioRegistro::find($this->id);
-        $formulario = Formulario::find($formularioRegistro->formulario_id);
-        $equipo = Equipo::find($formularioRegistro->equipo_id);
-        $solicitud = MontacargaSolicitud::findOrFail($formularioRegistro->solicitud_id);
+        //$formularioRegistro = FormularioRegistro::find($this->id);
+        $formulario = Formulario::find($this->formulario_id);
         $consecutivo = $solicitud->consecutivo_exportable;
-        $horometro_campo = $formulario->campos()->whereNombre('horometro')->first();
-        $horometo = $formularioRegistro->data()->whereFormularioCampoId($horometro_campo->id)->first()->valor;
-
+        $horometro = $solicitud->horometro;
+        $observacion = $solicitud->descripcion;
         $width = 297;
         $height = 420;
         $pageLayout = array($width, $height);
@@ -51,7 +48,7 @@ class FormularioRegistro extends BaseModel
         $pdf->SetConfigInforme();
         $pdf->AddPage();
 
-        $pdf->cabeceraInformeMPreventivo($formularioRegistro->formulario->nombre_menu, $formularioRegistro->created_at,$consecutivo);
+        $pdf->cabeceraInformeMPreventivo($this->formulario->nombre_menu, $this->created_at,$consecutivo);
 
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetLineStyle($pdf->borderDashed());
@@ -98,7 +95,7 @@ class FormularioRegistro extends BaseModel
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x + 3, $y);
-        $horometros = $horometo ? $horometo : "";
+        $horometros = $horometro ? $horometro : "";
         $pdf->Cell(60, 6, html_entity_decode("Horometro: " . $horometros), 0, 0, 'L');
         $pdf->Rect($x + 3, $y, 60, 6, 'D', array('all' => $pdf->borderDashed()));
         $pdf->Ln();
@@ -163,8 +160,8 @@ class FormularioRegistro extends BaseModel
             $isInforme = 1;
         }*/
 
-        if ($formularioRegistro->data()->get()->count() > 0) {
-            $formulario_data = $formularioRegistro->data()->get();
+        if ($this->data()->get()->count() > 0) {
+            $formulario_data = $this->data()->get();
             $isInforme = 1;
         }
 
@@ -180,55 +177,55 @@ class FormularioRegistro extends BaseModel
             if($seccion->titulo=='Informacion Adicional'){
                 foreach($seccion->campos()->get() as $campo) {
                     if( $campo->tipo=='firma'){
-                    
+
                         if($campo->nombre=='trabajo_recibido_por'){
-                            $firmasPath[1] =  storage_path('/app/public/firmas/'.$formularioRegistro->data()->whereFormularioCampoId($campo->id)->first()->valor);
+                            $firmasPath[1] =  storage_path('/app/public/firmas/'.$this->data()->whereFormularioCampoId($campo->id)->first()->valor);
                         }
-                
+
                         if($campo->nombre=='trabajo_realizado_por'){
-                            $firmasPath[2] =  storage_path('/app/public/firmas/'.$formularioRegistro->data()->whereFormularioCampoId($campo->id)->first()->valor);
+                            $firmasPath[2] =  storage_path('/app/public/firmas/'.$this->data()->whereFormularioCampoId($campo->id)->first()->valor);
                         }
                     }
                 }
-            
+
             }else{
                     if ($index > 4 && $y > 295) {
                         // Modificamos la bandera
                         $sw_a = 1;
-        
+
                         // Obtenemos la posicion Y
                         $max_y_posicion_ = $y;
-        
+
                         // Aumentamos a $posicion_x_inicial la posicion X
                         $x = $x + $posicion_x_inicial;
-        
+
                         $pdf->SetY(65);
-        
+
                         $y = $pdf->GetY();
                     }
-        
+
                     $size = $pdf->getSizeFont(5);//$numero
-        
+
                     $pdf->SetFont('helvetica', 'P', $size);
                     $pdf->SetXY($x, $y);
                     $pdf->SetLineStyle($pdf->borderSolid());
                     $pdf->SetTextColor(255, 255, 255);
                     $pdf->MultiCell(85, 5, html_entity_decode($seccion->titulo), 1, 'L', 1, false);
                     $pdf->Ln();
-        
+
                     if ($size > 8) {
                         $pdf->SetTextColor(73, 73, 73);
                     } else {
                         $pdf->SetTextColor(0, 0, 0);
                     }
-        
+
                     $pdf->SetFont('helvetica', 'p', $size);
-        
+
                     //$cantidad_informe = $tabInforme->informes->count();
                     $cantidad_campos= $seccion->campos()->get()->count();
-        
+
                     foreach($seccion->campos()->get() as $j => $campo) {
-        
+
                         // Valores por defectos con la primera
                         // modificacion del $index > 4 && $y > 295
                         if ($sw_a == 1) {
@@ -237,7 +234,7 @@ class FormularioRegistro extends BaseModel
                         } else {
                             $_y = $pdf->GetY();
                         }
-        
+
                         // Verificamos que la posicion Y actual
                         // no pase los 320 de hacerlo se reinician
                         // las posiciones a la indicadas
@@ -245,55 +242,40 @@ class FormularioRegistro extends BaseModel
                             $x = $x + $posicion_x_inicial;
                             $_y = 65;
                         }
-        
+
                         $pdf->SetXY($x, $_y);
-        
+
                         $sigla = "";
-        
+
                         if ($isInforme == 1) {
-                            /* foreach ($informes_solicitud as $informe_marcado) {
-                                if (($informe_marcado->id == $informe->id) && ($informe_marcado->pivot)) {
-                                    $pivot = $informe_marcado->pivot;
-                                    $evaluacion_trabajo = $informe_marcado->evaluacion_trabajos()
-                                        ->where('id', $pivot->evaluacion_id)
-                                        ->first();
-        
-                                    $sigla = $evaluacion_trabajo->sigla;
-                                }
-                            }*/
-        
-                            foreach ($formulario_data as $data){
-        
-                            }
-        
-                            $sigla = $formularioRegistro->data()->whereFormularioCampoId($campo->id)->first()->valor;
+                            $sigla = $this->data()->whereFormularioCampoId($campo->id)->first()->valor;
                         }
-        
+
                         $pdf->MultiCell(10, 4,$sigla , 'T', 'C', false, 0);
                         $pdf->MultiCell(75, 4,  html_entity_decode($campo->etiqueta), 1, 'L', 0, true);
                         $pdf->Ln(0);
-        
+
                         if ($j == $cantidad_campos - 1) {
                             $pdf->Ln(5);
                         }
-        
-                    
+
+
                     }
-        
-        
+
+
                     $y = $pdf->GetY();
-        
+
                     if (($index > 4) && ($y > 300)) {
                         $x = $x + $posicion_x_inicial;
                         $y = 65;
                         $pdf->SetY($y);
                     }
-        
+
                     // Modificacion del indice
                     $index = $index + 1;
             }
-        }   
-       
+        }
+
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetTextColor(50, 50, 50);
 
@@ -324,10 +306,10 @@ class FormularioRegistro extends BaseModel
 
         $y = $y + 6;
         $pdf->SetXY($x, $y);
-        
+
         $pdf->Cell(85, 6, "", 0, 0, 'L');
         $pdf->Rect($x, $y, 85, 14, 'D', array('all' => $pdf->borderSolid()));
-        
+
         $firma2['x']=$x;
         $firma2['y']=$y;
 
@@ -367,12 +349,12 @@ class FormularioRegistro extends BaseModel
             $pdf->Image($firmasPath[2],  '', '', 50, 14, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
         }
 
-        $name = 'mant_prev_frm_reg_'.$formularioRegistro->id.'.pdf';
+        $name = 'mant_prev_frm_reg_'.$this->id.'.pdf';
         $path = storage_path('app/public/pdf/'.$name);
 
         $pdf->Output($path, 'F');
 
-        return $path;
+        return  ['path'=>$path,'url'=>'pdf/'.$name];
     }
 
 

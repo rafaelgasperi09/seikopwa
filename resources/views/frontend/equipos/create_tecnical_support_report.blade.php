@@ -47,7 +47,7 @@
                             {{ Form::date('fecha',date('Y-m-d'),array('class'=>'form-control','readonly')) }}
                         </div>
                     </div>
-                </div>               
+                </div>
                 <div class="col-md-4 col-sm-6 col-12">
                     <div class="form-group basic">
                         <div class="input-wrapper">
@@ -71,7 +71,7 @@
                             {{ Form::text('voltaje_combustible',null,array('class'=>'form-control')) }}
                         </div>
                     </div>
-                </div>                                           
+                </div>
                 <div class="col-md-4 col-sm-6 col-12">
                     <div class="form-group basic">
                         <div class="input-wrapper">
@@ -87,7 +87,7 @@
                             {{ Form::time('hora_salida',null,array('class'=>'form-control')) }}
                         </div>
                     </div>
-                </div>     
+                </div>
                 <div class="col-md-4 col-sm-6 col-12">
                     <div class="form-group basic">
                         <div class="input-wrapper">
@@ -95,7 +95,7 @@
                             {{ Form::number('horometro',null,array('class'=>'form-control','required')) }}
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="col-md-4 col-sm-6 col-12">
                     <div class="form-group basic">
                         <div class="input-wrapper">
@@ -111,7 +111,7 @@
                             {{ Form::text('numero_parte',$data->voltaje,array('class'=>'form-control','readonly')) }}
                         </div>
                     </div>
-                </div>                                 
+                </div>
             </div>
             <div class="section-title"></div>
             <div class="section-title"></div>

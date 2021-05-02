@@ -49,7 +49,7 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         Route::get('/search/{sub}/{id}', array('as' => 'equipos.search', 'uses' => 'EquiposController@search'));
 
-        Route::get('/detail/{id}', array('as' => 'equipos.detail', 'uses' => 'EquiposController@detail'))->middleware('hasAccess');
+        Route::get('{id}', array('as' => 'equipos.detail', 'uses' => 'EquiposController@detail'))->middleware('hasAccess');
 
         Route::get('/create_daily_check/{id}', array('as' => 'equipos.create_daily_check', 'uses' => 'EquiposController@createDailyCheck'))->middleware('hasAccess');
 
@@ -58,6 +58,10 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::get('/create_mant_prev/{id}/tipo/{tipo}', array('as' => 'equipos.create_mant_prev', 'uses' => 'EquiposController@createMantPrev'))->middleware('hasAccess');
 
         Route::post('/store_mant_prev', array('as' => 'equipos.store_mant_prev', 'uses' => 'EquiposController@storeMantPrev'));
+
+        Route::get('/mant_prev/{id}/edit', array('as' => 'equipos.edit_mant_prev', 'uses' => 'EquiposController@editMantPrev'))->middleware('hasAccess');
+
+        Route::put('/mant_prev/{id}/update', array('as' => 'equipos.update_mant_prev', 'uses' => 'EquiposController@updateMantPrev'));
 
         Route::get('/tecnical_support/{id}', array('as' => 'equipos.create_tecnical_support', 'uses' => 'EquiposController@createTecnicalSupport'))->middleware('hasAccess');
 
@@ -78,6 +82,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::get('/search', array('as' => 'baterias.search', 'uses' => 'BateriaController@search'));
 
         Route::get('/{id}', array('as' => 'baterias.detail', 'uses' => 'BateriaController@detail'))->middleware('hasAccess');
+
+        Route::get('/{id}/download', array('as' => 'baterias.download', 'uses' => 'BateriaController@download'));
 
         Route::get('/{id}/register_in_and_out', array('as' => 'baterias.register_in_and_out', 'uses' => 'BateriaController@registrarEntradaSalida'))->middleware('hasAccess');
 
