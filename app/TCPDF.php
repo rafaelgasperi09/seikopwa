@@ -58,34 +58,25 @@ class TCPDF extends \TCPDF
 
     public function SetConfig()
     {
-        // set document information
+        $this->SetLineWidth(0.4);
         $this->SetCreator('Angel Hidalgo');
+        $this->SetFont('helvetica', '', 12);
+        $this->SetAuthor('GMP');
         $this->SetTitle('Montacargas y Respuestos, S.A.');
-        $this->SetSubject('Informe de general de Moresa');
+        $this->SetSubject('Daily Check Report');
         $this->SetKeywords('TCPDF, PDF, php, html5, css3, javascrip, jquery');
 
-        // set default header data
-        $this->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+        $this->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+       // $this->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
-        // set header and footer fonts
-        $this->setHeaderFont(Array('helvetica', '', 15));
-        $this->setFooterFont(Array('helvetica', '', 7));
+        $this->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-        // set default monospaced font
-        $this->SetDefaultMonospacedFont('courier');
-
-        // set margins
-        $this->SetMargins(PDF_MARGIN_LEFT, 15, PDF_MARGIN_RIGHT);
+        $this->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $this->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $this->SetFooterMargin(PDF_MARGIN_FOOTER);
+        //$this->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-        // set auto page breaks
-        $this->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
-
-        // set image scale factor
-        $this->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-        $this->AddPage();
+        $this->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $this->SetDisplayMode('real','default');
     }
 
     public function cabeceraServicioTecnico()

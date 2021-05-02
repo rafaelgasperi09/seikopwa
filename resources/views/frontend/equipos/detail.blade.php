@@ -107,7 +107,7 @@
                         @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev'))
                         <div class="tab-pane fade " id="mant_prev" role="tabpanel">
                             <div class="section full mt-1">
-                                <h3>{{$data->tipo_equipos_id}}Mantenimiento Preventivo</h3>
+                                <h3>Mantenimiento Preventivo</h3>
                                 <div class="wide-block p-0">
 
                                 <div class="table-responsive">
