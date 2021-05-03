@@ -519,6 +519,15 @@ class EquiposController extends BaseController
                 'Content-Disposition' => 'inline; prevew.pdf',
             ]);
        }
-
+      
+       if($reporte=='form_montacarga_daily_check'){
+        
+        $file= $datos['cab']->savePdfDC();
+   
+        return Response::make(file_get_contents($file), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; prevew.pdf',
+        ]);
+       }
     }
 }

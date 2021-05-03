@@ -6,7 +6,7 @@ use App\Http\Traits\FilterDataTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+Use DB;
 class FormularioRegistro extends BaseModel
 {
     use SoftDeletes;
@@ -355,5 +355,173 @@ class FormularioRegistro extends BaseModel
         $pdf->Output($path, 'F');
 
         return  ['path'=>$path,'url'=>'pdf/'.$name];
+    }
+
+
+    public function savePdfDC()
+    {
+        $formularioRegistro = FormularioRegistro::find($this->id);
+        $formulario = Formulario::find($formularioRegistro->formulario_id);
+        $equipo = Equipo::find($formularioRegistro->equipo_id);
+        $horometro_campo = $formulario->campos()->whereNombre('horometro')->first();
+        $horometo = $formularioRegistro->data()->whereFormularioCampoId($horometro_campo->id)->first()->valor;
+        $datos=FormularioRegistro::where('ano',$formularioRegistro->ano)->where('semana',$formularioRegistro->semana)->get();
+        $data=array();
+       //$dias=array('Lunes','Martes','Miercoles','Jueves','Viernes','Sabado');
+        $dias=array('Lunes1','Lunes2','Martes1','Martes2','Miercoles1','Miercoles2','Jueves1','Jueves2','Viernes1','Viernes2','Sabado1','Sabado2');
+       $dataQuery="SELECT 
+       fr.semana,fr.ano,fd.formulario_campo_id,fc.nombre,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Lunes1' THEN fd.valor ELSE '' END) AS Lunes1,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Lunes2' THEN fd.valor ELSE '' END) AS Lunes2,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Martes1' THEN fd.valor ELSE '' END) AS Martes1,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Martes2' THEN fd.valor ELSE '' END) AS Martes2,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Miercoles1' THEN fd.valor ELSE '' END) AS Miercoles1,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Miercoles2' THEN fd.valor ELSE '' END) AS Miercoles2,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Jueves1' THEN fd.valor ELSE '' END) AS Jueves1,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Jueves2' THEN fd.valor ELSE '' END) AS Jueves2,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Viernes1' THEN fd.valor ELSE '' END) AS Viernes1,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Viernes2' THEN fd.valor ELSE '' END) AS Viernes2,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Sabado1' THEN fd.valor ELSE '' END) AS Sabado1,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Sabado2' THEN fd.valor ELSE '' END) AS Sabado2
+                FROM formulario_registro fr,formulario_data fd,formulario_campos fc 
+                WHERE fr.id=fd.formulario_registro_id
+                AND fd.formulario_campo_id=fc.id
+
+                AND fr.semana=$formularioRegistro->semana
+                AND fr.ano=$formularioRegistro->ano
+                GROUP BY fr.semana,fr.ano,fd.formulario_campo_id ";
+      
+        $data=\DB::select(DB::Raw($dataQuery));
+        $width = 220;
+        $height = 380;
+        $pageLayout = array($width, $height);
+       
+        $pdf = new TCPDF('P', 'mm', $pageLayout, true, 'UTF-8', false);
+    
+        $pdf->SetConfig();
+
+        $pdf->AddPage();
+        
+        $x = $pdf->GetX();
+        $y = $pdf->GetY();
+        $pdf->SetXY($x-12, $y-10);
+        $pdf->Image(storage_path('/app/pdf/dce.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+        $name = 'daily_check-'.$formularioRegistro->id.'.svg';
+        $path = storage_path('app/public/pdf/'.$name);
+    
+        $pdf->SetFont('helvetica', 'B', 10);
+        $pdf->SetTextColor(50, 50, 50);
+      
+        $x = 20;
+        $y = 15;
+        $pdf->SetXY($x, $y);
+        $pdf->Cell(55, 6, $formularioRegistro->equipo()->cliente->nombre, 0, 0, 'L');
+        $x = $pdf->GetX()+17;
+        $pdf->SetXY($x, $y);
+        $pdf->Cell(30, 6, $formularioRegistro->equipo()->cliente->direccion, 0, 0, 'L');
+        $x = $pdf->GetX()+38;
+        $pdf->SetXY($x, $y);
+        $date = \Carbon\Carbon::now();
+        $date->setISODate($formularioRegistro->ano,$formularioRegistro->semana);
+        
+        $pdf->Cell(30, 6, $date->startOfWeek()->format('Y-m-d'), 0, 0, 'L');   
+        $x = $pdf->GetX()+9;
+        $pdf->SetXY($x, $y);
+        $pdf->Cell(6, 6, "21 ", 0, 0, 'L');   
+        $x = 20;
+        $y = 19;
+        $pdf->SetXY($x, $y);
+        $pdf->Cell(40, 8,$formularioRegistro->equipo()->marca()->first()->display_name, 0, 0, 'L');
+        $y = $pdf->GetY()+5;
+        $pdf->SetXY($x, $y);
+        $pdf->Cell(40, 8, $formularioRegistro->equipo()->modelo, 0, 0, 'L');
+        $x = $pdf->GetX()+35;
+        $pdf->SetX($x);
+        $pdf->Cell(30, 6, $formularioRegistro->equipo()->serie, 0, 0, 'L');
+        $pdf->SetXY(160,30);
+        $pdf->Cell(10, 6, $formularioRegistro->equipo()->numero_parte, 0, 0, 'L');
+        $matrizx=array(79,89,101,111,122,
+                       132,143,155,166,175,
+                       186,199  );
+        $matrizy=array(53,61,67,74,79,
+                      86,93,100,107,113,
+                      121,128,134,140,147, 
+                      154,161,168,178,186,
+                      192,198,206,212,255,276);  
+        
+        $vars=array('identificacion'=>53,
+        'seguridad'=>61,
+        'danos_estructura'=>67,
+        'fugas'=>74,
+        'ruedas'=>79,
+        'horquillas'=>86,
+        'cadenas_cables_mangueras'=>93,
+        'bateria'=>100,
+        'conector_bateria'=>107,
+        'protectores'=>113,
+        'dispositivos_seguridad'=>121,
+        'control_handle'=>128,
+        'extintor'=>134,
+        'horometro'=>140,
+        'pito'=>147,
+        'direccion'=>154,
+        'control_traccion'=>161,
+        'control_hidraulicos'=>168,
+        'frenos'=>178,
+        'freno'=>186,
+        'carga_bateria'=>192,
+        'indicador_descarga_bateria'=>198,
+        'desconector_poder'=>206,
+        'luces_alarma_retroceso'=>212,
+        'lectura_horometro'=>235,
+        'operador'=>255,
+        'ok_supervisor'=>276);
+       $comentarios='';$contador=0;
+       foreach($data as $d){
+            $datos=json_decode(json_encode($d), true);
+            foreach($matrizx as $xkey=>$vx){
+                if($datos["nombre"]=='comentarios'){        
+                    if($datos[$dias[$xkey]]<>''){
+                        $comentarios.=$datos[$dias[$xkey]].' |';
+                        $contador++;
+                        if($contador==2){
+                            $contador=0;
+                            $comentarios.='|';
+                        }
+                    }
+                       
+                }                
+                if(isset($vars[$datos["nombre"]])){
+                    $valor=$datos[$dias[$xkey]];
+                    $pdf->SetXY($vx,$vars[$datos["nombre"]]);
+
+                    if(in_array($datos["nombre"],['operador','ok_supervisor','lectura_horometro'])){                  
+                        $pdf->StartTransform();
+                        $pdf->Rotate(90);
+                        if($datos["nombre"]=='lectura_horometro')
+                            $pdf->Cell(2, 6, $valor, 0, 0, 'L');
+                        else
+                            $pdf->Image(storage_path('app/public/firmas/'.$valor),  '', '', 20, 10, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+                        $pdf->StopTransform();
+                    }else{   
+                        $pdf->Cell(2, 6, $valor, 0, 0, 'L');
+                    
+                    }  
+                }    
+            }
+ 
+       }
+     
+       $comentarios= explode('||',$comentarios);
+       foreach($comentarios as $key=>$c){
+            $pdf->SetXY(10,278+($key*5));
+            $pdf->Cell(200, 10, $c, 0, 0, 'L');
+       }
+ 
+
+
+        $pdf->Output($path, 'F');
+
+        return $path;
     }
 }
