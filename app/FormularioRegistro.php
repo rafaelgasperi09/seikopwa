@@ -400,12 +400,13 @@ class FormularioRegistro extends BaseModel
     
         $pdf->SetConfig();
 
-        $pdf->AddPage();
+        $pdf->AddPage(); 
         
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x-12, $y-10);
-        $pdf->Image(storage_path('/app/pdf/dce.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+
+        $pdf->Image(public_path('images/dce2.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
         $name = 'daily_check-'.$formularioRegistro->id.'.svg';
         $path = storage_path('app/public/pdf/'.$name);
     
