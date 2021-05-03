@@ -41,7 +41,7 @@
                 <td>@empty(!$d->Sabado1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Sabado1 }}" data-turno="1" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
                 <td>@empty(!$d->Sabado2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Sabado2 }}" data-turno="2" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
                 <td>
-                    <a href="{{ url('/reportes/form_montacarga_daily_check/'.$d->Sabado2) }}" target="_blank" class="btn btn-primary btn-sm mr-1 ">
+                    <a href="{{ url('/equipos/reportes/form_montacarga_daily_check/'.$d->id) }}" target="_blank" class="btn btn-primary btn-sm mr-1 ">
                         <ion-icon name="print-outline" title="Ver detalle"></ion-icon>Imprimir
                     </a>
                 </td>
@@ -93,8 +93,9 @@
                     var html = '';
 
                     $.each(data.data, function( index, value ) {
-
                         valor = value.valor;
+                        if(value.tipo=='firma')
+                            valor = "<img src='/storage/firmas/"+value.valor+"' height='50px'>";
                         if(index == 1) valor = value.valor+' (Turno '+turno+')';
                         if(value.campo.tipo == 'firma') valor = '<img src="../storage/firmas/'+valor+'">';
                         html +='<dl class="row">\n' +
