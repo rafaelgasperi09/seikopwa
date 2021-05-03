@@ -9,6 +9,8 @@ use App\MontacargaConsecutivo;
 use App\MontacargaCopiaSolicitud;
 use App\MontacargaImagen;
 use App\MontacargaSolicitud;
+use App\Notifications\NewDailyCheck;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -142,7 +144,11 @@ class EquiposController extends BaseController
         if(!current_user()->can('see',$equipo)){
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
+        }elseif(!current_user()->can('edit',$data)){
+            request()->session()->flash('message.error','Este registro no esta disponible para ser modificado.');
+            return redirect(route('equipos.detail',$equipo->id));
         }
+
         $formulario = Formulario::findOrFail($data->formulario_id);
 
         return view('frontend.equipos.edit_daily_check')
@@ -208,12 +214,25 @@ class EquiposController extends BaseController
                 }
             });
 
+            // notificar a el o a los supervisores del cliente que tiene una firma pendiente por daily check
+
+
+            $when = now()->addMinutes(1);
+            /*foreach (User::whereCrmClienteId(current_user()->crm_cliente->id)->get() as $u){
+                if($u->isOnGroup('SupervisorC')){
+                    $u->notify(new NewDailyCheck($model))->delay($when);
+                }
+            }*/
+
+            $u = new User(['id'=>1,'email'=>'rafaelgasperi@clic.com.pa']);
+            $u->notify((new NewDailyCheck($model))->delay($when));
+
             $request->session()->flash('message.success','Registro creado con éxito');
             return redirect(route('equipos.detail',$equipo_id));
 
         }catch (\Exception $e){
             $request->session()->flash('message.error',$e->getMessage());
-            return redirect(route('equipos.store_daily_check',$equipo_id));
+            return redirect(route('equipos.create_daily_check',$equipo_id));
         }
 
 
@@ -231,11 +250,10 @@ class EquiposController extends BaseController
             ]);
 
             $formulario_registro_id = $request->formulario_registro_id;
-            $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;
-            $formulario = Formulario::find($formulario_id);
-            $equipo = Equipo::find($equipo_id);
+            $formulario = Formulario::findOrFail($formulario_id);
             $model = FormularioRegistro::findOrFail($formulario_registro_id);
+            $equipo = Equipo::findOrFail($model->equipo_id);
 
             DB::transaction(function () use ($model, $request, $formulario, $equipo) {
 
@@ -266,9 +284,7 @@ class EquiposController extends BaseController
 
             });
 
-            //aqui hay que ver a quien notificar
-
-            $request->session()->flash('message.success', 'Registro creado con éxito');
+            $request->session()->flash('message.success', 'Registro guardado con éxito');
             return redirect(route('equipos.detail', $equipo->id));
 
         } catch (\Exception $e) {
@@ -519,11 +535,11 @@ class EquiposController extends BaseController
                 'Content-Disposition' => 'inline; prevew.pdf',
             ]);
        }
-      
+
        if($reporte=='form_montacarga_daily_check'){
-        
+
         $file= $datos['cab']->savePdfDC();
-   
+
         return Response::make(file_get_contents($file), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; prevew.pdf',

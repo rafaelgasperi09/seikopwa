@@ -369,7 +369,7 @@ class FormularioRegistro extends BaseModel
         $data=array();
        //$dias=array('Lunes','Martes','Miercoles','Jueves','Viernes','Sabado');
         $dias=array('Lunes1','Lunes2','Martes1','Martes2','Miercoles1','Miercoles2','Jueves1','Jueves2','Viernes1','Viernes2','Sabado1','Sabado2');
-       $dataQuery="SELECT 
+       $dataQuery="SELECT
        fr.semana,fr.ano,fd.formulario_campo_id,fc.nombre,
                 MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Lunes1' THEN fd.valor ELSE '' END) AS Lunes1,
                 MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Lunes2' THEN fd.valor ELSE '' END) AS Lunes2,
@@ -383,35 +383,35 @@ class FormularioRegistro extends BaseModel
                 MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Viernes2' THEN fd.valor ELSE '' END) AS Viernes2,
                 MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Sabado1' THEN fd.valor ELSE '' END) AS Sabado1,
                 MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Sabado2' THEN fd.valor ELSE '' END) AS Sabado2
-                FROM formulario_registro fr,formulario_data fd,formulario_campos fc 
+                FROM formulario_registro fr,formulario_data fd,formulario_campos fc
                 WHERE fr.id=fd.formulario_registro_id
                 AND fd.formulario_campo_id=fc.id
 
                 AND fr.semana=$formularioRegistro->semana
                 AND fr.ano=$formularioRegistro->ano
                 GROUP BY fr.semana,fr.ano,fd.formulario_campo_id ";
-      
+
         $data=\DB::select(DB::Raw($dataQuery));
         $width = 220;
         $height = 380;
         $pageLayout = array($width, $height);
-       
+
         $pdf = new TCPDF('P', 'mm', $pageLayout, true, 'UTF-8', false);
-    
+
         $pdf->SetConfig();
 
         $pdf->AddPage();
-        
+
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x-12, $y-10);
         $pdf->Image(storage_path('/app/pdf/dce.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
         $name = 'daily_check-'.$formularioRegistro->id.'.svg';
         $path = storage_path('app/public/pdf/'.$name);
-    
+
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetTextColor(50, 50, 50);
-      
+
         $x = 20;
         $y = 15;
         $pdf->SetXY($x, $y);
@@ -423,11 +423,11 @@ class FormularioRegistro extends BaseModel
         $pdf->SetXY($x, $y);
         $date = \Carbon\Carbon::now();
         $date->setISODate($formularioRegistro->ano,$formularioRegistro->semana);
-        
-        $pdf->Cell(30, 6, $date->startOfWeek()->format('Y-m-d'), 0, 0, 'L');   
+
+        $pdf->Cell(30, 6, $date->startOfWeek()->format('Y-m-d'), 0, 0, 'L');
         $x = $pdf->GetX()+9;
         $pdf->SetXY($x, $y);
-        $pdf->Cell(6, 6, "21 ", 0, 0, 'L');   
+        $pdf->Cell(6, 6, "21 ", 0, 0, 'L');
         $x = 20;
         $y = 19;
         $pdf->SetXY($x, $y);
@@ -445,10 +445,10 @@ class FormularioRegistro extends BaseModel
                        186,199  );
         $matrizy=array(53,61,67,74,79,
                       86,93,100,107,113,
-                      121,128,134,140,147, 
+                      121,128,134,140,147,
                       154,161,168,178,186,
-                      192,198,206,212,255,276);  
-        
+                      192,198,206,212,255,276);
+
         $vars=array('identificacion'=>53,
         'seguridad'=>61,
         'danos_estructura'=>67,
@@ -480,7 +480,7 @@ class FormularioRegistro extends BaseModel
        foreach($data as $d){
             $datos=json_decode(json_encode($d), true);
             foreach($matrizx as $xkey=>$vx){
-                if($datos["nombre"]=='comentarios'){        
+                if($datos["nombre"]=='comentarios'){
                     if($datos[$dias[$xkey]]<>''){
                         $comentarios.=$datos[$dias[$xkey]].' |';
                         $contador++;
@@ -489,13 +489,13 @@ class FormularioRegistro extends BaseModel
                             $comentarios.='|';
                         }
                     }
-                       
-                }                
+
+                }
                 if(isset($vars[$datos["nombre"]])){
                     $valor=$datos[$dias[$xkey]];
                     $pdf->SetXY($vx,$vars[$datos["nombre"]]);
 
-                    if(in_array($datos["nombre"],['operador','ok_supervisor','lectura_horometro'])){                  
+                    if(in_array($datos["nombre"],['operador','ok_supervisor','lectura_horometro'])){
                         $pdf->StartTransform();
                         $pdf->Rotate(90);
                         if($datos["nombre"]=='lectura_horometro')
@@ -503,25 +503,26 @@ class FormularioRegistro extends BaseModel
                         else
                             $pdf->Image(storage_path('app/public/firmas/'.$valor),  '', '', 20, 10, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
                         $pdf->StopTransform();
-                    }else{   
+                    }else{
                         $pdf->Cell(2, 6, $valor, 0, 0, 'L');
-                    
-                    }  
-                }    
+
+                    }
+                }
             }
- 
+
        }
-     
+
        $comentarios= explode('||',$comentarios);
        foreach($comentarios as $key=>$c){
             $pdf->SetXY(10,278+($key*5));
             $pdf->Cell(200, 10, $c, 0, 0, 'L');
        }
- 
+
 
 
         $pdf->Output($path, 'F');
 
         return $path;
     }
+
 }

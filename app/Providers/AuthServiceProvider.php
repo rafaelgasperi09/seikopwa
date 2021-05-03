@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Equipo;
+use App\FormularioRegistro;
 use App\Policies\EquipoPolicy;
+use App\Policies\FormularioRegistroPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -17,6 +19,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         // 'App\Model' => 'App\Policies\ModelPolicy',
         Equipo::class => EquipoPolicy::class,
+        FormularioRegistro::class => FormularioRegistroPolicy::class,
     ];
 
     /**
