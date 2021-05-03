@@ -94,8 +94,6 @@
 
                     $.each(data.data, function( index, value ) {
                         valor = value.valor;
-                        if(value.tipo=='firma')
-                            valor = "<img src='/storage/firmas/"+value.valor+"' height='50px'>";
                         if(index == 1) valor = value.valor+' (Turno '+turno+')';
                         if(value.campo.tipo == 'firma') valor = '<img src="../storage/firmas/'+valor+'">';
                         html +='<dl class="row">\n' +
