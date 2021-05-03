@@ -20,13 +20,13 @@
        <td>{!!getStatusHtml($d->estatus)!!}</td>
        <td>
             @if(\Sentinel::getUser()->hasAccess('equipos.edit_mant_prev') && $d->estatus <> 'C')
-               <a href="{{ route('equipos.edit_mant_prev',$d->id) }}" class="btn btn-success btn-sm mr-1 ">
-                   <ion-icon name="create-outline" title="Ver detalle"></ion-icon>Editar
+               <a href="{{ route('equipos.edit_mant_prev',$d->id) }}" target="_blank" class="btn btn-success btn-sm mr-1 ">
+                   <ion-icon name="create-outline" title="Editar"></ion-icon>Editar
                </a>
             @endif
            @if($d->estatus  == 'C')
                @if($nombre == 'mantenimiento_preventivo')
-                    <a href="{{ Storage::url($d->nombre_archivo) }}" target="_blank" class="btn btn-primary btn-sm mr-1 ">
+                    <a href="{{ Storage::url($d->nombre_archivo) }}" class="btn btn-primary btn-sm mr-1 ">
                         <ion-icon name="print-outline" title="Ver detalle"></ion-icon>Imprimir
                     </a>
                @elseif($nombre == 'form_montacarga_servicio_tecnico')

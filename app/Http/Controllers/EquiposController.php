@@ -9,6 +9,8 @@ use App\MontacargaConsecutivo;
 use App\MontacargaCopiaSolicitud;
 use App\MontacargaImagen;
 use App\MontacargaSolicitud;
+use App\Notifications\NewDailyCheck;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -76,7 +78,7 @@ class EquiposController extends BaseController
             return redirect(route('equipos.index'));
         }
 
-        $form['dc'] =FormularioRegistro::selectRaw("formulario_registro.semana,formulario_registro.ano,max(formulario_registro.id) as id,
+        $form['dc'] =FormularioRegistro::selectRaw("formulario_registro.semana,formulario_registro.ano,formulario_registro.estatus,max(formulario_registro.id) as id,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes1' THEN formulario_registro.id ELSE '' END) AS Lunes1,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes2' THEN formulario_registro.id ELSE '' END) AS Lunes2,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Martes1' THEN formulario_registro.id ELSE '' END) AS Martes1,
@@ -92,7 +94,7 @@ class EquiposController extends BaseController
                                         ->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)
                                         ->where('formularios.nombre','form_montacarga_daily_check')
-                                        ->groupBy('formulario_registro.semana','formulario_registro.ano')
+                                        ->groupBy('formulario_registro.semana','formulario_registro.ano','formulario_registro.estatus')
                                         ->get();
 
         $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
@@ -105,6 +107,8 @@ class EquiposController extends BaseController
 
         return view('frontend.equipos.detail')->with('data',$data)->with('form',$form);
     }
+
+    /******************* FORMS DE DAILY CHECK **************************/
 
     public function createDailyCheck($id){
 
@@ -131,6 +135,26 @@ class EquiposController extends BaseController
 
 
         return view('frontend.equipos.create_daily_check')->with('data',$data)->with('formulario',$formulario)->with('turno',$turno);
+    }
+
+    public function editDailyCheck($id){
+
+        $data = FormularioRegistro::findOrFail($id);
+        $equipo = Equipo::findOrFail($data->equipo_id);
+        if(!current_user()->can('see',$equipo)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
+            return redirect(route('equipos.index'));
+        }elseif(!current_user()->can('edit',$data)){
+            request()->session()->flash('message.error','Este registro no esta disponible para ser modificado.');
+            return redirect(route('equipos.detail',$equipo->id));
+        }
+
+        $formulario = Formulario::findOrFail($data->formulario_id);
+
+        return view('frontend.equipos.edit_daily_check')
+            ->with('equipo',$equipo)
+            ->with('formulario',$formulario)
+            ->with('data',$data);
     }
 
     public function storeDailyCheck(Request $request){
@@ -190,16 +214,86 @@ class EquiposController extends BaseController
                 }
             });
 
+            // notificar a el o a los supervisores del cliente que tiene una firma pendiente por daily check
+
+
+            $when = now()->addMinutes(1);
+            /*foreach (User::whereCrmClienteId(current_user()->crm_cliente->id)->get() as $u){
+                if($u->isOnGroup('SupervisorC')){
+                    $u->notify(new NewDailyCheck($model))->delay($when);
+                }
+            }*/
+
+            $u = new User(['id'=>1,'email'=>'rafaelgasperi@clic.com.pa']);
+            $u->notify((new NewDailyCheck($model))->delay($when));
+
             $request->session()->flash('message.success','Registro creado con éxito');
             return redirect(route('equipos.detail',$equipo_id));
 
         }catch (\Exception $e){
             $request->session()->flash('message.error',$e->getMessage());
-            return redirect(route('equipos.store_daily_check',$equipo_id));
+            return redirect(route('equipos.create_daily_check',$equipo_id));
         }
 
 
     }
+
+    public function updateDailyCheck(Request $request)
+    {
+        try {
+
+            $this->validate($request, [
+                'equipo_id'              => 'required',
+                'formulario_id'          => 'required',
+                'formulario_registro_id' => 'required',
+                'ok_supervidor'  => 'required',
+            ]);
+
+            $formulario_registro_id = $request->formulario_registro_id;
+            $formulario_id = $request->formulario_id;
+            $formulario = Formulario::findOrFail($formulario_id);
+            $model = FormularioRegistro::findOrFail($formulario_registro_id);
+            $equipo = Equipo::findOrFail($model->equipo_id);
+
+            DB::transaction(function () use ($model, $request, $formulario, $equipo) {
+
+                foreach ($formulario->campos()->get() as $campo) {
+
+                    $valor = $request->get($campo->nombre);
+
+                    if(!empty($valor)){
+
+                        if($campo->tipo=='firma'){
+
+                            $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
+                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
+                            Storage::put('public/firmas/'.$filename,$data);
+                            $valor =  $filename;
+
+                        }
+                        $form_data = FormularioData::whereFormularioRegistroId($model->id)->whereFormularioCampoId($campo->id)->first();
+                        $form_data->valor = $valor;
+                        $form_data->user_id = current_user()->id;
+
+                        if (!$form_data->save()) {
+                            throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
+                        }
+                    }
+
+                }
+
+            });
+
+            $request->session()->flash('message.success', 'Registro guardado con éxito');
+            return redirect(route('equipos.detail', $equipo->id));
+
+        } catch (\Exception $e) {
+            $request->session()->flash('message.error', $e->getMessage());
+            return redirect(route('equipos.edit_daily_check',$formulario_registro_id))->withInput($request->all());
+        }
+    }
+
+    /******************* FORMS DE MANTENIMIENTO PREVENTIVO **************************/
 
     public function createMantPrev($id,$tipo){
 
@@ -219,6 +313,10 @@ class EquiposController extends BaseController
 
         $data = FormularioRegistro::findOrFail($id);
         $equipo = Equipo::findOrFail($data->equipo_id);
+        if(!current_user()->can('see',$equipo)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
+            return redirect(route('equipos.index'));
+        }
         $formulario = Formulario::findOrFail($data->formulario_id);
 
         return view('frontend.equipos.edit_mant_prev')
@@ -342,6 +440,8 @@ class EquiposController extends BaseController
         }
     }
 
+    /******************* FORM DE SOPORTE TECNICO **************************/
+
     public function createTecnicalSupport($id){
 
         $data = Equipo::findOrFail($id);
@@ -435,11 +535,11 @@ class EquiposController extends BaseController
                 'Content-Disposition' => 'inline; prevew.pdf',
             ]);
        }
-      
+
        if($reporte=='form_montacarga_daily_check'){
-        
+
         $file= $datos['cab']->savePdfDC();
-   
+
         return Response::make(file_get_contents($file), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; prevew.pdf',
