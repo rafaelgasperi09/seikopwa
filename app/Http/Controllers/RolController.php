@@ -18,7 +18,12 @@ class RolController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Rol::where('id','>',1)->get();
+        if(current_user()->id == 1){
+            $data = Rol::get();
+        }else{
+            $data = Rol::where('id','>',1)->get();
+    }
+
         return view('frontend.roles.index')->with('data',$data);
     }
 

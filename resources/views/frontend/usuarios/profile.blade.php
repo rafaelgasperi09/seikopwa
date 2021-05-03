@@ -1,5 +1,6 @@
 @extends('frontend.main-layout')
 @section('content')
+    <br/><br/>
     <div class="section mt-2">
         <div class="profile-head">
             <div class="avatar">

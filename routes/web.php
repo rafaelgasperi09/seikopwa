@@ -55,6 +55,10 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         Route::post('/store_daily_check', array('as' => 'equipos.store_daily_check', 'uses' => 'EquiposController@storeDailyCheck'));
 
+        Route::get('/daily_check/{id}/edit', array('as' => 'equipos.edit_daily_check', 'uses' => 'EquiposController@editDailyCheck'))->middleware('hasAccess');
+
+        Route::put('/daily_check/{id}/update', array('as' => 'equipos.update_daily_check', 'uses' => 'EquiposController@updateDailyCheck'));
+
         Route::get('/create_mant_prev/{id}/tipo/{tipo}', array('as' => 'equipos.create_mant_prev', 'uses' => 'EquiposController@createMantPrev'))->middleware('hasAccess');
 
         Route::post('/store_mant_prev', array('as' => 'equipos.store_mant_prev', 'uses' => 'EquiposController@storeMantPrev'));

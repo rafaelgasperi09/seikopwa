@@ -24,6 +24,7 @@
                 @foreach(array_chunk(Config::get('permisos.permissions'),2,true) as $block)
                     <div class="row">
                         @foreach($block as $key => $permisos)
+                            @if($key != 'roles')
                             <div class="col-md-6">
                                 <div style="background: #dedede;margin: 1em 0;text-align: center">
                                     <h2 style="text-align: center">Modulo {{ $key }}</h2>
@@ -38,6 +39,24 @@
                                 </div>
                                 @endforeach
                             </div>
+                            @else
+                                @if(current_user()->id == 1)
+                                    <div class="col-md-6">
+                                        <div style="background: #dedede;margin: 1em 0;text-align: center">
+                                            <h2 style="text-align: center">Modulo {{ $key }}</h2>
+                                        </div>
+                                        @foreach($permisos as $key2 => $value)
+                                            <div class="m-1">
+                                                <div class="col-8">{{ $value }}</div>
+                                                <div class="custom-control custom-switch col-4">
+                                                    <input name="{{ $key2 }}" type="checkbox" class="custom-control-input" id="customSwitch_{{ $key2 }}" @if ($sentryRol->hasAccess($key2)) checked @endif>
+                                                    <label class="custom-control-label" for="customSwitch_{{ $key2 }}"></label>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            @endif
                         @endforeach
                     </div>
                 @endforeach

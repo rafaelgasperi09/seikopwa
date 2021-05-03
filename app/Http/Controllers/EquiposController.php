@@ -76,7 +76,7 @@ class EquiposController extends BaseController
             return redirect(route('equipos.index'));
         }
 
-        $form['dc'] =FormularioRegistro::selectRaw("formulario_registro.semana,formulario_registro.ano,max(formulario_registro.id) as id,
+        $form['dc'] =FormularioRegistro::selectRaw("formulario_registro.semana,formulario_registro.ano,formulario_registro.estatus,max(formulario_registro.id) as id,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes1' THEN formulario_registro.id ELSE '' END) AS Lunes1,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes2' THEN formulario_registro.id ELSE '' END) AS Lunes2,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Martes1' THEN formulario_registro.id ELSE '' END) AS Martes1,
@@ -92,7 +92,7 @@ class EquiposController extends BaseController
                                         ->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)
                                         ->where('formularios.nombre','form_montacarga_daily_check')
-                                        ->groupBy('formulario_registro.semana','formulario_registro.ano')
+                                        ->groupBy('formulario_registro.semana','formulario_registro.ano','formulario_registro.estatus')
                                         ->get();
 
         $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
@@ -105,6 +105,8 @@ class EquiposController extends BaseController
 
         return view('frontend.equipos.detail')->with('data',$data)->with('form',$form);
     }
+
+    /******************* FORMS DE DAILY CHECK **************************/
 
     public function createDailyCheck($id){
 
@@ -131,6 +133,22 @@ class EquiposController extends BaseController
 
 
         return view('frontend.equipos.create_daily_check')->with('data',$data)->with('formulario',$formulario)->with('turno',$turno);
+    }
+
+    public function editDailyCheck($id){
+
+        $data = FormularioRegistro::findOrFail($id);
+        $equipo = Equipo::findOrFail($data->equipo_id);
+        if(!current_user()->can('see',$equipo)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
+            return redirect(route('equipos.index'));
+        }
+        $formulario = Formulario::findOrFail($data->formulario_id);
+
+        return view('frontend.equipos.edit_daily_check')
+            ->with('equipo',$equipo)
+            ->with('formulario',$formulario)
+            ->with('data',$data);
     }
 
     public function storeDailyCheck(Request $request){
@@ -201,6 +219,66 @@ class EquiposController extends BaseController
 
     }
 
+    public function updateDailyCheck(Request $request)
+    {
+        try {
+
+            $this->validate($request, [
+                'equipo_id'              => 'required',
+                'formulario_id'          => 'required',
+                'formulario_registro_id' => 'required',
+                'ok_supervidor'  => 'required',
+            ]);
+
+            $formulario_registro_id = $request->formulario_registro_id;
+            $equipo_id = $request->equipo_id;
+            $formulario_id = $request->formulario_id;
+            $formulario = Formulario::find($formulario_id);
+            $equipo = Equipo::find($equipo_id);
+            $model = FormularioRegistro::findOrFail($formulario_registro_id);
+
+            DB::transaction(function () use ($model, $request, $formulario, $equipo) {
+
+                foreach ($formulario->campos()->get() as $campo) {
+
+                    $valor = $request->get($campo->nombre);
+
+                    if(!empty($valor)){
+
+                        if($campo->tipo=='firma'){
+
+                            $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
+                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
+                            Storage::put('public/firmas/'.$filename,$data);
+                            $valor =  $filename;
+
+                        }
+                        $form_data = FormularioData::whereFormularioRegistroId($model->id)->whereFormularioCampoId($campo->id)->first();
+                        $form_data->valor = $valor;
+                        $form_data->user_id = current_user()->id;
+
+                        if (!$form_data->save()) {
+                            throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
+                        }
+                    }
+
+                }
+
+            });
+
+            //aqui hay que ver a quien notificar
+
+            $request->session()->flash('message.success', 'Registro creado con éxito');
+            return redirect(route('equipos.detail', $equipo->id));
+
+        } catch (\Exception $e) {
+            $request->session()->flash('message.error', $e->getMessage());
+            return redirect(route('equipos.edit_daily_check',$formulario_registro_id))->withInput($request->all());
+        }
+    }
+
+    /******************* FORMS DE MANTENIMIENTO PREVENTIVO **************************/
+
     public function createMantPrev($id,$tipo){
 
         $data = Equipo::findOrFail($id);
@@ -219,6 +297,10 @@ class EquiposController extends BaseController
 
         $data = FormularioRegistro::findOrFail($id);
         $equipo = Equipo::findOrFail($data->equipo_id);
+        if(!current_user()->can('see',$equipo)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
+            return redirect(route('equipos.index'));
+        }
         $formulario = Formulario::findOrFail($data->formulario_id);
 
         return view('frontend.equipos.edit_mant_prev')
@@ -341,6 +423,8 @@ class EquiposController extends BaseController
             return redirect(route('equipos.edit_mant_prev',$formulario_registro_id))->withInput($request->all());
         }
     }
+
+    /******************* FORM DE SOPORTE TECNICO **************************/
 
     public function createTecnicalSupport($id){
 

@@ -64,7 +64,7 @@
             <div id="accordion003" class="accordion-body collapse" data-parent="#detalle" style="">
                     <div class="accordion-content">
                         <ul class="nav nav-tabs style1 iconed" role="tablist">
-                            @if(\Sentinel::hasAccess('equipos.create_daily_check'))
+                            @if(\Sentinel::hasAnyAccess(['equipos.create_daily_check','equipos.edit_daily_check']))
                             <li class="nav-item">
                                 <a class="nav-link active " data-toggle="tab" href="#dailycheck" role="tab" aria-selected="true">
                                         <ion-icon name="list-outline" class="text-primary" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
@@ -74,7 +74,7 @@
                             @endif
                             @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev']))
                             <li class="nav-item">
-                                <a class="nav-link  @if(!\Sentinel::hasAccess('equipos.create_daily_check')) active @endif" data-toggle="tab" href="#mant_prev" role="tab" aria-selected="true">
+                                <a class="nav-link  @if(!\Sentinel::hasAnyAccess(['equipos.create_daily_check','equipos.edit_daily_check'])) active @endif" data-toggle="tab" href="#mant_prev" role="tab" aria-selected="true">
                                         <ion-icon name="hammer-outline" class="text-info" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
                                         Mantenimiento Preventivo
                                 </a>
@@ -90,7 +90,7 @@
                             @endif
                         </ul>
                         <div class="tab-content mt-1">
-                        @if(\Sentinel::hasAccess('equipos.create_daily_check'))
+                        @if(\Sentinel::hasAnyAccess(['equipos.create_daily_check','equipos.edit_daily_check']))
                         <div class="tab-pane fade active show" id="dailycheck" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Daily Check
@@ -109,7 +109,7 @@
                         </div>
                         @endif
                         @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev']))
-                        <div class="tab-pane @if(!\Sentinel::hasAccess('equipos.create_daily_check'))  active show @else fade @endif" id="mant_prev" role="tabpanel">
+                        <div class="tab-pane @if(!\Sentinel::hasAnyAccess(['equipos.create_daily_check','equipos.edit_daily_check']))  active show @else fade @endif" id="mant_prev" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Mantenimiento Preventivo
                                     @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev'))

@@ -59,7 +59,7 @@
                             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                         </i>
                     </div>
-                    <small style="color: red;">Este es el identificador unico del cliente con el mismo correo en el CRM , para crear este clinete debe estar creado primero en el CRM.</small>
+                    <small style="color: red;">Este es el identificador unico del cliente en el CRM , para crear este usuario con rol tipo cliente debe estar creado primero en el CRM.</small>
                 </div>
                 <div class="divider  mt-2 mb-3"></div>
                 <div class="form-group boxed">
@@ -89,15 +89,15 @@
         $("#rol").change(function (){
 
             console.log('Rol :'+$(this).val())
-            if($(this).val() == 1){
+            if($(this).val() == 2){
                 $('#crm_user_id').hide();
                 $('#crm_cliente_id').hide();
-            }else if($(this).val() == 2){ // operador
-                $('#crm_user_id').show();
-                $('#crm_cliente_id').hide();
-            }else if($(this).val() == 3){ // cliente
+            }else if($(this).val() == 3 || $(this).val() == 4){ // supervisor_operador-clinete
                 $('#crm_user_id').hide();
                 $('#crm_cliente_id').show();
+            }else if($(this).val() == 5 || $(this).val() == 6){ // operador-tecnico_gmp
+                $('#crm_user_id').show();
+                $('#crm_cliente_id').hide();
             }
         });
     </script>
