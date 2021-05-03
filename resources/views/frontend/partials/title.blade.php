@@ -10,7 +10,7 @@
         </a>
         </div>
         @else
-        <a href="javascript:;" class="headerButton goBack">
+        <a href="{{ URL::previous()  }}" class="headerButton goBack">
             <ion-icon name="chevron-back-outline" role="img" class="md hydrated" aria-label="chevron back outline"></ion-icon>
         </a>
         @endif

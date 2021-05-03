@@ -51,29 +51,47 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         Route::get('{id}', array('as' => 'equipos.detail', 'uses' => 'EquiposController@detail'))->middleware('hasAccess');
 
-        Route::get('/create_daily_check/{id}', array('as' => 'equipos.create_daily_check', 'uses' => 'EquiposController@createDailyCheck'))->middleware('hasAccess');
-
-        Route::post('/store_daily_check', array('as' => 'equipos.store_daily_check', 'uses' => 'EquiposController@storeDailyCheck'));
-
-        Route::get('/daily_check/{id}/edit', array('as' => 'equipos.edit_daily_check', 'uses' => 'EquiposController@editDailyCheck'))->middleware('hasAccess');
-
-        Route::put('/daily_check/{id}/update', array('as' => 'equipos.update_daily_check', 'uses' => 'EquiposController@updateDailyCheck'));
-
-        Route::get('/create_mant_prev/{id}/tipo/{tipo}', array('as' => 'equipos.create_mant_prev', 'uses' => 'EquiposController@createMantPrev'))->middleware('hasAccess');
-
-        Route::post('/store_mant_prev', array('as' => 'equipos.store_mant_prev', 'uses' => 'EquiposController@storeMantPrev'));
-
-        Route::get('/mant_prev/{id}/edit', array('as' => 'equipos.edit_mant_prev', 'uses' => 'EquiposController@editMantPrev'))->middleware('hasAccess');
-
-        Route::put('/mant_prev/{id}/update', array('as' => 'equipos.update_mant_prev', 'uses' => 'EquiposController@updateMantPrev'));
-
-        Route::get('/tecnical_support/{id}', array('as' => 'equipos.create_tecnical_support', 'uses' => 'EquiposController@createTecnicalSupport'))->middleware('hasAccess');
-
-        Route::get('/tecnical_support/edit/{id}', array('as' => 'equipos.edit_tecnical_support', 'uses' => 'EquiposController@editTecnicalSupport'));
-
-        Route::post('/store_tecnical_support', array('as' => 'equipos.store_tecnical_support', 'uses' => 'EquiposController@storeTecnicalSupport'));
-
         Route::get('/reportes/{nombre}/{id}', array('as' => 'reporte.detalle', 'uses' => 'EquiposController@reportes'));
+
+        Route::group(array('prefix' => 'daily_check'), function() {
+
+            Route::get('/create/{id}', array('as' => 'equipos.create_daily_check', 'uses' => 'EquiposController@createDailyCheck'))->middleware('hasAccess');
+
+            Route::post('/store', array('as' => 'equipos.store_daily_check', 'uses' => 'EquiposController@storeDailyCheck'));
+
+            Route::get('/{id}/edit', array('as' => 'equipos.edit_daily_check', 'uses' => 'EquiposController@editDailyCheck'))->middleware('hasAccess');
+
+            Route::put('/{id}/update', array('as' => 'equipos.update_daily_check', 'uses' => 'EquiposController@updateDailyCheck'));
+
+        });
+
+        Route::group(array('prefix' => 'mantenimiento_preventivo'), function() {
+
+            Route::get('/create/{id}/tipo/{tipo}', array('as' => 'equipos.create_mant_prev', 'uses' => 'EquiposController@createMantPrev'))->middleware('hasAccess');
+
+            Route::post('/store', array('as' => 'equipos.store_mant_prev', 'uses' => 'EquiposController@storeMantPrev'));
+
+            Route::get('/{id}/edit', array('as' => 'equipos.edit_mant_prev', 'uses' => 'EquiposController@editMantPrev'))->middleware('hasAccess');
+
+            Route::put('/{id}/update', array('as' => 'equipos.update_mant_prev', 'uses' => 'EquiposController@updateMantPrev'));
+
+        });
+
+        Route::group(array('prefix' => 'tecnical_support'), function() {
+
+            Route::get('/create/{id}', array('as' => 'equipos.create_tecnical_support', 'uses' => 'EquiposController@createTecnicalSupport'))->middleware('hasAccess');
+
+            Route::get('/{id}/edit', array('as' => 'equipos.edit_tecnical_support', 'uses' => 'EquiposController@editTecnicalSupport'));
+
+            Route::put('/{id}/start', array('as' => 'equipos.start_tecnical_support', 'uses' => 'EquiposController@startTecnicalSupport'))->middleware('hasAccess');
+
+            Route::put('/{id}/update', array('as' => 'equipos.update_tecnical_support', 'uses' => 'EquiposController@updateTecnicalSupport'));
+
+            Route::post('/store', array('as' => 'equipos.store_tecnical_support', 'uses' => 'EquiposController@storeTecnicalSupport'));
+
+        });
+
+
     });
 
     Route::group(array('prefix' => 'baterias'), function() {

@@ -20,7 +20,7 @@
             <ion-icon name="home-outline" role="img" class="md hydrated" aria-label="home outline"></ion-icon>
         </div>
     </a>
-    @if(current_user()->isOnGroup('administradores'))
+    @if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
         <a href="{{ route('usuarios.index') }}" class="item @if(Request::is('usuarios') or Request::is('usuarios/*')) active @endif">
             <div class="col">
                 <ion-icon name="people-outline" role="img" class="md hydrated" aria-label="layers outline"></ion-icon>

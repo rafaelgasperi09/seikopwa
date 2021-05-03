@@ -456,9 +456,18 @@ class EquiposController extends BaseController
 
     public function editTecnicalSupport($id){
 
-        $data = Equipo::findOrFail($id);
+        $data = FormularioRegistro::findOrFail($id);
+        $equipo = Equipo::findOrFail($data->equipo_id);
         $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
-        return view('frontend.equipos.create_tecnical_support_report')->with('data',$data)->with('formulario',$formulario);
+
+        $campos = $formulario->campos()->whereIn('nombre',['hora_entrada','hora_salida','tecnico_asignado'])->pluck('id');
+        $otrosDatos = $data->data()->whereIn('formulario_campo_id',$campos)->pluck('valor');
+
+        return view('frontend.equipos.edit_tecnical_support_report')
+            ->with('equipo',$equipo)
+            ->with('formulario',$formulario)
+            ->with('otrosCampos',$otrosDatos)
+            ->with('data',$data);
     }
 
     public function storeTecnicalSupport(Request $request){
@@ -468,6 +477,7 @@ class EquiposController extends BaseController
             'formulario_id'  => 'required',
             'fecha'          => 'required|date',
         ]);
+
         $equipo_id = $request->equipo_id;
         $formulario_id = $request->formulario_id;
         $tipo_equipos_id = $request->tipo_equipos_id;
@@ -516,6 +526,92 @@ class EquiposController extends BaseController
         $request->session()->flash('message.success','Registro creado con exito');
         return redirect(route('equipos.detail',$equipo_id));
     }
+
+    public function updateTecnicalSupport(Request $request)
+    {
+        try {
+
+            $this->validate($request, [
+                'equipo_id'              => 'required',
+                'formulario_id'          => 'required',
+                'formulario_registro_id' => 'required',
+               // 'trabajo_recibido_por'  => 'required',
+            ]);
+
+            $formulario_registro_id = $request->formulario_registro_id;
+            $equipo_id = $request->equipo_id;
+            $formulario_id = $request->formulario_id;
+            $formulario = Formulario::find($formulario_id);
+            $equipo = Equipo::find($equipo_id);
+            $model = FormularioRegistro::findOrFail($formulario_registro_id);
+
+            DB::transaction(function () use ($model, $request, $formulario, $equipo) {
+
+                foreach ($formulario->campos()->get() as $campo) {
+
+                    $valor = $request->get($campo->nombre);
+
+                    if(!empty($valor) or $campo->nombre == 'hora_salida'){
+
+                        if($campo->tipo=='firma'){
+
+                            $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
+                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
+                            Storage::put('public/firmas/'.$filename,$data);
+                            $valor =  $filename;
+                        }
+                        if($campo->nombre == 'hora_salida'){
+                            $valor = date('H:i');
+                        }
+                        $form_data = FormularioData::whereFormularioRegistroId($model->id)->whereFormularioCampoId($campo->id)->first();
+                        $form_data->valor = $valor;
+                        $form_data->user_id = current_user()->id;
+
+                        if (!$form_data->save()) {
+                            throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
+                        }
+                    }
+
+                }
+
+            });
+
+            //aqui hay que ver a quien notificar
+
+            $request->session()->flash('message.success', 'Registro creado con éxito');
+            return redirect(route('equipos.detail', $equipo_id));
+
+        } catch (\Exception $e) {
+            $request->session()->flash('message.error', $e->getMessage());
+            return redirect(route('equipos.edit_tecnical_support',$formulario_registro_id))->withInput($request->all());
+        }
+    }
+
+    public function startTecnicalSupport($id){
+
+        $model = FormularioRegistro::findOrFail($id);
+        $model->estatus = 'PR';
+
+        if($model->save()){
+            $horaEntredaCampo = $model->formulario()->first()->campos()->whereNombre('hora_entrada')->first();
+            $data = $model->data()->whereFormularioCampoId($horaEntredaCampo->id)->first();
+            $data->valor = date('H:i');
+            $data->user_id = current_user()->id;
+            $data->save();
+
+            $htecnicoCampo = $model->formulario()->first()->campos()->whereNombre('tecnico_asignado')->first();
+            $data = $model->data()->whereFormularioCampoId($htecnicoCampo->id)->first();
+            $data->valor = current_user()->getFullName();
+            $data->user_id = current_user()->id;
+            $data->save();
+
+            request()->session()->flash('message.success', 'Inicio de servicio tecnico exitoso , no olvide hacer cierre del mismo al terminar.');
+            return redirect(route('equipos.detail', $model->equipo_id));
+        }
+
+    }
+
+    /******************* REPORTES **************************/
 
     public function reportes($reporte,$id){
        $datos['cab']=FormularioRegistro::find($id);
