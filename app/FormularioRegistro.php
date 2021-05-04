@@ -495,14 +495,17 @@ class FormularioRegistro extends BaseModel
                 if(isset($vars[$datos["nombre"]])){
                     $valor=$datos[$dias[$xkey]];
                     $pdf->SetXY($vx,$vars[$datos["nombre"]]);
-
+                  
                     if(in_array($datos["nombre"],['operador','ok_supervisor','lectura_horometro'])){
                         $pdf->StartTransform();
                         $pdf->Rotate(90);
                         if($datos["nombre"]=='lectura_horometro')
                             $pdf->Cell(2, 6, $valor, 0, 0, 'L');
-                        else
+                        else{
+                        
                             $pdf->Image(storage_path('app/public/firmas/'.$valor),  '', '', 20, 10, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+                        }
+                            
                         $pdf->StopTransform();
                     }else{
                         $pdf->Cell(2, 6, $valor, 0, 0, 'L');

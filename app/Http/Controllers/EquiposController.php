@@ -75,6 +75,7 @@ class EquiposController extends BaseController
         $data = Equipo::findOrFail($id);
 
         if(!current_user()->can('see',$data)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
         }
 
