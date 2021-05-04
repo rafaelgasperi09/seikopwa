@@ -31,11 +31,11 @@ class FormularioMantenimientoPreventivoReach extends Seeder
             'etiqueta'=>'Horometro',
             'tipo'=>'number',
             'icono'=>'pulse-outline',
-            'tipo_validacion'=>'fecha',
+            'tipo_validacion'=>'number',
             'database_nombre'=>'nombre',
-            'formato_fecha'=>'Y-m-d',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         $seeciones = ['Inspección Visual',
