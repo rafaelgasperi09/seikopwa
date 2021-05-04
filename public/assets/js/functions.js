@@ -23,7 +23,9 @@ $(document).ready(function() {
 	var options = {
 			defaultAction: 'drawIt',
 			drawOnly: true,
-			penColour: '#000'
+			penColour: '#000',
+			penWidth :5,
+
 			
 	}
 	
@@ -34,7 +36,7 @@ $(document).ready(function() {
 	
 	var signature = $('.signed').signaturePad({displayOnly:true}); // stores a reference to the DOM element where 
 																   // we want to regenerate the saved signature	
-	
+	signature.penWidth=5;
 	/*** Fetch stored signature data and regenerate on button click ***/
 	$('#get').click(function() {
 		$.ajax({

@@ -14,6 +14,18 @@ use App\MontacargaSolicitud;
 
 class FormularioDataObserver
 {
+
+    /**
+     * Handle the formulario data "updated" event.
+     *
+     * @param  \App\FormularioData  $formularioData
+     * @return void
+     */
+    public function created(FormularioData $formularioData)
+    {
+        $formularioData->user_id = current_user()->id;
+        $formularioData->save();
+    }
     /**
      * Handle the formulario data "updated" event.
      *
@@ -23,7 +35,7 @@ class FormularioDataObserver
     public function updated(FormularioData $formularioData)
     {
         $formularioCampo = FormularioCampo::find($formularioData->formulario_campo_id);
-
+        $formularioData->user_id = current_user()->id;
         if($formularioCampo->cambio_estatus) { // cambio el estatus a C
             $formularioRegistro = FormularioRegistro::find($formularioData->formulario_registro_id);
             $formularioRegistro->estatus = 'C';

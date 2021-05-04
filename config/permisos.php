@@ -25,7 +25,9 @@ return [
      "equipos.edit_daily_check"=>"Actualizar Daily Check",
      "equipos.create_mant_prev"=>"Crear Ticket Mantenimiento Preventivo",
      "equipos.edit_mant_prev"=>"Actualizar Ticket Mantenimiento Preventivo",
-     "equipos.create_tecnical_support"=>"Crear Ticket Soporte Tecnico",
+     "equipos.create_tecnical_support"=>"Crear Servicio Soporte Tecnico",
+     "equipos.edit_tecnical_support"=>"Editar Servicio Soporte Tecnico",
+     "equipos.start_tecnical_support"=>"Iniciar Servicio de Soporte Tecnico",
      "equipos.detail"=>"Ver Detalle Equipo",
    ),
    "Taller"=>array(
@@ -39,6 +41,10 @@ return [
    "Flujos Formulario"=>array(
      "parteA"=>"Primera Parte del proceso (creación)",
      "parteB"=>"Segunda Parte del proceso (edición)",
-     "parteC"=>"Primera Parte 2 del proceso (creación2)",
+   ),
+   "Flujos soporte Tecnico"=>array(
+     "sp.parteA"=>"Primera Parte del proceso (creación)",
+     "sp.parteB"=>"Segunda Parte del proceso (edicion hora entrada)",
+     "sp.parteC"=>"Tercera Parte 2 del proceso (edicion hora salida)",
    ),
  )];

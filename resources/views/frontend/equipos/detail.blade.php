@@ -80,7 +80,7 @@
                                 </a>
                             </li>
                             @endif
-                            @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
+                            @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.edit_tecnical_support']))
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#serv_tec" role="tab" aria-selected="true">
                                         <ion-icon name="alert-circle-outline" class="text-warning" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
@@ -129,7 +129,7 @@
                             </div>
                         </div>
                         @endif
-                        @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
+                        @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.edit_tecnical_support']))
                         <div class="tab-pane fade " id="serv_tec" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Reporte Servicio Técnico

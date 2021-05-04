@@ -19,7 +19,7 @@ class CreateAdminUserSeed extends Seeder
             'password'   => 'test',
         ]);
 
-        $role = \Cartalyst\Sentinel\Laravel\Facades\Sentinel::findRoleByName('Administradores');
+        $role = \Cartalyst\Sentinel\Laravel\Facades\Sentinel::findRoleByName('Programador');
 
         $role->users()->attach($user);
     }
