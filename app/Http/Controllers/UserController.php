@@ -56,8 +56,20 @@ class UserController extends Controller
 
     public function create(){
 
-        $roles = Rol::where('id','<>',1)->pluck('name','id');
-        return view('frontend.usuarios.create',compact('roles'));
+        $roles = Rol::where('id','<>',1)->get()->pluck('full_name','id');
+
+        $clientes = Cliente::whereNotIn('id',User::whereNotNull('crm_cliente_id')->pluck('crm_cliente_id'))
+                ->whereHas('equipos')
+                ->orderBy('nombre')
+                ->get()
+                ->pluck('full_name','id');
+
+        $users = MontacargaUser::whereNotIn('id',User::whereNotNull('crm_user_id')->pluck('crm_user_id'))
+            ->orderBy('name')
+            ->get()
+            ->pluck('full_name','id');
+
+        return view('frontend.usuarios.create',compact('roles','clientes','users'));
 
     }
 
@@ -72,6 +84,17 @@ class UserController extends Controller
             'password_confirmation' => 'required|same:password'
         ]);
 
+        $role = Sentinel::findRoleById($request->get('rol_id'));
+
+        if($role->tipo == 'cliente' && empty($request->crm_cliente_id)){
+            session()->flash('message.error', 'Para rol de cliente la selección de la lista de contactos del CRM es requerida.');
+            return redirect(route('usuarios.create'));
+        }elseif($role->tipo == 'gmp' && empty($request->crm_user_id)){
+            session()->flash('message.error', 'Para rol de GMP la selección de la lista de usuarios del CRM es requerida.');
+            return redirect(route('usuarios.create'));
+        }
+
+
         $user = Sentinel::registerAndActivate(array(
             'email' => $request->get('email'),
             'first_name' => $request->get('first_name'),
@@ -79,18 +102,13 @@ class UserController extends Controller
             'password' => $request->get('password'),
         ));
 
-        $role = Sentinel::findRoleById($request->get('rol_id'));
         $role->users()->attach($user);
-        $user->crm_user_id = $request->crm_user_id;
         $user->have_to_change_password = 1;
-        // si el el rol es cliente buscarlo en la tabla de contactos del crm para sacar su id
-        if($role->slug =='clientes'){
-            $cliente = Cliente::where('correo','like',"'".$request->email."'")->first();
-            if($cliente) $user->crm_cliente_id = $cliente->id;
-        }else{ // buscar si esta en la tabla de usuarios
-            // si el el rol es cliente buscarlo en la tabla de contactos del crm para sacar su id
-            $crmuser = MontacargaUser::whereEmail($request->email)->first();
-            if($crmuser) $user->crm_user_id = $crmuser->id;
+
+        if($role->tipo == 'cliente'){
+            $user->crm_cliente_id = $request->crm_cliente_id;
+        }elseif($role->tipo == 'gmp'){
+            $user->crm_user_id = $request->crm_user_id;
         }
 
         if($user->save()){

@@ -12,4 +12,8 @@ class Cliente extends BaseModel
     public function equipos(){
         return $this->hasMany(Equipo::class);
     }
+
+    public function getFullNameAttribute() {
+        return $this->nombre.' ('.$this->equipos->count().' montacargas)'; //Change the format to whichever you desire
+    }
 }

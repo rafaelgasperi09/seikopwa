@@ -16,8 +16,8 @@
                 </div>
                 <div class="form-group boxed">
                     <div class="input-wrapper">
-                        <label class="label" for="email">Correo Electrónico</label>
-                        {{ Form::email('email',null,array('class'=>'form-control','placeholder'=>'Correo Electrónico','required')) }}
+                        <label class="label" for="email">Correo Electrónico (usuario para ingresar)</label>
+                        {{ Form::email('email',null,array('class'=>'form-control','placeholder'=>'Correo Electrónico','required','autocomplete'=>'off')) }}
                         <i class="clear-input">
                             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                         </i>
@@ -41,26 +41,9 @@
                         </i>
                     </div>
                 </div>
-                <div class="form-group boxed" id="crm_user_id" style="display: none;">
-                    <div class="input-wrapper">
-                        <label class="label" for="crm_user_id">CRM ID</label>
-                        {{ Form::number('crm_user_id',null, array("class" => "form-control",'placeholder'=>'CRM ID'))  }}
-                        <i class="clear-input">
-                            <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
-                        </i>
-                    </div>
-                    <small style="color: red;">Este es el identificador unico del usuario con el mismo correo en el CRM</small>
-                </div>
-                <div class="form-group boxed" id="crm_cliente_id" style="display: none;">
-                    <div class="input-wrapper">
-                        <label class="label" for="crm_user_id">CRM ID</label>
-                        {{ Form::number('crm_cliente_id',null, array("class" => "form-control",'placeholder'=>'CRM ID'))  }}
-                        <i class="clear-input">
-                            <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
-                        </i>
-                    </div>
-                    <small style="color: red;">Este es el identificador unico del cliente en el CRM , para crear este usuario con rol tipo cliente debe estar creado primero en el CRM.</small>
-                </div>
+                @include('frontend.partials.typeahead',array('field_label'=>'Usuario','field_name'=>'crm_user_id','items'=>$users,'value'=>['',''],'display'=>'none'))
+                @include('frontend.partials.typeahead',array('field_label'=>'Cliente','field_name'=>'crm_cliente_id','items'=>$clientes,'value'=>['',''],'display'=>'none','small'=>'Esta selección sirve para determinar que equipos pertecen a este nuevo cliente usando la información del CRM.'))
+
                 <div class="divider  mt-2 mb-3"></div>
                 <div class="form-group boxed">
                     <div class="input-wrapper">
@@ -90,14 +73,14 @@
 
             console.log('Rol :'+$(this).val())
             if($(this).val() == 2){
-                $('#crm_user_id').hide();
-                $('#crm_cliente_id').hide();
+                $('#group_crm_user_id').hide();
+                $('#group_crm_cliente_id').hide();
             }else if($(this).val() == 3 || $(this).val() == 4){ // supervisor_operador-clinete
-                $('#crm_user_id').hide();
-                $('#crm_cliente_id').show();
+                $('#group_crm_user_id').hide();
+                $('#group_crm_cliente_id').show();
             }else if($(this).val() == 5 || $(this).val() == 6){ // operador-tecnico_gmp
-                $('#crm_user_id').show();
-                $('#crm_cliente_id').hide();
+                $('#group_crm_user_id').show();
+                $('#group_crm_cliente_id').hide();
             }
         });
     </script>
