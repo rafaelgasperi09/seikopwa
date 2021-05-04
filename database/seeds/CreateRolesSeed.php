@@ -66,7 +66,7 @@ class CreateRolesSeed extends Seeder
             'name' => 'Supervisor',
             'slug' => 'supervisor',
             'tipo'=>'gmp',
-            'permissions' => jsdon_decode('{"usuarios.index":true,"usuarios.create":true,"usuarios.import":true,"usuarios.store":true,"usuarios.detail":true,"usuarios.update":true,"usuarios.profile":true,"role.index":false,"role.create":false,"role.store":false,"role.show":false,"role.edit":false,"role.update":false,"equipos.index":true,"equipos.create":true,"equipos.create_daily_check":true,"equipos.create_mant_prev":true,"equipos.create_tecnical_support":true,"equipos.detail":true,"taller":false,"baterias.index":false,"baterias.detail":false,"baterias.register_in_and_out":false,"parteA":true,"parteB":false}')
+            'permissions' => json_decode('{"usuarios.index":true,"usuarios.create":true,"usuarios.import":true,"usuarios.store":true,"usuarios.detail":true,"usuarios.update":true,"usuarios.profile":true,"role.index":false,"role.create":false,"role.store":false,"role.show":false,"role.edit":false,"role.update":false,"equipos.index":true,"equipos.create":true,"equipos.create_daily_check":true,"equipos.create_mant_prev":true,"equipos.create_tecnical_support":true,"equipos.detail":true,"taller":false,"baterias.index":false,"baterias.detail":false,"baterias.register_in_and_out":false,"parteA":true,"parteB":false}')
         ];
 
         Sentinel::getRoleRepository()->createModel()->fill($supervisorGMPRole)->save();
