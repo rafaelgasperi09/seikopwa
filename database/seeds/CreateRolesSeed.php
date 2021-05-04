@@ -11,7 +11,7 @@ class CreateRolesSeed extends Seeder
      */
     public function run()
     {
-        $permisos_admin = array();
+        /*$permisos_admin = array();
         $permisos_user = array();
         foreach(config('permisos.permissions') as $key => $permisos){
             foreach($permisos as $key2 => $value){
@@ -25,7 +25,7 @@ class CreateRolesSeed extends Seeder
                 }
 
             }
-        }
+        }*/
 
         $programRole = [
             'name' => 'Programador',
