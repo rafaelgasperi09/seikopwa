@@ -36,6 +36,7 @@ class EquiposController extends BaseController
                          ->FiltroCliente()
                          ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
                          ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id')
+                         ->where('equipos.tipo_equipos_id','<=',7)
                          ->get();
 
         $tipoEquiposArray=array();
