@@ -23,7 +23,7 @@
             <!-- toast top iconed -->
             <div id="toast-1" class="toast-box toast-top  @if(!\Sentinel::check()) show-nologued @endif">
                 <div class="in">
-                    <ion-icon name="checkmark-circle" class="text-danger"></ion-icon>
+                    <ion-icon name="close-circle" class="text-danger"></ion-icon>
                     <div class="text-danger">
                         {{ Session::get('message.error') }}
                     </div>

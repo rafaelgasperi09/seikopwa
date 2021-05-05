@@ -10,6 +10,7 @@ use App\MontacargaCopiaSolicitud;
 use App\MontacargaImagen;
 use App\MontacargaSolicitud;
 use App\Notifications\NewDailyCheck;
+use App\Notifications\NewTecnicalSupportAssignTicket;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -498,7 +499,7 @@ class EquiposController extends BaseController
                 foreach ($formulario->campos()->get() as $campo)
                 {
                     $valor =  $request->get($campo->nombre);
-                    if($campo->tipo=='firma'){
+                    if($campo->tipo=='firma' && !empty($valor)){
                         $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
                         $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
                         Storage::put('public/firmas/'.$filename,$data);
@@ -586,6 +587,29 @@ class EquiposController extends BaseController
             $request->session()->flash('message.error', $e->getMessage());
             return redirect(route('equipos.edit_tecnical_support',$formulario_registro_id))->withInput($request->all());
         }
+    }
+
+    public function assignTecnicalSupport(Request $request,$id){
+
+        $this->validate($request, [
+            'tecnico_asignado'  => 'required',
+        ]);
+
+        $model = FormularioRegistro::findOrFail($id);
+        $model->estatus = 'A';
+        $model->tecnico_asignado = $request->tecnico_asignado;
+        $model->fecha_asignacion =Carbon::now();
+        $user = User::findOrFail($request->tecnico_asignado);
+
+        if($model->save()){
+            // crear notificacion al tecnico asignado
+            $user->notify(new NewTecnicalSupportAssignTicket($model));
+            $request->session()->flash('message.success', 'Se a asignado el servicio de suporte técnico a '.$user->getFullName().' de forma exitosa.');
+        }else{
+            $request->session()->flash('message.error', 'Se a asignado el servicio de suporte tecnico de forma exitosa.');
+        }
+
+        return redirect(route('equipos.detail', $model->equipo_id));
     }
 
     public function startTecnicalSupport($id){

@@ -128,4 +128,27 @@ function getStatusHtml($status){
     return $html;
 }
 
+function getUsersByRol($rol_name){
+
+$arr=array();
+    foreach(\App\User::get() as $u){
+
+        if($u->isOnGroup($rol_name))
+            $arr[] = $u;
+    }
+
+    return $arr;
+}
+
+function getListUsersByRol($rol_name){
+
+    $arr=array();
+    foreach(\App\User::get() as $u){
+
+        if($u->isOnGroup($rol_name))
+            $arr[$u->id] = $u->getFullName();
+    }
+
+    return $arr;
+}
 ?>

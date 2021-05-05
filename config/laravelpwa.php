@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'name' => 'GMPCheck',
+    'name' => 'GMPAPP',
     'manifest' => [
-        'name' => env('APP_NAME', 'GMPCheck'),
-        'short_name' => 'GMPCheck',
+        'name' => env('APP_NAME', 'GMPAPP'),
+        'short_name' => 'GMPAPP',
         'start_url' => '/',
         'background_color' => '#e3ac13',
         'theme_color' => '#000000',
