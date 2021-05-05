@@ -15,9 +15,11 @@ class CreateFormularioRegistroEstadosTable extends Migration
     {
         Schema::create('formulario_registro_estatus', function (Blueprint $table) {
             $table->id();
-            $table->text('estatus');
+            $table->integer('formulario_registro_id')->unsigned()->index();
+            $table->foreign('formulario_registro_id')->references('id')->on('formulario_registro')->onDelete('cascade');
             $table->integer('user_id')->unsigned()->nullable()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->text('estatus');
             $table->softDeletes();
             $table->timestamps();
         });

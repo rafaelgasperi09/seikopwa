@@ -34,6 +34,10 @@ class FormularioRegistro extends BaseModel
         return Equipo::find($this->equipo_id);
     }
 
+    public function estatusHistory(){
+        return $this->hasMany(FormularioRegistroEstatus::class);
+    }
+
     public function savePdf($equipo,$solicitud)
     {
         //$formularioRegistro = FormularioRegistro::find($this->id);
