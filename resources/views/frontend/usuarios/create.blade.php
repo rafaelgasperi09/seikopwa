@@ -71,9 +71,8 @@
     <script>
         $("#rol").change(function (){
 
-            console.log('Rol :'+$(this).val())
             if($(this).val() == 2){
-                $('#group_crm_user_id').hide();
+                $('#group_crm_user_id').show();
                 $('#group_crm_cliente_id').hide();
             }else if($(this).val() == 3 || $(this).val() == 4){ // supervisor_operador-clinete
                 $('#group_crm_user_id').hide();
