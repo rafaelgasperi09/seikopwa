@@ -55,10 +55,32 @@ class LoginController extends Controller
         }
     }
 
+    public function loginByPersistence(Request $request,$code){
+
+        $user = Sentinel::findByPersistenceCode($code);
+
+        $success = false;
+
+        if($user){
+            $auth = Sentinel::login($user);
+            if ($auth)
+            {
+               $success = true;
+            }
+        }
+
+        return response()->json([
+
+            'success'=>$success
+        ]);
+    }
+
     public function logout(){
 
         Sentinel::logout();
         return redirect(route('login'));
     }
+
+
 
 }

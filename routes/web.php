@@ -25,6 +25,7 @@ Route::get('/', function () {
 /*************** USERS LOGIN PASSWORD ROUTES **************************************/
 Route::get('/login', function () { return view('frontend.login');});
 Route::post('login', array('as' => 'login','uses' => 'LoginController@login'));
+Route::post('login_persistence/{code}', array('as' => 'login.persistence','uses' => 'LoginController@loginByPersistence'));
 
 
 Route::get('forgot_password/create', function () { return view('frontend.forgot_password'); });

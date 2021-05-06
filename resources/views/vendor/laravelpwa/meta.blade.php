@@ -55,6 +55,8 @@
         return navigator.serviceWorker.register('/serviceworker.js?t={{ time() }}')
             .then(function(registration) {
                 console.log('Laravel PWA: ServiceWorker registration successful with scope: ', registration.scope);
+                sessionStorage.setItem('user_persistence_code','{{ current_user()->persistences()->orderBy('id','DESC')->first()->code }}');
+                createDB();
                 initPush();
             })
             .then(function(pushSubscription) {

@@ -93,10 +93,6 @@
 <script src="{{ url('assets/js/base.js') }}"></script>
 <!-- ///////////// CUSTOM SCRIPTS ////////////////////  -->
 @yield('post_scripts')
-
-
-
-    @yield('post_scripts')
 <script>
 /*
     setTimeout(() => {

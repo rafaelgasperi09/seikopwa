@@ -64,6 +64,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Rol::class,'role_users','user_id','role_id');
     }
 
+    public function persistences(){
+        return $this->hasMany(Persistence::class);
+    }
+
     public function isOnGroup($group_name)
     {
         $sentryUser = Sentinel::findUserById($this->id);

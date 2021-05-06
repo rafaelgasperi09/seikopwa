@@ -13,6 +13,8 @@ $(document).ready(function () {
     setTimeout(() => {
         $("#loader").fadeToggle(250);
     }, 700); // hide delay when page load
+
+    recconect();
 });
 ///////////////////////////////////////////////////////////////////////////
 
@@ -308,10 +310,30 @@ $(".notification-box.tap-to-close .notification-dialog").click(function () {
     $(".notification-box.show").removeClass("show");
 });
 ///////////////////////////////////////////////////////////////////////////
-
-
-
-
+// Toast
+// trigger toast
+function toastbox(target, time) {
+    var a = "#" + target;
+    $(".toast-box").removeClass("show");
+    setTimeout(() => {
+        $(a).addClass("show");
+    }, 100);
+    if (time) {
+        time = time + 100;
+        setTimeout(() => {
+            $(".toast-box").removeClass("show");
+        }, time);
+    }
+};
+// close button toast
+$(".toast-box .close-button").click(function (event) {
+    event.preventDefault();
+    $(".toast-box.show").removeClass("show");
+});
+// tap to close toast
+$(".toast-box.tap-to-close").click(function () {
+    $(this).removeClass("show");
+});
 ///////////////////////////////////////////////////////////////////////////
 // Header Scrolled
 // Animated header style
@@ -552,4 +574,40 @@ dmswitch.on('change', function () {
     dmswitch.prop('checked', this.checked);
 });
 ///////////////////////////////////////////////////////////////////////////
+function recconect(){
+
+    var home_path = location.protocol + '//' + location.host;
+    if (navigator.standalone || matchMedia('(display-mode: standalone)').matches) {
+       console.log('is running from standalone app');
+        navigator.serviceWorker.ready
+            .then((registration) => {
+                var code = sessionStorage.getItem('user_persistence_code');
+                var _token = document.querySelector('meta[name="_token"]').content;
+
+                if(code.length>0){
+                    console.log('User persistence code :'+code);
+                    fetch('login_persistence/'+code,{
+                        method:'post',
+                        headers: {
+                            'X-CSRF-Token': _token
+                        },
+                    })
+                        .then(response => response.text())
+                        .then(data => {
+
+                            console.log(data.success)
+                            if(data.success){
+                               window.location.replace(home_path+'/dashboard');
+                            }
+                        })
+                        .catch(function(error) {
+                            console.log('Hubo un problema con la petición Fetch:' + error.message);
+                        });
+                }
+            });
+    }
+
+
+}
+
 
