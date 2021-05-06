@@ -37,7 +37,7 @@ class EquiposController extends BaseController
                          ->FiltroCliente()
                          ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
                          ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id')
-                         ->where('equipos.tipo_equipos_id','<=',7)
+                         //->where('equipos.tipo_equipos_id','<=',7)
                          ->get();
 
         $tipoEquiposArray=array();
@@ -304,7 +304,9 @@ class EquiposController extends BaseController
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
         }
-        $forms = [1=>'form_montacarga_counter_rc',2=>'form_montacarga_combustion',3=>'form_montacarga_counter_fc',4=>'form_montacarga_counter_sc',5=>'form_montacarga_pallet',6=>'form_montacarga_reach',7=>'form_montacarga_stock_picker'];
+        $forms = [1=>'form_montacarga_counter_rc',2=>'form_montacarga_combustion',3=>'form_montacarga_counter_fc',4=>'form_montacarga_counter_sc',
+            5=>'form_montacarga_pallet',6=>'form_montacarga_reach',7=>'form_montacarga_stock_picker',8=>'form_montacarga_wave_stacker_walke',
+            9=>'form_montacarga_wave_stacker_walke',10=>'form_montacarga_wave_stacker_walke'];
 
         $formulario = Formulario::whereNombre($forms[$tipo])->first();
 
