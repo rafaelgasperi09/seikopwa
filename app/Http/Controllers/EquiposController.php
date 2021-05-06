@@ -194,6 +194,17 @@ class EquiposController extends BaseController
                             Storage::put('public/firmas/'.$filename,$data);
                             $valor =  $filename;
                         }
+                        if(in_array($campo->tipo,['camera','file'])){
+                            $file = $request->file($campo->nombre);
+                            if($file){
+                                $ext = $file->getClientOriginalExtension();
+                                $filename = $model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
+                                $upload =  Storage::disk('public')->putFileAs('equipos',$file,$filename);
+                                if($upload){
+                                    $valor =  $filename;
+                                }
+                            }
+                        }
 
                         $api_descripcion = '';
                         $form_data = FormularioData::create([
@@ -203,8 +214,6 @@ class EquiposController extends BaseController
                             'tipo' => $campo->tipo,
                             'api_descripcion'=>$api_descripcion,
                         ]);
-
-
 
                         if(!$form_data)
                         {

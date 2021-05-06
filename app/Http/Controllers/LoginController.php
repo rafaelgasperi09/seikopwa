@@ -58,9 +58,7 @@ class LoginController extends Controller
     public function loginByPersistence(Request $request,$code){
 
         $user = Sentinel::findByPersistenceCode($code);
-
         $success = false;
-
         if($user){
             $auth = Sentinel::login($user);
             if ($auth)
@@ -70,8 +68,8 @@ class LoginController extends Controller
         }
 
         return response()->json([
-
-            'success'=>$success
+            'success'=>$success,
+            'data'=>$auth
         ]);
     }
 

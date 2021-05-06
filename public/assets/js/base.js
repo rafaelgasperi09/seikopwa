@@ -328,7 +328,9 @@ function toastbox(target, time) {
 // close button toast
 $(".toast-box .close-button").click(function (event) {
     event.preventDefault();
+    $(".toast-box.show-nologued").removeClass("show");
     $(".toast-box.show").removeClass("show");
+    $(this).parent().remove();
 });
 // tap to close toast
 $(".toast-box.tap-to-close").click(function () {
@@ -594,8 +596,6 @@ function recconect(){
                     })
                         .then(response => response.text())
                         .then(data => {
-
-                            console.log(data.success)
                             if(data.success){
                                window.location.replace(home_path+'/dashboard');
                             }
@@ -606,8 +606,6 @@ function recconect(){
                 }
             });
     }
-
-
 }
 
 

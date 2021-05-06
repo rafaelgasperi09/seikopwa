@@ -90,7 +90,7 @@
 <!-- jQuery Circle Progress -->
 <script src="{{ url('assets/js/plugins/jquery-circle-progress/circle-progress.min.js') }}"></script>
 <!-- Base Js File -->
-<script src="{{ url('assets/js/base.js') }}"></script>
+<script src="{{ url('assets/js/base.js?='.time()) }}"></script>
 <!-- ///////////// CUSTOM SCRIPTS ////////////////////  -->
 @yield('post_scripts')
 <script>
