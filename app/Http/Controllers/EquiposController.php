@@ -22,6 +22,7 @@ use App\TipoEquipo;
 use App\Equipo;
 use App\SubEquipo;
 use Illuminate\Support\Facades\DB;
+use Intervention\Image\Facades\Image;
 use Sentinel;
 use Illuminate\Support\Facades\Storage;
 use PDF;
@@ -197,12 +198,13 @@ class EquiposController extends BaseController
                         if(in_array($campo->tipo,['camera','file'])){
                             $file = $request->file($campo->nombre);
                             if($file){
+                                $img = Image::make($file->path());
                                 $ext = $file->getClientOriginalExtension();
                                 $filename = $model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
-                                $upload =  Storage::disk('public')->putFileAs('equipos',$file,$filename);
-                                if($upload){
-                                    $valor =  $filename;
-                                }
+                                $destinationPath = storage_path('/app/public/equipos');
+                                $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                                $valor =  $filename;
+
                             }
                         }
 
