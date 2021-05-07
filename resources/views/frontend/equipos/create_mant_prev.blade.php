@@ -65,7 +65,9 @@
     {{ Form::hidden('formulario_id',$formulario->id,array('required')) }}
     @include('frontend.partials.form',array('formulario'=>$formulario,'parte'=>'parteA'))
     <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm btn-block">GUARDAR</button>
+        <button type="submit" class="btn mobile-height btn-primary btn-sm btn-block">
+            <ion-icon name="save-outline"></ion-icon> GUARDAR
+        </button>
     </div>
     {{ Form::close() }}
 
