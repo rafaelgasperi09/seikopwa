@@ -78,10 +78,11 @@ class EquiposController extends BaseController
         $data = Equipo::findOrFail($id);
 
         if(!current_user()->can('see',$data)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
         }
 
-        $form['dc'] =FormularioRegistro::selectRaw("formulario_registro.semana,formulario_registro.ano,formulario_registro.estatus,max(formulario_registro.id) as id,
+        $form['dc'] =FormularioRegistro::selectRaw("formulario_registro.semana,formulario_registro.ano,max(formulario_registro.id) as id,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes1' THEN formulario_registro.id ELSE '' END) AS Lunes1,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes2' THEN formulario_registro.id ELSE '' END) AS Lunes2,
                                         MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Martes1' THEN formulario_registro.id ELSE '' END) AS Martes1,
@@ -97,7 +98,7 @@ class EquiposController extends BaseController
                                         ->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)
                                         ->where('formularios.nombre','form_montacarga_daily_check')
-                                        ->groupBy('formulario_registro.semana','formulario_registro.ano','formulario_registro.estatus')
+                                        ->groupBy('formulario_registro.semana','formulario_registro.ano')
                                         ->get();
 
         $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
@@ -189,22 +190,26 @@ class EquiposController extends BaseController
                         $valor =  $request->get($campo->nombre);
                         if($campo->nombre == 'semana') $valor = Carbon::now()->startOfWeek()->format('d-m-Y');
                         if($campo->nombre == 'dia_semana') $valor = getDayOfWeek(date('N'));
-                        if($campo->tipo=='firma'){
-                            $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
-                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
-                            Storage::put('public/firmas/'.$filename,$data);
-                            $valor =  $filename;
-                        }
-                        if(in_array($campo->tipo,['camera','file'])){
-                            $file = $request->file($campo->nombre);
-                            if($file){
-                                $img = Image::make($file->path());
-                                $ext = $file->getClientOriginalExtension();
-                                $filename = $model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
-                                $destinationPath = storage_path('/app/public/equipos');
-                                $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                        if($request->get($campo->nombre)){                        
+                            if($campo->tipo=='firma'){
+                                $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
+                                $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
+                                Storage::put('public/firmas/'.$filename,$data);
                                 $valor =  $filename;
+                            }
+                            if(in_array($campo->tipo,['camera','file'])){
 
+
+                                    $file = $request->file($campo->nombre);
+                                    if($file){
+                                        $img = Image::make($file->path());
+                                        $ext = $file->getClientOriginalExtension();
+                                        $filename = $model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
+                                        $destinationPath = storage_path('/app/public/equipos');
+                                        $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                                        $valor =  $filename;
+        
+                                    }
                             }
                         }
 

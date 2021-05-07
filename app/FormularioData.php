@@ -12,7 +12,7 @@ class FormularioData extends BaseModel
     protected $guarded = ['id','typeheadA'];
 
     public function registro(){
-        return $this->belongsTo(FormularioRegistro::class);
+        return $this->belongsTo(FormularioRegistro::class,'formulario_registro_id');
     }
 
     public function campo(){

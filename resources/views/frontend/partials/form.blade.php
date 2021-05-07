@@ -72,7 +72,7 @@
                                     <div class="wide-block pt-2 pb-2">
                                         @php
                                             $i=0;
-                                            $checked='checked';
+                                            $checked='';
                                         @endphp
 
                                         @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
