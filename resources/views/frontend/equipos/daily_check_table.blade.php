@@ -89,10 +89,12 @@
                 data: "formulario_registro_id="+id,
                 type: 'get',
                 success: function(data) {
-
+                   
                     var html = '';
-
+                    var estatus='';
                     $.each(data.data, function( index, value ) {
+                        if(estatus=='')
+                            estatus=value.registro.estatus;
                         valor = value.valor;
                         if(index == 1) valor = value.valor+' (Turno '+turno+')';
                         if(value.campo.tipo == 'firma') valor = '<img src="../storage/firmas/'+valor+'">';
@@ -101,11 +103,15 @@
                                     '<dd class="col-sm-9">'+valor+'</dd>\n' +
                                '</dl>'
                     });
-
+                    
                     $('#daily_check_modal_body').html(html);
 
-                    if(supervisorAccess && status != 'C'){
-                        $('.modal-footer').html('<a href="daily_check/'+id+'/edit" class="btn btn-success btn-sm"><ion-icon name="create-outline" title="Editar"></ion-icon>Editar</a>');
+                    if(supervisorAccess ){
+                        console.log(estatus);
+                        if(estatus!='C'){
+                            $('.modal-footer').html('<a href="daily_check/'+id+'/edit" class="btn btn-success btn-sm"><ion-icon name="create-outline" title="Editar"></ion-icon>Editar</a>');
+                        }
+                        
                     }
 
                     $('#DailyCheckModal').modal('show');
