@@ -2,7 +2,7 @@
     <li class="multi-level">
         <a href="#" class="item">
             <div class="imageWrapper">
-                <img src="{{url('assets/img/mc2.png')}}" alt="image" class="imaged w64">
+                <img src="{{ getEquipoIconBySubTipo($e->tipo_equipos_id) }}" alt="image" class="imaged w64">
             </div>
             <div class="in">
                 <div>{{$e->numero_parte}}</div>

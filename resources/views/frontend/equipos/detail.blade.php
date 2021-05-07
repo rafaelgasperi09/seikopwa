@@ -1,7 +1,7 @@
 @extends('frontend.main-layout')
 
 @section('content')
-@include('frontend.partials.title',array('title'=>'Detalle de Equipos','subtitle'=>$data->numero_parte))
+@include('frontend.partials.title',array('title'=>'Detalle de Equipos','subtitle'=>$data->numero_parte,'image'=>getEquipoIconBySubTipo($data->tipo_equipos_id)))
 <div class="section full mt-2">
     <div class="accordion" id="detalle">
         <div class="item">

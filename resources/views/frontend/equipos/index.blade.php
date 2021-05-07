@@ -37,7 +37,9 @@
 
                             <li>
                                 <a href="{{route('equipos.tipo',['sub'=>$s->name,'id'=>$key])}}" class="item">
-                                    <img src="{{url('assets/img/mc.svg')}}" alt="image" class="image">
+                                    <div class="imageWrapper">
+                                        <img src="{{ getEquipoIconBySubTipo($key) }}" alt="{{ $s->name }}" class="imaged w64">
+                                    </div>
                                     <div class="in">
                                         <div>{{$t}}</div>
 
@@ -45,6 +47,7 @@
                                 </a>
                             </li>
                             @endforeach
+                            {{--}}
                             <li>
                                 <a href="{{route('equipos.tipo',['sub'=>$s->name,'id'=>'todos'])}}" class="item">
                                     <img src="{{url('assets/img/mc.svg')}}" alt="image" class="image">
@@ -53,6 +56,7 @@
                                     </div>
                                 </a>
                             </li>
+                            {{--}}
                         @endif
                     </ul>
                 </div>
