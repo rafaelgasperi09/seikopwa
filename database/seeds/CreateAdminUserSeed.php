@@ -16,7 +16,7 @@ class CreateAdminUserSeed extends Seeder
             'email'      => 'admin@admin.com',
             'first_name' => 'Administrador',
             'last_name'  => 'del Sistema',
-            'password'   => 'test',
+            'password'   => '!Xga798b',
         ]);
 
         $role = \Cartalyst\Sentinel\Laravel\Facades\Sentinel::findRoleByName('Programador');

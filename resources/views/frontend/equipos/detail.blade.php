@@ -151,9 +151,8 @@
                     </div>
                 </div>
             </div>
+            @include('frontend.equipos.modal_assign_tecnico')
         </div>
-
-
     </div>
 </div>
 

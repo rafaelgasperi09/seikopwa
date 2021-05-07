@@ -1,12 +1,12 @@
 var staticCacheName = "pwa-v" + new Date().getTime();
 var filesToCache = [
     '/assets/css/style.css',
-    'assets/js/lib/jquery-3.4.1.min.js',
-    'assets/js/toast.js',
-    'assets/js/lib/popper.min.js',
-    'assets/js/lib/bootstrap.min.js',
-    'assets/js/plugins/owl-carousel/owl.carousel.min.js',
-    'assets/js/plugins/jquery-circle-progress/circle-progress.min.js',
+    '/assets/js/lib/jquery-3.4.1.min.js',
+    '/assets/js/toast.js',
+    '/assets/js/lib/popper.min.js',
+    '/assets/js/lib/bootstrap.min.js',
+    '/assets/js/plugins/owl-carousel/owl.carousel.min.js',
+    '/assets/js/plugins/jquery-circle-progress/circle-progress.min.js',
     '/assets/js/base.js',
     '/images/icons/icon-72x72.png',
     '/images/icons/icon-96x96.png',

@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             $this->command->info('Creando Formulario Mant Prev Counter FC...');
             $this->call(FormularioMantenimientoPreventivoCounterRC::class);
             $this->command->info('Creando Formulario Mant Prev Counter RC...');
-                        $this->call(FormularioMantenimientoPreventivoCounterSC::class);
+            $this->call(FormularioMantenimientoPreventivoCounterSC::class);
             $this->command->info('Creando Formulario Mant Prev Counter SC...');
             $this->call(FormularioMantenimientoPreventivoPallet::class);
             $this->command->info('Creando Formulario Mant Prev Pallet...');

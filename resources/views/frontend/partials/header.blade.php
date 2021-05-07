@@ -9,6 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
     <title>GMP Check</title>
+    <meta name="_token" content="{{ csrf_token() }}">
     <meta name="description" content="Mobilekit HTML Mobile UI Kit">
     <meta name="keywords" content="bootstrap 4, mobile template, cordova, phonegap, mobile, html" />
     <link rel="icon" type="image/png" href="{{ url('assets/img/favicon.png') }}" sizes="32x32">
@@ -23,7 +24,7 @@
     <script src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
     <script src="{{ url('assets/js/toast.js') }}"></script>
     <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-    
+    {{ Html::script('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js') }}
 
 </head>
 

@@ -10,6 +10,7 @@ use App\MontacargaCopiaSolicitud;
 use App\MontacargaImagen;
 use App\MontacargaSolicitud;
 use App\Notifications\NewDailyCheck;
+use App\Notifications\NewTecnicalSupportAssignTicket;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ use App\TipoEquipo;
 use App\Equipo;
 use App\SubEquipo;
 use Illuminate\Support\Facades\DB;
+use Intervention\Image\Facades\Image;
 use Sentinel;
 use Illuminate\Support\Facades\Storage;
 use PDF;
@@ -36,6 +38,7 @@ class EquiposController extends BaseController
                          ->FiltroCliente()
                          ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
                          ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id')
+                         //->where('equipos.tipo_equipos_id','<=',7)
                          ->get();
 
         $tipoEquiposArray=array();
@@ -193,6 +196,18 @@ class EquiposController extends BaseController
                             Storage::put('public/firmas/'.$filename,$data);
                             $valor =  $filename;
                         }
+                        if(in_array($campo->tipo,['camera','file'])){
+                            $file = $request->file($campo->nombre);
+                            if($file){
+                                $img = Image::make($file->path());
+                                $ext = $file->getClientOriginalExtension();
+                                $filename = $model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
+                                $destinationPath = storage_path('/app/public/equipos');
+                                $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                                $valor =  $filename;
+
+                            }
+                        }
 
                         $api_descripcion = '';
                         $form_data = FormularioData::create([
@@ -202,8 +217,6 @@ class EquiposController extends BaseController
                             'tipo' => $campo->tipo,
                             'api_descripcion'=>$api_descripcion,
                         ]);
-
-
 
                         if(!$form_data)
                         {
@@ -303,7 +316,9 @@ class EquiposController extends BaseController
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
         }
-        $forms = [1=>'form_montacarga_counter_rc',2=>'form_montacarga_combustion',3=>'form_montacarga_counter_fc',4=>'form_montacarga_counter_sc',5=>'form_montacarga_pallet',6=>'form_montacarga_reach',7=>'form_montacarga_stock_picker'];
+        $forms = [1=>'form_montacarga_counter_rc',2=>'form_montacarga_combustion',3=>'form_montacarga_counter_fc',4=>'form_montacarga_counter_sc',
+            5=>'form_montacarga_pallet',6=>'form_montacarga_reach',7=>'form_montacarga_stock_picker',8=>'form_montacarga_wave_stacker_walke',
+            9=>'form_montacarga_wave_stacker_walke',10=>'form_montacarga_wave_stacker_walke'];
 
         $formulario = Formulario::whereNombre($forms[$tipo])->first();
 
@@ -498,7 +513,7 @@ class EquiposController extends BaseController
                 foreach ($formulario->campos()->get() as $campo)
                 {
                     $valor =  $request->get($campo->nombre);
-                    if($campo->tipo=='firma'){
+                    if($campo->tipo=='firma' && !empty($valor)){
                         $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
                         $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
                         Storage::put('public/firmas/'.$filename,$data);
@@ -586,6 +601,29 @@ class EquiposController extends BaseController
             $request->session()->flash('message.error', $e->getMessage());
             return redirect(route('equipos.edit_tecnical_support',$formulario_registro_id))->withInput($request->all());
         }
+    }
+
+    public function assignTecnicalSupport(Request $request,$id){
+
+        $this->validate($request, [
+            'tecnico_asignado'  => 'required',
+        ]);
+
+        $model = FormularioRegistro::findOrFail($id);
+        $model->estatus = 'A';
+        $model->tecnico_asignado = $request->tecnico_asignado;
+        $model->fecha_asignacion =Carbon::now();
+        $user = User::findOrFail($request->tecnico_asignado);
+
+        if($model->save()){
+            // crear notificacion al tecnico asignado
+            $user->notify(new NewTecnicalSupportAssignTicket($model));
+            $request->session()->flash('message.success', 'Se a asignado el servicio de suporte técnico a '.$user->getFullName().' de forma exitosa.');
+        }else{
+            $request->session()->flash('message.error', 'Se a asignado el servicio de suporte tecnico de forma exitosa.');
+        }
+
+        return redirect(route('equipos.detail', $model->equipo_id));
     }
 
     public function startTecnicalSupport($id){

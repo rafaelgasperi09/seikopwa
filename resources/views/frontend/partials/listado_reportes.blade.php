@@ -31,13 +31,19 @@
                 </a>
                @endif
            @elseif($nombre == 'form_montacarga_servicio_tecnico')
-               @if(\Sentinel::getUser()->hasAccess('equipos.start_tecnical_support') && $d->estatus == 'P')
+               @if(\Sentinel::getUser()->hasAccess('equipos.assign_tecnical_support') && $d->estatus == 'P')
+                   <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#assign_tecnico_modal"
+                      data-action="{{ route('equipos.assign_tecnical_support',$d->id) }}">
+                       <ion-icon name="build-outline" class="md hydrated" aria-label="logo android"></ion-icon>
+                       Asignar Técnico
+                   </a>
+               @elseif(\Sentinel::getUser()->hasAccess('equipos.start_tecnical_support') && $d->estatus == 'A')
                    {{ Form::model($data, array('route' => array('equipos.start_tecnical_support', $d->id), 'method' => 'PUT' , 'role' => 'form','class'=>'form-horizontal')) }}
                        <button type="submit" class="btn btn-primary btn-sm mr-1 ">
                            <ion-icon name="play-outline" title="Editar"></ion-icon>Iniciar
                        </button>
                    {{ Form::close() }}
-               @elseif(\Sentinel::getUser()->hasAccess('equipos.edit_tecnical_support') && $d->estatus <> 'C')
+               @elseif(\Sentinel::getUser()->hasAccess('equipos.edit_tecnical_support') && $d->estatus == 'PR')
                    <a href="{{ route('equipos.edit_tecnical_support',$d->id) }}" class="btn btn-success btn-sm mr-1 ">
                        <ion-icon name="create-outline" title="Editar"></ion-icon>Editar
                    </a>

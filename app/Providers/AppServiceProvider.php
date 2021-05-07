@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use App\FormularioData;
+use App\FormularioRegistro;
+use App\FormularioRegistroEstatus;
 use App\Observers\FormularioDataObserver;
+use App\Observers\FormularioRegistroObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,5 +29,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         FormularioData::observe(FormularioDataObserver::class);
+        FormularioRegistro::observe(FormularioRegistroObserver::class);
+
     }
 }

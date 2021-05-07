@@ -522,7 +522,7 @@ class FormularioDailyCheckSeeder extends Seeder
             'nombre'=>'foto',
             'etiqueta'=>'Foto',
             'subetiqueta'=>'(foto instantanea del equipo)',
-            'tipo'=>'file',
+            'tipo'=>'camera',
             'icono'=>'camera-outline',
             'tipo_validacion'=>'file',
             'database_nombre'=>'nombre',

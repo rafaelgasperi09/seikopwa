@@ -80,7 +80,7 @@
             <div class="section-title">OK => Buen Estado , M => Mal Estado , R => Revisar</div>
         </div>
     </div>
-    {{Form::open(array("method" => "POST","action" => "EquiposController@storeDailyCheck","role" => "form",'class'=>'form-horizontal'))}}
+    {{Form::open(array("method" => "POST","action" => "EquiposController@storeDailyCheck","role" => "form",'class'=>'form-horizontal','files'=>true))}}
     {{ Form::hidden('equipo_id',$data->id) }}
     {{ Form::hidden('formulario_id',$formulario->id) }}
     {{ Form::hidden('turno_chequeo_diario',$turno) }}

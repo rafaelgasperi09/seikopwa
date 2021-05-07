@@ -47,6 +47,16 @@
                                 @elseif($campo->tipo == 'file')
                                     {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                     <div id="errorBlock" class="help-block"></div>
+                                @elseif($campo->tipo == 'camera')
+                                    <img id="photo_{{ $campo->nombre}}" class="photo" width="100%"><br/>
+                                    {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*','capture'=>'camera')) }}
+                                   <script>
+                                       const photo_{{ $campo->id }} = document.querySelector('#photo_{{ $campo->nombre }}');
+                                       const camera_{{ $campo->id }} = document.querySelector('#{{ $campo->nombre }}');
+                                       camera_{{ $campo->id }}.addEventListener('change', function(e) {
+                                          photo_{{ $campo->id }}.src = URL.createObjectURL(e.target.files[0]);
+                                       });
+                                   </script>
                                 @elseif($campo->tipo == 'time')
                                     {{ Form::time($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                 @elseif($campo->tipo == 'number')

@@ -59,7 +59,7 @@ class NewDailyCheck extends Notification
     public function toArray($notifiable)
     {
         return [
-            'modulo'    => 'Daily Check',
+            'modulo'    => 'daily_check',
             'title'     => 'Firma pendiente',
             'color'     => 'info',
             'route'     => route('equipos.edit_daily_check',$this->model->id),

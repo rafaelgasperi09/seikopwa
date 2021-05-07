@@ -6,7 +6,7 @@
     </div>
 
     <div class="section mt-1">
-        <h1>Check</h1>
+        <h1>APP</h1>
         <h4>Coloque sus datos para ingresar</h4>
     </div>
     <div class="section mt-1 mb-5">
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="form-links mt-2">
-                <div><a href="{{ url('forgot_password/create') }}" class="text-muted">Olvido su contrasena?</a></div>
+                <div><a href="{{ url('forgot_password/create') }}" class="text-muted">Olvido su contraseña?</a></div>
             </div>
             <div class="form-button-group">
                 <button type="submit" class="btn btn-primary btn-block btn-lg">Ingresar</button><br/>

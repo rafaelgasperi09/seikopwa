@@ -36,7 +36,7 @@ class FormularioDataObserver
     {
         $formularioCampo = FormularioCampo::find($formularioData->formulario_campo_id);
         $formularioData->user_id = current_user()->id;
-        if($formularioCampo->cambio_estatus) { // cambio el estatus a C
+        if($formularioCampo->cambio_estatus && !empty($formularioData->valor)) { // cambio el estatus a C
             $formularioRegistro = FormularioRegistro::find($formularioData->formulario_registro_id);
             $formularioRegistro->estatus = 'C';
 
