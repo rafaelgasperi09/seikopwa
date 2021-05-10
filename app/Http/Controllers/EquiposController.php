@@ -154,6 +154,13 @@ class EquiposController extends BaseController
         }
 
         $formulario = Formulario::findOrFail($data->formulario_id);
+        $formularioData =$data->data()->get()->pluck('valor','formulario_campo_id');
+
+        $datos=array();
+
+        foreach($formulario->campos as $c){
+            $datos[$c->nombre]=$formularioData[$c->id];
+        }
 
         return view('frontend.equipos.edit_daily_check')
             ->with('equipo',$equipo)

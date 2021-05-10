@@ -92,6 +92,5 @@
     {{ Form::close() }}
 
 <script>
-
 </script>
 @stop

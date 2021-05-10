@@ -54,8 +54,11 @@ class DashboardController extends Controller
                     $data['equipos_sin_daily_check_hoy'][$e->id]=$e->numero_parte;
             }
         }
-
-
+        $data['daily_check']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','formularios.id')
+                                                ->where('formularios.nombre','form_montacarga_daily_check')
+                                                ->where('formulario_registro.estatus','P')
+                                                ->whereRaw('equipo_id IN (SELECT id FROM seikowpa.`equipos` WHERE cliente_id=59)')->get();
+       
         //dd($data);
         return view('frontend.dashboard',compact('data'));
     }
