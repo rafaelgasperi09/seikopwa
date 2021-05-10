@@ -13,6 +13,7 @@ class FormularioData extends BaseModel
 
     public function registro(){
         return $this->belongsTo(FormularioRegistro::class,'formulario_registro_id');
+        
     }
 
     public function campo(){

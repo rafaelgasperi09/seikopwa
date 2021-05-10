@@ -22,6 +22,12 @@
 </div>
 <div class="header-large-title">
 @empty(!$subtitle)
-<h3 class="title">{{ $subtitle }}</h3>
+<h3 class="title">
+    @isset($image)
+        <img src="{{ $image }}" alt="image" >
+    @endisset
+    {{ $subtitle }}
+</h3>
 @endempty
+
 </div>

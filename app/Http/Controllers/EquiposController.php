@@ -197,7 +197,7 @@ class EquiposController extends BaseController
                         $valor =  $request->get($campo->nombre);
                         if($campo->nombre == 'semana') $valor = Carbon::now()->startOfWeek()->format('d-m-Y');
                         if($campo->nombre == 'dia_semana') $valor = getDayOfWeek(date('N'));
-                        if($request->get($campo->nombre)){                        
+                        if($request->get($campo->nombre)){
                             if($campo->tipo=='firma'){
                                 $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
                                 $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
@@ -205,18 +205,16 @@ class EquiposController extends BaseController
                                 $valor =  $filename;
                             }
                             if(in_array($campo->tipo,['camera','file'])){
+                                $file = $request->file($campo->nombre);
+                                if($file){
+                                    $img = Image::make($file->path());
+                                    $ext = $file->getClientOriginalExtension();
+                                    $filename = $model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
+                                    $destinationPath = storage_path('/app/public/equipos');
+                                    $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                                    $valor =  $filename;
 
-
-                                    $file = $request->file($campo->nombre);
-                                    if($file){
-                                        $img = Image::make($file->path());
-                                        $ext = $file->getClientOriginalExtension();
-                                        $filename = $model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
-                                        $destinationPath = storage_path('/app/public/equipos');
-                                        $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
-                                        $valor =  $filename;
-        
-                                    }
+                                }
                             }
                         }
 

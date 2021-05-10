@@ -22,6 +22,7 @@ Route::get('/formulario_data', function (Request $request) {
     $data =  \App\FormularioData::with('registro')->with('campo')
     ->when($request->has('formulario_registro_id'),function ($q) use($request){
         $q->where('formulario_registro_id',$request->formulario_registro_id);
+
     })->get();
 
     return response()->json(['success' => true,

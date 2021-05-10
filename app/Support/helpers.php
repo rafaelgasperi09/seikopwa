@@ -1,4 +1,7 @@
 <?php
+
+use Intervention\Image\Facades\Image;
+
 function current_user(){
     if(Sentinel::check()){
         return \App\User::find(\Sentinel::getUser()->id);
@@ -150,5 +153,49 @@ function getListUsersByRol($rol_name){
     }
 
     return $arr;
+}
+
+function  getEquipoIconBySubTipo($sub_tipo_id){
+
+    $icon = url('assets/img/mc2.png');
+    $path = '';
+    switch($sub_tipo_id){
+        case 1:
+          $icon = 'COUNTER RC.JPG';
+          break;
+        case 2:
+            $icon = 'COMBUSTION.JPG';
+            break;
+        case 3:
+            $icon = 'COUNTER FC.JPG';
+            break;
+        case 4:
+            $icon = 'COUNTER SC.JPG';
+            break;
+        case 5:
+            $icon ='PALLET.PNG';
+            break;
+        case 6:
+            $icon = 'REACH.JPG';
+            break;
+        case 7:
+            $icon = 'STOCK PICKER.PNG';
+            break;
+        case 8:
+            $icon = 'WALKIE PALLET.JPG';
+            break;
+        case 9:
+            $icon = 'STACKER.JPG';
+            break;
+        case 10:
+            $icon = 'WAVE.JPG';
+            break;
+    }
+
+    //$img = Image::make(public_path('images/montacargas/'.$icon));
+    //$img->resize(64, 64)->save(public_path('images/montacargas/thumbnails/'.$icon));
+
+     return url('images/montacargas/thumbnails/'.$icon);
+
 }
 ?>

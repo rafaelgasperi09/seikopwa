@@ -28,18 +28,18 @@
                 <td data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ $date->startOfWeek()->format('Y-m-d') }} a {{ $date->endOfWeek()->format('Y-m-d')  }}" aria-describedby="tooltip112589" >
                     {{ $d->semana }}
                 </td>
-                <td>@empty(!$d->Lunes1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Lunes1 }}" data-turno="1" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td>@empty(!$d->Lunes2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Lunes2 }}" data-turno="2" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td>@empty(!$d->Martes1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Martes1 }}" data-turno="1" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td>@empty(!$d->Martes2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Martes2 }}" data-turno="2" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td>@empty(!$d->Miercoles1) <ion-icon class='checkday' name="checkmark-outline"  size="large"style="color:green;" data-id="{{ $d->Miercoles1 }}" data-turno="1" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td>@empty(!$d->Miercoles2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Miercoles2 }}" data-turno="2" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td>@empty(!$d->Jueves1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Jueves1 }}" data-turno="1" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td>@empty(!$d->Jueves2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Jueves2 }}" data-turno="2" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td>@empty(!$d->Viernes1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Viernes1 }}" data-turno="1" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td>@empty(!$d->Viernes2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Viernes2 }}" data-turno="2" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td>@empty(!$d->Sabado1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Sabado1 }}" data-turno="1" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td>@empty(!$d->Sabado2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Sabado2 }}" data-turno="2" data-status="{{ $d->estatus }}"></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                <td>@empty(!$d->Lunes1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Lunes1 }}" data-turno="1" ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                <td>@empty(!$d->Lunes2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Lunes2 }}" data-turno="2" ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                <td>@empty(!$d->Martes1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Martes1 }}" data-turno="1" ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                <td>@empty(!$d->Martes2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Martes2 }}" data-turno="2" ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                <td>@empty(!$d->Miercoles1) <ion-icon class='checkday' name="checkmark-outline"  size="large"style="color:green;" data-id="{{ $d->Miercoles1 }}" data-turno="1" ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                <td>@empty(!$d->Miercoles2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Miercoles2 }}" data-turno="2" ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                <td>@empty(!$d->Jueves1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Jueves1 }}" data-turno="1" ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                <td>@empty(!$d->Jueves2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Jueves2 }}" data-turno="2" ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                <td>@empty(!$d->Viernes1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Viernes1 }}" data-turno="1" ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                <td>@empty(!$d->Viernes2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Viernes2 }}" data-turno="2" ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                <td>@empty(!$d->Sabado1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Sabado1 }}" data-turno="1" ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                <td>@empty(!$d->Sabado2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;" data-id="{{ $d->Sabado2 }}" data-turno="2" ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
                 <td>
                     <a href="{{ url('/equipos/reportes/form_montacarga_daily_check/'.$d->id) }}" target="_blank" class="btn btn-primary btn-sm mr-1 ">
                         <ion-icon name="print-outline" title="Ver detalle"></ion-icon>Imprimir
@@ -79,9 +79,6 @@
         $('.checkday').click(function (){
             var id = $(this).attr('data-id');
             var turno = $(this).attr('data-turno');
-            var status = $(this).attr('data-status');
-
-            console.log('status : '+status);
 
             $.ajax({
                 url: '{{ url("api/formulario_data") }}',
@@ -89,10 +86,11 @@
                 data: "formulario_registro_id="+id,
                 type: 'get',
                 success: function(data) {
-                   
+
                     var html = '';
                     var estatus='';
                     $.each(data.data, function( index, value ) {
+                        console.log(value);
                         if(estatus=='')
                             estatus=value.registro.estatus;
                         valor = value.valor;
@@ -103,13 +101,13 @@
                         }else{
                             valor='';
                         }
-                        
+
                         html +='<dl class="row">\n' +
                                     '<dt class="col-sm-3">'+value.campo.etiqueta+' :</dt>\n' +
                                     '<dd class="col-sm-9">'+valor+'</dd>\n' +
                                '</dl>'
                     });
-                    
+
                     $('#daily_check_modal_body').html(html);
 
                     if(supervisorAccess ){
@@ -117,7 +115,7 @@
                         if(estatus!='C'){
                             $('.modal-footer').html('<a href="daily_check/'+id+'/edit" class="btn btn-success btn-sm"><ion-icon name="create-outline" title="Editar"></ion-icon>Editar</a>');
                         }
-                        
+
                     }
 
                     $('#DailyCheckModal').modal('show');

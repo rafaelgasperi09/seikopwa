@@ -79,9 +79,7 @@
 
                                             <div class="custom-control custom-radio d-inline">
                                              @if($value == $o)
-                                                {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$checked,$readonly)) }}
-                                             @elseif($o=='C')
-                                                {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$checked,$readonly)) }}
+                                                {{ Form::radio($campo->nombre,$o,$value,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$checked,$readonly)) }}
                                              @else
                                                 {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$readonly)) }}
                                              @endif
