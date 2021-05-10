@@ -25,7 +25,7 @@ self.addEventListener("install", event => {
         caches.open(staticCacheName)
             .then(cache => {
                 return cache.addAll(filesToCache);
-            })
+            }),
     )
 });
 
