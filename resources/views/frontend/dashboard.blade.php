@@ -4,7 +4,7 @@
 
     <div class="section mt-2">
     <div class="row">
-        <div class=" mb-2 col-md-3 col-sm-6 col">
+        <div class=" mb-2 col-md-6 col-sm-12 col">
         <?PHP /****  LISTADO DE TIPOS DE EQUIPOS  ************/?>
             <div class="card text-white bg-light">
                 <div class="card-header"><span id="tot_title">Total Equipos </span><h5 class="card-title" id="tot_equipos">0</h5></div>
@@ -45,7 +45,7 @@
         if(count($data['mant_prev'])){ $totmp=count($data['mant_prev']);  }
         if(count($data['serv_tec_p'])){ $totstp=count($data['serv_tec_p']);}
         @endphp
-        <div class=" mb-2 col-md-3 col-sm-6 col">
+        <div class=" mb-2 col-md-6  col-sm-12 col">
             @if(current_user()->isOnGroup('supervisorC') or current_user()->isOnGroup('programador'))
                 <div class="card text-white bg-light">
                     <div class="card-header">
@@ -109,10 +109,9 @@
             @endif  
             @if(current_user()->isOnGroup('operadorC') or current_user()->isOnGroup('programador'))
             @php
-            $totsta=0;
-            if(count($data['serv_tec_a'])){
-                $totsta=count($data['serv_tec_a']);
-            }
+            $totsta=0;$totstpr=0;
+            if(count($data['serv_tec_a'])){ $totsta=count($data['serv_tec_a']);  }
+            if(count($data['serv_tec_pr'])){ $totsta=count($data['serv_tec_pr']);  }
             @endphp
                 <div class="card text-white bg-light">
                     <div class="card-header">
@@ -121,18 +120,38 @@
                     </div>
                     <div class="card-body">
                     @if(count($data['serv_tec_a']))
-                        @foreach($data['serv_tec_a'] as $mp)
+                        @foreach($data['serv_tec_a'] as $sta)
                         <a href="{{ route('equipos.edit_daily_check',array('id'=>$dc->id)) }}"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
                             </i>
-                            <span class="chip-label">{{$mp->equipo()->numero_parte}} </span>
+                            <span class="chip-label">{{$sta->equipo()->numero_parte}} </span>
                         </a>                    
                         @endforeach                     
 
                     @endif
                     </div>
-                </div>             
+                </div>     
+                <br/>
+                <div class="card text-white bg-light">
+                    <div class="card-header">
+                        <span id="tot_title"><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte tecnico<br/>
+                        <span class="card-title" id="tot_equipos">{{$totstpr}} </span>Por cerrar</span>
+                    </div>
+                    <div class="card-body">
+                    @if(count($data['serv_tec_pr']))
+                        @foreach($data['serv_tec_pr'] as $stpr)
+                        <a href="{{ route('equipos.edit_daily_check',array('id'=>$dc->id)) }}"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
+                            <i class="chip-icon">
+                                Ir
+                            </i>
+                            <span class="chip-label">{{$stpr->equipo()->numero_parte}} </span>
+                        </a>                    
+                        @endforeach                     
+
+                    @endif
+                    </div>
+                </div>                       
             @endif
         </div>
 

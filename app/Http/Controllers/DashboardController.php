@@ -21,7 +21,7 @@ class DashboardController extends Controller
         ->where('formularios.tipo',$formType)
         ->where('formulario_registro.estatus',$status)
         ->whereNull('formulario_registro.deleted_at')
-        ->whereRaw('equipo_id IN (SELECT id FROM seikowpa.`equipos` '.$userFilter.') '.$filterExtra)->get();          
+        ->whereRaw('equipo_id IN (SELECT id FROM montacarga.`equipos` '.$userFilter.') '.$filterExtra)->get();          
     
         return $r;
     }
@@ -78,6 +78,8 @@ class DashboardController extends Controller
         $data['serv_tec_p']=$this->getPendings('serv_tec');     
         //servicio tecnico ABIERTAS
         $data['serv_tec_a']=$this->getPendings('serv_tec','A',' AND formulario_registro.tecnico_asignado='.current_user()->id);     
+        //servicio tecnico EN PROCESO
+        $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',' AND formulario_registro.tecnico_asignado='.current_user()->id);     
         //dd($data);
         return view('frontend.dashboard',compact('data'));
     }
