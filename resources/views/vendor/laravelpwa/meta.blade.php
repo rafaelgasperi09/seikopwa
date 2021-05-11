@@ -99,7 +99,7 @@
                 return registration.pushManager.subscribe(subscribeOptions);
             })
             .then((pushSubscription) => {
-                console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
+                //console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
                 storePushSubscription(pushSubscription);
             });
     }
@@ -120,7 +120,7 @@
             return res.json();
         })
         .then((res) => {
-            console.log(res)
+            //console.log(res)
         })
         .catch((err) => {
             console.log(err)

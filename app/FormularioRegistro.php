@@ -47,6 +47,14 @@ class FormularioRegistro extends BaseModel
         $observacion = $solicitud->descripcion;
         $width = 297;
         $height = 420;
+        $y_max_pos = 300;
+        if(in_array($equipo->tipo->name,['stock-picker']))  {
+            $height = 440;
+            $y_max_pos = 332;
+        }elseif(in_array($equipo->tipo->name,['reach'])){
+            $height = 448;
+            $y_max_pos = 343;
+        }
         $pageLayout = array($width, $height);
         $pdf = new TCPDF('P', 'mm', $pageLayout, true, 'UTF-8', false);
         $pdf->SetConfigInforme();
@@ -152,7 +160,7 @@ class FormularioRegistro extends BaseModel
 
         $index = 0;
         //$tabInformes = TabInforme::where('exportable', $numero)->get();
-        $secciones = $formulario->secciones()->whereNotIn('titulo',['Counter-SC','Counter-FC','Counter-RC','Pallet-PE','RR - RD SERIE 52','COMBUSTION','STOCK PICKER'])->get();
+        $secciones = $formulario->secciones()->whereNotIn('titulo',['Counter-SC','Counter-FC','Counter-RC','Pallet-PE','RR - RD SERIE 52','COMBUSTION','STOCK PICKER','WAVE/STACKER/WALKE-PALLET'])->get();
         $cantidad_secciones = $secciones->count();
         //$cantidad_tab = $tabInformes->count();
         $isInforme = 0;
@@ -174,13 +182,14 @@ class FormularioRegistro extends BaseModel
         $y = $pdf->GetY();
         $sw_a = 0;
         $max_y_posicion_ = 0;
+
         $_y = 0;
         $posicion_x_inicial = 90;
         $firmasPath=array();
         foreach($secciones as $i => $seccion) {
             if($seccion->titulo=='Informacion Adicional'){
                 foreach($seccion->campos()->get() as $campo) {
-                    if( $campo->tipo=='firma'){
+                    if( $campo->tipo=='firma' && $this->data()->whereFormularioCampoId($campo->id)->first()){
 
                         if($campo->nombre=='trabajo_recibido_por'){
                             $firmasPath[1] =  storage_path('/app/public/firmas/'.$this->data()->whereFormularioCampoId($campo->id)->first()->valor);
@@ -193,7 +202,7 @@ class FormularioRegistro extends BaseModel
                 }
 
             }else{
-                    if ($index > 4 && $y > 295) {
+                    if ($index > 4 && $y > $y_max_pos-5) {
                         // Modificamos la bandera
                         $sw_a = 1;
 
@@ -242,7 +251,7 @@ class FormularioRegistro extends BaseModel
                         // Verificamos que la posicion Y actual
                         // no pase los 320 de hacerlo se reinician
                         // las posiciones a la indicadas
-                        if ($_y > 300) {
+                        if ($_y > $y_max_pos) {
                             $x = $x + $posicion_x_inicial;
                             $_y = 65;
                         }
@@ -269,7 +278,7 @@ class FormularioRegistro extends BaseModel
 
                     $y = $pdf->GetY();
 
-                    if (($index > 4) && ($y > 300)) {
+                    if (($index > 4) && ($y > $y_max_pos)) {
                         $x = $x + $posicion_x_inicial;
                         $y = 65;
                         $pdf->SetY($y);
@@ -284,7 +293,7 @@ class FormularioRegistro extends BaseModel
         $pdf->SetTextColor(50, 50, 50);
 
         $x = $pdf->GetX();
-        $y = 310;
+        $y = $y_max_pos+10;
         $pdf->SetXY($x, $y);
         $pdf->Cell(85, 6, "Trabajo Recibido por: ", 0, 0, 'L');
         $pdf->Rect($x, $y, 85, 6, 'D', array('all' => $pdf->borderSolid()));
@@ -368,7 +377,8 @@ class FormularioRegistro extends BaseModel
         $formulario = Formulario::find($formularioRegistro->formulario_id);
         $equipo = Equipo::find($formularioRegistro->equipo_id);
         $horometro_campo = $formulario->campos()->whereNombre('horometro')->first();
-        $horometo = $formularioRegistro->data()->whereFormularioCampoId($horometro_campo->id)->first()->valor;
+        $horometo = '';
+        if($formularioRegistro->data()->whereFormularioCampoId($horometro_campo->id)->first()) $horometo = $formularioRegistro->data()->whereFormularioCampoId($horometro_campo->id)->first()->valor;
         $datos=FormularioRegistro::where('ano',$formularioRegistro->ano)->where('semana',$formularioRegistro->semana)->get();
         $data=array();
        //$dias=array('Lunes','Martes','Miercoles','Jueves','Viernes','Sabado');
@@ -499,17 +509,17 @@ class FormularioRegistro extends BaseModel
                 if(isset($vars[$datos["nombre"]])){
                     $valor=$datos[$dias[$xkey]];
                     $pdf->SetXY($vx,$vars[$datos["nombre"]]);
-                  
+
                     if(in_array($datos["nombre"],['operador','ok_supervisor','lectura_horometro'])){
                         $pdf->StartTransform();
                         $pdf->Rotate(90);
                         if($datos["nombre"]=='lectura_horometro')
                             $pdf->Cell(2, 6, $valor, 0, 0, 'L');
                         else{
-                        
+
                             $pdf->Image(storage_path('app/public/firmas/'.$valor),  '', '', 20, 10, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
                         }
-                            
+
                         $pdf->StopTransform();
                     }else{
                         $pdf->Cell(2, 6, $valor, 0, 0, 'L');

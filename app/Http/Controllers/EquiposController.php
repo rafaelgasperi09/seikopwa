@@ -102,13 +102,14 @@ class EquiposController extends BaseController
                                         ->get();
 
         $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
-                                        ->where('equipo_id',$id)->where('formularios.nombre','form_montacarga_servicio_tecnico')->get();
+                                        ->where('equipo_id',$id)->where('formularios.tipo','serv_tec')->get();
 
 
         $form['mp']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
-                                        ->where('equipo_id',$id)->where('formularios.nombre_menu','like',$data->tipo->name)->get();
+                                        ->where('equipo_id',$id)->where('formularios.tipo','mant_prev')->get();
 
 
+        //dd($data->tipo->name);
         return view('frontend.equipos.detail')->with('data',$data)->with('form',$form);
     }
 
@@ -453,7 +454,7 @@ class EquiposController extends BaseController
 
             //aqui hay que ver a quien notificar
 
-            $request->session()->flash('message.success', 'Registro creado con éxito');
+            $request->session()->flash('message.success', 'Registro guardado con éxito');
             return redirect(route('equipos.detail', $equipo_id));
 
         } catch (\Exception $e) {

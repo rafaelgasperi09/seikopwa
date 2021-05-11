@@ -36,7 +36,8 @@ class FormularioDataObserver
     {
         $formularioCampo = FormularioCampo::find($formularioData->formulario_campo_id);
         $formularioData->user_id = current_user()->id;
-        if($formularioCampo->cambio_estatus && !empty($formularioData->valor)) { // cambio el estatus a C
+
+        if($formularioCampo->cambio_estatus && isset($formularioData->valor)) { // cambio el estatus a C
             $formularioRegistro = FormularioRegistro::find($formularioData->formulario_registro_id);
             $formularioRegistro->estatus = 'C';
 
@@ -44,14 +45,19 @@ class FormularioDataObserver
 
                 $formulario = Formulario::find($formularioRegistro->formulario_id);
                 // solo si firmulario es de mantenimiento preventivo
-                if(in_array($formulario->nombre,['form_montacarga_combustion','form_montacarga_counter_fc','form_montacarga_counter_rc','form_montacarga_counter_sc',
-                    'form_montacarga_pallet','form_montacarga_reach','form_montacarga_stock_picker'])){
+                if(in_array($formulario->tipo,['mant_prev'])){
 
+                    $horometro ='';
+                    $obs ='';
                     $horometroCampo = $formularioRegistro->formulario()->first()->campos()->where('nombre','horometro')->first();
-                    $horometro =$formularioRegistro->data()->whereFormularioCampoId($horometroCampo->id)->first()->valor;
+                    if($formularioRegistro->data()->whereFormularioCampoId($horometroCampo->id)->first()){
+                        $horometro =$formularioRegistro->data()->whereFormularioCampoId($horometroCampo->id)->first()->valor;
+                    }
 
                     $obsCampo = $formularioRegistro->formulario()->first()->campos()->where('nombre','observacion')->first();
-                    $obs =$formularioRegistro->data()->whereFormularioCampoId($obsCampo->id)->first()->valor;
+                    if($formularioRegistro->data()->whereFormularioCampoId($obsCampo->id)->first()){
+                        $obs =$formularioRegistro->data()->whereFormularioCampoId($obsCampo->id)->first()->valor;
+                    }
 
                     // crear una solicitud de mantenimiento preventivo en la base de dato de montacarga
                     $equipo = Equipo::find($formularioRegistro->equipo_id);

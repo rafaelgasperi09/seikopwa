@@ -36,9 +36,9 @@ class TCPDF extends \TCPDF
     public function SetConfigInforme()
     {
         $this->SetLineWidth(0.4);
-        $this->SetCreator('Angel Hidalgo');
+        $this->SetCreator('GMPAPP');
         $this->SetFont('helvetica', '', 12);
-        $this->SetAuthor('Grupo 3A Consulting');
+        $this->SetAuthor('Rafael Gasperi');
         $this->SetTitle('Montacargas y Respuestos, S.A.');
         $this->SetSubject('Informe de servicio tecnico');
         $this->SetKeywords('TCPDF, PDF, php, html5, css3, javascrip, jquery');
