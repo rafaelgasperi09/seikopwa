@@ -45,18 +45,29 @@
                                 @elseif($campo->tipo == 'date')
                                     {{ Form::date($campo->nombre,$value,array('class'=>'form-control date',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,$readonly)) }}
                                 @elseif($campo->tipo == 'file')
-                                    {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly)) }}
-                                    <div id="errorBlock" class="help-block"></div>
+                                    <div class="custom-file-upload">
+                                        {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*')) }}
+                                        <label for="{{ $campo->nombre }}" id="{{ $campo->nombre }}">
+                                            <span>
+                                                <strong>
+                                                    <ion-icon name="cloud-upload-outline" role="img" class="md hydrated" aria-label="cloud upload outline"></ion-icon>
+                                                    <i>Subir foto</i>
+                                                </strong>
+                                            </span>
+                                        </label>
+                                    </div>
                                 @elseif($campo->tipo == 'camera')
-                                    <img id="photo_{{ $campo->nombre}}" class="photo" width="100%"><br/>
-                                    {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*','capture'=>'camera')) }}
-                                   <script>
-                                       const photo_{{ $campo->id }} = document.querySelector('#photo_{{ $campo->nombre }}');
-                                       const camera_{{ $campo->id }} = document.querySelector('#{{ $campo->nombre }}');
-                                       camera_{{ $campo->id }}.addEventListener('change', function(e) {
-                                          photo_{{ $campo->id }}.src = URL.createObjectURL(e.target.files[0]);
-                                       });
-                                   </script>
+                                    <div class="custom-file-upload">
+                                        {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*','capture'=>'camera')) }}
+                                        <label for="{{ $campo->nombre }}" id="{{ $campo->nombre }}">
+                                            <span>
+                                                <strong>
+                                                    <ion-icon name="cloud-upload-outline" role="img" class="md hydrated" aria-label="cloud upload outline"></ion-icon>
+                                                    <i>Tomar foto</i>
+                                                </strong>
+                                            </span>
+                                        </label>
+                                    </div>
                                 @elseif($campo->tipo == 'time')
                                     {{ Form::time($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                 @elseif($campo->tipo == 'number')
@@ -79,8 +90,8 @@
                                         @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
 
                                             <div class="custom-control custom-radio d-inline">
-                                             @if($value == $o)
-                                                {{ Form::radio($campo->nombre,$o,$value,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$checked,$readonly)) }}
+                                             @if($value == $o or $o == 'C')
+                                                {{ Form::radio($campo->nombre,$o,$value,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,'checked',$readonly)) }}
                                              @else
                                                 {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$readonly)) }}
                                              @endif
@@ -113,7 +124,7 @@
                         @php $campos=true; @endphp
                     @endif
                 @endforeach
-                @include('frontend.partials.firma')
+
             </div>
         </div>
     </div>
@@ -123,6 +134,7 @@
     }
     @endphp
 @endforeach
+@include('frontend.partials.firma')
 <script>
     {!!$remove!!}
 </script>

@@ -102,13 +102,14 @@ class EquiposController extends BaseController
                                         ->get();
 
         $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
-                                        ->where('equipo_id',$id)->where('formularios.nombre','form_montacarga_servicio_tecnico')->get();
+                                        ->where('equipo_id',$id)->where('formularios.tipo','serv_tec')->get();
 
 
         $form['mp']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
-                                        ->where('equipo_id',$id)->where('formularios.nombre_menu','like',$data->tipo->name)->get();
+                                        ->where('equipo_id',$id)->where('formularios.tipo','mant_prev')->get();
 
 
+        //dd($data->tipo->name);
         return view('frontend.equipos.detail')->with('data',$data)->with('form',$form);
     }
 
@@ -177,6 +178,8 @@ class EquiposController extends BaseController
             $equipo = Equipo::find($equipo_id);
             $model = new FormularioRegistro();
 
+
+
             DB::transaction(function() use($model,$request,$formulario,$equipo){
 
                 $model->formulario_id = $formulario->id;
@@ -197,28 +200,28 @@ class EquiposController extends BaseController
                         $valor =  $request->get($campo->nombre);
                         if($campo->nombre == 'semana') $valor = Carbon::now()->startOfWeek()->format('d-m-Y');
                         if($campo->nombre == 'dia_semana') $valor = getDayOfWeek(date('N'));
-                        if($request->get($campo->nombre)){                        
+                       // if(!empty($valor)){
                             if($campo->tipo=='firma'){
                                 $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
                                 $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
                                 Storage::put('public/firmas/'.$filename,$data);
                                 $valor =  $filename;
                             }
+
                             if(in_array($campo->tipo,['camera','file'])){
+                                $file = $request->file($campo->nombre);
 
+                                if($file){
+                                    $img = Image::make($file->path());
+                                    $ext = $file->getClientOriginalExtension();
+                                    $filename = $model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
+                                    $destinationPath = storage_path('/app/public/equipos');
+                                    $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                                    $valor =  $filename;
 
-                                    $file = $request->file($campo->nombre);
-                                    if($file){
-                                        $img = Image::make($file->path());
-                                        $ext = $file->getClientOriginalExtension();
-                                        $filename = $model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
-                                        $destinationPath = storage_path('/app/public/equipos');
-                                        $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
-                                        $valor =  $filename;
-        
-                                    }
+                                }
                             }
-                        }
+                        //}
 
                         $api_descripcion = '';
                         $form_data = FormularioData::create([
@@ -250,7 +253,7 @@ class EquiposController extends BaseController
             }*/
 
             $u = new User(['id'=>1,'email'=>'rafaelgasperi@clic.com.pa']);
-            $u->notify((new NewDailyCheck($model))->delay($when));
+            //$u->notify((new NewDailyCheck($model))->delay($when));
 
             $request->session()->flash('message.success','Registro creado con éxito');
             return redirect(route('equipos.detail',$equipo_id));
@@ -459,7 +462,7 @@ class EquiposController extends BaseController
 
             //aqui hay que ver a quien notificar
 
-            $request->session()->flash('message.success', 'Registro creado con éxito');
+            $request->session()->flash('message.success', 'Registro guardado con éxito');
             return redirect(route('equipos.detail', $equipo_id));
 
         } catch (\Exception $e) {
