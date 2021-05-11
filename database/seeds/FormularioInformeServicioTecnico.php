@@ -16,6 +16,7 @@ class FormularioInformeServicioTecnico extends Seeder
             'nombre_menu'=>'Informe Servicio Técnico',
             'titulo' => '',
             'creado_por'=>1,
+            'tipo'=>'serv_tec'
         ]);
 
         $form_sec = \App\FormularioSeccion::create([

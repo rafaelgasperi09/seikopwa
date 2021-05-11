@@ -16,6 +16,7 @@ class FormularioMantenimientoPreventivoReach extends Seeder
             'nombre_menu'=>'RR - RD SERIE 52',
             'titulo' => 'Informe de Mantenimento Preventivo',
             'creado_por'=>1,
+            'tipo'=>'mant_prev'
         ]);
 
         $form_sec = \App\FormularioSeccion::create([
