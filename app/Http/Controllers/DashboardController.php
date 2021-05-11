@@ -12,6 +12,21 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    private function getPendings($formType,$status='P',$filterExtra=''){
+        $userFilter='';
+        if(current_user()->crm_cliente_id)
+            $userFilter='WHERE cliente_id='.current_user()->crm_cliente_id;
+
+       $r=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','formularios.id')
+        ->where('formularios.tipo',$formType)
+        ->where('formulario_registro.estatus',$status)
+        ->whereNull('formulario_registro.deleted_at')
+        ->whereRaw('equipo_id IN (SELECT id FROM seikowpa.`equipos` '.$userFilter.') '.$filterExtra)->get();          
+    
+        return $r;
+    }
+
+
     public function index(){
 
         ///////////// EQUIPOS ///////////////////////
@@ -54,11 +69,15 @@ class DashboardController extends Controller
                     $data['equipos_sin_daily_check_hoy'][$e->id]=$e->numero_parte;
             }
         }
-        $data['daily_check']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','formularios.id')
-                                                ->where('formularios.nombre','form_montacarga_daily_check')
-                                                ->where('formulario_registro.estatus','P')
-                                                ->whereRaw('equipo_id IN (SELECT id FROM seikowpa.`equipos` WHERE cliente_id=59)')->get();
        
+        //daily check pendientes de firma supervisor    
+        $data['daily_check']=$this->getPendings('daily_check');     
+        //mantenimientos preventivos pendientes de firma supervisor    
+        $data['mant_prev']=$this->getPendings('mant_prev');     
+        //servicio tecnico PENDIENTES
+        $data['serv_tec_p']=$this->getPendings('serv_tec');     
+        //servicio tecnico ABIERTAS
+        $data['serv_tec_a']=$this->getPendings('serv_tec','A',' AND formulario_registro.tecnico_asignado='.current_user()->id);     
         //dd($data);
         return view('frontend.dashboard',compact('data'));
     }

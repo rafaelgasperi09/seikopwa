@@ -73,6 +73,7 @@
                                         @php
                                             $i=0;
                                             $checked='';
+                                            $value="C";
                                         @endphp
 
                                         @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
@@ -90,14 +91,18 @@
                                         @endforeach
                                     </div>
                                 @elseif($campo->tipo == 'firma'  and \Sentinel::hasAccess($campo->permiso))
-                                    <div id="grupo_{{$campo->nombre}}">
-                                        <img id="img_{{$campo->nombre}}" width="100%" style="max-width:550px" data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}">
-                                        <button type="button" id="btn{{$campo->nombre}}" class="signRequest align-self-center"  data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}">
-                                            <ion-icon name="pencil-outline" size="large"></ion-icon>
-                                            <span>Haga clic para colocar firma </span>
-                                        </button>
-                                        {{ Form::hidden($campo->nombre,'',['id'=>$campo->nombre]) }}
-                                    </div>
+                                    @if($value=="")
+                                        <div id="grupo_{{$campo->nombre}}">
+                                            <img id="img_{{$campo->nombre}}" width="100%" style="max-width:550px" data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}">
+                                            <button type="button" id="btn{{$campo->nombre}}" class="signRequest align-self-center"  data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}">
+                                                <ion-icon name="pencil-outline" size="large"></ion-icon>
+                                                <span>Haga clic para colocar firma </span>
+                                            </button>
+                                            {{ Form::hidden($campo->nombre,'',['id'=>$campo->nombre]) }}
+                                        </div>
+                                    @else
+                                    <img id="img_operador" width="100%" style="max-width:550px" data-toggle="modal"  data-field="operador" src="/storage/firmas/{{$value}}">
+                                    @endif
                                 @endif
                                 <i class="clear-input">
                                     <ion-icon name="{{ $campo->icono }}"></ion-icon>

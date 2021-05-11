@@ -20,6 +20,7 @@ class CreateFomulariosTable extends Migration
             $table->text('titulo')->nullable();
             $table->text('subtitulo')->nullable();
             $table->text('descripcion')->nullable();
+            $table->string('tipo',100);
             $table->integer('creado_por')->unsigned()->nullable()->index();
             $table->foreign('creado_por')->references('id')->on('users')->onDelete('cascade');
             $table->string('clase')->nullable();

@@ -11,7 +11,7 @@
                         <div class="input-wrapper">
                             <label class="label" for="name1">Cliente</label>
                             {{ Form::text('cliente',$data->cliente->nombre,array('class'=>'form-control','readonly')) }}
-                            {{ Form::hidden('cliente_id',$data->id) }}
+                            {{ Form::hidden('cliente_id',$data->cliente_id) }}
                         </div>
                     </div>
                 </div>
