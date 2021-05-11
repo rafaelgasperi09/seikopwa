@@ -16,6 +16,7 @@ class FormularioCargaBateriaSeeder extends Seeder
             'nombre_menu'=>'Control de Carga',
             'titulo' => 'Control de carga en cuarto de baterias',
             'creado_por'=>1,
+            'tipo'=>'carga_bateria'
         ]);
 
         $form_sec = \App\FormularioSeccion::create([

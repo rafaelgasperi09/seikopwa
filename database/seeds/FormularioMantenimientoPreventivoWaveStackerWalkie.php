@@ -16,6 +16,7 @@ class FormularioMantenimientoPreventivoWaveStackerWalkie extends Seeder
             'nombre_menu'=>'Wave/Stacker/Walke Pallet',
             'titulo' => 'Informe de Mantenimento Preventivo',
             'creado_por'=>1,
+            'tipo'=>'mant_prev'
         ]);
 
         $form_sec = \App\FormularioSeccion::create([

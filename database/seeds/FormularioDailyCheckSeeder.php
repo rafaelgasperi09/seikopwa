@@ -16,6 +16,7 @@ class FormularioDailyCheckSeeder extends Seeder
             'nombre_menu'=>'Daily Check',
             'titulo' => 'Control diario de operador de montacargas',
             'creado_por'=>1,
+            'tipo'=>'daily_check'
         ]);
 
         $form_sec = \App\FormularioSeccion::create([
@@ -29,7 +30,7 @@ class FormularioDailyCheckSeeder extends Seeder
             'formulario_seccion_id'=>$form_sec->id,
             'nombre'=>'semana',
             'etiqueta'=>'Semana',
-            'tipo'=>'date',
+            'tipo'=>'otro',
             'icono'=>'calendar-outline',
             'tipo_validacion'=>'fecha',
             'database_nombre'=>'nombre',
@@ -44,7 +45,7 @@ class FormularioDailyCheckSeeder extends Seeder
             'formulario_seccion_id'=>$form_sec->id,
             'nombre'=>'dia_semana',
             'etiqueta'=>'Dia de la Semana',
-            'tipo'=>'date',
+            'tipo'=>'otro',
             'icono'=>'calendar-outline',
             'tipo_validacion'=>'fecha',
             'database_nombre'=>'nombre',
