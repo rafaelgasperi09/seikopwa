@@ -1,7 +1,9 @@
 @extends('frontend.main-layout')
 @section('content')
     @include('frontend.partials.title',array('title'=>'Dashboard','subtitle'=>'Bienvenido(a) a GMPCheck'))
-
+    @php 
+    $totales_title='Total Equipos';
+@endphp   
     <div class="section mt-2">
     <div class="row">
         <div class=" mb-2 col-md-6 col-sm-12 col">
