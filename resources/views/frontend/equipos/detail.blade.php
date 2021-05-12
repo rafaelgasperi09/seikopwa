@@ -152,6 +152,7 @@
                 </div>
             </div>
             @include('frontend.equipos.modal_assign_tecnico')
+            @include('frontend.equipos.modal_status_history')
         </div>
     </div>
 </div>

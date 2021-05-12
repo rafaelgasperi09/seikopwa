@@ -34,6 +34,10 @@ class FormularioRegistro extends BaseModel
         return Equipo::find($this->equipo_id);
     }
 
+    public function tecnicoAsignado(){
+        return $this->belongsTo(User::class,'tecnico_asignado');
+    }
+
     public function estatusHistory(){
         return $this->hasMany(FormularioRegistroEstatus::class);
     }
