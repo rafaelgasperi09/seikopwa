@@ -3,17 +3,16 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
-    <title>GMP Check</title>
+    <title>{{ env('APP_NAME') }}</title>
     <meta name="_token" content="{{ csrf_token() }}">
-    <meta name="description" content="Mobilekit HTML Mobile UI Kit">
-    <meta name="keywords" content="bootstrap 4, mobile template, cordova, phonegap, mobile, html" />
-    <link rel="icon" type="image/png" href="{{ url('assets/img/favicon.png') }}" sizes="32x32">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url('assets/img/icon/192x192.png') }}">
+    <meta name="description" content="Aplicacion para gestion y control de las montacargas de la empresa gmp panama.">
+    <meta name="keywords" content="montacasrgas ,panama, gmp, servicio tecnico, daily check, counter fc,counter sc,counter rc,reach,pallet pe,wave,combustion" />
+    <link rel="icon" type="image/png" href="{{ url('images/AppImages/android/icon-144x144.png') }}" sizes="144x144">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url('images/AppImages/android/icon-192x192.png') }}">
     @yield('css')
     <link rel="stylesheet" href="{{ url('assets/css/style.css?time='.time()) }}">
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">

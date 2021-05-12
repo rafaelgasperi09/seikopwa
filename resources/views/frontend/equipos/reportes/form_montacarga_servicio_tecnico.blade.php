@@ -11,7 +11,7 @@ $cFirma='style="border-bottom:1px solid black"';
       }
       </style>
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
     </head>
     <body>
         <table align="center" width="100%" style="border:0px solid #ddd;">
@@ -98,7 +98,7 @@ $cFirma='style="border-bottom:1px solid black"';
                         <span style="font-size:10px">CAPACIDAD:</span>
                         <br>{{$datos['cab']->equipo()->capacidad_de_carga}}
                         </td>
-                    </tr>        
+                    </tr>
                 </table>
                 <br/><br/>
             </td>
@@ -168,7 +168,7 @@ $cFirma='style="border-bottom:1px solid black"';
                         <td style="font-size:12px">FIRMA DEL CLIENTE</td>
                         <td>&nbsp;</td>
                         <td style="font-size:12px">FIRMA DEL TÉCNICO</td>
-                    </tr>            
+                    </tr>
                 </table>
             </td>
         </tr>
