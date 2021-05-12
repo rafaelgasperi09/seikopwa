@@ -74,7 +74,7 @@ class EquiposController extends BaseController
         return view('frontend.equipos.page')->with('data',$equipos);
     }
 
-    public function detail($id){
+    public function detail(Request $request,$id){
         $data = Equipo::findOrFail($id);
 
         if(!current_user()->can('see',$data)){
@@ -110,7 +110,37 @@ class EquiposController extends BaseController
 
 
         //dd($data->tipo->name);
-        return view('frontend.equipos.detail')->with('data',$data)->with('form',$form);
+        $mostrar=array('det'=>'show','reg'=>'');
+        if($request->get('show')=='rows'){
+            $mostrar['det']='';
+            $mostrar['reg']='show';
+        }
+
+        $tab=array('t1'=>'active','t2'=>'','t3'=>'');
+        $tab_content=array('t1'=>'active show','t2'=>'','t3'=>'');
+        if(!\Sentinel::hasAnyAccess(['equipos.create_daily_check','equipos.edit_daily_check'])){
+            $tab['t1']=''; $tab['t2']='active';
+            $tab_content['t1']=''; $tab['t2']='active show';
+        }
+
+        if($request->get('tab')== 1){
+            $tab=array('t1'=>'active','t2'=>'','t3'=>'');
+            $tab_content=array('t1'=>'active show','t2'=>'','t3'=>'');         
+        }
+
+        if($request->get('tab')== 2){
+            $tab=array('t1'=>'','t2'=>'active','t3'=>'');
+            $tab_content=array('t1'=>'','t2'=>'active show','t3'=>'');
+        }
+
+        if($request->get('tab')== 3){
+            $tab=array('t1'=>'','t2'=>'','t3'=>'active');
+            $tab_content=array('t1'=>'','t2'=>'','t3'=>'active show');
+        }
+
+
+;
+        return view('frontend.equipos.detail')->with('data',$data)->with('form',$form)->with('mostrar',$mostrar)->with('tab',$tab)->with('tab_content',$tab_content);
     }
 
     /******************* FORMS DE DAILY CHECK **************************/

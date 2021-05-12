@@ -48,7 +48,7 @@
         if(count($data['serv_tec_p'])){ $totstp=count($data['serv_tec_p']);}
         @endphp
         <div class=" mb-2 col-md-6  col-sm-12 col">
-            @if(current_user()->isOnGroup('supervisorC') or current_user()->isOnGroup('programador'))
+            @if(current_user()->isOnGroup('supervisor') or current_user()->isOnGroup('programador'))
                 <div class="card text-white bg-light">
                     <div class="card-header">
                         <span id="tot_title"><ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon> Daily Check<br/>
@@ -97,7 +97,7 @@
                     <div class="card-body">
                     @if(count($data['serv_tec_p']))
                         @foreach($data['serv_tec_p'] as $st)
-                        <a href="{{ route('equipos.edit_tecnical_support',array('id'=>$st->id)) }}"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
+                        <a href="{{ route('equipos.detail',array('id'=>$dc->equipo()->id)) }}?show=rows&tab=3"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
                             </i>
@@ -109,7 +109,7 @@
                     </div>
                 </div>   
             @endif  
-            @if(current_user()->isOnGroup('operadorC') or current_user()->isOnGroup('programador'))
+            @if(current_user()->isOnGroup('tecnico') or current_user()->isOnGroup('programador'))
             @php
             $totsta=0;$totstpr=0;
             if(count($data['serv_tec_a'])){ $totsta=count($data['serv_tec_a']);  }
@@ -123,7 +123,7 @@
                     <div class="card-body">
                     @if(count($data['serv_tec_a']))
                         @foreach($data['serv_tec_a'] as $sta)
-                        <a href="{{ route('equipos.edit_daily_check',array('id'=>$dc->id)) }}"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
+                        <a href="{{ route('equipos.detail',array('id'=>$dc->equipo()->id)) }}?show=rows&tab=3"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
                             </i>
@@ -143,7 +143,7 @@
                     <div class="card-body">
                     @if(count($data['serv_tec_pr']))
                         @foreach($data['serv_tec_pr'] as $stpr)
-                        <a href="{{ route('equipos.edit_daily_check',array('id'=>$dc->id)) }}"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
+                        <a href="{{ route('equipos.edit_daily_check',array('id'=>$dc->id)) }}?show=rows&tab=3"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
                             </i>
@@ -154,6 +154,28 @@
                     @endif
                     </div>
                 </div>                       
+            @endif
+            @if(current_user()->isOnGroup('operadorc') or current_user()->isOnGroup('programador'))
+                <div class="card text-white bg-light">
+                    <div class="card-header">
+                        <span id="tot_title">
+                            <ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon>
+                            Equipos pendientes por Daily Check<br/>
+        
+                    </div>
+                    <div class="card-body">
+                    @if(count($data['equipos_sin_daily_check_hoy']) and $count=1)
+                        @foreach($data['equipos_sin_daily_check_hoy'] as $id=>$equipo)
+                            @if( current_user()->isOnGroup('programador') and ($count++<=20))
+                            <a href="{{ route('equipos.detail',array('id'=>$id)) }}?show=rows&tab=1"  class="chip chip-warning chip-media ml-05 mb-05" >
+                                <span class="chip-label">{{$equipo}}</span>
+                            </a>       
+                            @endif             
+                        @endforeach                     
+
+                    @endif
+                    </div>
+                </div> 
             @endif
         </div>
 
