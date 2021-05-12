@@ -41,14 +41,14 @@
                 </div>
             </div>
         </div>
-        @php
-        $totdc=0; $totmp=0;$totstp=0;
-        if(count($data['daily_check'])){  $totdc=count($data['daily_check']); }
-        if(count($data['mant_prev'])){ $totmp=count($data['mant_prev']);  }
-        if(count($data['serv_tec_p'])){ $totstp=count($data['serv_tec_p']);}
-        @endphp
         <div class=" mb-2 col-md-6  col-sm-12 col">
             @if(current_user()->isOnGroup('supervisor') or current_user()->isOnGroup('programador'))
+                @php
+                $totdc=0; $totmp=0;$totstp=0;
+                if(count($data['daily_check'])){  $totdc=count($data['daily_check']); }
+                if(count($data['mant_prev'])){ $totmp=count($data['mant_prev']);  }
+                if(count($data['serv_tec_p'])){ $totstp=count($data['serv_tec_p']);}
+                @endphp
                 <div class="card text-white bg-light">
                     <div class="card-header">
                         <span id="tot_title"><ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon> Daily Check<br/>
@@ -91,8 +91,8 @@
                 <br/>
                 <div class="card text-white bg-light">
                     <div class="card-header">
-                        <span id="tot_title"><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte tecnico<br/>
-                        <span class="card-title" id="tot_equipos">{{$totstp}} </span>Pendientes por asignar tecnico</span>
+                        <span id="tot_title"><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
+                        <span class="card-title" id="tot_equipos">{{$totstp}} </span>Pendientes por asignar técnico</span>
                     </div>
                     <div class="card-body">
                     @if(count($data['serv_tec_p']))
@@ -117,7 +117,7 @@
             @endphp
                 <div class="card text-white bg-light">
                     <div class="card-header">
-                        <span id="tot_title"><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte tecnico<br/>
+                        <span id="tot_title"><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
                         <span class="card-title" id="tot_equipos">{{$totsta}} </span>Pendientes de iniciar</span>
                     </div>
                     <div class="card-body">
@@ -137,7 +137,7 @@
                 <br/>
                 <div class="card text-white bg-light">
                     <div class="card-header">
-                        <span id="tot_title"><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte tecnico<br/>
+                        <span id="tot_title"><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
                         <span class="card-title" id="tot_equipos">{{$totstpr}} </span>Por cerrar</span>
                     </div>
                     <div class="card-body">
@@ -177,6 +177,31 @@
                     </div>
                 </div> 
             @endif
+            
+            @if(current_user()->isOnGroup('supervisorc') or current_user()->isOnGroup('programador'))
+                <div class="card text-white bg-light">
+                    <div class="card-header">
+                        <span id="tot_title">
+                            <ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon>
+                            Últimos reportes de servicio técnico<br/>
+        
+                    </div>
+                    <div class="card-body">
+                    @if(count($data['serv_tec_10']) and $count=1)
+                        @foreach($data['serv_tec_10'] as $st10)
+
+                           <a href="{{ route('equipos.detail',array('id'=>$st10->equipo()->id)) }}?show=rows&tab=3" class="chip  chip-media ml-05 mb-05"  style="width:100%">
+                                <i class="chip-icon bg-{!!getStatusBgColor($st10->estatus)!!}">
+                                    {{$st10->estatus}} 
+                                </i>
+                                <span class="chip-label">{{$st10->equipo()->numero_parte}}</span>
+                            </a>   
+                        @endforeach                     
+
+                    @endif
+                    </div>
+                </div> 
+            @endif            
         </div>
 
     </div>

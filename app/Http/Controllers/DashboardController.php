@@ -12,16 +12,16 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    private function getPendings($formType,$status='P',$filterExtra=''){
+    private function getPendings($formType,$status='P',$filterExtra='',$limit=100){
         $userFilter='';
         if(current_user()->crm_cliente_id)
             $userFilter='WHERE cliente_id='.current_user()->crm_cliente_id;
 
        $r=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','formularios.id')
         ->where('formularios.tipo',$formType)
-        ->where('formulario_registro.estatus',$status)
+        ->whereRaw("formulario_registro.estatus='".$status."'")
         ->whereNull('formulario_registro.deleted_at')
-        ->whereRaw('equipo_id IN (SELECT id FROM montacarga.`equipos` '.$userFilter.') '.$filterExtra)->get();          
+        ->whereRaw('equipo_id IN (SELECT id FROM montacarga.`equipos` '.$userFilter.') '.$filterExtra)->take($limit)->get();          
     
         return $r;
     }
@@ -80,7 +80,9 @@ class DashboardController extends Controller
         $data['serv_tec_a']=$this->getPendings('serv_tec','A',' AND formulario_registro.tecnico_asignado='.current_user()->id);     
         //servicio tecnico EN PROCESO
         $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',' AND formulario_registro.tecnico_asignado='.current_user()->id);   
-
+         //servicio tecnico EN PROCESO
+        $data['serv_tec_10']=$this->getPendings('serv_tec',"P' or formulario_registro.estatus<>'",' ',10);   
+      
         return view('frontend.dashboard',compact('data'));
     }
 }
