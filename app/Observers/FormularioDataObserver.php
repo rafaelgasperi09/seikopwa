@@ -60,6 +60,8 @@ class FormularioDataObserver
                     }
 
                     // crear una solicitud de mantenimiento preventivo en la base de dato de montacarga
+                    $user_id = 1;
+                    if(!empty(current_user()->crm_user_id)) $user_id = current_user()->crm_user_id;
                     $equipo = Equipo::find($formularioRegistro->equipo_id);
                     $solicitud = new MontacargaSolicitud();
                     $consecutivo = MontacargaConsecutivo::where('consecutivo_opcion','mantenimiento-preventivo')->first();

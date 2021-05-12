@@ -32,3 +32,20 @@ Route::get('/formulario_data', function (Request $request) {
         'total'=> $data->count(),
         'data' => $data]);
 });
+
+Route::get('/formulario_registro_estatus', function (Request $request) {
+
+    $data =  \App\FormularioRegistroEstatus::with('registro')
+        ->with('user')
+        ->when($request->has('formulario_registro_id'),function ($q) use($request){
+            $q->where('formulario_registro_id',$request->formulario_registro_id);
+
+        })->get();
+
+    return response()->json(['success' => true,
+        "draw"=> 1,
+        "recordsTotal"=> $data->count(),
+        "recordsFiltered"=> $data->count(),
+        'total'=> $data->count(),
+        'data' => $data]);
+});

@@ -125,7 +125,7 @@ function getFormFields($formName){
 
 function getStatusHtml($status){
 
-    $estados=array('P'=>'Pendiente','A'=>'Abierto','PR'=>'EN PROCESO','C'=>'Cerrado',''=>'N/A');
+    $estados=array('P'=>'PENDIENTE','A'=>'ASIGNADO','PR'=>'EN PROCESO','C'=>'CERRADO',''=>'N/A');
     $colores=array('P'=>'warning','A'=>'success','PR'=>'primary','C'=>'secondary','ligth');
     $html='<span class="badge badge-'.$colores[$status].'">'.$estados[$status].'</span>';
     return $html;
