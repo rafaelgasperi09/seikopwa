@@ -97,7 +97,7 @@
                     <div class="card-body">
                     @if(count($data['serv_tec_p']))
                         @foreach($data['serv_tec_p'] as $st)
-                        <a href="{{ route('equipos.detail',array('id'=>$dc->equipo()->id)) }}?show=rows&tab=3"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
+                        <a href="{{ route('equipos.detail',array('id'=>$st->equipo()->id)) }}?show=rows&tab=3"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
                             </i>
@@ -123,7 +123,7 @@
                     <div class="card-body">
                     @if(count($data['serv_tec_a']))
                         @foreach($data['serv_tec_a'] as $sta)
-                        <a href="{{ route('equipos.detail',array('id'=>$dc->equipo()->id)) }}?show=rows&tab=3"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
+                        <a href="{{ route('equipos.detail',array('id'=>$sta->equipo()->id)) }}?show=rows&tab=3"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
                             </i>
@@ -143,7 +143,7 @@
                     <div class="card-body">
                     @if(count($data['serv_tec_pr']))
                         @foreach($data['serv_tec_pr'] as $stpr)
-                        <a href="{{ route('equipos.edit_daily_check',array('id'=>$dc->id)) }}?show=rows&tab=3"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
+                        <a href="{{ route('equipos.edit_daily_check',array('id'=>$stpr->id)) }}?show=rows&tab=3"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
                             </i>
