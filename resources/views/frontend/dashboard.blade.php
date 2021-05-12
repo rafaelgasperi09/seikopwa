@@ -167,7 +167,7 @@
                     @if(count($data['equipos_sin_daily_check_hoy']) and $count=1)
                         @foreach($data['equipos_sin_daily_check_hoy'] as $id=>$equipo)
                             @if( current_user()->isOnGroup('programador') and ($count++<=20))
-                            <a href="{{ route('equipos.detail',array('id'=>$id)) }}?show=rows&tab=1"  class="chip chip-warning chip-media ml-05 mb-05" >
+                            <a href="{{ route('equipos.detail',array('id'=>$st->equipo()->id)) }}?show=rows&tab=3" class="chip chip-warning chip-media ml-05 mb-05" >
                                 <span class="chip-label">{{$equipo}}</span>
                             </a>       
                             @endif             
