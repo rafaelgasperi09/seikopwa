@@ -84,14 +84,14 @@
                                         @php
                                             $i=0;
                                             $checked='';
-                                            $value="C";
+                                            if(current_user()->isOnGroup('programador') && empty($valor)) $value="C";
                                         @endphp
 
                                         @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
 
                                             <div class="custom-control custom-radio d-inline">
-                                             @if($value == $o or $o == 'C')
-                                                {{ Form::radio($campo->nombre,$o,$value,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,'checked',$readonly)) }}
+                                             @if($value == $o)
+                                                {{ Form::radio($campo->nombre,$o,$value,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$checked,$readonly)) }}
                                              @else
                                                 {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$readonly)) }}
                                              @endif
