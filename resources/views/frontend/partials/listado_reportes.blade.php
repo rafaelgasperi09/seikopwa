@@ -4,10 +4,9 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Creado por</th>
-            <th  scope="col">Fecha creacion</th>
-            <th  scope="col">Actualizado</th>
-            <th  scope="col">Estado</th>
-            <th  scope="col">Acciones</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acciones</th>
         </tr>
     </thead>
     <tbody>

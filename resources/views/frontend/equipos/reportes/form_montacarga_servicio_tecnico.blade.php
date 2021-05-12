@@ -99,7 +99,7 @@ $cFirma='style="border-bottom:1px solid black"';
                         <span style="font-size:10px">CAPACIDAD:</span>
                         <br>{{$datos['cab']->equipo()->capacidad_de_carga}}
                         </td>
-                    </tr>        
+                    </tr>
                 </table>
                 <br/><br/>
             </td>
@@ -169,7 +169,7 @@ $cFirma='style="border-bottom:1px solid black"';
                         <td style="font-size:12px">FIRMA DEL CLIENTE</td>
                         <td>&nbsp;</td>
                         <td style="font-size:12px">FIRMA DEL TÉCNICO</td>
-                    </tr>            
+                    </tr>
                 </table>
             </td>
         </tr>

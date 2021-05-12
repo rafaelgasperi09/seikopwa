@@ -63,6 +63,7 @@
                     }else if(value.estatus == 'C'){
                         html +='<div class="dot bg-secundary"></div>\n';
                         estatus = 'CERRADO';
+                        mensaje = usuario+' dio por finalizada las tareas de soporte tecnico ';
                     }
 
 
