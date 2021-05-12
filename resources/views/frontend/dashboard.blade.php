@@ -113,7 +113,7 @@
             @php
             $totsta=0;$totstpr=0;
             if(count($data['serv_tec_a'])){ $totsta=count($data['serv_tec_a']);  }
-            if(count($data['serv_tec_pr'])){ $totsta=count($data['serv_tec_pr']);  }
+            if(count($data['serv_tec_pr'])){ $totstpr=count($data['serv_tec_pr']);  }
             @endphp
                 <div class="card text-white bg-light">
                     <div class="card-header">
@@ -143,7 +143,7 @@
                     <div class="card-body">
                     @if(count($data['serv_tec_pr']))
                         @foreach($data['serv_tec_pr'] as $stpr)
-                        <a href="{{ route('equipos.edit_daily_check',array('id'=>$stpr->id)) }}?show=rows&tab=3"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
+                        <a href="{{ route('equipos.detail',array('id'=>$stpr->equipo()->id)) }}?show=rows&tab=3"  class="chip chip-danger chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
                             </i>
@@ -167,7 +167,7 @@
                     @if(count($data['equipos_sin_daily_check_hoy']) and $count=1)
                         @foreach($data['equipos_sin_daily_check_hoy'] as $id=>$equipo)
                             @if( current_user()->isOnGroup('programador') and ($count++<=20))
-                            <a href="{{ route('equipos.detail',array('id'=>$st->equipo()->id)) }}?show=rows&tab=3" class="chip chip-warning chip-media ml-05 mb-05" >
+                            <a href="{{ route('equipos.detail',array('id'=>$id)) }}?show=rows&tab=1" class="chip chip-warning chip-media ml-05 mb-05" >
                                 <span class="chip-label">{{$equipo}}</span>
                             </a>       
                             @endif             

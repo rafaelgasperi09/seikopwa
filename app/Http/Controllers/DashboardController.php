@@ -69,7 +69,7 @@ class DashboardController extends Controller
                     $data['equipos_sin_daily_check_hoy'][$e->id]=$e->numero_parte;
             }
         }
- 
+        //dd($data['equipos_sin_daily_check_hoy'] );
         //daily check pendientes de firma supervisor    
         $data['daily_check']=$this->getPendings('daily_check');     
         //mantenimientos preventivos pendientes de firma supervisor    
@@ -79,8 +79,8 @@ class DashboardController extends Controller
         //servicio tecnico ABIERTAS
         $data['serv_tec_a']=$this->getPendings('serv_tec','A',' AND formulario_registro.tecnico_asignado='.current_user()->id);     
         //servicio tecnico EN PROCESO
-        $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',' AND formulario_registro.tecnico_asignado='.current_user()->id);     
-       // dd($data);
+        $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',' AND formulario_registro.tecnico_asignado='.current_user()->id);   
+
         return view('frontend.dashboard',compact('data'));
     }
 }
