@@ -588,7 +588,7 @@ function recconect(){
 
                 if(code.length>0){
                     console.log('User persistence code :'+code);
-                    fetch('login_persistence/'+code,{
+                    fetch(home_path+'/login_persistence/'+code,{
                         method:'post',
                         headers: {
                             'X-CSRF-Token': _token

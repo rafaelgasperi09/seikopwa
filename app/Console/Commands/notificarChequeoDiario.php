@@ -41,6 +41,8 @@ class notificarChequeoDiario extends Command
      */
     public function handle()
     {
+
+        $this->info('------------------START CHEQUEO DIARIO JOB-------------------');
         $notificados['users'] = array();
         foreach (User::whereNotNull('crm_cliente_id')->get() as $user){
 
