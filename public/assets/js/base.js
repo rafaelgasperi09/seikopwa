@@ -11,10 +11,10 @@
 // Page Loader with preload
 $(document).ready(function () {
     setTimeout(() => {
-        $("#loader").fadeToggle(250);
+        $("#loader").fadeToggle(50);
     }, 700); // hide delay when page load
 
-    recconect();
+    //recconect();
 });
 ///////////////////////////////////////////////////////////////////////////
 
