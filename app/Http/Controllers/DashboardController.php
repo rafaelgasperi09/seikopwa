@@ -64,7 +64,7 @@ class DashboardController extends Controller
         if(current_user()->isCliente() or true){
             $formularioDailyCheck = Formulario::whereNombre('form_montacarga_daily_check')->first();
             $equipo_daily_check_today = FormularioRegistro::whereFormularioId($formularioDailyCheck->id)
-                ->whereRaw("date_format(created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'")->take(20)
+                ->whereRaw("date_format(created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'")
                 ->pluck('equipo_id')->toArray();
             foreach ($equipos as $e){
                 
