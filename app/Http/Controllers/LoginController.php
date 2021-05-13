@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 use Sentinel;
 use Illuminate\Http\Request;
 
@@ -73,7 +75,7 @@ class LoginController extends Controller
     }
 
     public function logout(){
-
+        Session::flush();
         Sentinel::logout();
         return redirect(route('login'));
     }
