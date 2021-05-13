@@ -6,7 +6,7 @@
 @endphp   
     <div class="section mt-2">
     <div class="row">
-        <div class=" mb-2 col-md-6 col-sm-12 col">
+        <div class=" mb-2 col-md-6 col">
         <?PHP /****  LISTADO DE TIPOS DE EQUIPOS  ************/?>
             <div class="card text-white bg-light">
                 <div class="card-header"><span id="tot_title">Total Equipos </span><h5 class="card-title" id="tot_equipos">0</h5></div>
@@ -41,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <div class=" mb-2 col-md-6  col-sm-12 col">
+        <div class=" mb-2 col-md-6   col">
             @if(current_user()->isOnGroup('supervisor') or current_user()->isOnGroup('programador'))
                 @php
                 $totdc=0; $totmp=0;$totstp=0;
@@ -164,13 +164,11 @@
         
                     </div>
                     <div class="card-body">
-                    @if(count($data['equipos_sin_daily_check_hoy']) and $count=1)
-                        @foreach($data['equipos_sin_daily_check_hoy'] as $id=>$equipo)
-                            @if( current_user()->isOnGroup('programador') and ($count++<=20))
+                    @if(count($data['equipos_sin_daily_check_hoy']))
+                        @foreach($data['equipos_sin_daily_check_hoy'] as $id=>$equipo)    
                             <a href="{{ route('equipos.detail',array('id'=>$id)) }}?show=rows&tab=1" class="chip chip-warning chip-media ml-05 mb-05" >
                                 <span class="chip-label">{{$equipo}}</span>
                             </a>       
-                            @endif             
                         @endforeach                     
 
                     @endif

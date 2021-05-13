@@ -19,7 +19,9 @@ class DashboardController extends Controller
 
        $r=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','formularios.id')
         ->where('formularios.tipo',$formType)
-        ->whereRaw("formulario_registro.estatus='".$status."'")
+        ->When(!empty($status),function($q)use($status){
+            $q->where('formulario_registro.estatus',$status);
+        })
         ->whereNull('formulario_registro.deleted_at')
         ->whereRaw('equipo_id IN (SELECT id FROM montacarga.`equipos` '.$userFilter.') '.$filterExtra)->take($limit)->get();          
     
@@ -62,12 +64,17 @@ class DashboardController extends Controller
         if(current_user()->isCliente() or true){
             $formularioDailyCheck = Formulario::whereNombre('form_montacarga_daily_check')->first();
             $equipo_daily_check_today = FormularioRegistro::whereFormularioId($formularioDailyCheck->id)
-                ->whereRaw("date_format(created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'")
+                ->whereRaw("date_format(created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'")->take(20)
                 ->pluck('equipo_id')->toArray();
             foreach ($equipos as $e){
-                if(!in_array($e->id,$equipo_daily_check_today))
+                
+                if(!in_array($e->id,$equipo_daily_check_today)){
                     $data['equipos_sin_daily_check_hoy'][$e->id]=$e->numero_parte;
+                }
+                   
             }
+         
+            
         }
         //dd($data['equipos_sin_daily_check_hoy'] );
         //daily check pendientes de firma supervisor    
@@ -81,7 +88,7 @@ class DashboardController extends Controller
         //servicio tecnico EN PROCESO
         $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',' AND formulario_registro.tecnico_asignado='.current_user()->id);   
          //servicio tecnico EN PROCESO
-        $data['serv_tec_10']=$this->getPendings('serv_tec',"P' or formulario_registro.estatus<>'",' ',10);   
+        $data['serv_tec_10']=$this->getPendings('serv_tec','','',10);   
       
         return view('frontend.dashboard',compact('data'));
     }
