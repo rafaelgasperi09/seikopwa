@@ -41,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <div class=" mb-2 col-md-6   col">
+        <div class=" mb-2 col-md-6 col">
             @if(current_user()->isOnGroup('supervisor') or current_user()->isOnGroup('programador'))
                 @php
                 $totdc=0; $totmp=0;$totstp=0;
