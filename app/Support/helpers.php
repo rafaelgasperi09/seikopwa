@@ -130,7 +130,10 @@ function getStatusHtml($status){
     $html='<span class="badge badge-'.$colores[$status].'">'.$estados[$status].'</span>';
     return $html;
 }
-
+function getStatusBgColor($status){
+    $colores=array('P'=>'warning','A'=>'success','PR'=>'primary','C'=>'secondary','ligth');
+    return $colores[$status];
+}
 function getUsersByRol($rol_name){
 
 $arr=array();

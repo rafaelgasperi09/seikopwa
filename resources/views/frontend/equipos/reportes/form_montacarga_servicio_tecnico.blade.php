@@ -10,7 +10,6 @@ $cFirma='style="border-bottom:1px solid black"';
         margin-top:0px;
       }
       </style>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
 
     </head>
     <body>
@@ -19,15 +18,17 @@ $cFirma='style="border-bottom:1px solid black"';
             <td>
             <table align="center" width="100%">
                 <tr>
-                    <td width="15%" valign="bottom" align="left">
-                        <h3>No. <span style="color:red">{{$datos['cab']->id}}</span></h3>
+                     <td align="center">
+                        <span style="font-size:24px;font-weight:bold">MONTACARGAS Y REPUESTOS, S.A.<span><br/>
+                        <span style="font-size:16px;font-weight:normal">"Satisfacción y confianza"<span><br/>
+                        <span style="font-size:20px;font-weight:bold">INFORME DE SERVICIO TÉCNICO<span>
                     </td>
-                    <td align="center">
-                        <h2>MONTACARGAS Y REPUESTOS, S.A.</h2>
-                        <h4>"Satisfacción y confianza"</h4>
-                        <h3>INFORME DE SERVICIO TÉCNICO</h3>
+                </tr>
+                <tr>
+                    <td align="left">
+                        <p style="font-size:20px;font-weight:bold;margin-bottom:5px">No. <span style="color:red">{{$datos['cab']->id}}</span></p>
                     </td>
-                    <td width="15%"></td>
+                        
                 </tr>
             </table>
             </td>
@@ -177,7 +178,7 @@ $cFirma='style="border-bottom:1px solid black"';
                 <table align="center" width="60%">
                     <tr>
 
-                        <td align="center" style="font-style:italic;font-size:14px">
+                        <td align="center" style="font-style:italic;font-size:12px">
                             <br/><br/>
                             Urbanizacion Los Ángeles Calle 62 Oeste Edificio GMP E-8<br/>
                             Teléfono:236-8079 // 236-0412 // 236-3544 • Fax: 236-0455<br/>
