@@ -1,9 +1,9 @@
 @extends('frontend.main-layout')
 @section('content')
     @include('frontend.partials.title',array('title'=>'Dashboard','subtitle'=>'Bienvenido(a) a GMPCheck'))
-    @php 
+    @php
     $totales_title='Total Equipos';
-@endphp   
+@endphp
     <div class="section mt-2">
     <div class="row">
         <div class=" mb-2 col-md-6 col">
@@ -13,9 +13,9 @@
                 <div class="card-body">
                 @php $totales=0;  @endphp
                 @foreach($data['total_equipos'] as $sub_equipos)
-                    @foreach($sub_equipos['tipos'] as $tipo)        
+                    @foreach($sub_equipos['tipos'] as $tipo)
                     @php $totales+=$tipo['total'];  @endphp
-                    <a href="{{ route('equipos.tipo',array($sub_equipos['name'],$tipo['tipo_id'])) }}" 
+                    <a href="{{ route('equipos.tipo',array($sub_equipos['name'],$tipo['tipo_id'])) }}"
                     class="chip chip-media ml-05 mb-05" style="width:100%">
                         <i class="chip-icon bg-primary">
                             {{ $tipo['total'] }}
@@ -23,20 +23,20 @@
                         <span class="chip-label">{{ $tipo['tipo'] }}</span>
                     </a>
                     @endforeach
-                @endforeach         
-                <?PHP /****  LISTADO DE BATERIAS  ************/?>   
+                @endforeach
+                <?PHP /****  LISTADO DE BATERIAS  ************/?>
                 @if(\Sentinel::hasAccess('baterias.index'))
-                <a href="{{ route('baterias.index') }}" 
+                <a href="{{ route('baterias.index') }}"
                     class="chip chip-media ml-05 mb-05" style="width:100%">
                         <i class="chip-icon bg-success">
                             {{ $data['total_baterias'] }}
                         </i>
                         <span class="chip-label">Baterías</span>
-                    </a>   
-                    @php 
-                        $totales+=$data['total_baterias'];  
+                    </a>
+                    @php
+                        $totales+=$data['total_baterias'];
                         $totales_title='Total Equipos + Baterías';
-                    @endphp   
+                    @endphp
                 @endif
                 </div>
             </div>
@@ -62,12 +62,12 @@
                                 Ir
                             </i>
                             <span class="chip-label">{{$dc->equipo()->numero_parte}} - turno {{$dc->turno_chequeo_diario}}</span>
-                        </a>                    
-                        @endforeach                     
+                        </a>
+                        @endforeach
 
                     @endif
                     </div>
-                </div>     
+                </div>
                 <br/>
                 <div class="card text-white bg-light">
                     <div class="card-header">
@@ -82,12 +82,12 @@
                                 Ir
                             </i>
                             <span class="chip-label">{{$mp->equipo()->numero_parte}} </span>
-                        </a>                    
-                        @endforeach                     
+                        </a>
+                        @endforeach
 
                     @endif
                     </div>
-                </div>  
+                </div>
                 <br/>
                 <div class="card text-white bg-light">
                     <div class="card-header">
@@ -102,13 +102,13 @@
                                 Ir
                             </i>
                             <span class="chip-label">{{$st->equipo()->numero_parte}} </span>
-                        </a>                    
-                        @endforeach                     
+                        </a>
+                        @endforeach
 
                     @endif
                     </div>
-                </div>   
-            @endif  
+                </div>    <br/>
+            @endif
             @if(current_user()->isOnGroup('tecnico') or current_user()->isOnGroup('programador'))
             @php
             $totsta=0;$totstpr=0;
@@ -128,12 +128,12 @@
                                 Ir
                             </i>
                             <span class="chip-label">{{$sta->equipo()->numero_parte}} </span>
-                        </a>                    
-                        @endforeach                     
+                        </a>
+                        @endforeach
 
                     @endif
                     </div>
-                </div>     
+                </div>
                 <br/>
                 <div class="card text-white bg-light">
                     <div class="card-header">
@@ -148,12 +148,12 @@
                                 Ir
                             </i>
                             <span class="chip-label">{{$stpr->equipo()->numero_parte}} </span>
-                        </a>                    
-                        @endforeach                     
+                        </a>
+                        @endforeach
 
                     @endif
                     </div>
-                </div>                       
+                </div> <br/>
             @endif
             @if(current_user()->isOnGroup('operadorc') or current_user()->isOnGroup('programador'))
                 <div class="card text-white bg-light">
@@ -161,28 +161,28 @@
                         <span id="tot_title">
                             <ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon>
                             Equipos pendientes por Daily Check<br/>
-        
+
                     </div>
                     <div class="card-body">
                     @if(count($data['equipos_sin_daily_check_hoy']))
-                        @foreach($data['equipos_sin_daily_check_hoy'] as $id=>$equipo)    
+                        @foreach($data['equipos_sin_daily_check_hoy'] as $id=>$equipo)
                             <a href="{{ route('equipos.detail',array('id'=>$id)) }}?show=rows&tab=1" class="chip chip-warning chip-media ml-05 mb-05" >
                                 <span class="chip-label">{{$equipo}}</span>
-                            </a>       
-                        @endforeach                     
+                            </a>
+                        @endforeach
 
                     @endif
                     </div>
-                </div> 
+                </div>  <br/>
             @endif
-            
+
             @if(current_user()->isOnGroup('supervisorc') or current_user()->isOnGroup('programador'))
                 <div class="card text-white bg-light">
                     <div class="card-header">
                         <span id="tot_title">
                             <ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon>
                             Últimos reportes de servicio técnico<br/>
-        
+                        </span>
                     </div>
                     <div class="card-body">
                     @if(count($data['serv_tec_10']) and $count=1)
@@ -190,16 +190,16 @@
 
                            <a href="{{ route('equipos.detail',array('id'=>$st10->equipo()->id)) }}?show=rows&tab=3" class="chip  chip-media ml-05 mb-05"  style="width:100%">
                                 <i class="chip-icon bg-{!!getStatusBgColor($st10->estatus)!!}">
-                                    {{$st10->estatus}} 
+                                    {{$st10->estatus}}
                                 </i>
                                 <span class="chip-label">{{$st10->equipo()->numero_parte}}</span>
-                            </a>   
-                        @endforeach                     
+                            </a>
+                        @endforeach
 
                     @endif
                     </div>
-                </div> 
-            @endif   
+                </div>  <br/>
+            @endif
 
             @if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador'))
                 <div class="card text-white bg-light">
@@ -207,45 +207,59 @@
                         <span id="tot_title">
                             <ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon>
                             Daily Check de equipos
-        
+                        </span>
                     </div>
                     <div class="card-body">
                     @if(count($data['global_sin_daily_check_hoy']) )
-                        @foreach($data['global_sin_daily_check_hoy'] as $dce)
-
-                           <a href="#" class="chip  chip-media ml-05 mb-05"  style="width:100%;background-color:#e4f0ff">
-                                <i class="chip-icon2 bg-primary">
-                                    {{$dce["equipos"]}} 
-                                </i>
-                                @if($dce["daily_check"]==0)
-                                <i class="chip-icon bg-danger">
-                                    {{$dce["daily_check"]}} 
-                                </i>
-                                @elseif($dce["equipos"]>$dce["daily_check"])
-                                <i class="chip-icon bg-warning">
-                                    {{$dce["daily_check"]}} 
-                                </i>
-                                @else
-                                <i class="chip-icon bg-success">
-                                    {{$dce["daily_check"]}} 
-                                </i>
-                                @endif
-                                <span class="chip-label">{{$dce["nombre"]}}</span>
-                            </a>   
-                        @endforeach                     
-
+                        <table class="table table-striped datatable responsive">
+                            <thead>
+                            <tr>
+                                <th scope="col">Cliente</th>
+                            </tr>
+                            </thead>
+                            @foreach($data['global_sin_daily_check_hoy'] as $dce)
+                            <tr>
+                                <td>
+                                    <a href="#" class="chip  chip-media ml-05 mb-05"  style="width:100%;background-color:#e4f0ff">
+                                        <i class="chip-icon2 bg-primary">
+                                            {{$dce["equipos"]}}
+                                        </i>
+                                        @if($dce["daily_check"]==0)
+                                            <i class="chip-icon bg-danger">
+                                                {{$dce["daily_check"]}}
+                                            </i>
+                                        @elseif($dce["equipos"]>$dce["daily_check"])
+                                            <i class="chip-icon bg-warning">
+                                                {{$dce["daily_check"]}}
+                                            </i>
+                                        @else
+                                            <i class="chip-icon bg-success">
+                                                {{$dce["daily_check"]}}
+                                            </i>
+                                        @endif
+                                        <span class="chip-label">{{$dce["nombre"]}}</span>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </table>
                     @endif
                     </div>
-                </div> 
-            @endif            
-                     
+                </div>  <br/>
+            @endif
+
         </div>
 
     </div>
     <script>
         $('#tot_equipos').html("{{$totales}}");
         $('#tot_title').html("{{$totales_title}}");
-
+        $(document).ready( function () {
+            $('.datatable').DataTable({
+                /*"bFilter": false,*/
+                /*"lengthChange": false*/
+            });
+        } );
     </script>
     </div>
 
