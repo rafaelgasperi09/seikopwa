@@ -7,6 +7,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\WebPush\WebPushChannel;
+use NotificationChannels\WebPush\WebPushMessage;
 
 class NewTecnicalSupportAssignTicket extends Notification
 {
@@ -31,7 +33,7 @@ class NewTecnicalSupportAssignTicket extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail','database'];
+        return ['mail','database',WebPushChannel::class];
     }
 
     /**
@@ -68,5 +70,15 @@ class NewTecnicalSupportAssignTicket extends Notification
             'equipo'    => $this->formularioRegistro->equipo()->numero_parte,
             'equipo_id'    => $this->formularioRegistro->equipo()->id,
         ];
+    }
+
+    public function toWebPush($notifiable, $notification)
+    {
+        return (new WebPushMessage)
+            ->title('Soporte Técnico')
+            ->icon('/assets/img/mc.png')
+            ->body('Se te ha asignado un nuevo ticket de soporte técnico.')
+            ->action('Ver',route('equipos.detail',array('id'=>$this->formularioRegistro->equipo()->id,'show'=>'rows','tab'=>3)))
+            ->data(['url' => route('equipos.detail',array('id'=>$this->formularioRegistro->equipo()->id,'show'=>'rows','tab'=>3))]);
     }
 }

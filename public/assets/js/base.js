@@ -14,7 +14,7 @@ $(document).ready(function () {
         $("#loader").fadeToggle(50);
     }, 700); // hide delay when page load
 
-    //recconect();
+    recconect();
 });
 ///////////////////////////////////////////////////////////////////////////
 

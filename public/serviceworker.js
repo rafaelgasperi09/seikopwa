@@ -64,11 +64,23 @@ self.addEventListener('push', function (e) {
 
     if (e.data) {
         var msg = e.data.json();
-        console.log(msg)
+        console.log(e.data.json());
+        console.log("url data "+msg.data.url);
         e.waitUntil(self.registration.showNotification(msg.title, {
             body: msg.body,
             icon: msg.icon,
-            actions: msg.actions
+            actions: msg.actions,
+            data:msg.data
         }));
+    }
+});
+
+self.addEventListener('notificationclick', function(event) {
+    console.log('On notification click: ', event);
+
+    if (Notification.prototype.hasOwnProperty('data')) {
+        console.log(event.notification.data);
+        var url = event.notification.data.url;
+        event.waitUntil(clients.openWindow(url));
     }
 });

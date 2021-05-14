@@ -68,6 +68,7 @@ class BateriaController extends Controller
             $model->formulario_id = $formulario->id;
             $model->creado_por = Sentinel::getUser()->id;
             $model->componente_id = $request->componente_id;
+            $model->estatus = 'C';
 
             if($model->save())
             {
