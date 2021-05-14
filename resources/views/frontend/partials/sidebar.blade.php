@@ -110,9 +110,6 @@
                     <ion-icon name="person-outline"></ion-icon>
                 </a>
                 @endif
-                <a href="javascript:;" class="button">
-                    <ion-icon name="archive-outline"></ion-icon>
-                </a>
                 @if(\Sentinel::hasAccess('role.index'))
                 <a href="{{ route('role.index') }}" class="button">
                     <ion-icon name="settings-outline"></ion-icon>

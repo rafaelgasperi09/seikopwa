@@ -14,8 +14,7 @@
     <tr>
        <td>{{$d->id}}</td>
        <td>{{$d->creador->first_name.' '.$d->creador->last_name}}</td>
-       <td>{{$d->created_at}}</td>
-       <td>{{$d->updated_at}}</td>
+       <td>{{ \Carbon\Carbon::parse($d->created_at)->format('Y-m-d')}}</td>
        <td>{!!getStatusHtml($d->estatus)!!}</td>
        <td>
            @if($nombre == 'mantenimiento_preventivo')
@@ -56,6 +55,7 @@
                </a>
            @endif
         </td>
+
     </tr>
     @endforeach
     </tbody>
