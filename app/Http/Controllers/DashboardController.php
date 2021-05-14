@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    private function getPendings($formType,$status='P',$filterExtra='',$limit=100){
+    private function getPendings($formType,$status='P',$filterExtra='',$equipos=true,$pluck=''){
         $userFilter='';
         if(current_user()->crm_cliente_id)
             $userFilter='WHERE cliente_id='.current_user()->crm_cliente_id;
@@ -23,9 +23,21 @@ class DashboardController extends Controller
             $q->where('formulario_registro.estatus',$status);
         })
         ->whereNull('formulario_registro.deleted_at')
-        ->whereRaw('equipo_id IN (SELECT id FROM montacarga.`equipos` '.$userFilter.') '.$filterExtra)->take($limit)->get();          
+        ->When($equipos,function($q)use($userFilter){
+            $q->whereRaw(' equipo_id IN (SELECT id FROM montacarga.equipos '.$userFilter.')');
+        })
+        ->When(!empty($filterExtra),function($q)use($filterExtra){
+            $q->whereRaw($filterExtra);
+        });
+        if(empty($pluck)){
+            return  $r->get(); 
+           
+        }else{
+            return $r->pluck('equipo_id');
+        }
+                
     
-        return $r;
+        
     }
 
 
@@ -34,6 +46,7 @@ class DashboardController extends Controller
         ///////////// EQUIPOS ///////////////////////
         /// FILTRO SOLO LAS ELECTRICAS POR LOS DE COMBUSTION NO TIENEN SUB TIPO
         $equipos =  Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo('electricas'))->whereNotNull('sub_equipos_id')->get();
+        
         //dd($equipos->pluck('numero_parte','id'));
 
         ///////////// TOTAL EQUIPOS POR TIPO //////////////
@@ -60,23 +73,24 @@ class DashboardController extends Controller
 
         ////////////// TOTAL EQUIPOS SIN DAILY CHECK ////////////////////////
         $data['equipos_sin_daily_check_hoy'] = array();
+        $formularioDailyCheck = Formulario::whereNombre('form_montacarga_daily_check')->first();
 
-        if(current_user()->isCliente() or true){
-            $formularioDailyCheck = Formulario::whereNombre('form_montacarga_daily_check')->first();
+        if(current_user()->isCliente() or  current_user()->isOnGroup('programador')){
             $equipo_daily_check_today = FormularioRegistro::whereFormularioId($formularioDailyCheck->id)
                 ->whereRaw("date_format(created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'")
                 ->pluck('equipo_id')->toArray();
+            $i=0;
             foreach ($equipos as $e){
-                
+                if(current_user()->isOnGroup('programador') and $i++>=10){
+                    break;
+                }
                 if(!in_array($e->id,$equipo_daily_check_today)){
                     $data['equipos_sin_daily_check_hoy'][$e->id]=$e->numero_parte;
-                }
-                   
+                }      
             }
-         
-            
         }
-        //dd($data['equipos_sin_daily_check_hoy'] );
+
+        
         //daily check pendientes de firma supervisor    
         $data['daily_check']=$this->getPendings('daily_check');     
         //mantenimientos preventivos pendientes de firma supervisor    
@@ -84,12 +98,31 @@ class DashboardController extends Controller
         //servicio tecnico PENDIENTES
         $data['serv_tec_p']=$this->getPendings('serv_tec');     
         //servicio tecnico ABIERTAS
-        $data['serv_tec_a']=$this->getPendings('serv_tec','A',' AND formulario_registro.tecnico_asignado='.current_user()->id);     
+        $data['serv_tec_a']=$this->getPendings('serv_tec','A',' formulario_registro.tecnico_asignado='.current_user()->id);     
         //servicio tecnico EN PROCESO
-        $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',' AND formulario_registro.tecnico_asignado='.current_user()->id);   
+        $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',' formulario_registro.tecnico_asignado='.current_user()->id);   
          //servicio tecnico EN PROCESO
         $data['serv_tec_10']=$this->getPendings('serv_tec','','',10);   
-      
+
+        if(current_user()->isOnGroup('administrador') or  current_user()->isOnGroup('programador')){
+            $dailyCheck =  $this->getPendings('daily_check','', "date_format(formulario_registro.created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'",false,true);
+           
+            $dailyCheckString='';
+            foreach($dailyCheck as $k=>$dc){
+                $dailyCheckString.=$dc;
+                if($k+1<count($dailyCheck))
+                    $dailyCheckString.=',';
+            }
+
+            $data['global_sin_daily_check_hoy']=  Equipo::selectRaw('contactos.nombre,count(*) as equipos, SUM(CASE WHEN equipos.id IN ('.$dailyCheckString.') THEN 1 ELSE 0 END ) AS daily_check')
+                                    ->join('contactos','equipos.cliente_id','contactos.id')
+                                    ->where('sub_equipos_id',getSubEquipo('electricas'))
+                                    ->whereNotNull('sub_equipos_id')
+                                    ->groupBy('contactos.nombre')
+                                    ->get()->toArray();
+
+           
+        }
         return view('frontend.dashboard',compact('data'));
     }
 }

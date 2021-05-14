@@ -199,7 +199,46 @@
                     @endif
                     </div>
                 </div> 
+            @endif   
+
+            @if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador'))
+                <div class="card text-white bg-light">
+                    <div class="card-header">
+                        <span id="tot_title">
+                            <ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon>
+                            Daily Check de equipos
+        
+                    </div>
+                    <div class="card-body">
+                    @if(count($data['global_sin_daily_check_hoy']) )
+                        @foreach($data['global_sin_daily_check_hoy'] as $dce)
+
+                           <a href="#" class="chip  chip-media ml-05 mb-05"  style="width:100%;background-color:#e4f0ff">
+                                <i class="chip-icon2 bg-primary">
+                                    {{$dce["equipos"]}} 
+                                </i>
+                                @if($dce["daily_check"]==0)
+                                <i class="chip-icon bg-danger">
+                                    {{$dce["daily_check"]}} 
+                                </i>
+                                @elseif($dce["equipos"]>$dce["daily_check"])
+                                <i class="chip-icon bg-warning">
+                                    {{$dce["daily_check"]}} 
+                                </i>
+                                @else
+                                <i class="chip-icon bg-success">
+                                    {{$dce["daily_check"]}} 
+                                </i>
+                                @endif
+                                <span class="chip-label">{{$dce["nombre"]}}</span>
+                            </a>   
+                        @endforeach                     
+
+                    @endif
+                    </div>
+                </div> 
             @endif            
+                     
         </div>
 
     </div>
