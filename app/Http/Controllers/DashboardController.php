@@ -111,7 +111,7 @@ class DashboardController extends Controller
             foreach($dailyCheck as $k=>$dc){
                 $dailyCheckString.=$dc.',';
             }
-            $dailyCheckString.='0';
+            $dailyCheckString.='0'; 
             $data['global_sin_daily_check_hoy']=  Equipo::selectRaw('contactos.nombre,count(*) as equipos, SUM(CASE WHEN equipos.id IN ('.$dailyCheckString.') THEN 1 ELSE 0 END ) AS daily_check')
                                     ->join('contactos','equipos.cliente_id','contactos.id')
                                     ->where('sub_equipos_id',getSubEquipo('electricas'))
