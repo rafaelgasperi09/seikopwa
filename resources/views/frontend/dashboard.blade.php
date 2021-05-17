@@ -258,6 +258,7 @@
             $('.datatable').DataTable({
                 /*"bFilter": false,*/
                 /*"lengthChange": false*/
+                language: { search: "" },
             });
         } );
     </script>
