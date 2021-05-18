@@ -84,12 +84,13 @@
                                         @php
                                             $i=0;
                                             $checked='';
-                                            if(current_user()->isOnGroup('programador') && empty($valor)) $value="C";
+                                            if(current_user()->isOnGroup('programador') && empty($value)) $value="C";
                                         @endphp
 
                                         @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
 
                                             <div class="custom-control custom-radio d-inline">
+
                                              @if($value == $o)
                                                 {{ Form::radio($campo->nombre,$o,$value,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$checked,$readonly)) }}
                                              @else
