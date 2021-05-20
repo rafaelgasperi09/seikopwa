@@ -135,7 +135,7 @@
     }
     @endphp
 @endforeach
-@include('frontend.partials.firma')
+@include('frontend.partials.firmaNew')
 <script>
     {!!$remove!!}
 </script>
