@@ -1,6 +1,6 @@
 @extends('frontend.main-layout')
 @section('content')
-    @include('frontend.partials.title',array('title'=>'Dashboard','subtitle'=>'Bienvenido(a) a GMPCheck'))
+    @include('frontend.partials.title',array('title'=>'Dashboard','subtitle'=>'Bienvenido(a) a '.env('APP_NAME')))
     @php
     $totales_title='Total Equipos';
 @endphp
