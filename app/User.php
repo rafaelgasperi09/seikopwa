@@ -54,8 +54,6 @@ class User extends Authenticatable
     public function getLastLoginAttribute($attr) {
         if(isset($attr)){
             return Carbon::parse($attr)->format('d-m-Y'); //Change the format to whichever you desire
-        }else{
-            return 'Nunca';
         }
 
     }
