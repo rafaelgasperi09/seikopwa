@@ -2,7 +2,7 @@
 @section('content')
 <div class="login-form mt-1">
     <div class="section">
-        <img src="{{ url('images/AppImages/android/icon-144x144.png?t=123') }}" alt="image" class="form-image">
+        <img src="{{ url('images/logo.png?t=123') }}" alt="image" class="form-image">
     </div>
 
     <div class="section mt-1">
