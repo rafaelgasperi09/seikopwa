@@ -13,6 +13,8 @@ use Sentinel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BateriasExport;
 
 class BateriaController extends Controller
 {
@@ -108,14 +110,22 @@ class BateriaController extends Controller
     }
 
     public function download($id){
-
+        $format='PDF';
+        if(request()->get('format')=='excel' ){
+            $format=request()->get('format');
+        }
         $bateria = Componente::findOrFail($id);
         $data = DB::table('form_carga_bateria_view')
             ->where('componente_id',$id)
             ->orderBy('fecha','DESC')
             ->get()->take(100);
-        $pdf = PDF::loadView('frontend.baterias.pdf',compact('bateria','data'));
-        $pdf->setPaper('a4', 'landscape');
-        return $pdf->stream('historial_cargas.pdf');
+        if($format=='PDF'){
+            $pdf = PDF::loadView('frontend.baterias.pdf',compact('bateria','data'));
+            $pdf->setPaper('a4', 'landscape');
+            return $pdf->stream('historial_cargas.pdf');
+        }else{ 
+            return Excel::download(new BateriasExport($id), 'Equipo.xlsx');
+        }
+
     }
 }

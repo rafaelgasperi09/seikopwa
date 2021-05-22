@@ -102,7 +102,12 @@ class DashboardController extends Controller
         //servicio tecnico EN PROCESO
         $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',' formulario_registro.tecnico_asignado='.current_user()->id);   
          //servicio tecnico EN PROCESO
-        $data['serv_tec_10']=$this->getPendings('serv_tec','','',10);   
+         $data['serv_tec_10']=array();
+        if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador'))
+            $data['serv_tec_10']=$this->getPendings('serv_tec',''," formulario_registro.estatus<>'C'",false,'');   
+        if(current_user()->isOnGroup('supervisorc'))
+            $data['serv_tec_10']=$this->getPendings('serv_tec','','',true,'');   
+       
 
         if(current_user()->isOnGroup('administrador') or  current_user()->isOnGroup('programador')){
             $dailyCheck =  $this->getPendings('daily_check','', "date_format(formulario_registro.created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'",false,true);

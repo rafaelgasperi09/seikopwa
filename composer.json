@@ -19,6 +19,7 @@
         "laravel/framework": "^7.29",
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.2",
+        "maatwebsite/excel": "^3.1",
         "silviolleite/laravelpwa": "^2.0",
         "tecnickcom/tcpdf": "^6.4.1",
         "yajra/laravel-datatables-oracle": "^9.17.4"
