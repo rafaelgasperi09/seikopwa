@@ -12,7 +12,14 @@
             </div>
             <div class="in">
                 <h3 class="name">{{ $data->getFullName() }}</h3>
-                <h5 class="subtext">Ult Ingreso : {{ \Carbon\Carbon::parse($data->last_login)->diffForHumans() }}</h5>
+                    <h5 class="subtext">
+                        Ult Ingreso :
+                        @isset($data->last_login)
+                            {{ \Carbon\Carbon::parse($data->last_login)->diffForHumans() }}
+                        @else
+                            NUNCA
+                        @endisset
+                    </h5>
             </div>
         </div>
     </div>

@@ -13,14 +13,34 @@
                 <dt class="col-sm-3">Nombre</dt>
                 <dd class="col-sm-9">{{ $data->first_name }}</dd>
             </dl>
+            @empty(!$data->last_name)
             <dl class="row">
                 <dt class="col-sm-3">Apellido</dt>
                 <dd class="col-sm-9">{{ $data->last_name }}</dd>
             </dl>
+            @endempty
             <dl class="row">
-                <dt class="col-sm-3">Correo Electronico</dt>
+                <dt class="col-sm-3">Correo Electrónico</dt>
                 <dd class="col-sm-9">{{ $data->email }}</dd>
             </dl>
+            <dl class="row">
+                <dt class="col-sm-3">Ult Ingreso</dt>
+                <dd class="col-sm-9">
+                    @isset($data->last_login)
+                        {{ \Carbon\Carbon::parse($data->last_login)->diffForHumans() }}
+                    @else
+                        NUNCA
+                    @endisset</dd>
+            </dl>
+        @if($data->isCliente())
+            <dl class="row">
+                <dt class="col-sm-3">Cliente</dt>
+                <dd class="col-sm-9">
+                    {{ $data->cliente()->nombre }}
+                    <small>( {{ $data->cliente()->direccion }} )</small>
+                </dd>
+            </dl>
+            @endif
         </div>
     </div>
 
