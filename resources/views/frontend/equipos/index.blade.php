@@ -1,7 +1,7 @@
 @extends('frontend.main-layout')
 @section('content')
 @if(isset($subEquipos))
-    @include('frontend.partials.title',array('subtitle'=>'Equipos > Tipos','title'=>'Equipos'))
+    @include('frontend.partials.title',array('subtitle'=>'Equipos > Tipos','title'=>'Equipos','route_back'=>route('dashboard')))
     <div class="">
             <ul class="nav nav-tabs style1" role="tablist">
             @php
@@ -68,7 +68,7 @@
     </div>
 @endif
 @if(isset($equipos))
-    @include('frontend.partials.title',array('title'=>'Equipos','subtitle'=>'Equipos > '.$datos["subName"].'> '.$datos["tipoName"]))
+    @include('frontend.partials.title',array('title'=>'Equipos','subtitle'=>'Equipos > '.$datos["subName"].'> '.$datos["tipoName"],'route_back'=>route('equipos.index')))
     @include('frontend.partials.search',array('title'=>'Escribir codigo del equipo','search_url'=>'/equipos/search/'.$datos['sub'].'/'.$datos['tipo']))
     @include('frontend.partials.list',array('data'=>$equipos,'page_view'=>'equipos.page','page_url'=>'/equipos/search/'.$datos['sub'].'/'.$datos['tipo'],'search_url'=>'/equipos/search'))
 @endif
