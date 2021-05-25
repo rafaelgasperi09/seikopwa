@@ -55,7 +55,9 @@
         return navigator.serviceWorker.register('/serviceworker.js?t={{ time() }}')
             .then(function(registration) {
                 console.log('Laravel PWA: ServiceWorker registration successful with scope: ', registration.scope);
+                @if(\Sentinel::check())
                 sessionStorage.setItem('user_persistence_code','{{ current_user()->persistences()->orderBy('id','DESC')->first()->code }}');
+                @endif
                 initPush();
             })
             .then(function(pushSubscription) {
@@ -99,7 +101,7 @@
                 return registration.pushManager.subscribe(subscribeOptions);
             })
             .then((pushSubscription) => {
-                //console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
+                console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
                 storePushSubscription(pushSubscription);
             });
     }

@@ -10,9 +10,9 @@
         </a>
         </div>
         @else
-        <a href="{{ URL::previous()  }}" class="headerButton goBack">
-            <ion-icon name="chevron-back-outline" role="img" class="md hydrated" aria-label="chevron back outline"></ion-icon>
-        </a>
+            <a href="@isset($route_back) {{ $route_back }} @else {{ URL::previous() }}@endisset" class="headerButton goBack">
+                <ion-icon name="chevron-back-outline" role="img" class="md hydrated" aria-label="chevron back outline"></ion-icon>
+            </a>
         @endif
     </div>
     <div class="pageTitle">{{ $title }}</div>
