@@ -23,22 +23,17 @@
         $active="show active";
     @endphp
     <div class="tab-content mt-1">
-
         @foreach($subEquipos as $s)
-
             <div class="tab-pane fade {{$active}}" id="{{$s->name}}" role="tabpanel">
                 <div class="section full mt mb">
                 <div class="section-title"><h3>{{$s->display_name}}</h3><br/><p>Seleccione un tipo de la lista</p></div>
                     <ul class="listview image-listview media mb-2">
-
                         @if(isset($tipos[$s->id]))
-
                             @foreach($tipos[$s->id] as $key=>$t)
-
                             <li>
                                 <a href="{{route('equipos.tipo',['sub'=>$s->name,'id'=>$key])}}" class="item">
                                     <div class="imageWrapper">
-                                        <img src="{{ getEquipoIconBySubTipo($key) }}" alt="{{ $s->name }}" class="imaged w64">
+                                        <img src="{{ getEquipoIconBySubTipo($key,$s->name) }}" alt="{{ $s->name }}" class="imaged w64">
                                     </div>
                                     <div class="in">
                                         <div>{{$t}}</div>
@@ -47,16 +42,6 @@
                                 </a>
                             </li>
                             @endforeach
-                            {{--}}
-                            <li>
-                                <a href="{{route('equipos.tipo',['sub'=>$s->name,'id'=>'todos'])}}" class="item">
-                                    <img src="{{url('assets/img/mc.svg')}}" alt="image" class="image">
-                                    <div class="in">
-                                        <div><b>Todos</b></div>
-                                    </div>
-                                </a>
-                            </li>
-                            {{--}}
                         @endif
                     </ul>
                 </div>

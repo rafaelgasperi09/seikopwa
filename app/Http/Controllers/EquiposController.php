@@ -34,17 +34,30 @@ class EquiposController extends BaseController
     public function index(){
         $subEquipos=SubEquipo::orderBy('id','desc')->get();
 
-        $tipoEquipos = Equipo::select('equipos.sub_equipos_id','equipos.tipo_equipos_id','tipo_equipos.display_name')
+        $tipoEquiposElectricos = Equipo::select('equipos.sub_equipos_id','equipos.tipo_equipos_id','tipo_equipos.display_name')
                          ->FiltroCliente()
                          ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
                          ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id')
-                         //->where('equipos.tipo_equipos_id','<=',7)
+                         ->where('equipos.sub_equipos_id','=',2)
+                         ->whereNotNull('equipos.tipo_equipos_id')
                          ->get();
 
         $tipoEquiposArray=array();
-        foreach($tipoEquipos as $t){
+        foreach($tipoEquiposElectricos as $t){
             $tipoEquiposArray[$t->sub_equipos_id][$t->tipo_equipos_id]=$t->display_name;
             $tipoEquiposArray[$t->sub_equipos_id][$t->tipo_equipos_id]=$t->display_name;
+        }
+
+        $tipoEquiposCombustion = Equipo::select('equipos.sub_equipos_id','equipos.tipo_motore_id','tipo_motores.display_name')
+            ->FiltroCliente()
+            ->join('tipo_motores','equipos.tipo_motore_id','=','tipo_motores.id')
+            ->groupBy('equipos.sub_equipos_id','equipos.tipo_motore_id')
+            ->where('equipos.sub_equipos_id','=',1)
+            ->get();
+
+        foreach($tipoEquiposCombustion as $t){
+            $tipoEquiposArray[$t->sub_equipos_id][$t->tipo_motore_id]=$t->display_name;
+            $tipoEquiposArray[$t->sub_equipos_id][$t->tipo_motore_id]=$t->display_name;
         }
 
         return view('frontend.equipos.index')->with('tipos',$tipoEquiposArray)->with('subEquipos',$subEquipos);
@@ -56,30 +69,44 @@ class EquiposController extends BaseController
         $datos=array('sub'=>$sub,
                      'tipo'=>$id,
                      'subName'=>getSubEquipo($sub,'name'),
-                     'tipoName'=>getTipoEquipo($id));
-        if($id=='todos')
+                     'tipoName'=>getTipoEquipo($id,$sub));
+
+        if($id=='todos'){
             $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->paginate(10);
-        else
+        }
+        else if($sub=='electricas') {
             $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->where('tipo_equipos_id',$id)->paginate(10);
+        }else{
+            $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->whereNull('tipo_equipos_id')->where('tipo_motore_id',$id)->paginate(10);
+        }
 
         return view('frontend.equipos.index')->with('equipos',$equipos)->with('datos',$datos);
     }
 
     public function search(Request $request,$sub,$id){
-        if($id=='todos')
-            $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))
-                ->where('numero_parte','like',"%".$request->q."%")
-                ->orWhereHas('cliente',function ($q) use($request){
-                    $q->where('nombre','like',"%".$request->q."%");
-                })
+
+        if($id=='todos'){
+            $equipos=Equipo::FiltroCliente()
+                ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
+                ->where('sub_equipos_id',getSubEquipo($sub))
+                ->whereRaw("(numero_parte like '%".$request->q."%' or contactos.nombre like '%".$request->q."%')")
                 ->paginate(10);
-        else
-            $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->where('tipo_equipos_id',$id)
-                ->where('numero_parte','like',"%".$request->q."%")
-                ->orWhereHas('cliente',function ($q) use($request){
-                    $q->where('nombre','like',"%".$request->q."%");
-                })
+        }else
+        if(getSubEquipo($sub)==2){
+            $equipos=Equipo::FiltroCliente()
+                ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
+                ->where('sub_equipos_id',getSubEquipo($sub))
+                ->where('tipo_equipos_id',$id)
+                ->whereRaw("(numero_parte like '%".$request->q."%' or contactos.nombre like '%".$request->q."%')")
                 ->paginate(10);
+        }else if(getSubEquipo($sub)==1){
+            $equipos=Equipo::FiltroCliente()
+                ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
+                ->where('sub_equipos_id',getSubEquipo($sub))
+                ->where('tipo_motore_id',$id)
+                ->whereRaw("(numero_parte like '%".$request->q."%' or contactos.nombre like '%".$request->q."%')")
+                ->paginate(10);
+        }
 
 
         return view('frontend.equipos.page')->with('data',$equipos);
@@ -149,9 +176,18 @@ class EquiposController extends BaseController
             $tab_content=array('t1'=>'','t2'=>'','t3'=>'active show');
         }
 
+        if($data->sub_equipos_id==1){
+            $route_back = route('equipos.tipo',['sub'=>$data->subTipo->name,'id'=>$data->tipo_motore_id]);
+        }else{
+            $route_back = route('equipos.tipo',['sub'=>$data->subTipo->name,'id'=>$data->tipo_equipos_id]);
+        }
 
-;
-        return view('frontend.equipos.detail')->with('data',$data)->with('form',$form)->with('mostrar',$mostrar)->with('tab',$tab)->with('tab_content',$tab_content);
+
+        return view('frontend.equipos.detail')->with('data',$data)
+            ->with('route_back',$route_back)
+            ->with('form',$form)->with('mostrar',$mostrar)
+            ->with('tab',$tab)
+            ->with('tab_content',$tab_content);
     }
 
     /******************* FORMS DE DAILY CHECK **************************/
@@ -219,8 +255,6 @@ class EquiposController extends BaseController
             $equipo = Equipo::find($equipo_id);
             $model = new FormularioRegistro();
 
-
-
             DB::transaction(function() use($model,$request,$formulario,$equipo){
 
                 $model->formulario_id = $formulario->id;
@@ -242,7 +276,7 @@ class EquiposController extends BaseController
                         if($campo->nombre == 'semana') $valor = Carbon::now()->startOfWeek()->format('d-m-Y');
                         if($campo->nombre == 'dia_semana') $valor = getDayOfWeek(date('N'));
                        // if(!empty($valor)){
-                            if($campo->tipo=='firma'){
+                            if($campo->tipo=='firma' && !empty($valor)){
                                 $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
                                 $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
                                 Storage::put('public/firmas/'.$filename,$data);
@@ -371,11 +405,18 @@ class EquiposController extends BaseController
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
         }
+
         $forms = [1=>'form_montacarga_counter_rc',2=>'form_montacarga_combustion',3=>'form_montacarga_counter_fc',4=>'form_montacarga_counter_sc',
             5=>'form_montacarga_pallet',6=>'form_montacarga_reach',7=>'form_montacarga_stock_picker',8=>'form_montacarga_wave_stacker_walke',
             9=>'form_montacarga_wave_stacker_walke',10=>'form_montacarga_wave_stacker_walke'];
 
-        $formulario = Formulario::whereNombre($forms[$tipo])->first();
+        if($data->sub_equipos_id==1){
+            $formulario = Formulario::whereNombre('form_montacarga_combustion')->first();
+        }else{
+            $formulario = Formulario::whereNombre($forms[$tipo])->first();
+        }
+
+
 
         return view('frontend.equipos.create_mant_prev')->with('data',$data)->with('formulario',$formulario);
     }
