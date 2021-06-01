@@ -5,7 +5,7 @@
                 <img src="{{ getEquipoIconBySubTipo($e->tipo_equipos_id) }}" alt="image" class="imaged w64">
             </div>
             <div class="in">
-                <div>{{$e->numero_parte}}</div>
+                <div>{{$e->numero_parte}}<br/> <small style="font-size: 8px">({{ $e->cliente->nombre }})</small></div>
             </div>
         </a>
         <!-- sub menu -->

@@ -50,6 +50,12 @@
                                 <dt class="col-sm-3">Cliente</dt>
                                 <dd class="col-sm-9">{{ $data->cliente->nombre }}</dd>
                             </dl>
+                            @if($data->sub_equipos_id == 1)
+                            <dl class="row">
+                                <dt class="col-sm-3">Clasificación</dt>
+                                <dd class="col-sm-9">{{ $data->motor->display_name }}</dd>
+                            </dl>
+                            @endif
                         </div>
                 </div>
             </div>

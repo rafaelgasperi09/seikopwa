@@ -44,6 +44,7 @@ class EquiposController extends BaseController
         $tipoEquiposArray=array();
         foreach($tipoEquipos as $t){
             $tipoEquiposArray[$t->sub_equipos_id][$t->tipo_equipos_id]=$t->display_name;
+            $tipoEquiposArray[$t->sub_equipos_id][$t->tipo_equipos_id]=$t->display_name;
         }
 
         return view('frontend.equipos.index')->with('tipos',$tipoEquiposArray)->with('subEquipos',$subEquipos);
@@ -66,9 +67,19 @@ class EquiposController extends BaseController
 
     public function search(Request $request,$sub,$id){
         if($id=='todos')
-            $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->where('numero_parte','like',"%".$request->q."%")->paginate(10);
+            $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))
+                ->where('numero_parte','like',"%".$request->q."%")
+                ->orWhereHas('cliente',function ($q) use($request){
+                    $q->where('nombre','like',"%".$request->q."%");
+                })
+                ->paginate(10);
         else
-            $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->where('tipo_equipos_id',$id)->where('numero_parte','like',"%".$request->q."%")->paginate(10);
+            $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->where('tipo_equipos_id',$id)
+                ->where('numero_parte','like',"%".$request->q."%")
+                ->orWhereHas('cliente',function ($q) use($request){
+                    $q->where('nombre','like',"%".$request->q."%");
+                })
+                ->paginate(10);
 
 
         return view('frontend.equipos.page')->with('data',$equipos);
@@ -125,7 +136,7 @@ class EquiposController extends BaseController
 
         if($request->get('tab')== 1){
             $tab=array('t1'=>'active','t2'=>'','t3'=>'');
-            $tab_content=array('t1'=>'active show','t2'=>'','t3'=>'');         
+            $tab_content=array('t1'=>'active show','t2'=>'','t3'=>'');
         }
 
         if($request->get('tab')== 2){
@@ -403,7 +414,7 @@ class EquiposController extends BaseController
                 $model->cliente_id = $equipo->cliente_id;
                 $model->estatus = 'P';
                 if ($model->save()) {
-                    
+
                     foreach ($formulario->campos()->get() as $campo) {
                         $valor = $request->get($campo->nombre);
                         $api_descripcion = '';
@@ -663,9 +674,9 @@ class EquiposController extends BaseController
         if($model->save()){
             // crear notificacion al tecnico asignado
             $user->notify(new NewTecnicalSupportAssignTicket($model));
-            $request->session()->flash('message.success', 'Se a asignado el servicio de suporte técnico a '.$user->getFullName().' de forma exitosa.');
+            $request->session()->flash('message.success', 'Se a asignado el servicio de soporte técnico a '.$user->getFullName().' de forma exitosa.');
         }else{
-            $request->session()->flash('message.error', 'Se a asignado el servicio de suporte tecnico de forma exitosa.');
+            $request->session()->flash('message.error', 'Se a asignado el servicio de soporte técnico de forma exitosa.');
         }
 
         return redirect(route('equipos.detail', $model->equipo_id));
