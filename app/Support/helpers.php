@@ -160,7 +160,7 @@ function getListUsersByRol($rol_name){
 
 function  getEquipoIconBySubTipo($sub_tipo_id){
 
-    $icon = url('assets/img/mc2.png');
+    $icon = 'mc2.png';
     $path = '';
     switch($sub_tipo_id){
         case 1:
