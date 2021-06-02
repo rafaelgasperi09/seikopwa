@@ -1,7 +1,7 @@
 @extends('frontend.main-layout')
 @section('content')
     @include('frontend.partials.title',array('title'=>'Servicio tecnico','subtitle'=>$data->numero_parte))
-    {{Form::open(array("method" => "POST","action" => "EquiposController@storeTecnicalSupport","role" => "form",'class'=>'form-horizontal',"autocomplete"=>"off"))}}
+    {{Form::open(array("method" => "POST","action" => "EquiposController@storeTecnicalSupport","role" => "form",'class'=>'form-horizontal',"autocomplete"=>"off",'files'=>true))}}
     <div class="section full mt-2 mb-2">
         <div class="section-title">{{$formulario->titulo}}</div>
         <div class="wide-block pb-3 pt-2">

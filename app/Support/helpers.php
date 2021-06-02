@@ -201,4 +201,16 @@ function  getEquipoIconBySubTipo($sub_tipo_id){
      return url('images/montacargas/thumbnails/'.$icon);
 
 }
+
+function getOptionsRadio($status,$tipo){
+    $text=array('D'=>'Diagnostico',
+                'C'=>'Comprar',
+                'F'=>'Facturar',
+                'S'=>'Seguimiento',
+                'G'=>'Garantía');
+    if($tipo=='form_montacarga_servicio_tecnico') //servicio tecnico
+        return $text[$status];
+    else 
+        return $status;
+}
 ?>

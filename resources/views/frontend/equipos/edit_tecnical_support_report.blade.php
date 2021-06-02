@@ -92,7 +92,7 @@
             </div>
         </div>
     </div>
-    {{ Form::model($formulario, array('route' => array('equipos.update_tecnical_support', $data->id), 'method' => 'PUT' , 'role' => 'form','class'=>'form-horizontal')) }}
+    {{ Form::model($formulario, array('route' => array('equipos.update_tecnical_support', $data->id), 'method' => 'PUT' , 'role' => 'form','class'=>'form-horizontal','files'=>true)) }}
         {{ Form::hidden('equipo_id',$equipo->id,array('required')) }}
         {{ Form::hidden('formulario_id',$formulario->id,array('required')) }}
         {{ Form::hidden('formulario_registro_id',$data->id,array('required')) }}

@@ -111,7 +111,7 @@ class TCPDF extends \TCPDF
         $this->Cell(30, 0, "No. " . html_entity_decode($consecutivo), 0, 0, 'C');
         $this->SetTextColor(0, 0, 0);
         $this->SetFont('helvetica', 'P', 11);
-        $this->Cell(140, 0, html_entity_decode("Tel/Fax 236-8079, E-mail: ventas_rp@montacargaspanama.com"), 0, 0, 'C');
+        $this->Cell(140, 0, html_entity_decode("Tel/Fax 236-8079, E-mail: gmp@montacargaspanama.com"), 0, 0, 'C');
         $this->Ln();
 
         $this->SetFont('helvetica', 'B', 14);

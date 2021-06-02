@@ -96,7 +96,7 @@
                                              @else
                                                 {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$readonly)) }}
                                              @endif
-                                            <label class="custom-control-label p-0" for="{{ $campo->nombre }}{{$i}}">{{$o}}</label>
+                                            <label class="custom-control-label p-0" for="{{ $campo->nombre }}{{$i}}">{{getOptionsRadio($o,$formulario->nombre)}}</label>
                                             </div>
                                             <?php $i++;
                                             $checked=''; ?>

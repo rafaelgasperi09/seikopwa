@@ -1,42 +1,74 @@
 @php
-$cTD='style="border:1px solid black"';
+$cTD='style="border:1px solid black';
+$cTD2=$cTD.';vertical-align:top;';
+$cTD3=$cTD2.'text-align:center"';
+$cTD.='"';
+$cTD2.='"';
 $cFirma='style="border-bottom:1px solid black"';
 @endphp
 <html>
     <head>
       <style>
+      html{
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 20px 18px;
+        }
       body {
         font-family: Arial, sans-serif;
         margin-top:0px;
       }
+        thead { display: table-header-group }
+        tfoot { display: table-row-group }
+        tr { page-break-inside: avoid }
+        .paginado{
+            font-size:12px;
+            vertical-align:top;
+            text-align:right;
+            width:120px;
+        }
+        .pagenum:before {
+            content: counter(page);
+        }     
+        .centered { vertical-align:middle; text-align:center; }
+        .centered img { display:block; margin:0 auto;border:1px solid #000; }   
       </style>
 
     </head>
     <body>
         <table align="center" width="100%" style="border:0px solid #ddd;">
-        <tr>
-            <td>
-            <table align="center" width="100%">
-                <tr>
-                     <td align="center">
-                        <span style="font-size:24px;font-weight:bold">MONTACARGAS Y REPUESTOS, S.A.<span><br/>
-                        <span style="font-size:16px;font-weight:normal">"Satisfacción y confianza"<span><br/>
-                        <span style="font-size:20px;font-weight:bold">INFORME DE SERVICIO TÉCNICO<span>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left">
-                        <p style="font-size:20px;font-weight:bold;margin-bottom:5px">No. <span style="color:red">{{$datos['cab']->id}}</span></p>
-                    </td>
-                        
-                </tr>
-            </table>
-            </td>
-        </tr>
+        <thead >
+            <tr>
+                <th>
+                <table align="center" width="100%">
+                    <tr>
+                        <td width="120px" ><img align="center" src="{{public_path('/images/logo.png')}}" width="80px"></td>
+                        <td align="center">
+                            <span style="font-size:24px;font-weight:bold">MONTACARGAS Y REPUESTOS, S.A.<span><br/>
+                            <span style="font-size:16px;font-weight:normal">"Satisfacción y confianza"<span><br/>
+                            <span style="font-size:20px;font-weight:bold">INFORME DE SERVICIO TÉCNICO<span>
+                        </td>
+                        <td class="paginado"> 
+                            @if($datos['det'][0]->foto)
+                            <div class="pagenum-container ">P. <span class="pagenum"></span></div>
+                            @endif 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <p style="font-size:18px;font-weight:bold;margin-bottom:5px">No. <span style="color:red">{{$datos['cab']->id}}</span></p>
+                        </td>
+                            
+                    </tr>
+                </table>
+                </th>
+            </tr>
+        </thead >
 
         <tr>
             <td>
-                <table width="100%" cellpadding="5" cellspacing="0" align="center" >
+                <table width="100%" cellpadding="0" cellspacing="0" align="center" >
                     <tr>
                         <td width="67%" colspan="2" {!!$cTD!!}>
                         <span style="font-size:10px">CLIENTE:</span>
@@ -101,56 +133,60 @@ $cFirma='style="border-bottom:1px solid black"';
                         </td>
                     </tr>
                 </table>
-                <br/><br/>
-            </td>
-        </tr>
-        <tr>
-            <td {!!$cTD!!}>
-                <b style="font-size:12px">FALLA REPORTADA:</b>
-                <br>{{$datos['det'][0]->falla_reportada}}
-            </td>
-        </tr>
-        <tr>
-            <td><br/></td>
-        </tr>
-        <tr>
-            <td {!!$cTD!!}>
-                <b style="font-size:12px">CAUSA DE LOS DAÑOS:</b>
-                <br>{{$datos['det'][0]->causa_de_danos}}
-            </td>
-        </tr>
-        <tr>
-            <td><br/></td>
-        </tr>
-        <tr>
-            <td {!!$cTD!!}>
-                <b style="font-size:12px">TRABAJOS REALIZADOS:</b>
-                <br>{{$datos['det'][0]->trabajos_realizados}}
-            </td>
-        </tr>
-        <tr>
-            <td><br/></td>
-        </tr>
-        <tr>
-            <td {!!$cTD!!}>
-                <b style="font-size:12px">COTIZAR:</b>
-                <br>{{$datos['det'][0]->cotizar}}
-
-            </td>
-        </tr>
-        <tr>
-            <td><br/></td>
-        </tr>
-        <tr>
-            <td {!!$cTD!!}>
-                <b style="font-size:12px">OTROS COMENTARIOS:</b>
-                <br>{{$datos['det'][0]->comentarios}}
-                <br >
+                <br/>
             </td>
         </tr>
         <tr>
             <td>
-                <br/><br/>
+            <table width="100%">
+                <thead>
+                <tr>
+                    <td {!!$cTD2!!} >
+                    <b style="font-size:12px">FALLA REPORTADA:</b>
+                    <br>{{$datos['det'][0]->falla_reportada}}
+                    </td>
+                </tr>
+                <tr>
+                <td {!!$cTD2!!}>
+                    <b style="font-size:12px">CAUSA DE LOS DAÑOS:</b>
+                    <br>{{$datos['det'][0]->causa_de_danos}}
+                </td>
+                </tr>
+                <tr>
+                    <td {!!$cTD2!!}>
+                        <b style="font-size:12px">TRABAJOS REALIZADOS:</b>
+                        <br>{{$datos['det'][0]->trabajos_realizados}}
+                    </td>
+                </tr>
+                <tr>
+                    <td {!!$cTD2!!}>
+                        <b style="font-size:12px">COTIZAR:</b>
+                        <br>{{$datos['det'][0]->cotizar}}
+
+                    </td>
+                </tr>
+                <tr>
+                    <td {!!$cTD2!!}>
+                        <b style="font-size:12px">OTROS COMENTARIOS:</b>
+                        <br>{{$datos['det'][0]->comentarios}}
+                        <br >
+                    </td>
+                </tr>              
+                </thead>
+            </table>            
+            </td>
+
+        </tr>
+        @if($datos['det'][0]->foto)
+        <tr>
+            <td {!!$cTD3!!} >
+                <img src="{{storage_path('app/public/equipos/'.$datos['det'][0]->foto)}}" width="600px" style="max-height:480px">
+            </td>
+        </tr>  
+        @endif
+        <tr>
+            <td>
+                <br/>
                 <table width="100%">
                     <tr>
                         <td {!!$cFirma!!} width="40%">
@@ -173,22 +209,23 @@ $cFirma='style="border-bottom:1px solid black"';
                 </table>
             </td>
         </tr>
-        <tr>
-            <td>
-                <table align="center" width="60%">
-                    <tr>
-
-                        <td align="center" style="font-style:italic;font-size:12px">
-                            <br/><br/>
-                            Urbanizacion Los Ángeles Calle 62 Oeste Edificio GMP E-8<br/>
-                            Teléfono:236-8079 // 236-0412 // 236-3544 • Fax: 236-0455<br/>
-                            Ciudad de Panamá<br/>
-                            E-mail:gmp@montacargaspanama.com
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+        <tfoot>
+            <tr>
+                <td>
+                    <table align="center" width="60%">
+                        <tr>
+                            <td align="center" style="font-style:italic;font-size:12px">
+                                <br/><br/>
+                                Urbanizacion Los Ángeles Calle 62 Oeste Edificio GMP E-8<br/>
+                                Teléfono:236-8079 // 236-0412 // 236-3544 • Fax: 236-0455<br/>
+                                Ciudad de Panamá<br/>
+                                E-mail:gmp@montacargaspanama.com
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        <tfoot>
         </table>
     </body>
 </html>

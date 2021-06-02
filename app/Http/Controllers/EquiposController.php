@@ -244,7 +244,7 @@ class EquiposController extends BaseController
                                 if($file){
                                     $img = Image::make($file->path());
                                     $ext = $file->getClientOriginalExtension();
-                                    $filename = $model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
+                                    $filename = 'dc'.$model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
                                     $destinationPath = storage_path('/app/public/equipos');
                                     $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
                                     $valor =  $filename;
@@ -538,7 +538,7 @@ class EquiposController extends BaseController
             'formulario_id'  => 'required',
             'fecha'          => 'required|date',
         ]);
-
+      
         $equipo_id = $request->equipo_id;
         $formulario_id = $request->formulario_id;
         $tipo_equipos_id = $request->tipo_equipos_id;
@@ -573,7 +573,19 @@ class EquiposController extends BaseController
                         'tipo' => $campo->tipo,
                         'api_descripcion'=>$api_descripcion,
                     ]);
+                    if(in_array($campo->tipo,['camera','file'])){
+                        $file = $request->file($campo->nombre);
 
+                        if($file){
+                            $img = Image::make($file->path());
+                            $ext = $file->getClientOriginalExtension();
+                            $filename = 'ts'.$model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
+                            $destinationPath = storage_path('/app/public/equipos');
+                            $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                            $valor =  $filename;
+
+                        }
+                    }
                     if(!$form_data)
                     {
                         Throw new \Exception('Hubo un problema y no se guardar el campo :'.$campo->nombre);
@@ -630,6 +642,19 @@ class EquiposController extends BaseController
 
                         if (!$form_data->save()) {
                             throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
+                        }
+                    }
+                    if(in_array($campo->tipo,['camera','file'])){
+                        $file = $request->file($campo->nombre);
+
+                        if($file){
+                            $img = Image::make($file->path());
+                            $ext = $file->getClientOriginalExtension();
+                            $filename = 'ts'.$model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
+                            $destinationPath = storage_path('/app/public/equipos');
+                            $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                            $valor =  $filename;
+
                         }
                     }
 
