@@ -4796,6 +4796,9 @@ textarea,
   color: #fff;
   font-size: 14px;
 }
+.chip-center{
+  right:48% !important;
+}
 .chip .chip-icon2 {
   position: absolute;
   right: 40px;
