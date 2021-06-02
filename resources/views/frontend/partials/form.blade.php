@@ -102,8 +102,9 @@
                                             $checked=''; ?>
                                         @endforeach
                                     </div>
-                                @elseif($campo->tipo == 'firma'  and \Sentinel::hasAccess($campo->permiso))
+                                @elseif($campo->tipo == 'firma')
                                     @if($value=="")
+                                        @if(\Sentinel::hasAccess($campo->permiso))
                                         <div id="grupo_{{$campo->nombre}}">
                                             <img id="img_{{$campo->nombre}}" width="100%" style="max-width:550px" data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}">
                                             <button type="button" id="btn{{$campo->nombre}}" class="signRequest align-self-center"  data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}">
@@ -112,6 +113,7 @@
                                             </button>
                                             {{ Form::hidden($campo->nombre,'',['id'=>$campo->nombre]) }}
                                         </div>
+                                        @endif
                                     @else
                                     <img id="img_operador" width="100%" style="max-width:550px" data-toggle="modal"  data-field="operador" src="/storage/firmas/{{$value}}">
                                     @endif
