@@ -7,6 +7,7 @@ use App\MontacargaUser;
 use App\Notifications\NewUser;
 use App\Rol;
 use App\User;
+use Cartalyst\Sentinel\Laravel\Facades\Activation;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Sentinel;
@@ -17,7 +18,7 @@ class UserController extends Controller
 
     public function index(){
 
-        $data = User::paginate(10);
+        $data = User::IsActive()->paginate(10);
         return view('frontend.usuarios.index',compact('data'));
 
     }
@@ -199,6 +200,13 @@ class UserController extends Controller
         $data = User::findOrFail($id);
         return view('frontend.usuarios.detail',compact('data'));
 
+    }
+
+    public function delete($id){
+
+        $user = Sentinel::findUserById($id);
+        Activation::remove($user);
+        return redirect(route('usuarios.index'));
     }
 
 }

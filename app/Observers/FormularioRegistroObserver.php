@@ -31,7 +31,7 @@ class FormularioRegistroObserver
 
         $formulario = Formulario::find($formularioRegistro->formulario_id);
         $request = request();
-        ///dd($request->all());
+        //dd($request->all());
         foreach ($formulario->campos()->get() as $campo) {
             $valor = '';
             if($request->has($campo->nombre))
@@ -39,7 +39,7 @@ class FormularioRegistroObserver
 
             if($campo->nombre == 'semana') {$valor = Carbon::now()->startOfWeek()->format('d-m-Y');}
             if($campo->nombre == 'dia_semana') {$valor = getDayOfWeek(date('N'));}
-            if($campo->tipo=='firma'){
+            if($campo->tipo=='firma' && $request->get($campo->nombre)){
                 $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
                 $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
                 Storage::put('public/firmas/'.$filename,$data);

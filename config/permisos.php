@@ -9,6 +9,7 @@ return [
        "usuarios.detail"=>"Mostrar Usuario",
        "usuarios.update"=>"Actualizar Usuario",
        "usuarios.profile"=>"Ver Perfil",
+       "usuarios.delete"=>"Desactivar Usuario",
    ),
    "Roles"=>array(
        "role.index"=>"Listar Roles",
