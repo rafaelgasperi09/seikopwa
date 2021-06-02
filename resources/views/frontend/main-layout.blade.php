@@ -5,5 +5,6 @@
     @yield('content')
 </div>
 <!-- * App Capsule -->
+@include('frontend.partials.delete')
 @include('frontend.partials.sidebar')
 @include('frontend.partials.footer')

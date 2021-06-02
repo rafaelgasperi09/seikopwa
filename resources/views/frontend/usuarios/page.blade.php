@@ -36,6 +36,20 @@
                     </div>
                 </a>
             </li>
+            @if(\Sentinel::hasAccess('usuarios.delete') && !$dato->isOnGroup('Programador'))
+            <li>
+                <a href="#" class="item" data-toggle="modal" data-target="#deleteModal"
+                data-action="{{ route('usuarios.delete',$dato->id) }}" data-message="Estas seguro que deseas desactivar a este usuario ?">
+                    <div  class="icon-box bg-danger">
+                        <ion-icon name="close-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
+                    </div>
+                    <div class="in">
+                        <div>Desactivar</div>
+                    </div>
+                </a>
+
+            </li>
+            @endif
         </ul>
         <!-- * sub menu -->
     </li>

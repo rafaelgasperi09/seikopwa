@@ -140,6 +140,7 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         Route::put('/{id}/photo', array('as' => 'usuarios.update_photo', 'uses' => 'UserController@updatePhoto'));
 
+        Route::delete('/{id}', array('as' => 'usuarios.delete', 'uses' => 'UserController@delete'))->middleware('hasAccess');
 
     });
 

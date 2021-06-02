@@ -88,4 +88,15 @@ class User extends Authenticatable
     public function cliente(){
         return Cliente::find($this->crm_cliente_id);
     }
+
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeIsActive($query)
+    {
+      return $query->join('activations', 'users.id','=','activations.user_id')->where('activations.completed',1);
+    }
 }
