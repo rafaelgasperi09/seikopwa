@@ -1,7 +1,7 @@
 @extends('frontend.main-layout')
 
 @section('content')
-@include('frontend.partials.title',array('title'=>'Detalle de Equipos','subtitle'=>$data->numero_parte,'image'=>getEquipoIconBySubTipo($data->tipo_equipos_id),'route_back'=>route('equipos.tipo',['sub'=>$data->subTipo->name,'id'=>$data->tipo_equipos_id])))
+@include('frontend.partials.title',array('title'=>'Detalle de Equipos','subtitle'=>$data->numero_parte,'image'=>getEquipoIconBySubTipo($data->tipo_equipos_id,$data->subTipo->display_name),'route_back'=>$route_back))
 <div class="section full mt-2">
     <div class="accordion" id="detalle">
         <div class="item">
@@ -50,6 +50,12 @@
                                 <dt class="col-sm-3">Cliente</dt>
                                 <dd class="col-sm-9">{{ $data->cliente->nombre }}</dd>
                             </dl>
+                            @if($data->sub_equipos_id == 1)
+                            <dl class="row">
+                                <dt class="col-sm-3">Clasificación</dt>
+                                <dd class="col-sm-9">{{ $data->motor->display_name }}</dd>
+                            </dl>
+                            @endif
                         </div>
                 </div>
             </div>

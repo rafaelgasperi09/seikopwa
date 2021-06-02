@@ -36,6 +36,12 @@ class Equipo extends BaseModel
         ]);
     }
 
+    public function motor(){
+        return $this->belongsTo(TipoMotor::class,'tipo_motore_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
+    }
+
     /**
      * Scope a query to only include popular users.
      *

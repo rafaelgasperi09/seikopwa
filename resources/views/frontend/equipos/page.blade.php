@@ -2,10 +2,10 @@
     <li class="multi-level">
         <a href="#" class="item">
             <div class="imageWrapper">
-                <img src="{{ getEquipoIconBySubTipo($e->tipo_equipos_id) }}" alt="image" class="imaged w64">
+                <img src="{{ getEquipoIconBySubTipo($e->tipo_equipos_id,$e->subTipo->display_name) }}" alt="image" class="imaged w64">
             </div>
             <div class="in">
-                <div>{{$e->numero_parte}}</div>
+                <div>{{$e->numero_parte}}<br/> <small style="font-size: 8px">({{ $e->cliente->nombre }})</small></div>
             </div>
         </a>
         <!-- sub menu -->
@@ -34,9 +34,13 @@
                     </a>
                 </li>
             @endif
-            @if(!empty($e->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev'))
+            @if((!empty($e->tipo_equipos_id) or !empty($e->tipo_motore_id)) && \Sentinel::hasAccess('equipos.create_mant_prev'))
                 <li>
-                    <a href="{{ route('equipos.create_mant_prev',[$e->id,$e->tipo_equipos_id]) }}" class="item">
+                    <a href="@if($e->sub_equipos_id==1)
+                        {{ route('equipos.create_mant_prev',[$e->id,$e->tipo_motore_id]) }}
+                    @else
+                        {{ route('equipos.create_mant_prev',[$e->id,$e->tipo_equipos_id]) }}
+                    @endif" class="item">
                         <div class="icon-box bg-info">
                             <ion-icon name="hammer-outline" role="img" class="md hydrated" aria-label="hammer-outline"></ion-icon>
                         </div>

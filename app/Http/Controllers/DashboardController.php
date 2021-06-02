@@ -30,14 +30,14 @@ class DashboardController extends Controller
             $q->whereRaw($filterExtra);
         });
         if(empty($pluck)){
-            return  $r->get(); 
-           
+            return  $r->get();
+
         }else{
             return $r->pluck('equipo_id');
         }
-                
-    
-        
+
+
+
     }
 
 
@@ -45,19 +45,21 @@ class DashboardController extends Controller
 
         ///////////// EQUIPOS ///////////////////////
         /// FILTRO SOLO LAS ELECTRICAS POR LOS DE COMBUSTION NO TIENEN SUB TIPO
-        $equipos =  Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo('electricas'))->whereNotNull('sub_equipos_id')->get();
-        
+        $equipos =  Equipo::FiltroCliente()->get();
         //dd($equipos->pluck('numero_parte','id'));
-
         ///////////// TOTAL EQUIPOS POR TIPO //////////////
-        $tipoEquipos = Equipo::selectRaw('count(equipos.id) as total,equipos.sub_equipos_id,equipos.tipo_equipos_id,tipo_equipos.display_name')
+        $tipoEquiposArray=array();
+        $tipoEquiposArrayAlquiler=array();
+
+        $tipoEquiposElectricas = Equipo::selectRaw('count(equipos.id) as total,equipos.sub_equipos_id,equipos.tipo_equipos_id,tipo_equipos.display_name')
             ->FiltroCliente()
             ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
+            ->where('equipos.sub_equipos_id','=',2)
             ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id')
             ->get();
 
-        $tipoEquiposArray=array();
-        foreach($tipoEquipos as $t){
+
+        foreach($tipoEquiposElectricas as $t){
             $se = SubEquipo::find($t->sub_equipos_id);
             $tipoEquiposArray[$t->sub_equipos_id]['name']=$se->name;
             $tipoEquiposArray[$t->sub_equipos_id]['sub_equipo_id']=$t->sub_equipos_id;
@@ -66,7 +68,61 @@ class DashboardController extends Controller
             $tipoEquiposArray[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['total']=$t->total;
         }
 
+        $tipoEquiposCombustion = Equipo::selectRaw('count(equipos.id) as total,equipos.sub_equipos_id,equipos.tipo_motore_id,tipo_motores.display_name')
+            ->FiltroCliente()
+            ->join('tipo_motores','equipos.tipo_motore_id','=','tipo_motores.id')
+            ->where('equipos.sub_equipos_id','=',1)
+            ->groupBy('equipos.sub_equipos_id','equipos.tipo_motore_id')
+            ->get();
+
+
+        foreach($tipoEquiposCombustion as $t){
+            $se = SubEquipo::find($t->sub_equipos_id);
+            $tipoEquiposArray[$t->sub_equipos_id]['name']=$se->name;
+            $tipoEquiposArray[$t->sub_equipos_id]['sub_equipo_id']=$t->sub_equipos_id;
+            $tipoEquiposArray[$t->sub_equipos_id]['tipos'][$t->tipo_motore_id]['tipo_id']=$t->tipo_motore_id;
+            $tipoEquiposArray[$t->sub_equipos_id]['tipos'][$t->tipo_motore_id]['tipo']=$t->display_name;
+            $tipoEquiposArray[$t->sub_equipos_id]['tipos'][$t->tipo_motore_id]['total']=$t->total;
+        }
+
+        $tipoEquiposElectricasGM = Equipo::selectRaw('count(equipos.id) as total,equipos.sub_equipos_id,equipos.tipo_equipos_id,tipo_equipos.display_name')
+            ->FiltroCliente()
+            ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
+            ->where('equipos.sub_equipos_id','=',2)
+            ->where('numero_parte','like','%GM%')
+            ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id')
+            ->get();
+
+        foreach($tipoEquiposElectricasGM as $t){
+            $se = SubEquipo::find($t->sub_equipos_id);
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['name']=$se->name;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['sub_equipo_id']=$t->sub_equipos_id;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['tipo_id']=$t->tipo_equipos_id;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['tipo']=$t->display_name;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['total']= $tipoEquiposArray[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['total'];
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['totalAlquiler']=$t->total;
+        }
+
+        $tipoEquiposCombustionGM = Equipo::selectRaw('count(equipos.id) as total,equipos.sub_equipos_id,equipos.tipo_motore_id,tipo_motores.display_name')
+            ->FiltroCliente()
+            ->join('tipo_motores','equipos.tipo_motore_id','=','tipo_motores.id')
+            ->where('equipos.sub_equipos_id','=',1)
+            ->where('numero_parte','like','%GM%')
+            ->groupBy('equipos.sub_equipos_id','equipos.tipo_motore_id')
+            ->get();
+
+        foreach($tipoEquiposCombustionGM as $t){
+            $se = SubEquipo::find($t->sub_equipos_id);
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['name']=$se->name;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['sub_equipo_id']=$t->sub_equipos_id;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['tipo_id']=$t->tipo_equipos_id;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['tipo']=$t->display_name;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['total']= $tipoEquiposArray[$t->sub_equipos_id]['tipos'][$t->tipo_motore_id]['total'];
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['totalAlquiler']=$t->total;
+        }
+
         $data['total_equipos'] =  $tipoEquiposArray;
+        $data['total_equiposGM'] =  $tipoEquiposArrayAlquiler;
 
         ////////////// TOTAL BATERIAS ////////////////////////////////
         $data['total_baterias'] =Componente::whereTipoComponenteId(2)->count();
@@ -78,7 +134,8 @@ class DashboardController extends Controller
         if(current_user()->isCliente() or  current_user()->isOnGroup('programador')){
             $equipo_daily_check_today = FormularioRegistro::whereFormularioId($formularioDailyCheck->id)
                 ->whereRaw("date_format(created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'")
-                ->pluck('equipo_id')->toArray();
+                ->pluck('equipo_id')
+                ->toArray();
             $i=0;
             foreach ($equipos as $e){
                 if(current_user()->isOnGroup('programador') and $i++>=10){
@@ -86,37 +143,37 @@ class DashboardController extends Controller
                 }
                 if(!in_array($e->id,$equipo_daily_check_today)){
                     $data['equipos_sin_daily_check_hoy'][$e->id]=$e->numero_parte;
-                }      
+                }
             }
         }
 
-        
-        //daily check pendientes de firma supervisor    
-        $data['daily_check']=$this->getPendings('daily_check');     
-        //mantenimientos preventivos pendientes de firma supervisor    
-        $data['mant_prev']=$this->getPendings('mant_prev');     
+        //daily check pendientes de firma supervisor
+        $data['daily_check']=$this->getPendings('daily_check');
+        //mantenimientos preventivos pendientes de firma supervisor
+        $data['mant_prev']=$this->getPendings('mant_prev');
         //servicio tecnico PENDIENTES
-        $data['serv_tec_p']=$this->getPendings('serv_tec');     
+        $data['serv_tec_p']=$this->getPendings('serv_tec');
         //servicio tecnico ABIERTAS
-        $data['serv_tec_a']=$this->getPendings('serv_tec','A',' formulario_registro.tecnico_asignado='.current_user()->id);     
+        $data['serv_tec_a']=$this->getPendings('serv_tec','A',' formulario_registro.tecnico_asignado='.current_user()->id);
         //servicio tecnico EN PROCESO
-        $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',' formulario_registro.tecnico_asignado='.current_user()->id);   
+        $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',' formulario_registro.tecnico_asignado='.current_user()->id);
          //servicio tecnico EN PROCESO
          $data['serv_tec_10']=array();
-        if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador'))
-            $data['serv_tec_10']=$this->getPendings('serv_tec',''," formulario_registro.estatus<>'C'",false,'');   
+
+         if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador'))
+            $data['serv_tec_10']=$this->getPendings('serv_tec',''," formulario_registro.estatus<>'C'",false,'');
+
         if(current_user()->isOnGroup('supervisorc'))
-            $data['serv_tec_10']=$this->getPendings('serv_tec','','',true,'');   
-       
+            $data['serv_tec_10']=$this->getPendings('serv_tec','','',true,'');
 
         if(current_user()->isOnGroup('administrador') or  current_user()->isOnGroup('programador')){
             $dailyCheck =  $this->getPendings('daily_check','', "date_format(formulario_registro.created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'",false,true);
-           
+
             $dailyCheckString='';
             foreach($dailyCheck as $k=>$dc){
                 $dailyCheckString.=$dc.',';
             }
-            $dailyCheckString.='0'; 
+            $dailyCheckString.='0';
             $data['global_sin_daily_check_hoy']=  Equipo::selectRaw('contactos.nombre,count(*) as equipos, SUM(CASE WHEN equipos.id IN ('.$dailyCheckString.') THEN 1 ELSE 0 END ) AS daily_check')
                                     ->join('contactos','equipos.cliente_id','contactos.id')
                                     ->where('sub_equipos_id',getSubEquipo('electricas'))
@@ -124,8 +181,9 @@ class DashboardController extends Controller
                                     ->groupBy('contactos.nombre')
                                     ->get()->toArray();
 
-           
+
         }
+
         return view('frontend.dashboard',compact('data'));
     }
 }

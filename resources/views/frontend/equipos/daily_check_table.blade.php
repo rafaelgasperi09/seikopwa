@@ -90,7 +90,7 @@
                     var html = '';
                     var estatus='';
                     $.each(data.data, function( index, value ) {
-                        console.log(value);
+
                         if(estatus=='')
                             estatus=value.registro.estatus;
                         valor = value.valor;

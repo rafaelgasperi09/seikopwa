@@ -44,10 +44,14 @@ function getSubEquipo($name,$campo=null){
         return $sub->id;
     }
 }
-function getTipoEquipo($id){
+function getTipoEquipo($id,$sub_tipo='electricas'){
     if($id=='todos')
       return 'Todos';
+
     $tipo=\App\TipoEquipo::findOrFail($id);
+    if($sub_tipo=='combustion')
+        $tipo=\App\TipoMotor::findOrFail($id);
+
     return $tipo->display_name;
 }
 function mostrarCampo($tipo){
@@ -158,41 +162,45 @@ function getListUsersByRol($rol_name){
     return $arr;
 }
 
-function  getEquipoIconBySubTipo($sub_tipo_id){
+function  getEquipoIconBySubTipo($sub_tipo_id,$tipo='electricas'){
 
-    $icon = url('assets/img/mc2.png');
-    $path = '';
-    switch($sub_tipo_id){
-        case 1:
-          $icon = 'COUNTER RC.JPG';
-          break;
-        case 2:
-            $icon = 'COMBUSTION.JPG';
-            break;
-        case 3:
-            $icon = 'COUNTER FC.JPG';
-            break;
-        case 4:
-            $icon = 'COUNTER SC.JPG';
-            break;
-        case 5:
-            $icon ='PALLET.PNG';
-            break;
-        case 6:
-            $icon = 'REACH.JPG';
-            break;
-        case 7:
-            $icon = 'STOCK PICKER.PNG';
-            break;
-        case 8:
-            $icon = 'WALKIE PALLET.JPG';
-            break;
-        case 9:
-            $icon = 'STACKER.JPG';
-            break;
-        case 10:
-            $icon = 'WAVE.JPG';
-            break;
+    if($tipo == 'electricas'){
+        $icon = 'mc2.png';
+        $path = '';
+        switch($sub_tipo_id){
+            case 1:
+                $icon = 'COUNTER RC.JPG';
+                break;
+            case 2:
+                $icon = 'COMBUSTION.JPG';
+                break;
+            case 3:
+                $icon = 'COUNTER FC.JPG';
+                break;
+            case 4:
+                $icon = 'COUNTER SC.JPG';
+                break;
+            case 5:
+                $icon ='PALLET.PNG';
+                break;
+            case 6:
+                $icon = 'REACH.JPG';
+                break;
+            case 7:
+                $icon = 'STOCK PICKER.PNG';
+                break;
+            case 8:
+                $icon = 'WALKIE PALLET.JPG';
+                break;
+            case 9:
+                $icon = 'STACKER.JPG';
+                break;
+            case 10:
+                $icon = 'WAVE.JPG';
+                break;
+        }
+    }else{
+        $icon = 'COMBUSTION.JPG';
     }
 
     //$img = Image::make(public_path('images/montacargas/'.$icon));

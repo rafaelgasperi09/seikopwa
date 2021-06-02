@@ -4,6 +4,7 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Creado por</th>
+            <th scope="col">Cliente</th>
             <th scope="col">Fecha</th>
             <th scope="col">Estado</th>
             <th scope="col">Acciones</th>
@@ -14,6 +15,7 @@
     <tr>
        <td>{{$d->id}}</td>
        <td>{{$d->creador->first_name.' '.$d->creador->last_name}}</td>
+        <td>{{$d->cliente()->nombre}}</td>
        <td>{{ \Carbon\Carbon::parse($d->created_at)->format('Y-m-d')}}</td>
        <td>{!!getStatusHtml($d->estatus)!!}</td>
        <td>
