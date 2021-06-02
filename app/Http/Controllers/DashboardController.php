@@ -47,9 +47,10 @@ class DashboardController extends Controller
         /// FILTRO SOLO LAS ELECTRICAS POR LOS DE COMBUSTION NO TIENEN SUB TIPO
         $equipos =  Equipo::FiltroCliente()->get();
         //dd($equipos->pluck('numero_parte','id'));
-
         ///////////// TOTAL EQUIPOS POR TIPO //////////////
         $tipoEquiposArray=array();
+        $tipoEquiposArrayAlquiler=array();
+
         $tipoEquiposElectricas = Equipo::selectRaw('count(equipos.id) as total,equipos.sub_equipos_id,equipos.tipo_equipos_id,tipo_equipos.display_name')
             ->FiltroCliente()
             ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
@@ -84,7 +85,44 @@ class DashboardController extends Controller
             $tipoEquiposArray[$t->sub_equipos_id]['tipos'][$t->tipo_motore_id]['total']=$t->total;
         }
 
+        $tipoEquiposElectricasGM = Equipo::selectRaw('count(equipos.id) as total,equipos.sub_equipos_id,equipos.tipo_equipos_id,tipo_equipos.display_name')
+            ->FiltroCliente()
+            ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
+            ->where('equipos.sub_equipos_id','=',2)
+            ->where('numero_parte','like','%GM%')
+            ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id')
+            ->get();
+
+        foreach($tipoEquiposElectricasGM as $t){
+            $se = SubEquipo::find($t->sub_equipos_id);
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['name']=$se->name;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['sub_equipo_id']=$t->sub_equipos_id;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['tipo_id']=$t->tipo_equipos_id;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['tipo']=$t->display_name;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['total']= $tipoEquiposArray[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['total'];
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['totalAlquiler']=$t->total;
+        }
+
+        $tipoEquiposCombustionGM = Equipo::selectRaw('count(equipos.id) as total,equipos.sub_equipos_id,equipos.tipo_motore_id,tipo_motores.display_name')
+            ->FiltroCliente()
+            ->join('tipo_motores','equipos.tipo_motore_id','=','tipo_motores.id')
+            ->where('equipos.sub_equipos_id','=',1)
+            ->where('numero_parte','like','%GM%')
+            ->groupBy('equipos.sub_equipos_id','equipos.tipo_motore_id')
+            ->get();
+
+        foreach($tipoEquiposCombustionGM as $t){
+            $se = SubEquipo::find($t->sub_equipos_id);
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['name']=$se->name;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['sub_equipo_id']=$t->sub_equipos_id;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['tipo_id']=$t->tipo_equipos_id;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['tipo']=$t->display_name;
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['total']= $tipoEquiposArray[$t->sub_equipos_id]['tipos'][$t->tipo_motore_id]['total'];
+            $tipoEquiposArrayAlquiler[$t->sub_equipos_id]['tipos'][$t->tipo_equipos_id]['totalAlquiler']=$t->total;
+        }
+
         $data['total_equipos'] =  $tipoEquiposArray;
+        $data['total_equiposGM'] =  $tipoEquiposArrayAlquiler;
 
         ////////////// TOTAL BATERIAS ////////////////////////////////
         $data['total_baterias'] =Componente::whereTipoComponenteId(2)->count();

@@ -267,54 +267,11 @@ class EquiposController extends BaseController
                 $model->semana = date('W');
                 $model->ano = date('Y');
 
-                if($model->save())
+                if(!$model->save())
                 {
-                    foreach ($formulario->campos()->get() as $campo)
-                    {
-
-                        $valor =  $request->get($campo->nombre);
-                        if($campo->nombre == 'semana') $valor = Carbon::now()->startOfWeek()->format('d-m-Y');
-                        if($campo->nombre == 'dia_semana') $valor = getDayOfWeek(date('N'));
-                       // if(!empty($valor)){
-                            if($campo->tipo=='firma' && !empty($valor)){
-                                $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
-                                $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
-                                Storage::put('public/firmas/'.$filename,$data);
-                                $valor =  $filename;
-                            }
-
-                            if(in_array($campo->tipo,['camera','file'])){
-                                $file = $request->file($campo->nombre);
-
-                                if($file){
-                                    $img = Image::make($file->path());
-                                    $ext = $file->getClientOriginalExtension();
-                                    $filename = $model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
-                                    $destinationPath = storage_path('/app/public/equipos');
-                                    $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
-                                    $valor =  $filename;
-
-                                }
-                            }
-                        //}
-
-                        $api_descripcion = '';
-                        $form_data = FormularioData::create([
-                            'formulario_registro_id' => $model->id,
-                            'formulario_campo_id'=>$campo->id,
-                            'valor' =>$valor,
-                            'tipo' => $campo->tipo,
-                            'api_descripcion'=>$api_descripcion,
-                        ]);
-
-                        if(!$form_data)
-                        {
-                            Throw new \Exception('Hubo un problema y no se guardar el campo :'.$campo->nombre);
-                        }
-                    }
-                }else{
                     Throw new \Exception('Hubo un problema y no se creo el registro!');
                 }
+
             });
 
             // notificar a el o a los supervisores del cliente que tiene una firma pendiente por daily check
@@ -454,33 +411,7 @@ class EquiposController extends BaseController
                 $model->equipo_id = $request->equipo_id;
                 $model->cliente_id = $equipo->cliente_id;
                 $model->estatus = 'P';
-                if ($model->save()) {
-
-                    foreach ($formulario->campos()->get() as $campo) {
-                        $valor = $request->get($campo->nombre);
-                        $api_descripcion = '';
-                        if($campo->tipo=='firma' and $request->get($campo->nombre)){
-                            $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
-                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
-                            Storage::put('public/firmas/'.$filename,$data);
-                            $valor =  $filename;
-                        }
-
-                        $form_data = FormularioData::create([
-                            'formulario_registro_id' => $model->id,
-                            'formulario_campo_id' => $campo->id,
-                            'valor' => $valor,
-                            'tipo' => $campo->tipo,
-                            'api_descripcion' => $api_descripcion,
-                            'user_id'=>current_user()->id
-                        ]);
-
-                        if (!$form_data) {
-                            throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
-                        }
-                    }
-
-                } else {
+                if (!$model->save()) {
                     throw new \Exception('Hubo un problema y no se creo el registro!');
                 }
             });
@@ -528,6 +459,20 @@ class EquiposController extends BaseController
                             $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
                             Storage::put('public/firmas/'.$filename,$data);
                             $valor =  $filename;
+                        }
+
+                        if(in_array($campo->tipo,['camera','file'])){
+                            $file = $request->file($campo->nombre);
+
+                            if($file){
+                                $img = Image::make($file->path());
+                                $ext = $file->getClientOriginalExtension();
+                                $filename = 'dc_'.$model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
+                                $destinationPath = storage_path('/app/public/equipos');
+                                $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                                $valor =  $filename;
+
+                            }
                         }
                         $form_data = FormularioData::whereFormularioRegistroId($model->id)->whereFormularioCampoId($campo->id)->first();
                         $form_data->valor = $valor;
@@ -605,33 +550,8 @@ class EquiposController extends BaseController
             $model->cliente_id = $request->cliente_id;
             $model->estatus = 'P';
 
-            if($model->save())
+            if(!$model->save())
             {
-                foreach ($formulario->campos()->get() as $campo)
-                {
-                    $valor =  $request->get($campo->nombre);
-                    if($campo->tipo=='firma' && !empty($valor)){
-                        $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
-                        $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
-                        Storage::put('public/firmas/'.$filename,$data);
-                        $valor =  $filename;
-                    }
-
-                    $api_descripcion = '';
-                    $form_data = FormularioData::create([
-                        'formulario_registro_id' => $model->id,
-                        'formulario_campo_id'=>$campo->id,
-                        'valor' =>$valor,
-                        'tipo' => $campo->tipo,
-                        'api_descripcion'=>$api_descripcion,
-                    ]);
-
-                    if(!$form_data)
-                    {
-                        Throw new \Exception('Hubo un problema y no se guardar el campo :'.$campo->nombre);
-                    }
-                }
-            }else{
                 Throw new \Exception('Hubo un problema y no se creo el registro!');
             }
         });
@@ -672,6 +592,19 @@ class EquiposController extends BaseController
                             $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
                             Storage::put('public/firmas/'.$filename,$data);
                             $valor =  $filename;
+                        }
+                        if(in_array($campo->tipo,['camera','file'])){
+                            $file = $request->file($campo->nombre);
+
+                            if($file){
+                                $img = Image::make($file->path());
+                                $ext = $file->getClientOriginalExtension();
+                                $filename = 'st_'.$model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
+                                $destinationPath = storage_path('/app/public/equipos');
+                                $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                                $valor =  $filename;
+
+                            }
                         }
                         if($campo->nombre == 'hora_salida'){
                             $valor = date('H:i');

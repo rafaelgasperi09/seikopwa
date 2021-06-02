@@ -2,8 +2,14 @@
 
 namespace App\Observers;
 
+use App\Formulario;
+use App\FormularioData;
 use App\FormularioRegistro;
 use App\FormularioRegistroEstatus;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+use Sentinel;
 
 class FormularioRegistroObserver
 {
@@ -20,6 +26,48 @@ class FormularioRegistroObserver
             'user_id'=>current_user()->id,
             'estatus'=>$formularioRegistro->estatus
         ]);
+
+        $formulario = Formulario::find($formularioRegistro->formulario_id);
+        $request = request();
+        foreach ($formulario->campos()->get() as $campo) {
+            $valor = $request->get($campo->nombre);
+            $api_descripcion = '';
+            if($campo->nombre == 'semana') $valor = Carbon::now()->startOfWeek()->format('d-m-Y');
+            if($campo->nombre == 'dia_semana') $valor = getDayOfWeek(date('N'));
+            if($campo->tipo=='firma' and $request->get($campo->nombre)){
+                $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
+                $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
+                Storage::put('public/firmas/'.$filename,$data);
+                $valor =  $filename;
+            }
+
+            if(in_array($campo->tipo,['camera','file'])){
+                $file = $request->file($campo->nombre);
+
+                if($file){
+                    $img = Image::make($file->path());
+                    $ext = $file->getClientOriginalExtension();
+                    $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().'.'.$ext;
+                    $destinationPath = storage_path('/app/public/equipos');
+                    $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                    $valor =  $filename;
+
+                }
+            }
+
+            $form_data = FormularioData::create([
+                'formulario_registro_id' => $formularioRegistro->id,
+                'formulario_campo_id' => $campo->id,
+                'valor' => $valor,
+                'tipo' => $campo->tipo,
+                'api_descripcion' => $api_descripcion,
+                'user_id'=>current_user()->id
+            ]);
+
+            if (!$form_data) {
+                throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
+            }
+        }
     }
     /**
      * Handle the formulario data "updated" event.
@@ -36,5 +84,7 @@ class FormularioRegistroObserver
                 'estatus'=>$formularioRegistro->estatus
             ]);
         }
+
     }
+
 }
