@@ -47,7 +47,7 @@
                                 @elseif($campo->tipo == 'file')
                                     <div class="custom-file-upload">
                                         {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*')) }}
-                                        <label for="{{ $campo->nombre }}" id="{{ $campo->nombre }}">
+                                        <label for="{{ $campo->nombre }}" id="{{ $campo->nombre }}" style="background-image: url({{ url('storage/equipos/'.$value) }});background-size: cover;background-repeat: no-repeat;background-position: center;">
                                             <span>
                                                 <strong>
                                                     <ion-icon name="cloud-upload-outline" role="img" class="md hydrated" aria-label="cloud upload outline"></ion-icon>
@@ -59,7 +59,7 @@
                                 @elseif($campo->tipo == 'camera')
                                     <div class="custom-file-upload">
                                         {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*','capture'=>'camera')) }}
-                                        <label for="{{ $campo->nombre }}" id="{{ $campo->nombre }}">
+                                        <label for="{{ $campo->nombre }}" id="{{ $campo->nombre }}" style="background-image: url({{ url('storage/equipos/'.$value) }});background-size: cover;background-repeat: no-repeat;background-position: center;">
                                             <span>
                                                 <strong>
                                                     <ion-icon name="cloud-upload-outline" role="img" class="md hydrated" aria-label="cloud upload outline"></ion-icon>

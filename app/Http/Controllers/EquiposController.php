@@ -306,50 +306,19 @@ class EquiposController extends BaseController
                 'equipo_id'              => 'required',
                 'formulario_id'          => 'required',
                 'formulario_registro_id' => 'required',
-                'ok_supervidor'  => 'required',
+                'ok_supervidor'          => 'required',
             ]);
 
             $formulario_registro_id = $request->formulario_registro_id;
-            $formulario_id = $request->formulario_id;
-            $formulario = Formulario::findOrFail($formulario_id);
             $model = FormularioRegistro::findOrFail($formulario_registro_id);
-            $equipo = Equipo::findOrFail($model->equipo_id);
-
-            DB::transaction(function () use ($model, $request, $formulario, $equipo) {
-
-                foreach ($formulario->campos()->get() as $campo) {
-
-                    $valor = $request->get($campo->nombre);
-
-                    if(!empty($valor)){
-
-                        if($campo->tipo=='firma'){
-
-                            $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
-                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
-                            Storage::put('public/firmas/'.$filename,$data);
-                            $valor =  $filename;
-
-                        }
-                        $form_data = FormularioData::whereFormularioRegistroId($model->id)->whereFormularioCampoId($campo->id)->first();
-                        $form_data->valor = $valor;
-                        $form_data->user_id = current_user()->id;
-
-                        if (!$form_data->save()) {
-                            throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
-                        }
-                    }
-
-                }
-
-            });
-
+            $model->updated_at =Carbon::now();
+            $model->save();
             $request->session()->flash('message.success', 'Registro guardado con éxito');
-            return redirect(route('equipos.detail', $equipo->id));
+            return redirect(route('equipos.detail', $model->equipo_id));
 
         } catch (\Exception $e) {
             $request->session()->flash('message.error', $e->getMessage());
-            return redirect(route('equipos.edit_daily_check',$formulario_registro_id))->withInput($request->all());
+            return redirect(route('equipos.edit_daily_check',$request->formulario_registro_id))->withInput($request->all());
         }
     }
 
@@ -439,62 +408,15 @@ class EquiposController extends BaseController
             ]);
 
             $formulario_registro_id = $request->formulario_registro_id;
-            $equipo_id = $request->equipo_id;
-            $formulario_id = $request->formulario_id;
-            $formulario = Formulario::find($formulario_id);
-            $equipo = Equipo::find($equipo_id);
             $model = FormularioRegistro::findOrFail($formulario_registro_id);
-
-            DB::transaction(function () use ($model, $request, $formulario, $equipo) {
-
-                foreach ($formulario->campos()->get() as $campo) {
-
-                    $valor = $request->get($campo->nombre);
-
-                    if(!empty($valor)){
-
-                        if($campo->tipo=='firma'){
-
-                            $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
-                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
-                            Storage::put('public/firmas/'.$filename,$data);
-                            $valor =  $filename;
-                        }
-
-                        if(in_array($campo->tipo,['camera','file'])){
-                            $file = $request->file($campo->nombre);
-
-                            if($file){
-                                $img = Image::make($file->path());
-                                $ext = $file->getClientOriginalExtension();
-                                $filename = 'dc_'.$model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
-                                $destinationPath = storage_path('/app/public/equipos');
-                                $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
-                                $valor =  $filename;
-
-                            }
-                        }
-                        $form_data = FormularioData::whereFormularioRegistroId($model->id)->whereFormularioCampoId($campo->id)->first();
-                        $form_data->valor = $valor;
-                        $form_data->user_id = current_user()->id;
-
-                        if (!$form_data->save()) {
-                            throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
-                        }
-                    }
-
-                }
-
-            });
-
-            //aqui hay que ver a quien notificar
-
+            $model->updated_at =Carbon::now();
+            $model->save();
             $request->session()->flash('message.success', 'Registro guardado con éxito');
-            return redirect(route('equipos.detail', $equipo_id));
+            return redirect(route('equipos.detail', $model->equipo_id));
 
         } catch (\Exception $e) {
             $request->session()->flash('message.error', $e->getMessage());
-            return redirect(route('equipos.edit_mant_prev',$formulario_registro_id))->withInput($request->all());
+            return redirect(route('equipos.edit_mant_prev',$request->formulario_registro_id))->withInput($request->all());
         }
     }
 
@@ -572,64 +494,15 @@ class EquiposController extends BaseController
             ]);
 
             $formulario_registro_id = $request->formulario_registro_id;
-            $equipo_id = $request->equipo_id;
-            $formulario_id = $request->formulario_id;
-            $formulario = Formulario::find($formulario_id);
-            $equipo = Equipo::find($equipo_id);
             $model = FormularioRegistro::findOrFail($formulario_registro_id);
-
-            DB::transaction(function () use ($model, $request, $formulario, $equipo) {
-
-                foreach ($formulario->campos()->get() as $campo) {
-
-                    $valor = $request->get($campo->nombre);
-
-                    if(!empty($valor) or $campo->nombre == 'hora_salida'){
-
-                        if($campo->tipo=='firma'){
-
-                            $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
-                            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
-                            Storage::put('public/firmas/'.$filename,$data);
-                            $valor =  $filename;
-                        }
-                        if(in_array($campo->tipo,['camera','file'])){
-                            $file = $request->file($campo->nombre);
-
-                            if($file){
-                                $img = Image::make($file->path());
-                                $ext = $file->getClientOriginalExtension();
-                                $filename = 'st_'.$model->id.'_'.$model->equipo_id.'_'.time().'.'.$ext;
-                                $destinationPath = storage_path('/app/public/equipos');
-                                $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
-                                $valor =  $filename;
-
-                            }
-                        }
-                        if($campo->nombre == 'hora_salida'){
-                            $valor = date('H:i');
-                        }
-                        $form_data = FormularioData::whereFormularioRegistroId($model->id)->whereFormularioCampoId($campo->id)->first();
-                        $form_data->valor = $valor;
-                        $form_data->user_id = current_user()->id;
-
-                        if (!$form_data->save()) {
-                            throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
-                        }
-                    }
-
-                }
-
-            });
-
-            //aqui hay que ver a quien notificar
-
-            $request->session()->flash('message.success', 'Registro creado con éxito');
-            return redirect(route('equipos.detail', $equipo_id));
+            $model->updated_at =Carbon::now();
+            $model->save();
+            $request->session()->flash('message.success', 'Registro guardado con éxito');
+            return redirect(route('equipos.detail', $model->equipo_id));
 
         } catch (\Exception $e) {
             $request->session()->flash('message.error', $e->getMessage());
-            return redirect(route('equipos.edit_tecnical_support',$formulario_registro_id))->withInput($request->all());
+            return redirect(route('equipos.edit_tecnical_support',$request->formulario_registro_id))->withInput($request->all());
         }
     }
 
