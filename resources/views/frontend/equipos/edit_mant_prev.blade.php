@@ -1,6 +1,6 @@
 @extends('frontend.main-layout')
 @section('content')
-    @include('frontend.partials.title',array('title'=>'Mantenimiento Preventivo','subtitle'=>'Equipo : '.$data->numero_parte))
+    @include('frontend.partials.title',array('title'=>'Mantenimiento Preventivo','subtitle'=>'Equipo : '.$equipo->numero_parte))
 
     <div class="section full mt-2 mb-2">
         <div class="section-title">{{$formulario->titulo}} <small>{{ $formulario->nombre_menu }}</small></div>
@@ -66,7 +66,7 @@
     {{ Form::hidden('formulario_registro_id',$data->id,array('required')) }}
     @include('frontend.partials.form',array('formulario'=>$formulario,'datos'=>$data))
     <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm btn-block">GUARDAR</button>
+        @include('frontend.partials.btnSubmit')
     </div>
     {{ Form::close() }}
 @stop

@@ -64,7 +64,9 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-sm btn-block">GUARDAR</button>
+            <div class="modal-footer">
+                @include('frontend.partials.btnSubmit')
+            </div>
             {{ Form::close() }}
         </div>
     </div>

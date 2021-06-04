@@ -86,9 +86,7 @@
     {{ Form::hidden('turno_chequeo_diario',$turno) }}
     @include('frontend.partials.form',array('formulario'=>$formulario))
     <div class="modal-footer">
-        <button type="submit" class="btn mobile-height btn-primary btn-sm btn-block">
-        <ion-icon name="save-outline"></ion-icon> GUARDAR
-        </button>
+       @include('frontend.partials.btnSubmit')
     </div>
     {{ Form::close() }}
 

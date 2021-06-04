@@ -1,6 +1,6 @@
 @foreach($data as $e)
     <li class="multi-level">
-        <a href="#" class="item">
+        <a href="#equipo_{{ $e->id }}" class="item">
             <div class="imageWrapper">
                 <img src="{{ getEquipoIconBySubTipo($e->tipo_equipos_id,$e->subTipo->display_name) }}" alt="image" class="imaged w64">
             </div>
@@ -9,7 +9,7 @@
             </div>
         </a>
         <!-- sub menu -->
-        <ul class="listview image-listview" style="display: none;">
+        <ul class="listview image-listview" style="display: none;" id="">
             @if(\Sentinel::hasAccess('equipos.detail'))
                 <li>
                     <a href="{{route('equipos.detail',['id'=>$e->id])}}" class="item">

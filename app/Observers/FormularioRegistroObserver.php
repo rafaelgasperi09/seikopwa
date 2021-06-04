@@ -2,11 +2,16 @@
 
 namespace App\Observers;
 
+use App\Equipo;
 use App\Formulario;
 use App\FormularioCampo;
 use App\FormularioData;
 use App\FormularioRegistro;
 use App\FormularioRegistroEstatus;
+use App\MontacargaConsecutivo;
+use App\MontacargaCopiaSolicitud;
+use App\MontacargaImagen;
+use App\MontacargaSolicitud;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -134,6 +139,7 @@ class FormularioRegistroObserver
                             if($formularioCampo->cambio_estatus && isset($form_data->valor)) {
                                 $formularioRegistro->estatus = 'C';
                                 $formularioRegistro->save();
+                                // si es matenimiento preventivo crear solicitud en crm de montacarga
                             }
                         }
                     }

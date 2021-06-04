@@ -86,29 +86,27 @@ class EquiposController extends BaseController
     public function search(Request $request,$sub,$id){
 
         if($id=='todos'){
-            $equipos=Equipo::FiltroCliente()
+            $equipos=Equipo::selectRaw('equipos.*')->FiltroCliente()
                 ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
                 ->where('sub_equipos_id',getSubEquipo($sub))
                 ->whereRaw("(numero_parte like '%".$request->q."%' or contactos.nombre like '%".$request->q."%')")
                 ->paginate(10);
         }else
         if(getSubEquipo($sub)==2){
-            $equipos=Equipo::FiltroCliente()
+            $equipos=Equipo::selectRaw('equipos.*')->FiltroCliente()
                 ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
                 ->where('sub_equipos_id',getSubEquipo($sub))
                 ->where('tipo_equipos_id',$id)
                 ->whereRaw("(numero_parte like '%".$request->q."%' or contactos.nombre like '%".$request->q."%')")
                 ->paginate(10);
         }else if(getSubEquipo($sub)==1){
-            $equipos=Equipo::FiltroCliente()
+            $equipos=Equipo::selectRaw('equipos.*')->FiltroCliente()
                 ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
                 ->where('sub_equipos_id',getSubEquipo($sub))
                 ->where('tipo_motore_id',$id)
                 ->whereRaw("(numero_parte like '%".$request->q."%' or contactos.nombre like '%".$request->q."%')")
                 ->paginate(10);
         }
-
-
         return view('frontend.equipos.page')->with('data',$equipos);
     }
 
@@ -342,8 +340,6 @@ class EquiposController extends BaseController
             $formulario = Formulario::whereNombre($forms[$tipo])->first();
         }
 
-
-
         return view('frontend.equipos.create_mant_prev')->with('data',$data)->with('formulario',$formulario);
     }
 
@@ -351,6 +347,7 @@ class EquiposController extends BaseController
 
         $data = FormularioRegistro::findOrFail($id);
         $equipo = Equipo::findOrFail($data->equipo_id);
+
         if(!current_user()->can('see',$equipo)){
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
@@ -409,8 +406,78 @@ class EquiposController extends BaseController
 
             $formulario_registro_id = $request->formulario_registro_id;
             $model = FormularioRegistro::findOrFail($formulario_registro_id);
+            $formulario = Formulario::findOrFail($model->formulario_id);
             $model->updated_at =Carbon::now();
             $model->save();
+
+            if($formulario->tipo == 'mant_prev' && $model->estatus =='C'){
+
+                $horometro ='';
+                $obs ='';
+                $horometroCampo = $model->formulario()->first()->campos()->where('nombre','horometro')->first();
+                $horoData = $model->data()->whereFormularioCampoId($horometroCampo->id)->first();
+                if($horoData){
+                    $horometro = $horoData->valor;
+                }
+
+                $obsCampo = $model->formulario()->first()->campos()->where('nombre','observacion')->first();
+                $obsData = $model->data()->whereFormularioCampoId($obsCampo->id)->first();
+                if($obsData){
+                    $obs = $obsData->valor;
+                }
+
+                // crear una solicitud de mantenimiento preventivo en la base de dato de montacarga
+                $equipo = Equipo::find($model->equipo_id);
+                $solicitud = new MontacargaSolicitud();
+                $consecutivo = MontacargaConsecutivo::where('consecutivo_opcion','mantenimiento-preventivo')->first();
+                $next_values_consecutivo = $consecutivo->numero_consecutivo+1;
+                $solicitud->cliente_id = $equipo->cliente_id;
+                $solicitud->tipo_servicio_id = 3; //mantenimiento-preventivo
+                $solicitud->equipo_id = $equipo->id;
+                $solicitud->usuario_creado_id = 1; // crear un app_user debe ser  el usuario actual pero tendriamos que cazarlo con uno de la bd de montacarga
+                $solicitud->usuario_id = 1; //
+                $solicitud->departamento_id =9; // servicio-tecnico
+                $solicitud->horometro = $horometro;
+                $solicitud->estado_id = 1; // abierta
+                $solicitud->descripcion = $obs;
+                $solicitud->consecutivo_exportable = $next_values_consecutivo;
+
+                if($solicitud->save()){
+
+                    $consecutivo->numero_consecutivo = $next_values_consecutivo;
+                    $consecutivo->save();
+                    // salvar la copia
+                    $copia_sol =new MontacargaCopiaSolicitud();
+                    $copia_sol->fill($solicitud->toArray());
+                    $copia_sol->usuario_creado_id = 1; // crear un app_user
+                    $copia_sol->usuario_id = 1;
+                    $copia_sol->nombre_servicio = 'Mantenimiento Preventivo';
+                    $copia_sol->nombre_contacto = $equipo->cliente->nombre;
+                    $copia_sol->nombre_departamento = 'Servicio técnico';
+                    $copia_sol->nombre_estado = 'Abierto';
+                    $copia_sol->nombre_usuario_crea = current_user()->getFullName();
+                    $copia_sol->equipo = $equipo->numero_parte;
+                    $copia_sol->save();
+                    // creams el pdf de la solicitud
+                    $pdf = $model->savePdf($equipo,$solicitud);
+
+                    MontacargaImagen::create([
+                        'name' =>$pdf['url'],
+                        'directory'=>'app/public/pdf',
+                        'solicitud_id'=>$solicitud->id,
+                        'calidad'=>'original',
+                        'usuario_id'=>1,
+                    ]);
+
+                    $model->solicitud_id = $solicitud->id;
+                    $model->nombre_archivo = $pdf['url'];
+
+                    FormularioRegistro::withoutEvents(function () use ($model) {
+                        return $model->save();
+                    });
+                }
+
+            }
             $request->session()->flash('message.success', 'Registro guardado con éxito');
             return redirect(route('equipos.detail', $model->equipo_id));
 
@@ -457,7 +524,7 @@ class EquiposController extends BaseController
             'formulario_id'  => 'required',
             'fecha'          => 'required|date',
         ]);
-      
+
         $equipo_id = $request->equipo_id;
         $formulario_id = $request->formulario_id;
         $tipo_equipos_id = $request->tipo_equipos_id;

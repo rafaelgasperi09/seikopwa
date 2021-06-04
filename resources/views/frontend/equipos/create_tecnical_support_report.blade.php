@@ -90,8 +90,8 @@
     {{ Form::hidden('equipo_id',$data->id) }}
     {{ Form::hidden('formulario_id',$formulario->id) }}
     @include('frontend.partials.form',array('formulario'=>$formulario))
-    <button type="submit" class="btn mobile-height btn-primary btn-sm btn-block">
-        <ion-icon name="save-outline"></ion-icon> GUARDAR
-    </button>
+        <div class="modal-footer">
+            @include('frontend.partials.btnSubmit')
+        </div>
     {{ Form::close() }}
 @stop

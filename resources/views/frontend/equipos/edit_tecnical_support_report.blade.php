@@ -97,7 +97,9 @@
         {{ Form::hidden('formulario_id',$formulario->id,array('required')) }}
         {{ Form::hidden('formulario_registro_id',$data->id,array('required')) }}
         @include('frontend.partials.form',array('formulario'=>$formulario,'datos'=>$data))
-        <button type="submit" class="btn btn-primary btn-sm btn-block">GUARDAR</button>
+        <div class="modal-footer">
+            @include('frontend.partials.btnSubmit')
+        </div>
     {{ Form::close() }}
 
 
