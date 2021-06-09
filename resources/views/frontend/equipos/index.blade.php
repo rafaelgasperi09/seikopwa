@@ -33,7 +33,7 @@
                             <li>
                                 <a href="{{route('equipos.tipo',['sub'=>$s->name,'id'=>$key])}}" class="item">
                                     <div class="imageWrapper">
-                                        <img src="{{ getEquipoIconBySubTipo($key,$s->name) }}" alt="{{ $s->name }}" class="imaged w64">
+                                        <img src="{{ getEquipoIconBySubTipo($key,$s->id) }}" alt="{{ $s->name }}" class="imaged w64">
                                     </div>
                                     <div class="in">
                                         <div>{{$t}}</div>

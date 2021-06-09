@@ -2,7 +2,7 @@
     <li class="multi-level">
         <a href="#equipo_{{ $e->id }}" class="item">
             <div class="imageWrapper">
-                <img src="{{ getEquipoIconBySubTipo($e->tipo_equipos_id,$e->subTipo->display_name) }}" alt="image" class="imaged w64">
+                <img src="{{ getEquipoIconBySubTipo($e->tipo_equipos_id,$e->sub_equipos_id) }}" alt="image" class="imaged w64">
             </div>
             <div class="in">
                 <div>{{$e->numero_parte}}<br/> <small style="font-size: 8px">({{ $e->cliente->nombre }})</small></div>

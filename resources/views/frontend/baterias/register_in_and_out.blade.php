@@ -9,7 +9,7 @@
             {{ Form::hidden('formulario_id',$formulario->id) }}
             @include('frontend.partials.form',array('formulario'=>$formulario))
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary btn-sm btn-block">GUARDAR</button>
+                @include('frontend.partials.btnSubmit')
             </div>
             {{ Form::close() }}
         </div>

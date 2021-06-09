@@ -134,10 +134,12 @@ function getStatusHtml($status){
     $html='<span class="badge badge-'.$colores[$status].'">'.$estados[$status].'</span>';
     return $html;
 }
+
 function getStatusBgColor($status){
     $colores=array('P'=>'warning','A'=>'success','PR'=>'primary','C'=>'secondary','ligth');
     return $colores[$status];
 }
+
 function getUsersByRol($rol_name){
 
 $arr=array();
@@ -162,9 +164,9 @@ function getListUsersByRol($rol_name){
     return $arr;
 }
 
-function  getEquipoIconBySubTipo($sub_tipo_id,$tipo='electricas'){
+function  getEquipoIconBySubTipo($sub_tipo_id,$tipo=1){
 
-    if($tipo == 'electricas'){
+    if($tipo == 2){
         $icon = 'mc2.png';
         $path = '';
         switch($sub_tipo_id){
@@ -218,7 +220,7 @@ function getOptionsRadio($status,$tipo){
                 'G'=>'Garantía');
     if($tipo=='form_montacarga_servicio_tecnico') //servicio tecnico
         return $text[$status];
-    else 
+    else
         return $status;
 }
 ?>
