@@ -31,6 +31,7 @@ return [
      "equipos.start_tecnical_support"=>"Iniciar Servicio de Soporte Técnico",
      "equipos.edit_tecnical_support"=>"Terminar Servicio Soporte Técnico",
      "equipos.detail"=>"Ver Detalle Equipo",
+     "equipos.calendar"=>"Ver Calendario (Servico Técnico)",
    ),
    "Taller"=>array(
     "taller"=>"Permisos personal de MORESA",
