@@ -213,8 +213,13 @@ class EquiposController extends BaseController
              $turno=1;
          }
 
+        $supervisores = User::whereHas('roles',function ($q){
+             $q->where('role_id',3);
+         })->where('crm_cliente_id',$data->cliente_id)
+         ->get()
+        ->pluck('FullName','id');
 
-        return view('frontend.equipos.create_daily_check')->with('data',$data)->with('formulario',$formulario)->with('turno',$turno);
+        return view('frontend.equipos.create_daily_check')->with('data',$data)->with('formulario',$formulario)->with('turno',$turno)->with('supervisores',$supervisores);
     }
 
     public function editDailyCheck($id){

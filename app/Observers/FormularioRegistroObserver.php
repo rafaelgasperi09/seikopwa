@@ -36,16 +36,21 @@ class FormularioRegistroObserver
 
         $formulario = Formulario::find($formularioRegistro->formulario_id);
         $request = request();
-        //dd($request->all());
+
         foreach ($formulario->campos()->get() as $campo) {
             $valor = '';
+            $user_id = current_user()->id;
+            if(!empty($request->second_sign) && $campo->nombre == 'ok_supervidor'){
+                $user_id = $request->second_sign;
+            }
             if($request->has($campo->nombre))
               $valor = $request->get($campo->nombre);
 
             if($campo->nombre == 'semana') {$valor = Carbon::now()->startOfWeek()->format('d-m-Y');}
             if($campo->nombre == 'dia_semana') {$valor = getDayOfWeek(date('N'));}
             if($campo->tipo=='firma' && $request->get($campo->nombre)){
-                $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
+
+                $filename = $user_id.'_'.$campo->nombre.'_'.time().'.png';
                 $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
                 Storage::put('public/firmas/'.$filename,$data);
                 $valor =  $filename;
@@ -71,11 +76,18 @@ class FormularioRegistroObserver
                 'valor' => $valor,
                 'tipo' => $campo->tipo,
                 'api_descripcion' => '',
-                'user_id'=>current_user()->id
+                'user_id'=>$user_id
             ]);
 
             if (!$form_data) {
                 throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
+            }else{
+                $formularioCampo = FormularioCampo::find($form_data->formulario_campo_id);
+                if($formularioCampo->cambio_estatus && isset($form_data->valor)) {
+                    $formularioRegistro->estatus = 'C';
+                    $formularioRegistro->save();
+                    // si es matenimiento preventivo crear solicitud en crm de montacarga
+                }
             }
         }
     }

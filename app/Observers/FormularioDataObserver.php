@@ -23,8 +23,8 @@ class FormularioDataObserver
      */
     public function created(FormularioData $formularioData)
     {
-        $formularioData->user_id = current_user()->id;
-        $formularioData->save();
+        //$formularioData->user_id = current_user()->id;
+        //$formularioData->save();
     }
     /**
      * Handle the formulario data "updated" event.

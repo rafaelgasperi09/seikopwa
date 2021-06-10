@@ -3,12 +3,23 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                
+
                 <h1 style="text-align:center;font-family:Arial">Dibuje su firma dentro del recuadro</h1>
-                
+
                 <div style="width:94%;max-width:800px;height:auto;margin:50px auto;padding: 20px 0;background-color:#eee;color:#FFF;" id="padcontainer">
                         {{ Form::hidden('firma_base','',['id'=>'firma_base']) }}
                         <div class="sigPad">
+                            @if(isset($supervisores))
+                                <div class="form-group boxed" id="userListBlock" style="display: none;">
+                                    <div class="input-wrapper">
+                                        <label class="label" for="password">Seleccionar Usuario</label>
+                                        {{ Form::select('second_sign',$supervisores,null,array('class'=>'form-control','required','autocomplete'=>'off','id'=>'firm_imput','disabled')) }}
+                                        <i class="clear-input">
+                                            <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
+                                        </i>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="sig sigWrapper">
                                 <canvas class="pad" width="300" height="200" id="signPad"></canvas>
                                 <input type="hidden" name="output" class="output"  id="output_filed">
@@ -31,11 +42,11 @@
                                     <ion-icon name="close-circle-outline" size="large"></ion-icon><br/>
                                         Cerrar
                                     </button>
-                                </div>	
+                                </div>
                             </div>
                             <div style="clear:both;"></div>
-                        </div>                    
-                </div>                
+                        </div>
+                </div>
 
             </div>
         </div>
@@ -48,6 +59,13 @@
 
         $('.signRequest').on('click', function(event){
             campo_firma=$(this).attr('data-field');
+            console.log('campo fien name :'+campo_firma);
+            $('#userListBlock').hide();
+            $('#firm_imput').attr('disabled','disabled');
+            if(campo_firma=='ok_supervidor') {
+                $('#userListBlock').show();
+                $('#firm_imput').removeAttr('disabled');
+            }
         });
 
         window.closeModal = function(){
@@ -60,22 +78,22 @@
             $('#img_'+campo_firma).attr('src',$('#firma_base').val());
             $('#img_'+campo_firma).show();
         };
-   
+
         $("#signEnviar").click(function() {
                 var canvas=$('#signPad');
-                var dataURL = canvas[0].toDataURL(); 
+                var dataURL = canvas[0].toDataURL();
                 $('#firma_base', window.parent.document).val(dataURL);
                 window.parent.setImage();
             window.parent.closeModal();
-        }) ;	
+        }) ;
 
         $("#signcerrar").click(function(){
             window.parent.closeModal();
-        });	
+        });
     });
     /**CODIGO DE FIRMA**/
     var scroll = $(window).scrollTop();
-   
+
     var limpiar = document.getElementById("clearButton");
     var canvas = document.getElementById("signPad");
     var ctx = canvas.getContext("2d");
@@ -95,7 +113,7 @@
     var ancho=300;
 
         function setWidth(){  //configura el tamaño del canvas
-        
+
         var curr_width = vancho*0.80;
         if(curr_width>720)
             curr_width=720;
@@ -150,7 +168,7 @@
     // Eventos pantallas táctiles
     document.body.addEventListener("touchstart", function(evt){ if (evt.target.nodeName == 'CANVAS') {
     //canvas.addEventListener('touchstart', function(evt){
-    
+
         dibujar = true;
         //ctx.clearRect(0, 0, cw, ch);
         puntos.length = 0;
@@ -160,13 +178,13 @@
 
     document.body.addEventListener("touchmove", function(evt){ if (evt.target.nodeName == 'CANVAS') {
     //canvas.addEventListener('touchmove',  function(evt){
-    
+
             if (dibujar) {
                 var m = oMousePos(canvas, evt);
                 puntos.push(m);
                 ctx.lineTo(m.x, m.y);
                 ctx.stroke();
-            }	
+            }
         }
     }, false);
 

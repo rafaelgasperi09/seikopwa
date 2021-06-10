@@ -37,7 +37,8 @@ class FormularioCargaBateriaSeeder extends Seeder
             'database_nombre'=>'nombre',
             'formato_fecha'=>'Y-m-d',
             'requerido'=>1,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -51,7 +52,8 @@ class FormularioCargaBateriaSeeder extends Seeder
             'database_nombre'=>'nombre',
             'formato_fecha'=>'Y-m-d',
             'requerido'=>1,
-            'tamano'=>'col-6'
+            'tamano'=>'col-6',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -64,7 +66,8 @@ class FormularioCargaBateriaSeeder extends Seeder
             'tipo_validacion'=>'texto',
             'database_nombre'=>'nombre',
             'requerido'=>1,
-            'tamano'=>'col-6'
+            'tamano'=>'col-6',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -76,7 +79,9 @@ class FormularioCargaBateriaSeeder extends Seeder
             'icono'=>'pulse-outline',
             'tipo_validacion'=>'number',
             'database_nombre'=>'nombre',
-            'requerido'=>0
+            'requerido'=>0,
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -88,7 +93,9 @@ class FormularioCargaBateriaSeeder extends Seeder
             'icono'=>'battery-charging-outline',
             'tipo_validacion'=>'number',
             'database_nombre'=>'nombre',
-            'requerido'=>0
+            'requerido'=>0,
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -100,7 +107,9 @@ class FormularioCargaBateriaSeeder extends Seeder
             'icono'=>'pulse-outline',
             'tipo_validacion'=>'number',
             'database_nombre'=>'nombre',
-            'requerido'=>0
+            'requerido'=>0,
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -112,7 +121,9 @@ class FormularioCargaBateriaSeeder extends Seeder
             'icono'=>'battery-charging-outline',
             'tipo_validacion'=>'number',
             'database_nombre'=>'nombre',
-            'requerido'=>0
+            'requerido'=>0,
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -125,7 +136,8 @@ class FormularioCargaBateriaSeeder extends Seeder
             'tipo_validacion'=>'texto',
             'database_nombre'=>'nombre',
             'requerido'=>0,
-            'tamano'=>'col-12'
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -138,7 +150,8 @@ class FormularioCargaBateriaSeeder extends Seeder
             'tipo_validacion'=>'texto',
             'database_nombre'=>'nombre',
             'requerido'=>0,
-            'tamano'=>'col-6'
+            'tamano'=>'col-6',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -151,7 +164,8 @@ class FormularioCargaBateriaSeeder extends Seeder
             'tipo_validacion'=>'texto',
             'database_nombre'=>'nombre',
             'requerido'=>0,
-            'tamano'=>'col-6'
+            'tamano'=>'col-6',
+            'permiso'=>'parteA'
         ]);
 
         \App\FormularioCampo::create([
@@ -163,7 +177,9 @@ class FormularioCargaBateriaSeeder extends Seeder
             'icono'=>'document-text-outline',
             'tipo_validacion'=>'texto',
             'database_nombre'=>'nombre',
-            'requerido'=>0
+            'requerido'=>0,
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
         ]);
 
 

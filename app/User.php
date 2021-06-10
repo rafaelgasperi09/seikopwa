@@ -85,6 +85,10 @@ class User extends Authenticatable
         return $this->first_name.' '.$this->last_name;
     }
 
+    public function getFullNameAttribute() {
+        return $this->first_name.' '.$this->last_name; //Change the format to whichever you desire
+    }
+
     public function cliente(){
         return Cliente::find($this->crm_cliente_id);
     }
