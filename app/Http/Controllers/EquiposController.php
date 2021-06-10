@@ -656,4 +656,38 @@ class EquiposController extends BaseController
         ]);
        }
     }
+
+
+    public function calendar(){
+
+        $registros = FormularioRegistro::with('estatusHistory')
+        ->whereHas('formulario',function ($q){
+            $q->where('formularios.nombre','form_montacarga_servicio_tecnico');
+        })
+        //->where('estatus','C')
+        ->get();
+
+        $eventos=array();
+        foreach ($registros as $r){
+
+            $equipo = Equipo::find($r->equipo_id);
+            $eventos[$r->id]['id'] = $r->id;
+            $eventos[$r->id]['estatus'] = $r->estatus;
+            $eventos[$r->id]['equipo'] = $equipo->numero_parte;
+            $fec_ini='';
+            $fec_fin='';
+            foreach ($r->estatusHistory as $h){
+                $eventos[$r->id]['fechas'][$h->estatus]['fecha'] = Carbon::parse($h->created_at)->format('Y-m-d H:i');
+                $eventos[$r->id]['fechas'][$h->estatus]['usuario'] = $h->user->getFullName();
+                if($h->estatus =='P') $fec_ini =  Carbon::parse($h->created_at)->format('Y-m-d H:i');
+                 $fec_fin =  Carbon::parse($h->created_at)->format('Y-m-d H:i');
+
+            }
+            $eventos[$r->id]['inicio'] =$fec_ini;
+            $eventos[$r->id]['fin'] = $fec_fin;
+        }
+        //dd($eventos);
+
+        return view('frontend.equipos.calendar',compact('eventos'));
+    }
 }

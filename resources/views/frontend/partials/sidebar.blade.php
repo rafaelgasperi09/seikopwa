@@ -85,6 +85,18 @@
                         </a>
                     </li>
                     @endif
+                    @if(\Sentinel::hasAccess('equipos.calendar'))
+                        <li>
+                            <a href="{{ route('equipos.calendar') }}" class="item">
+                                <div class="icon-box bg-primary">
+                                    <ion-icon name="calendar-outline"></ion-icon>
+                                </div>
+                                <div class="in">
+                                    <div>Calendario</div>
+                                </div>
+                            </a>
+                        </li>
+                    @endif
                     <li>
                         <div class="item">
                             <div class="icon-box bg-primary">
