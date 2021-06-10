@@ -8,18 +8,16 @@
 
                 <div style="width:94%;max-width:800px;height:auto;margin:50px auto;padding: 20px 0;background-color:#eee;color:#FFF;" id="padcontainer">
                         {{ Form::hidden('firma_base','',['id'=>'firma_base']) }}
-                        <div class="sigPad">
-                            @if(isset($supervisores))
-                                <div class="form-group boxed" id="userListBlock" style="display: none;">
-                                    <div class="input-wrapper">
-                                        <label class="label" for="password">Seleccionar Usuario</label>
-                                        {{ Form::select('second_sign',$supervisores,null,array('class'=>'form-control','required','autocomplete'=>'off','id'=>'firm_imput','disabled')) }}
-                                        <i class="clear-input">
-                                            <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
-                                        </i>
-                                    </div>
+                        @if(isset($supervisores))
+                            <div class="form-group" style="margin: 10px 20px;">
+                                <div class="col-md-11" id="userListBlock" style="display: none;">
+                                    <label class="label"><h3>Seleccionar el supervisor que firma</h3></label>
+                                    {{ Form::select('second_sign',$supervisores,null,array('class'=>'form-control','required','autocomplete'=>'off','id'=>'firm_imput','disabled')) }}
                                 </div>
-                            @endif
+                            </div>
+                        @endif
+                        <div class="sigPad">
+
                             <div class="sig sigWrapper">
                                 <canvas class="pad" width="300" height="200" id="signPad"></canvas>
                                 <input type="hidden" name="output" class="output"  id="output_filed">

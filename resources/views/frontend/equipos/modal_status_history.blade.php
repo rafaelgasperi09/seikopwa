@@ -38,8 +38,9 @@
                 $.each(data.data, function( index, value ) {
                     console.log(value);
                     var d = new Date(value.created_at);
+                    console.log(d);
                     var curr_date = d.getDate();
-                    var curr_month = d.getMonth();
+                    var curr_month = d.getMonth()+1;
                     var curr_year = d.getFullYear();
 
                     var usuario= value.user.first_name+' '+value.user.last_name;
