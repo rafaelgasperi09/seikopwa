@@ -674,6 +674,7 @@ class EquiposController extends BaseController
             $eventos[$r->id]['id'] = $r->id;
             $eventos[$r->id]['estatus'] = $r->estatus;
             $eventos[$r->id]['equipo'] = $equipo->numero_parte;
+            $eventos[$r->id]['cliente'] = $equipo->cliente->nombre;
             $fec_ini='';
             $fec_fin='';
             foreach ($r->estatusHistory as $h){

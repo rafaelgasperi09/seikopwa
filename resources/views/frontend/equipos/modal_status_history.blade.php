@@ -6,9 +6,11 @@
                 <h5 class="modal-title">Historico Estatus</h5>
             </div>
             <div class="modal-body">
+                <h4 class="modal-subtitle"></h4>
+
                 <div class="wide-block">
                     <!-- timeline -->
-                    <div class="timeline timed">
+                    <div class="timeline timed" id="timeline2">
 
                     </div>
                     <!-- * timeline -->
@@ -36,7 +38,7 @@
                 var html = '';
                 var estatus='';
                 $.each(data.data, function( index, value ) {
-                    console.log(value);
+
                     var d = new Date(value.created_at);
                     console.log(d);
                     var curr_date = d.getDate();
