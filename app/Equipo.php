@@ -42,6 +42,12 @@ class Equipo extends BaseModel
         ]);
     }
 
+    public function mastile(){
+        return $this->belongsTo(TipoMastil::class,'tipo_mastil_id')->withDefault([
+            'nombre'=>'N/A'
+        ]);
+    }
+
     /**
      * Scope a query to only include popular users.
      *

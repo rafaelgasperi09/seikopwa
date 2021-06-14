@@ -154,7 +154,7 @@ class EquiposController extends BaseController
 
         $tab=array('t1'=>'active','t2'=>'','t3'=>'');
         $tab_content=array('t1'=>'active show','t2'=>'','t3'=>'');
-        if(!\Sentinel::hasAnyAccess(['equipos.create_daily_check','equipos.edit_daily_check'])){
+        if(!\Sentinel::hasAnyAccess(['equipos.see_daily_check','equipos.edit_daily_check'])){
             $tab['t1']=''; $tab['t2']='active';
             $tab_content['t1']=''; $tab['t2']='active show';
         }

@@ -41,10 +41,10 @@
                     <li>
                         <a href="{{ route('equipos.index') }}" class="item" title="Equipos">
                             <div class="icon-box bg-primary">
-                                <ion-icon name="train-outline"></ion-icon>
+                                <ion-icon name="train-outline" title="equipos"></ion-icon>
                             </div>
                             <div class="in">
-                                Equipos
+                                Equipo
                             </div>
                         </a>
                     </li>

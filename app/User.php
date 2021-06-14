@@ -103,4 +103,18 @@ class User extends Authenticatable
     {
       return $query->join('activations', 'users.id','=','activations.user_id')->where('activations.completed',1);
     }
+
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFilterClientes($query)
+    {
+        if(current_user()->isOnGroup('supervisor'))
+            return $query->whereNull('crm_cliente_id');
+
+        return $query;
+    }
 }

@@ -20,8 +20,14 @@
                             </dl>
                             <dl class="row">
                                 <dt class="col-sm-3">Tipo</dt>
-                                <dd class="col-sm-9">{{ $data->tipo->display_name }}</dd>
+                                <dd class="col-sm-9">{{ $data->subTipo->display_name }}</dd>
                             </dl>
+                            @if($data->sub_equipos_id == 1)
+                                <dl class="row">
+                                    <dt class="col-sm-3">Clasificación</dt>
+                                    <dd class="col-sm-9">{{ $data->motor->display_name }}</dd>
+                                </dl>
+                            @endif
                             <dl class="row">
                                 <dt class="col-sm-3">Marca</dt>
                                 <dd class="col-sm-9">{{ $data->marca->display_name }}</dd>
@@ -38,24 +44,24 @@
                                 <dt class="col-sm-3">Capacidad de carga</dt>
                                 <dd class="col-sm-9">{{ $data->capacidad_de_carga }}</dd>
                             </dl>
+
                             <dl class="row">
-                                <dt class="col-sm-3">Voltaje</dt>
-                                <dd class="col-sm-9">{{ $data->voltaje }}</dd>
+                                <dt class="col-sm-3">Tipo Mastil</dt>
+                                <dd class="col-sm-9">{{ $data->mastile->nombre }}</dd>
                             </dl>
                             <dl class="row">
-                                <dt class="col-sm-3">Mastil</dt>
-                                <dd class="col-sm-9">{{ $data->mastil }}</dd>
+                                <dt class="col-sm-3">Altura Mastil</dt>
+                                <dd class="col-sm-9">{{ $data->altura_mastil }}</dd>
                             </dl>
                             <dl class="row">
                                 <dt class="col-sm-3">Cliente</dt>
                                 <dd class="col-sm-9">{{ $data->cliente->nombre }}</dd>
                             </dl>
-                            @if($data->sub_equipos_id == 1)
                             <dl class="row">
-                                <dt class="col-sm-3">Clasificación</dt>
-                                <dd class="col-sm-9">{{ $data->motor->display_name }}</dd>
+                                <dt class="col-sm-3">Descripción</dt>
+                                <dd class="col-sm-9">{{ $data->descripcion }}</dd>
                             </dl>
-                            @endif
+
                         </div>
                 </div>
             </div>
@@ -70,7 +76,7 @@
             <div id="accordion003" class="accordion-body collapse {{$mostrar['reg']}}" data-parent="#detalle" style="">
                     <div class="accordion-content">
                         <ul class="nav nav-tabs style1 iconed" role="tablist">
-                            @if(\Sentinel::hasAnyAccess(['equipos.create_daily_check','equipos.edit_daily_check']))
+                            @if(\Sentinel::hasAnyAccess(['equipos.see_daily_check','equipos.edit_daily_check']))
                             <li class="nav-item">
                                 <a class="nav-link {{$tab['t1']}} " data-toggle="tab" href="#dailycheck" role="tab" aria-selected="true">
                                         <ion-icon name="list-outline" class="text-primary" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
@@ -96,7 +102,7 @@
                             @endif
                         </ul>
                         <div class="tab-content mt-1">
-                        @if(\Sentinel::hasAnyAccess(['equipos.create_daily_check','equipos.edit_daily_check']))
+                        @if(\Sentinel::hasAnyAccess(['equipos.see_daily_check','equipos.edit_daily_check']))
                         <div class="tab-pane  {{$tab_content['t1']}} " id="dailycheck" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Daily Check
