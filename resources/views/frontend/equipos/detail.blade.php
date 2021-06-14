@@ -84,7 +84,7 @@
                                 </a>
                             </li>
                             @endif
-                            @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev']))
+                            @if(!empty($data->tipo_equipos_id) or \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev']))
                             <li class="nav-item">
                                 <a class="nav-link  {{$tab['t2']}} " data-toggle="tab" href="#mant_prev" role="tab" aria-selected="true">
                                         <ion-icon name="hammer-outline" class="text-info" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
@@ -120,14 +120,18 @@
                             </div>
                         </div>
                         @endif
-                        @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev']))
+                        @if(!empty($data->tipo_equipos_id) or \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev']))
                         <div class="tab-pane  {{$tab_content['t2']}}" id="mant_prev" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Mantenimiento Preventivo
                                     @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev'))
-                                    <div class="right">
-                                        <a href="{{ route('equipos.create_mant_prev',[$data->id,$data->tipo_equipos_id])}}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
-                                    </div>
+                                        <div class="right">
+                                            <a href="{{ route('equipos.create_mant_prev',[$data->id,$data->tipo_equipos_id])}}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
+                                        </div>
+                                    @elseif(!empty($data->tipo_motore_id)  && \Sentinel::hasAccess('equipos.create_mant_prev'))
+                                        <div class="right">
+                                            <a href="{{ route('equipos.create_mant_prev',[$data->id,2])}}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
+                                        </div>
                                     @endif
                                 </div>
 
