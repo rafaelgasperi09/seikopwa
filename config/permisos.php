@@ -22,6 +22,7 @@ return [
    "Equipos"=>array(
      "equipos.index"=>"Listar Equipos",
      "equipos.create"=>"Crear Equipo",
+     "equipos.see_daily_check"=>"Ver Daily Check",
      "equipos.create_daily_check"=>"Crear Daily Check",
      "equipos.edit_daily_check"=>"Actualizar Daily Check",
      "equipos.create_mant_prev"=>"Crear Ticket Mantenimiento Preventivo",

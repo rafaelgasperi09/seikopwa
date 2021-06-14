@@ -145,7 +145,7 @@ class FormularioCargaBateriaSeeder extends Seeder
             'formulario_seccion_id'=>$form_sec->id,
             'nombre'=>'h2o',
             'etiqueta'=>'H2O',
-            'tipo'=>'checkbox',
+            'tipo'=>'number',
             'icono'=>'water-outline',
             'tipo_validacion'=>'texto',
             'database_nombre'=>'nombre',

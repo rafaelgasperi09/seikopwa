@@ -16,6 +16,7 @@
         </a>
         <!-- sub menu -->
         <ul class="listview image-listview" style="display: none;">
+            @if(\Sentinel::hasAccess('usuarios.detail'))
             <li>
                 <a href="{{ route('usuarios.detail',$dato->id) }}" class="item">
                     <div class="icon-box bg-primary">
@@ -26,6 +27,8 @@
                     </div>
                 </a>
             </li>
+            @endif
+            @if(\Sentinel::hasAccess('usuarios.profile'))
             <li>
                 <a href="{{ route('usuarios.profile',$dato->id) }}" class="item">
                     <div class="icon-box bg-secondary">
@@ -36,6 +39,7 @@
                     </div>
                 </a>
             </li>
+            @endif
             @if(\Sentinel::hasAccess('usuarios.delete') && !$dato->isOnGroup('Programador'))
             <li>
                 <a href="#" class="item" data-toggle="modal" data-target="#deleteModal"
