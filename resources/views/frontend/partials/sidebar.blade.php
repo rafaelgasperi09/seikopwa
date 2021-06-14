@@ -28,7 +28,7 @@
 
                 <ul class="listview flush transparent no-line image-listview mt-2">
                     <li>
-                        <a href="{{ route('dashboard') }}" class="item">
+                        <a href="{{ route('dashboard') }}" class="item" title="Dashboard">
                             <div class="icon-box bg-primary">
                                 <ion-icon name="home-outline"></ion-icon>
                             </div>
@@ -39,7 +39,7 @@
                     </li>
                     @if(\Sentinel::hasAccess('equipos.index'))
                     <li>
-                        <a href="{{ route('equipos.index') }}" class="item">
+                        <a href="{{ route('equipos.index') }}" class="item" title="Equipos">
                             <div class="icon-box bg-primary">
                                 <ion-icon name="train-outline"></ion-icon>
                             </div>
@@ -51,7 +51,7 @@
                     @endif
                     @if(\Sentinel::hasAccess('baterias.index'))
                     <li>
-                        <a href="{{ route('baterias.index') }}" class="item">
+                        <a href="{{ route('baterias.index') }}" class="item"  title="Baterias">
                             <div class="icon-box bg-primary">
                                 <ion-icon name="battery-charging-outline"></ion-icon>
                             </div>
@@ -63,7 +63,7 @@
                     @endif
                     @if(\Sentinel::hasAccess('usuarios.index'))
                     <li>
-                        <a href="{{ route('usuarios.index') }}" class="item">
+                        <a href="{{ route('usuarios.index') }}" class="item"  title="Usuarios">
                             <div class="icon-box bg-primary">
                                 <ion-icon name="people-circle-outline"></ion-icon>
                             </div>
@@ -75,7 +75,7 @@
                     @endif
                     @if(\Sentinel::hasAccess('role.index'))
                     <li>
-                        <a href="{{ route('role.index') }}" class="item">
+                        <a href="{{ route('role.index') }}" class="item"  title="Roles">
                             <div class="icon-box bg-primary">
                                 <ion-icon name="settings-outline"></ion-icon>
                             </div>
@@ -87,7 +87,7 @@
                     @endif
                     @if(\Sentinel::hasAccess('equipos.calendar'))
                         <li>
-                            <a href="{{ route('equipos.calendar') }}" class="item">
+                            <a href="{{ route('equipos.calendar') }}" class="item"  title="Calendario">
                                 <div class="icon-box bg-primary">
                                     <ion-icon name="calendar-outline"></ion-icon>
                                 </div>

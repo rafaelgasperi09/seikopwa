@@ -73,7 +73,7 @@
                     <div class="card-body">
                     @if(count($data['daily_check']))
                         @foreach($data['daily_check'] as $dc)
-                        <a href="{{ route('equipos.edit_daily_check',array('id'=>$dc->id)) }}"  class="chip chip-warning chip-media ml-05 mb-05" style="width:100%">
+                        <a href="@if(Sentinel::getUser()->hasAccess('equipos.edit_daily_check')) {{ route('equipos.edit_daily_check',array('id'=>$dc->id)) }} @else {{ route('equipos.detail',array('id'=>$dc->equipo_id)) }}#dailycheck @endif"  class="chip chip-warning chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
                             </i>
