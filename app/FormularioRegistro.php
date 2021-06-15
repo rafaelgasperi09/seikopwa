@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Http\Traits\FilterDataTrait;
+use App\Notifications\NewMantenimientoPreventivo;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -105,6 +106,14 @@ class FormularioRegistro extends BaseModel
 
                 $this->solicitud_id = $solicitud->id;
                 $this->nombre_archivo = $pdf['url'];
+
+                // enviar notificacion al o los supervisores gmp
+                $notificados = User::FilterByRoles([1,5])->get();
+                $when = now()->addMinutes(1);
+                foreach ($notificados as $noti){
+                    if(current_user()->id <> $noti->id)
+                        $noti->notify(new NewMantenimientoPreventivo($this));
+                }
 
                 FormularioRegistro::withoutEvents(function (){
                     return $this->save();
