@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewDailyCheck extends Notification
+class NewMantenimientoPreventivo extends Notification
 {
     use Queueable;
     protected $model;
@@ -43,11 +43,12 @@ class NewDailyCheck extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Nuevo DailyCheck')
-                    ->line('Se ha creado un nuevo formulario daily check que requiere su firma.')
-                    ->line('Equipo :'.$this->model->equipo()->numero_parte)
-                    ->action('Firmar',route('equipos.edit_daily_check',$this->model->id))
-                    ->line('Gracias por usar nuestra aplicación '.env('APP_NAME'));
+            ->subject('Nuevo Mantenimiento ('.$this->model->formulario->nombre_menu.')')
+            ->line('Se ha creado un nuevo formulario de mantenimiento preventivo.')
+            ->line('Equipo :'.$this->model->equipo()->numero_parte)
+            ->line('Cliente :'.$this->model->cliente()->nombre)
+            ->action('Ver',route('equipos.detail',$this->model->equipo_id."?rows=show&tab=2"))
+            ->line('Gracias por usar nuestra aplicación '.env('APP_NAME'));
     }
 
     /**
@@ -59,13 +60,14 @@ class NewDailyCheck extends Notification
     public function toArray($notifiable)
     {
         return [
-            'modulo'    => 'daily_check',
-            'title'     => 'Firma pendiente',
+            'modulo'    => 'mantenimiento_preventivo',
+            'title'     => 'Nuevo Mantenimiento',
             'color'     => 'info',
-            'route'     => route('equipos.edit_daily_check',$this->model->id),
+            'route'     => route('equipos.detail',$this->model->equipo_id),
             'id'        => $this->model->id,
             'equipo'    => $this->model->equipo()->numero_parte,
-            'equipo_id'    => $this->model->equipo()->id,
+            'equipo_id'    => $this->model->equipo_id,
+            'cliente_id'    => $this->model->cliente_id,
         ];
     }
 }

@@ -117,4 +117,18 @@ class User extends Authenticatable
 
         return $query;
     }
+
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFilterByRoles($query,array $roles)
+    {
+        return $query->whereHas('roles',function ($q) use($roles){
+            $q->whereIn('role_users.role_id',$roles);
+        });
+
+    }
 }

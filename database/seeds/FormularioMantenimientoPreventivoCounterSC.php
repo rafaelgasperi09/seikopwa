@@ -190,5 +190,19 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
             'permiso'=>'parteA'
         ]);
 
+        \App\FormularioCampo::create([
+            'formulario_id'=>$form->id,
+            'formulario_seccion_id'=>$form_sec->id,
+            'nombre'=>'foto',
+            'etiqueta'=>'Foto',
+            'tipo'=>'camera',
+            'icono'=>'create-outline',
+            'tipo_validacion'=>'text',
+            'database_nombre'=>'nombre',
+            'requerido'=>0,
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
+        ]);
+
     }
 }
