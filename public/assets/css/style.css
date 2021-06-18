@@ -8471,6 +8471,9 @@ canvas {
 ion-icon {
   pointer-events: none;
  }
+ .fecha{
+   margin-right:6vh;
+ }
 @media screen and (max-width: 768px){
   .signModal .modal-dialog{
     width: 98%;

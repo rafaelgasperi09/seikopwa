@@ -2,8 +2,8 @@
 <head>
     <style>
         @page { margin: 100px 25px; }
-        header { position: fixed; top: -60px; left: 0px; right: 0px; background-color: lightblue; height: 50px; }
-        .content { position: relative; top: 100px; left: 0px; right: 0px;  }
+        header { position: fixed; top: -60px; left: 0px; right: 0px; background-color: #fff; height: 50px; }
+        .content { position: relative; top: 128px; left: 0px; right: 0px;  }
         footer { position: fixed; bottom: -60px; left: 0px; right: 0px; background-color: lightblue; height: 50px; }
         p { page-break-after: always; }
         p:last-child { page-break-after: never; }
@@ -25,15 +25,22 @@
         $pdf->page_text($x, $y, $text, $font, $size, $color, $word_space, $char_space, $angle);
     }
 </script>
-<header>
-    <h3 style="text-align: center;">CONTROL DE CARGA EN CUARTO DE BATERIAS</h3>
-    <h4>Bateria : {{ $bateria->id_componente }} Voltaje:{{ $bateria->voltaje }}V</h4>
+<header style="height:">
+    <table>
+        <tr>
+            <td width="80px"> <img align="center" src="{{public_path('/images/logo.png')}}" width="80px" style=""></td>
+            <td align="center"><h3 style="text-align:center;margin-left:40px">CONTROL DE CARGA EN CUARTO DE BATERIAS</h3></td>
+            <td width="80px">&nbsp;</td>
+        </tr>
+        <tr>
+            <td rowspan="3"> <h4>Bateria : {{ $bateria->id_componente }} Voltaje:{{ $bateria->voltaje }}V</h4></td>
+        </tr>        
+    </table>
     <table border="1" cellpadding="0" cellspacing="0" width="880" style="border-collapse:
  collapse;table-layout:fixed;width:100%">
-        <colgroup><col width="80" span="11" style="width:60pt">
-        </colgroup>
+     
         <tbody>
-        <tr height="28" style="height:21.0pt">
+        <tr >
             <td rowspan="2" height="48" class="xl69" width="80" style="height:36.0pt;width:60pt">Fecha</td>
             <td rowspan="2" class="xl69" width="80" style="width:60pt">Hora de Entrada</td>
             <td rowspan="2" class="xl122" width="80" style="width:60pt"><span style="mso-spacerun:yes">&nbsp;</span>Número de Equipo<span style="mso-spacerun:yes">&nbsp;</span></td>
@@ -50,9 +57,8 @@
             <td rowspan="2" class="xl125" width="80" style="border-bottom:.5pt solid black;
   width:60pt">Observacion<span style="mso-spacerun:yes">&nbsp;</span></td>
         </tr>
-        <tr height="20" style="height:15.0pt">
-            <td height="20" class="xl69" width="80" style="height:15.0pt;border-top:none;
-  border-left:none;width:60pt">Horometro</td>
+        <tr>
+            <td >Horometro</td>
             <td class="xl69" width="80" style="border-top:none;border-left:none;width:60pt">%
                 de Carga</td>
             <td class="xl69" width="80" style="border-top:none;border-left:none;width:60pt">Horometro</td>
@@ -64,8 +70,9 @@
 </header>
 <div class="content">
     <table border="1" cellpadding="0" cellspacing="0" width="880" style="border-collapse:collapse;table-layout:fixed;width:100%">
-        @foreach($data as $dato)
+
             <tbody>
+            @foreach($data as $dato)
             <tr height="20" style="height:15.0pt">
                 <td height="20" class="xl70" style="height:15.0pt;border-top:none">{{ $dato->fecha }}</td>
                 <td class="xl71" style="border-top:none;border-left:none">{{ $dato->hora_entrada }}</td>
