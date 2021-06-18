@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\ImportarClienteCrm::class,
         \App\Console\Commands\notificarChequeoDiario::class,
+        \App\Console\Commands\notificarBateriasSinHidratar::class,
     ];
 
     /**
@@ -30,6 +31,9 @@ class Kernel extends ConsoleKernel
          $schedule->command('notificar:chequeo_diario')
              ->dailyAt('10:00')
              ->sendOutputTo(storage_path('logs/notificar_chequeo_diario-'.$fec.'.log'));
+        $schedule->command('notificar:baterias_no_hidratadas')
+             ->dailyAt('07:30')
+             ->sendOutputTo(storage_path('logs/notificar_baterias_no_hidratadas-'.$fec.'.log'));
     }
 
     /**
