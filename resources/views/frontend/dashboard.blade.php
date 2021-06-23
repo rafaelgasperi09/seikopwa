@@ -1,20 +1,20 @@
 @extends('frontend.main-layout')
 @section('content')
-    @include('frontend.partials.title',array('title'=>'Dashboard','subtitle'=>'Bienvenido(a) a '.env('APP_NAME')))
+    @include('frontend.partials.title',array('title'=>'Dashboard','subtitle'=>'Bienvenido(a) a GMP APP'))
     @php
     $totales_title='Total Equipos';
-   $totales=0;  
+   $totales=0;
 @endphp
     <div class="section mt-2">
     <div class="row">
-        @if(!current_user()->isOnGroup('tecnico')) 
+        @if(!current_user()->isOnGroup('tecnico'))
         <div class=" mb-2 col-md-6 col @if(current_user()->isOnGroup('tecnico')) d-none @endif">
         <?PHP /****  LISTADO DE TIPOS DE EQUIPOS  ************/?>
-            
+
             <div class="card text-white bg-light">
                 <div class="card-header"><span id="tot_title">Total Equipos </span><h5 class="card-title" id="tot_equipos">0</h5></div>
                 <div class="card-body">
-              
+
                 @if(!current_user()->isCliente())
                 <div class="chip chip-media ml-05 mb-05" style="width:100%">
                     <div class="col-md-4"><b>Tipo</b></div>
@@ -37,7 +37,7 @@
                             </i>
                             <i class="chip-icon bg-warning" title="GMP">
                                 {{ $tipo['GMtotal'] }}
-                            </i>                        
+                            </i>
                         @endif
                         <span class="chip-label">{{ $tipo['tipo'] }}</span>
                     </a>
@@ -130,7 +130,7 @@
                     </div>
                     @if(count($data['serv_tec_pi_a']))
                     <div class="card-header">
-                        <span class="card-title" id="tot_equipos">{{$totstp}} </span>Pendientes por Iniciar</span>                        
+                        <span class="card-title" id="tot_equipos">{{$totstp}} </span>Pendientes por Iniciar</span>
                     </div>
                     <div class="card-body">
                         @foreach($data['serv_tec_pi_a'] as $st)

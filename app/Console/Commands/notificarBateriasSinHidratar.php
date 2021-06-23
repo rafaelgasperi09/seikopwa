@@ -45,8 +45,8 @@ class notificarBateriasSinHidratar extends Command
 
         $this->info('------------------START CHEQUEO DIARIO JOB -------------------');
         $notificados['users'] = array();
-  
-        $query="SELECT DISTINCT(componente_id) FROM 
+
+        $query="SELECT DISTINCT(componente_id) FROM
                 form_carga_bateria_view
                 WHERE fecha >=DATE_ADD(NOW(), INTERVAL -60 DAY) AND h2o<>''";
         $hidrated=\DB::select(DB::Raw($query));
@@ -59,7 +59,7 @@ class notificarBateriasSinHidratar extends Command
 
 
         $title = 'Listado de baterias con 15 días sin hidratar.';
-        $message=' Baterias: ';
+        $message='';
         foreach($baterias as $key=>$b){
             $datos[$key]=array(
                 'marca'=>$b->marca,
@@ -70,18 +70,13 @@ class notificarBateriasSinHidratar extends Command
             $message.=$b->id_componente.',';
         }
 
-        $notificados['users']=User::whereHas('roles',function ($q){
-            $q->where('role_id',5);
-            })
-        ->get()
-       ->pluck('FullName','id');
+        $notificados = User::whereHas('roles',function ($q){
+                            $q->where('role_id',5);
+                     })->get();
 
-        foreach ($notificados['users'] as $user_id=>$nombre){
-
-            $tot =0;
-            $user = User::find($user_id);
+        foreach ($notificados as $user){
             $user->notify(new BateriasNoHidratadas($title,$message,route('baterias.index')));
-            $this->info($nombre);
+            $this->info($user->getFullName());
             $this->info('body :'.$message);
             $this->info('------------------------------------------');
         }

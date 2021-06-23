@@ -36,7 +36,7 @@ class BateriasNoHidratadas extends Notification
      */
     public function via($notifiable)
     {
-        return [WebPushChannel::class];
+        return ['mail','database',WebPushChannel::class];
     }
 
     /**
@@ -48,9 +48,11 @@ class BateriasNoHidratadas extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject('Baterias con hidratacion pendiente')
+            ->greeting('Lista de baterias con mas de 15 dias sin hidratacion:')
+            ->line($this->body)
+            ->action('Ver',$this->action)
+            ->line('Gracias por usar nuestra aplicación '.env('APP_NAME'));
     }
 
     /**
@@ -62,7 +64,11 @@ class BateriasNoHidratadas extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'modulo'    => 'baterias',
+            'title'     => 'Baterias con hidratacion pendiente',
+            'color'     => 'info',
+            'route'     => $this->action,
+            'body'      => $this->body,
         ];
     }
 
