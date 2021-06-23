@@ -3,8 +3,14 @@
     @if(\Sentinel::hasAccess('equipos.index'))
     <a href="{{ route('equipos.index') }}" class="item  @if(Request::is('equipos') or Request::is('equipos/*')) active @endif" title="Equipos">
         <div class="col">
-            <ion-icon name="train-outline" role="img" class="md hydrated" aria-label="chatbubble ellipses outline"></ion-icon>
-            {{--}}<span class="badge badge-danger">5</span>{{--}}
+            @if(Request::is('equipos') or Request::is('equipos/*'))
+            <img src="{{url('/images/icons/mcactive.png')}}" width="28px">
+            @else
+            <img src="{{url('/images/icons/mc.png')}}" width="28px">
+            @endif
+
+            {{--}} <ion-icon name="train-outline" role="img" class="md hydrated" aria-label="chatbubble ellipses outline"></ion-icon>
+           <span class="badge badge-danger">5</span>{{--}}
         </div>
     </a>
     @endif
