@@ -5,19 +5,21 @@
     @endphp
         @if($routeName=='dashboard')
         <div class="left">
-        <a href="#" class="headerButton" data-toggle="modal" data-target="#sidebarPanel">
+        <a href="#" class="headerButton" data-toggle="modal" data-target="#sidebarPanel" title="Menú">
             <ion-icon name="menu-outline"></ion-icon>
         </a>
         </div>
         @else
-            <a href="@isset($route_back) {{ $route_back }} @else {{ URL::previous() }}@endisset" class="headerButton goBack">
+            <a href="@isset($route_back) {{ $route_back }} @else {{ URL::previous() }}@endisset" class="headerButton goBack" title="Regresar">
                 <ion-icon name="chevron-back-outline" role="img" class="md hydrated" aria-label="chevron back outline"></ion-icon>
             </a>
         @endif
     </div>
     <div class="pageTitle">{{ $title }}</div>
     <div class="right">
-
+        <a href="{{ route('logout') }}" class="headerButton" title="Cerrar sesión">
+            <ion-icon name="log-out-outline"></ion-icon>
+        </a>
     </div>
 </div>
 <div class="header-large-title">

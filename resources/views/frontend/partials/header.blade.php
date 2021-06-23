@@ -48,8 +48,11 @@
     <div class="pageTitle">
         Dashboard
     </div>
-
-
+    <div class="right">
+        <a href="{{ route('logout') }}" class="button">
+            <ion-icon name="log-out-outline"></ion-icon>
+        </a>
+    </div>
 </div>
 <!-- * App Header -->
 @endif

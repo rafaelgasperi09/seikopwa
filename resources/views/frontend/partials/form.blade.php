@@ -107,7 +107,7 @@
                                     @if($value=="")
                                         @if(\Sentinel::hasAccess($campo->permiso))
                                         <div id="grupo_{{$campo->nombre}}">
-                                            <img id="img_{{$campo->nombre}}" width="100%" style="max-width:550px" data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}">
+                                            <img id="img_{{$campo->nombre}}" width="100%" style="max-width:550px" data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}"  class="signRequest">
                                             <button type="button" id="btn{{$campo->nombre}}" class="signRequest align-self-center"  data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}">
                                                 <ion-icon name="pencil-outline" size="large"></ion-icon>
                                                 <span>Haga clic para colocar firma </span>
@@ -116,7 +116,7 @@
                                         </div>
                                         @endif
                                     @else
-                                    <img id="img_operador" width="100%" style="max-width:550px" data-toggle="modal"  data-field="operador" src="/storage/firmas/{{$value}}">
+                                    <img id="img_operador" width="100%" style="max-width:550px" data-toggle="modal"  data-field="operador" src="/storage/firmas/{{$value}}" class="imgSignRequest">
                                     @endif
                                 @endif
                                 <i class="clear-input">

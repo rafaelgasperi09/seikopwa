@@ -4,6 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Historico Estatus</h5>
+                <button type="button" class="btn btn-outline-secondary rounded shadowed mr-1 mb-1 right" data-dismiss="modal">Cerrar</button>
             </div>
             <div class="modal-body">
                 <h4 class="modal-subtitle"></h4>
@@ -18,7 +19,7 @@
             </div>
             <div class="modal-footer">
                 <div class="btn-inline">
-                    <button type="button" class="btn btn-text-secondary" data-dismiss="modal">CANCELAR</button>
+                    <!---<button type="button" class="btn btn-text-secondary" data-dismiss="modal">CANCELAR</button>-->
                 </div>
             </div>
         </div>

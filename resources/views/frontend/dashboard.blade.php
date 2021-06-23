@@ -1,17 +1,20 @@
 @extends('frontend.main-layout')
 @section('content')
-    @include('frontend.partials.title',array('title'=>'Dashboard','subtitle'=>'Bienvenido(a) a '.env('APP_NAME')))
+    @include('frontend.partials.title',array('title'=>'Dashboard','subtitle'=>'Bienvenido(a) a GMP APP'))
     @php
     $totales_title='Total Equipos';
+   $totales=0;
 @endphp
     <div class="section mt-2">
     <div class="row">
-        <div class=" mb-2 col-md-6 col">
+        @if(!current_user()->isOnGroup('tecnico'))
+        <div class=" mb-2 col-md-6 col @if(current_user()->isOnGroup('tecnico')) d-none @endif">
         <?PHP /****  LISTADO DE TIPOS DE EQUIPOS  ************/?>
+
             <div class="card text-white bg-light">
                 <div class="card-header"><span id="tot_title">Total Equipos </span><h5 class="card-title" id="tot_equipos">0</h5></div>
                 <div class="card-body">
-                @php $totales=0;  @endphp
+
                 @if(!current_user()->isCliente())
                 <div class="chip chip-media ml-05 mb-05" style="width:100%">
                     <div class="col-md-4"><b>Tipo</b></div>
@@ -34,7 +37,7 @@
                             </i>
                             <i class="chip-icon bg-warning" title="GMP">
                                 {{ $tipo['GMtotal'] }}
-                            </i>                        
+                            </i>
                         @endif
                         <span class="chip-label">{{ $tipo['tipo'] }}</span>
                     </a>
@@ -57,6 +60,7 @@
                 </div>
             </div>
         </div>
+        @endif
         <div class=" mb-2 col-md-6 col">
             @if(current_user()->isOnGroup('supervisor') or current_user()->isOnGroup('programador') or current_user()->isOnGroup('supervisorC'))
                 @php
@@ -73,7 +77,7 @@
                     <div class="card-body">
                     @if(count($data['daily_check']))
                         @foreach($data['daily_check'] as $dc)
-                        <a href="{{ route('equipos.edit_daily_check',array('id'=>$dc->id)) }}"  class="chip chip-warning chip-media ml-05 mb-05" style="width:100%">
+                        <a href="@if(Sentinel::getUser()->hasAccess('equipos.edit_daily_check')) {{ route('equipos.edit_daily_check',array('id'=>$dc->id)) }} @else {{ route('equipos.detail',array('id'=>$dc->equipo_id)) }}?show=rows#dailycheck @endif"  class="chip chip-warning chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
                             </i>
@@ -93,7 +97,7 @@
                     <div class="card-body">
                     @if(count($data['mant_prev']))
                         @foreach($data['mant_prev'] as $mp)
-                        <a href="{{ route('equipos.edit_mant_prev',array('id'=>$mp->id)) }}"  class="chip chip-warning chip-media ml-05 mb-05" style="width:100%">
+                        <a href="@if(Sentinel::getUser()->hasAccess('equipos.edit_mant_prev')) {{ route('equipos.edit_mant_prev',array('id'=>$mp->id)) }} @else {{ route('equipos.detail',array('id'=>$dc->equipo_id)) }}?show=rows#mant_prev @endif"  class="chip chip-warning chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
                             </i>
@@ -118,11 +122,28 @@
                                 Ir
                             </i>
                             <span class="chip-label">{{$st->equipo()->numero_parte}} </span>
+                            <span class="fecha pull-right" title="Fecha de creacion de ticket">{{transletaDate($st->created_at)}}</span>
                         </a>
                         @endforeach
 
                     @endif
                     </div>
+                    @if(count($data['serv_tec_pi_a']))
+                    <div class="card-header">
+                        <span class="card-title" id="tot_equipos">{{$totstp}} </span>Pendientes por Iniciar</span>
+                    </div>
+                    <div class="card-body">
+                        @foreach($data['serv_tec_pi_a'] as $st)
+                        <a href="{{ route('equipos.detail',array('id'=>$st->equipo()->id)) }}?show=rows&tab=3"  class="chip chip-warning chip-media ml-05 mb-05" style="padding:18px; width:100%">
+                            <i class="chip-icon">
+                                Ir
+                            </i>
+                            <span class="chip-label">{{$st->equipo()->numero_parte}} </span>
+                            <div class="fecha pull-right"><span title="Fecha de asignacion de tecnico">{{transletaDate($st->fecha_asignacion)}}</span> <br/> <span title="Tecnico asignado"> {{$st->tecnicoAsignado->getFullName()}}</span></div>
+                        </a>
+                        @endforeach
+                    </div>
+                    @endif
                 </div>    <br/>
             @endif
             @if(current_user()->isOnGroup('tecnico') or current_user()->isOnGroup('programador'))

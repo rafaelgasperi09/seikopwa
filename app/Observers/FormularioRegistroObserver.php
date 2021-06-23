@@ -62,8 +62,14 @@ class FormularioRegistroObserver
                 if($file){
                     $img = Image::make($file->path());
                     $ext = $file->getClientOriginalExtension();
-                    $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().'.'.$ext;
-                    $destinationPath = storage_path('/app/public/equipos');
+                    if(!empty($formularioRegistro->componente_id)){
+                        $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->componente_id.'_'.time().'.'.$ext;
+                        $destinationPath = storage_path('/app/public/baterias');
+                    }else{
+                        $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().'.'.$ext;
+                        $destinationPath = storage_path('/app/public/equipos');
+                    }
+
                     $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
                     $valor =  $filename;
 

@@ -1,7 +1,7 @@
 @if(\Sentinel::check())
 <div class="appBottomMenu">
     @if(\Sentinel::hasAccess('equipos.index'))
-    <a href="{{ route('equipos.index') }}" class="item  @if(Request::is('equipos') or Request::is('equipos/*')) active @endif">
+    <a href="{{ route('equipos.index') }}" class="item  @if(Request::is('equipos') or Request::is('equipos/*')) active @endif" title="Equipos">
         <div class="col">
             <ion-icon name="train-outline" role="img" class="md hydrated" aria-label="chatbubble ellipses outline"></ion-icon>
             {{--}}<span class="badge badge-danger">5</span>{{--}}
@@ -9,25 +9,25 @@
     </a>
     @endif
     @if(\Sentinel::hasAccess('baterias.index'))
-    <a href="{{ route('baterias.index') }}" class="item @if(Request::is('baterias') or Request::is('baterias/*')) active @endif">
+    <a href="{{ route('baterias.index') }}" class="item @if(Request::is('baterias') or Request::is('baterias/*')) active @endif"  title="Baterías">
         <div class="col">
             <ion-icon name="battery-charging-outline" role="img" class="md hydrated" aria-label="cube outline"></ion-icon>
         </div>
     </a>
     @endif
-    <a href="{{ route('dashboard') }}" class="item @if(Request::is('dashboard')) active @endif">
+    <a href="{{ route('dashboard') }}" class="item @if(Request::is('dashboard')) active @endif"  title="Inicio">
         <div class="col">
             <ion-icon name="home-outline" role="img" class="md hydrated" aria-label="home outline"></ion-icon>
         </div>
     </a>
     @if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
-        <a href="{{ route('usuarios.index') }}" class="item @if(Request::is('usuarios') or Request::is('usuarios/*')) active @endif">
+        <a href="{{ route('usuarios.index') }}" class="item @if(Request::is('usuarios') or Request::is('usuarios/*')) active @endif"  title="Usuarios">
             <div class="col">
                 <ion-icon name="people-outline" role="img" class="md hydrated" aria-label="layers outline"></ion-icon>
             </div>
         </a>
     @else
-        <a href="{{ route('usuarios.profile',current_user()->id) }}" class="item @if(Request::is('usuarios') or Request::is('usuarios/*')) active @endif">
+        <a href="{{ route('usuarios.profile',current_user()->id) }}" class="item @if(Request::is('usuarios') or Request::is('usuarios/*')) active @endif"  title="Perfil">
             <div class="col">
                 <ion-icon name="person-outline" role="img" class="md hydrated" aria-label="layers outline"></ion-icon>
             </div>

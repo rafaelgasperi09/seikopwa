@@ -223,4 +223,31 @@ function getOptionsRadio($status,$tipo){
     else
         return $status;
 }
+
+function traducirMes($mes,$return=false,$format='corto'){
+    if($format=='corto')
+        $meses = array("Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic");
+    else
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+    if($return)
+        return $meses[(int)$mes-1];
+
+    echo $meses[(int)$mes-1];
+}
+
+function transletaDate($fecha,$showTime=false){
+	if($fecha==NULL){
+		echo '';
+	}
+	else{
+		$month = date("m",strtotime($fecha));
+        $html=traducirMes($month,true,'corto');
+
+        if($showTime)
+            return date('d',strtotime($fecha)).' '.$html.' '.date('Y',strtotime($fecha) ).' '.date('H;i',strtotime($fecha));
+        else
+		    return date('d',strtotime($fecha)).' '.$html.' '.date('Y',strtotime($fecha));
+	}
+
+}
 ?>

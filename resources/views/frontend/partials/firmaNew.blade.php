@@ -1,18 +1,19 @@
 <link href="{{url('/assets/css/')}}/signpad.css?t={{time()}}" rel="stylesheet" type="text/css" />
-<div class="modal fade signModal" id="signModal" role="dialog" aria-labelledby="signModal" aria-hidden="true">
+<div class="modal fade modalbox" id="signModal" data-backdrop="static" tabindex="-1" role="dialog" aria-modal="true">
+
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
 
-                <h1 style="text-align:center;font-family:Arial">Dibuje su firma dentro del recuadro</h1>
+                <h2 style="text-align:center;font-family:Arial">Dibuje su firma dentro del recuadro</h2>
 
-                <div style="width:94%;max-width:800px;height:auto;margin:50px auto;padding: 20px 0;background-color:#eee;color:#FFF;" id="padcontainer">
+                <div style="width:94%;max-width:800px;height:auto;margin:auto;padding: 20px 0;background-color:#eee;color:#FFF;" id="padcontainer">
                         {{ Form::hidden('firma_base','',['id'=>'firma_base']) }}
                         @if(isset($supervisores))
                             <div class="form-group" style="margin: 10px 20px;">
                                 <div class="col-md-11" id="userListBlock" style="display: none;">
                                     <label class="label"><h3>Seleccionar el supervisor que firma</h3></label>
-                                    {{ Form::select('second_sign',$supervisores,null,array('class'=>'form-control','required','autocomplete'=>'off','id'=>'firm_imput','disabled')) }}
+                                    {{ Form::select('second_sign',$supervisores,null,array('class'=>'form-control','required','autocomplete'=>'off','id'=>'firm_input','disabled')) }}
                                 </div>
                             </div>
                         @endif
@@ -30,13 +31,13 @@
                                     </button>
                                 </div>
                                 <div class="col">
-                                    <button name="type" type="button" id="signEnviar" class=" btn btn-icon btn-outline-success signButtons">
+                                    <button name="type" type="button" data-dismiss="modal" id="signEnviar" class=" btn btn-icon btn-outline-success signButtons">
                                         <ion-icon name="checkmark-circle-outline" size="large"></ion-icon><br/>
                                         Enviar
                                     </button>
                                 </div>
                                 <div class="col">
-                                    <button  type="button" id="signcerrar"   class=" btn btn-icon btn-outline-danger signButtons">
+                                    <button  type="button" id="signcerrar"  data-dismiss="modal"   class=" btn btn-icon btn-outline-danger signButtons">
                                     <ion-icon name="close-circle-outline" size="large"></ion-icon><br/>
                                         Cerrar
                                     </button>
@@ -54,20 +55,45 @@
     var campo_firma='';
 
     $(document).ready(function () {
+        
+        
+        function launchFullScreen(element) {
+          if(element.requestFullScreen) {
+            element.requestFullScreen();
+          } else if(element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+          } else if(element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen();
+          }
+        }
+        // Lanza en pantalla completa en navegadores que lo soporten
+         function cancelFullScreen() {
+             if(document.cancelFullScreen) {javascript:;
+                 document.cancelFullScreen();
+             } else if(document.mozCancelFullScreen) {
+                 document.mozCancelFullScreen();
+             } else if(document.webkitCancelFullScreen) {
+                 document.webkitCancelFullScreen();
+             }
+         }
 
         $('.signRequest').on('click', function(event){
+            launchFullScreen(document.documentElement);
             campo_firma=$(this).attr('data-field');
             console.log('campo fien name :'+campo_firma);
             $('#userListBlock').hide();
-            $('#firm_imput').attr('disabled','disabled');
+            $('#firm_input').attr('disabled','disabled');
             if(campo_firma=='ok_supervidor') {
                 $('#userListBlock').show();
-                $('#firm_imput').removeAttr('disabled');
+                $('#firm_input').removeAttr('disabled');
             }
+            limpiarCanvas();
         });
-
+        
+        
         window.closeModal = function(){
             $('.signModal').modal('hide');
+            cancelFullScreen();
         };
         window.setImage = function(){
 
@@ -78,6 +104,7 @@
         };
 
         $("#signEnviar").click(function() {
+            cancelFullScreen();
                 var canvas=$('#signPad');
                 var dataURL = canvas[0].toDataURL();
                 $('#firma_base', window.parent.document).val(dataURL);
@@ -122,36 +149,41 @@
         }
 
         setWidth();
-
+        
+        
+        
         $( window ).resize(function() {//setea el tamaño del canvas
             vancho=window.innerWidth;
             valto=window.innerHeight;
-            setWidth();
+           // setWidth();
         });
-
-    limpiar.addEventListener('click', function(evt) {
-    dibujar = false;
-    ctx.clearRect(0, 0, cw, ch);
-    Trazados.length = 0;
-    puntos.length = 0;
-    }, false);
-
-
-    canvas.addEventListener('mousedown', function(evt) {
-    dibujar = true;
-    //ctx.clearRect(0, 0, cw, ch);
-    puntos.length = 0;
-    ctx.beginPath();
-
-    }, false);
-
-    canvas.addEventListener('mouseup', function(evt) {
-    redibujarTrazados();
-    }, false);
-
-    canvas.addEventListener("mouseout", function(evt) {
-    redibujarTrazados();
-    }, false);
+    
+        function limpiarCanvas(){
+            dibujar = false;
+            ctx.clearRect(0, 0, cw, ch);
+            Trazados.length = 0;
+            puntos.length = 0;
+        }
+        limpiar.addEventListener('click', function(evt) {
+            limpiarCanvas();
+        }, false);
+    
+    
+        canvas.addEventListener('mousedown', function(evt) {
+        dibujar = true;
+        //ctx.clearRect(0, 0, cw, ch);
+        puntos.length = 0;
+        ctx.beginPath();
+    
+        }, false);
+    
+        canvas.addEventListener('mouseup', function(evt) {
+        redibujarTrazados();
+        }, false);
+    
+        /*canvas.addEventListener("mouseout", function(evt) {
+        redibujarTrazados();
+        }, false);*/
 
     canvas.addEventListener("mousemove", function(evt) {
     if (dibujar) {

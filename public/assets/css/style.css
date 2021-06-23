@@ -7924,7 +7924,7 @@ body.dark-mode-active .table {
 }
 
 body.dark-mode-active .table thead th {
-  color: #FFFFFF;
+  color: #23344c;
 }
 
 body.dark-mode-active .table td,
@@ -8047,7 +8047,8 @@ body.dark-mode-active .nav-tabs.style1 {
 }
 
 body.dark-mode-active .nav-tabs.style1 .nav-item .nav-link {
-  color: #8195a6;
+/*  color: #8195a6;*/
+    color: #454b50;
 }
 
 body.dark-mode-active .nav-tabs.style1 .nav-item .nav-link.active {
@@ -8467,6 +8468,12 @@ canvas {
   height:80px;
   margin-top:10px;
 }
+ion-icon {
+  pointer-events: none;
+ }
+ .fecha{
+   margin-right:6vh;
+ }
 @media screen and (max-width: 768px){
   .signModal .modal-dialog{
     width: 98%;

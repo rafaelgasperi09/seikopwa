@@ -18,7 +18,7 @@ class UserController extends Controller
 
     public function index(){
 
-        $data = User::IsActive()->FilterClientes()->paginate(10);
+        $data = User::IsActive()->whereHas('roles',function ($q){ $q->where('role_users.role_id','<>',1);})->FilterClientes()->paginate(10);
         return view('frontend.usuarios.index',compact('data'));
 
     }

@@ -127,6 +127,8 @@ class DashboardController extends Controller
         $data['mant_prev']=$this->getPendings('mant_prev');
         //servicio tecnico PENDIENTES
         $data['serv_tec_p']=$this->getPendings('serv_tec');
+        //servicio tecnico PENDIENTES DE INICIAR
+        $data['serv_tec_pi_a']=$this->getPendings('serv_tec','A');        
         //servicio tecnico ABIERTAS
         $data['serv_tec_a']=$this->getPendings('serv_tec','A',' formulario_registro.tecnico_asignado='.current_user()->id);
         //servicio tecnico EN PROCESO
