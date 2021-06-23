@@ -72,26 +72,8 @@ class BateriaController extends Controller
             $model->componente_id = $request->componente_id;
             $model->estatus = 'C';
 
-            if($model->save())
+            if(!$model->save())
             {
-                foreach ($formulario->campos()->get() as $campo)
-                {
-                    $valor =  $request->get($campo->nombre);
-                    $api_descripcion = '';
-                    $form_data = FormularioData::create([
-                        'formulario_registro_id' => $model->id,
-                        'formulario_campo_id'=>$campo->id,
-                        'valor' =>$valor,
-                        'tipo' => $campo->tipo,
-                        'api_descripcion'=>$api_descripcion,
-                    ]);
-
-                    if(!$form_data)
-                    {
-                        Throw new \Exception('Hubo un problema y no se guardar el campo :'.$campo->nombre);
-                    }
-                }
-            }else{
                 Throw new \Exception('Hubo un problema y no se creo el registro!');
             }
         });
@@ -123,7 +105,7 @@ class BateriaController extends Controller
             $pdf = PDF::loadView('frontend.baterias.pdf',compact('bateria','data'));
             $pdf->setPaper('a4', 'landscape');
             return $pdf->stream('historial_cargas.pdf');
-        }else{ 
+        }else{
             return Excel::download(new BateriasExport($id), 'Equipo.xlsx');
         }
 

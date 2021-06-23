@@ -28,7 +28,7 @@
                 </a>
             </li>
             @endif
-            @if(\Sentinel::hasAccess('usuarios.profile'))
+            @if(\Sentinel::hasAccess('usuarios.profile')  or $dato->id == current_user()->id)
             <li>
                 <a href="{{ route('usuarios.profile',$dato->id) }}" class="item">
                     <div class="icon-box bg-secondary">

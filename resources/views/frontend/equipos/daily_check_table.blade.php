@@ -1,5 +1,5 @@
-<div class="section mt-2" style="overflow-x:auto">
-    <table class="table table-striped datatable responsive">
+<div class="section mt-2" style="overflow-x:scroll">
+    <table class="table table-striped datatable responsive" >
         <thead>
         <tr>
             <th scope="col">Semana</th>
@@ -18,7 +18,7 @@
             <th  scope="col">Acciones</th>
         </tr>
         </thead>
-        <tbody id="check_table">
+        <tbody id="check_table" >
         @foreach($data as $d)
             @php
                 $date = \Carbon\Carbon::now();
@@ -73,7 +73,8 @@
                 supervisorAccess = true;
             @endif
         $('.datatable').DataTable({
-            'order':['0','DESC']
+            'order':['0','DESC'],
+            "scrollX": true
         });
 
         $("#check_table > tr > td").click(function() {
@@ -118,7 +119,7 @@
                         }
 
                     }
-
+                    if(html.length>0)
                     $('#DailyCheckModal').modal('show');
                 }
             });
