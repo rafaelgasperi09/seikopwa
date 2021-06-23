@@ -7,11 +7,13 @@
                 <!-- profile box -->
                 <div class="profileBox">
                     <div class="image-wrapper">
-                        @empty($data->photo)
-                            <img src="{{url('assets/img/user.png')}}" alt="image" class="imaged rounded">
-                        @else
-                            <img src="{{ \Storage::url($data->photo)}}" alt="image" class="imaged rounded">
-                        @endif
+                        <a href="{{ route('usuarios.profile',current_user()->id) }}">
+                            @empty($data->photo)
+                                <img src="{{url('assets/img/user.png')}}" alt="image" class="imaged rounded">
+                            @else
+                                <img src="{{ \Storage::url($data->photo)}}" alt="image" class="imaged rounded">
+                            @endif
+                        </a>
                     </div>
                     <div class="in">
                         <strong>{{ current_user()->getFullName() }}</strong>
