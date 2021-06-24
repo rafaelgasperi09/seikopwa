@@ -8,6 +8,7 @@ use App\Formulario;
 use App\FormularioRegistro;
 use App\SubEquipo;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -16,6 +17,12 @@ class DashboardController extends Controller
         $userFilter='';
         if(current_user()->crm_cliente_id)
             $userFilter='WHERE cliente_id='.current_user()->crm_cliente_id;
+       $idqeuipos=DB::connection('crm')->select(DB::raw('SELECT id FROM montacarga.equipos '.$userFilter));
+       $lista=array();
+       foreach($idqeuipos as $k=>$i){
+           $lista[]=$i->id;
+       }
+       $lista=implode(',',$lista);
 
        $r=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','formularios.id')
         ->where('formularios.tipo',$formType)
@@ -23,8 +30,8 @@ class DashboardController extends Controller
             $q->where('formulario_registro.estatus',$status);
         })
         ->whereNull('formulario_registro.deleted_at')
-        ->When($equipos,function($q)use($userFilter){
-            $q->whereRaw(' equipo_id IN (SELECT id FROM montacarga.equipos '.$userFilter.')');
+        ->When($equipos,function($q)use($userFilter,$lista){
+            $q->whereRaw(' equipo_id IN ('.$lista.')');
         })
         ->When(!empty($filterExtra),function($q)use($filterExtra){
             $q->whereRaw($filterExtra);
