@@ -1,4 +1,4 @@
-<div class="section mt-2" style="overflow-x:scroll">
+<div class="section mt-2" >
     <table class="table table-striped datatable responsive" >
         <thead>
         <tr>
@@ -74,7 +74,6 @@
             @endif
         $('.datatable').DataTable({
             'order':['0','DESC'],
-            "scrollX": true
         });
 
         $("#check_table > tr > td").click(function() {

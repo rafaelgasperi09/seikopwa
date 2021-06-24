@@ -106,7 +106,7 @@
                                 @elseif($campo->tipo == 'firma')
                                     @if($value=="")
                                         @if(\Sentinel::hasAccess($campo->permiso))
-                                        <div id="grupo_{{$campo->nombre}}">
+                                        <div id="grupo_{{$campo->nombre}}" style="background: #ffffff;">
                                             <img id="img_{{$campo->nombre}}" width="100%" style="max-width:550px" data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}"  class="signRequest">
                                             <button type="button" id="btn{{$campo->nombre}}" class="signRequest align-self-center"  data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}">
                                                 <ion-icon name="pencil-outline" size="large"></ion-icon>

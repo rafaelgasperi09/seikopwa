@@ -30,7 +30,10 @@ $cFirma='style="border-bottom:1px solid black"';
         }
         .pagenum:before {
             content: counter(page);
-        }     
+        }   
+        td{
+            padding:0px 8px;
+        }  
         .centered { vertical-align:middle; text-align:center; }
         .centered img { display:block; margin:0 auto;border:1px solid #000; }   
       </style>

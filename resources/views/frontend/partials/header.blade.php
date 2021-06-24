@@ -22,7 +22,6 @@
     <script src="{{ url('assets/js/toast.js') }}"></script>
     <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     {{ Html::script('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js') }}
-    {{ Html::script('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js') }}
     <!-- fullcalendar -->
     {{ Html::script('assets/js/moment.min.js') }}
     {{ Html::script('assets/js/plugins/fullcalendar/fullcalendar.min.js') }}
