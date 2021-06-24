@@ -6,7 +6,7 @@
             @if(Request::is('equipos') or Request::is('equipos/*'))
             <img src="{{url('/images/icons/mcactive.png')}}" width="28px">
             @else
-            <img src="{{url('/images/icons/mc.png')}}" width="28px">
+            <img id="equipos_icon" src="{{url('/images/icons/mc.png')}}" width="28px">
             @endif
 
             {{--}} <ion-icon name="train-outline" role="img" class="md hydrated" aria-label="chatbubble ellipses outline"></ion-icon>

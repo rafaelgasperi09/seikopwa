@@ -138,4 +138,30 @@
     </div>
 </div>
 <!-- * App Sidebar -->
+<script>
+ function actualizaIcono(dmactivo){
+    if(dmactivo){
+        $('#equipos_icon').attr("src","{{url('/images/icons/mcwhite.png')}}");
+    }else{
+        $('#equipos_icon').attr("src","{{url('/images/icons/mc.png')}}");
+    }
+ }
+    
+ $( document ).ready(function() {
+    var dmactivo=$('body').hasClass("dark-mode-active");
+
+    actualizaIcono(dmactivo);
+
+    $('#darkmodesidebar').on('change',function(){
+    dmactivo=$('#darkmodesidebar').is(":checked");
+    actualizaIcono(dmactivo);
+
+});
+});
+
+
+
+
+    
+</script>
 @endif
