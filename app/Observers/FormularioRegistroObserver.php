@@ -102,7 +102,7 @@ class FormularioRegistroObserver
                             'tabla'=>'formulario_registro',
                             'registro_id'=>$formularioRegistro->id,
                             'nombre'=>$filename,
-                            'ruta'=>$folder.'/storage/'.$filename
+                            'ruta'=>'/storage/'.$folder.'/'.$filename
                         ]);
 
                     }

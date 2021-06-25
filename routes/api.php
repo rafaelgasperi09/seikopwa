@@ -39,7 +39,6 @@ Route::get('/formulario_registro_estatus', function (Request $request) {
         ->with('user')
         ->when($request->has('formulario_registro_id'),function ($q) use($request){
             $q->where('formulario_registro_id',$request->formulario_registro_id);
-
         })->get();
 
     return response()->json(['success' => true,

@@ -10,7 +10,9 @@ class FormularioRegistroEstatus extends Model
     protected $fillable=['formulario_registro_id','user_id','estatus'];
 
     public function registro(){
-        return $this->belongsTo(FormularioRegistro::class,'formulario_registro_id')->with('tecnicoAsignado');
+        return $this->belongsTo(FormularioRegistro::class,'formulario_registro_id')
+            ->with('tecnicoAsignado')
+            ->with('files');
     }
 
     public function user(){
@@ -20,7 +22,5 @@ class FormularioRegistroEstatus extends Model
         ]);
     }
 
-    public function files(){
-       // return $this->hasMany(File::class)->where
-    }
+
 }
