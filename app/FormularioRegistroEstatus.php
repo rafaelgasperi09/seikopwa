@@ -19,4 +19,8 @@ class FormularioRegistroEstatus extends Model
             'last_name'=>''
         ]);
     }
+
+    public function files(){
+       // return $this->hasMany(File::class)->where
+    }
 }

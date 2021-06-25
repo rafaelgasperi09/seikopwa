@@ -13,6 +13,7 @@
                         $readonly='';
                         $part = "$campo->permiso";
                         $value=null;
+                        $files=array();
                         if($campo->requerido) $requerido = 'required';
                         if(!Sentinel::getUser()->hasAccess($campo->permiso)){
                              $readonly='disabled';
@@ -21,6 +22,8 @@
                               $vd = $datos->data()->where('formulario_campo_id',$campo->id)->first();
                               if($vd) $value = $vd->valor;
                         }
+                        if($campo->tipo=='files')
+                            $files = \App\File::whereTabla('formulario_registro')->whereRegistroId($campo->formulario_registro_id)->get();
 
                         @endphp
                         <div class="form-group boxed {{$campo->tamano}}">
@@ -56,6 +59,18 @@
                                                 </strong>
                                             </span>
                                         </label>
+                                    </div>
+                                @elseif($campo->tipo == 'files')
+                                    <div class="">
+                                        {{ Form::file($campo->nombre.'[]',array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*','multiple')) }}
+
+                                    </div>
+                                    <div class="row">
+                                        @foreach($files as $file)
+                                        <div class="col-4 mb-2">
+                                            <img src="{{ url($file->ruta) }}" alt="image" class="imaged w-100">
+                                        </div>
+                                        @endforeach
                                     </div>
                                 @elseif($campo->tipo == 'camera')
                                     <div class="custom-file-upload">

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Equipo;
+use App\File;
 use App\Formulario;
 use App\FormularioCampo;
 use App\FormularioData;
@@ -46,6 +47,9 @@ class FormularioRegistroObserver
             if($request->has($campo->nombre))
               $valor = $request->get($campo->nombre);
 
+            $files=array();
+            if($campo->tipo=='files')  $files = $request->file($campo->nombre);
+
             if($campo->nombre == 'semana') {$valor = Carbon::now()->startOfWeek()->format('d-m-Y');}
             if($campo->nombre == 'dia_semana') {$valor = getDayOfWeek(date('N'));}
             if($campo->tipo=='firma' && $request->get($campo->nombre)){
@@ -76,6 +80,36 @@ class FormularioRegistroObserver
                 }
             }
 
+            if(count($files) > 0){
+                $j=1;
+                foreach ($files as $file){
+                    if($file){
+                        $img = Image::make($file->path());
+                        $ext = $file->getClientOriginalExtension();
+                        if(!empty($formularioRegistro->componente_id)){
+                            $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->componente_id.'_'.time().$j.'.'.$ext;
+                            $folder = 'baterias' ;
+                        }else{
+                            $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().$j.'.'.$ext;
+                            $folder = 'equipos' ;
+                        }
+
+                        $destinationPath = storage_path( '/app/public/'.$folder);
+                        $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                        $valor .=  $filename.',';
+                        File::create([
+                            'user_id'=>current_user()->id,
+                            'tabla'=>'formulario_registro',
+                            'registro_id'=>$formularioRegistro->id,
+                            'nombre'=>$filename,
+                            'ruta'=>$folder.'/storage/'.$filename
+                        ]);
+
+                    }
+                    $j++;
+                }
+            }
+
             $form_data = FormularioData::create([
                 'formulario_registro_id' => $formularioRegistro->id,
                 'formulario_campo_id' => $campo->id,
@@ -89,7 +123,7 @@ class FormularioRegistroObserver
                 throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
             }else{
                 $formularioCampo = FormularioCampo::find($form_data->formulario_campo_id);
-                if($formularioCampo->cambio_estatus && isset($form_data->valor)) {
+                if($formularioCampo->cambio_estatus && !empty($form_data->valor)) {
                     $formularioRegistro->estatus = 'C';
                     $formularioRegistro->save();
                     // si es matenimiento preventivo crear solicitud en crm de montacarga
@@ -115,13 +149,16 @@ class FormularioRegistroObserver
         }else{
             $formulario = Formulario::find($formularioRegistro->formulario_id);
             $request = request();
+
             DB::transaction(function () use ($request, $formulario,$formularioRegistro) {
 
                 foreach ($formulario->campos()->get() as $campo) {
 
                     $valor = $request->get($campo->nombre);
+                    $files=array();
+                    if($campo->tipo=='files')  $files = $request->file($campo->nombre);
 
-                    if(!empty($valor)){
+                    if(!empty($valor) or count($files) > 0){
 
                         if($campo->tipo=='firma'){
                             $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
@@ -141,6 +178,36 @@ class FormularioRegistroObserver
                                 $valor =  $filename;
 
                             }
+                        }
+                        if(count($files) > 0){
+                            $j=1;
+;                            foreach ($files as $file){
+                                if($file){
+                                    $img = Image::make($file->path());
+                                    $ext = $file->getClientOriginalExtension();
+                                    if(!empty($formularioRegistro->componente_id)){
+                                        $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->componente_id.'_'.time().$j.'.'.$ext;
+                                        $folder = 'baterias' ;
+                                    }else{
+                                        $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().$j.'.'.$ext;
+                                        $folder = 'equipos' ;
+                                    }
+
+                                    $destinationPath = storage_path( '/app/public/'.$folder);
+                                    $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                                    $valor .=  $filename.',';
+                                    File::create([
+                                        'user_id'=>current_user()->id,
+                                        'tabla'=>'formulario_registro',
+                                        'registro_id'=>$formularioRegistro->id,
+                                        'nombre'=>$filename,
+                                        'ruta'=>$folder.'/storage/'.$filename
+                                    ]);
+
+                                }
+                                $j++;
+                            }
+
                         }
                         if($campo->nombre == 'hora_salida'){
                             $valor = date('H:i');
