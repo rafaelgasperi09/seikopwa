@@ -79,34 +79,35 @@ class FormularioRegistroObserver
 
                 }
             }
-
-            if(count($files) > 0){
-                $j=1;
-                foreach ($files as $file){
-                    if($file){
-                        $img = Image::make($file->path());
-                        $ext = $file->getClientOriginalExtension();
-                        if(!empty($formularioRegistro->componente_id)){
-                            $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->componente_id.'_'.time().$j.'.'.$ext;
-                            $folder = 'baterias' ;
-                        }else{
-                            $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().$j.'.'.$ext;
-                            $folder = 'equipos' ;
+            if(isset($files)){
+                if(count($files) > 0){
+                    $j=1;
+                    foreach ($files as $file){
+                        if($file){
+                            $img = Image::make($file->path());
+                            $ext = $file->getClientOriginalExtension();
+                            if(!empty($formularioRegistro->componente_id)){
+                                $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->componente_id.'_'.time().$j.'.'.$ext;
+                                $folder = 'baterias' ;
+                            }else{
+                                $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().$j.'.'.$ext;
+                                $folder = 'equipos' ;
+                            }
+    
+                            $destinationPath = storage_path( '/app/public/'.$folder);
+                            $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                            $valor .=  $filename.',';
+                            File::create([
+                                'user_id'=>current_user()->id,
+                                'tabla'=>'formulario_registro',
+                                'registro_id'=>$formularioRegistro->id,
+                                'nombre'=>$filename,
+                                'ruta'=>'/storage/'.$folder.'/'.$filename
+                            ]);
+    
                         }
-
-                        $destinationPath = storage_path( '/app/public/'.$folder);
-                        $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
-                        $valor .=  $filename.',';
-                        File::create([
-                            'user_id'=>current_user()->id,
-                            'tabla'=>'formulario_registro',
-                            'registro_id'=>$formularioRegistro->id,
-                            'nombre'=>$filename,
-                            'ruta'=>'/storage/'.$folder.'/'.$filename
-                        ]);
-
+                        $j++;
                     }
-                    $j++;
                 }
             }
 
@@ -155,8 +156,10 @@ class FormularioRegistroObserver
                 foreach ($formulario->campos()->get() as $campo) {
 
                     $valor = $request->get($campo->nombre);
-                    $files=array();
-                    if($campo->tipo=='files')  $files = $request->file($campo->nombre);
+                    $files=array(); 
+                    if($campo->tipo=='files' and $request->file($campo->nombre)) {
+                        $files = $request->file($campo->nombre);
+                    }
 
                     if(!empty($valor) or count($files) > 0){
 
@@ -174,41 +177,48 @@ class FormularioRegistroObserver
                                 $ext = $file->getClientOriginalExtension();
                                 $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().'.'.$ext;
                                 $destinationPath = storage_path('/app/public/equipos');
-                                $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                                $img->resize(800,null, function ($constraint) {
+                                    $constraint->aspectRatio();
+                                })->save($destinationPath.'/'.$filename);
                                 $valor =  $filename;
 
                             }
                         }
-                        if(count($files) > 0){
-                            $j=1;
-;                            foreach ($files as $file){
-                                if($file){
-                                    $img = Image::make($file->path());
-                                    $ext = $file->getClientOriginalExtension();
-                                    if(!empty($formularioRegistro->componente_id)){
-                                        $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->componente_id.'_'.time().$j.'.'.$ext;
-                                        $folder = 'baterias' ;
-                                    }else{
-                                        $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().$j.'.'.$ext;
-                                        $folder = 'equipos' ;
+                        if(isset($files)){
+                            if(count($files) > 0){
+                                $j=1;
+                                foreach ($files as $file){
+                                    if($file){
+                                        $img = Image::make($file->path());
+                                        $ext = $file->getClientOriginalExtension();
+                                        if(!empty($formularioRegistro->componente_id)){
+                                            $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->componente_id.'_'.time().$j.'.'.$ext;
+                                            $folder = 'baterias' ;
+                                        }else{
+                                            $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().$j.'.'.$ext;
+                                            $folder = 'equipos' ;
+                                        }
+    
+                                        $destinationPath = storage_path( '/app/public/'.$folder);
+                                        $img->resize(800,null, function ($constraint) {
+                                            $constraint->aspectRatio();
+                                        })->save($destinationPath.'/'.$filename);
+                                        $valor .=  $filename.',';
+                                        File::create([
+                                            'user_id'=>current_user()->id,
+                                            'tabla'=>'formulario_registro',
+                                            'registro_id'=>$formularioRegistro->id,
+                                            'nombre'=>$filename,
+                                            'ruta'=>$folder.'/storage/'.$filename
+                                        ]);
+    
                                     }
-
-                                    $destinationPath = storage_path( '/app/public/'.$folder);
-                                    $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
-                                    $valor .=  $filename.',';
-                                    File::create([
-                                        'user_id'=>current_user()->id,
-                                        'tabla'=>'formulario_registro',
-                                        'registro_id'=>$formularioRegistro->id,
-                                        'nombre'=>$filename,
-                                        'ruta'=>$folder.'/storage/'.$filename
-                                    ]);
-
+                                    $j++;
                                 }
-                                $j++;
+    
                             }
-
                         }
+
                         if($campo->nombre == 'hora_salida'){
                             $valor = date('H:i');
                         }

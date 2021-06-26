@@ -183,10 +183,25 @@ $cFirma='style="border-bottom:1px solid black"';
         @if($datos['det'][0]->foto_cliente)
         <tr>
             <td {!!$cTD3!!} >
-                <img src="{{storage_path('app/public/equipos/'.$datos['det'][0]->foto_cliente)}}" width="600px" style="max-height:480px">
+                <small style="width:500px">Imagen reportada por el cliente</small><br/>
+                <img src="{{storage_path('app/public/equipos/'.$datos['det'][0]->foto_cliente)}}" width="500px" style="max-height:400px">
             </td>
         </tr>
         @endif
+        @if($datos['det'][0]->foto_tecnico)
+            @foreach(explode(',',$datos['det'][0]->foto_tecnico) as $key=>$ft)
+                @if(strlen($ft)>10)
+                <tr>
+                    <td {!!$cTD3!!} >
+                        @if($key==0)
+                        <small style="width:650px">Imagenes (tecnico)</small><br/>
+                        @endif
+                        <img src="{{storage_path('app/public/equipos/'.$ft)}}" width="500px" style="max-height:400px">
+                    </td>
+                </tr>
+                @endif
+            @endforeach
+        @endif        
         <tr>
             <td>
                 <br/>
