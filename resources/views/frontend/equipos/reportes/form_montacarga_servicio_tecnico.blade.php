@@ -30,12 +30,12 @@ $cFirma='style="border-bottom:1px solid black"';
         }
         .pagenum:before {
             content: counter(page);
-        }   
+        }
         td{
             padding:0px 8px;
-        }  
+        }
         .centered { vertical-align:middle; text-align:center; }
-        .centered img { display:block; margin:0 auto;border:1px solid #000; }   
+        .centered img { display:block; margin:0 auto;border:1px solid #000; }
       </style>
 
     </head>
@@ -52,17 +52,17 @@ $cFirma='style="border-bottom:1px solid black"';
                             <span style="font-size:16px;font-weight:normal">"Satisfacción y confianza"<span><br/>
                             <span style="font-size:20px;font-weight:bold">INFORME DE SERVICIO TÉCNICO<span>
                         </td>
-                        <td class="paginado"> 
-                            @if($datos['det'][0]->foto)
+                        <td class="paginado">
+                            @if($datos['det'][0]->foto_cliente)
                             <div class="pagenum-container ">P. <span class="pagenum"></span></div>
-                            @endif 
+                            @endif
                         </td>
                     </tr>
                     <tr>
                         <td align="left">
                             <p style="font-size:18px;font-weight:bold;margin-bottom:5px">No. <span style="color:red">{{$datos['cab']->id}}</span></p>
                         </td>
-                            
+
                     </tr>
                 </table>
                 </th>
@@ -174,18 +174,18 @@ $cFirma='style="border-bottom:1px solid black"';
                         <br>{{$datos['det'][0]->comentarios}}
                         <br >
                     </td>
-                </tr>              
+                </tr>
                 </thead>
-            </table>            
+            </table>
             </td>
 
         </tr>
-        @if($datos['det'][0]->foto)
+        @if($datos['det'][0]->foto_cliente)
         <tr>
             <td {!!$cTD3!!} >
-                <img src="{{storage_path('app/public/equipos/'.$datos['det'][0]->foto)}}" width="600px" style="max-height:480px">
+                <img src="{{storage_path('app/public/equipos/'.$datos['det'][0]->foto_cliente)}}" width="600px" style="max-height:480px">
             </td>
-        </tr>  
+        </tr>
         @endif
         <tr>
             <td>

@@ -571,6 +571,7 @@ class EquiposController extends BaseController
 
        if($reporte=='form_montacarga_servicio_tecnico'){
             $datos['det']=getFormData($datos['cab']->formulario->nombre,0,0,$id);
+            //dd($datos);
             $pdf = PDF::loadView('frontend.equipos.reportes.form_montacarga_servicio_tecnico',compact('datos'));
             return $pdf->stream('pdfview.pdf');
             return view('frontend.equipos.reportes.form_montacarga_servicio_tecnico')->with('datos',$datos);

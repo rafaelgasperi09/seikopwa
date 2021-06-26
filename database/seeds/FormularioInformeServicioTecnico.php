@@ -41,35 +41,7 @@ class FormularioInformeServicioTecnico extends Seeder
             'permiso'=>'sp.parteA'
         ]);
 
-        \App\FormularioCampo::create([
-            'formulario_id'=>$form->id,
-            'formulario_seccion_id'=>$form_sec->id,
-            'nombre'=>'voltaje_combustible',
-            'etiqueta'=>'Voltaje/Combustible',
-            'tipo'=>'number',
-            'icono'=>'timer-outline',
-            'tipo_validacion'=>'texto',
-            'database_nombre'=>'nombre',
-            'formato_fecha'=>'',
-            'requerido'=>1,
-            'tamano'=>'col-12',
-            'permiso'=>'sp.parteA'
-        ]);
 
-        \App\FormularioCampo::create([
-            'formulario_id'=>$form->id,
-            'formulario_seccion_id'=>$form_sec->id,
-            'nombre'=>'horometro',
-            'etiqueta'=>'Horometro',
-            'tipo'=>'number',
-            'icono'=>'speedometer-outline',
-            'tipo_validacion'=>'texto',
-            'database_nombre'=>'nombre',
-            'formato_fecha'=>'Y-m-d',
-            'requerido'=>0,
-            'tamano'=>'col-12',
-            'permiso'=>'sp.parteA'
-        ]);
 
         \App\FormularioCampo::create([
             'formulario_id'=>$form->id,
@@ -86,12 +58,57 @@ class FormularioInformeServicioTecnico extends Seeder
             'permiso'=>'sp.parteA'
         ]);
 
+        \App\FormularioCampo::create([
+            'formulario_id'=>$form->id,
+            'formulario_seccion_id'=>$form_sec->id,
+            'nombre'=>'foto_cliente',
+            'etiqueta'=>'Foto',
+            'tipo'=>'camera',
+            'icono'=>'create-outline',
+            'tipo_validacion'=>'texto',
+            'database_nombre'=>'nombre',
+            'formato_fecha'=>'',
+            'requerido'=>1,
+            'tamano'=>'col-12',
+            'permiso'=>'sp.parteA'
+        ]);
+
         $form_sec = \App\FormularioSeccion::create([
             'formulario_id'=>$form->id,
             'titulo'=>'Servicio tecnico',
             'descripcion'=>''
         ]);
         /* COLOCAR PERMISOS A PARTIR DE AHORA */
+
+        \App\FormularioCampo::create([
+            'formulario_id'=>$form->id,
+            'formulario_seccion_id'=>$form_sec->id,
+            'nombre'=>'voltaje_combustible',
+            'etiqueta'=>'Voltaje/Combustible',
+            'tipo'=>'number',
+            'icono'=>'timer-outline',
+            'tipo_validacion'=>'texto',
+            'database_nombre'=>'nombre',
+            'formato_fecha'=>'',
+            'requerido'=>1,
+            'tamano'=>'col-12',
+            'permiso'=>'sp.parteB'
+        ]);
+
+        \App\FormularioCampo::create([
+            'formulario_id'=>$form->id,
+            'formulario_seccion_id'=>$form_sec->id,
+            'nombre'=>'horometro',
+            'etiqueta'=>'Horometro',
+            'tipo'=>'number',
+            'icono'=>'speedometer-outline',
+            'tipo_validacion'=>'texto',
+            'database_nombre'=>'nombre',
+            'formato_fecha'=>'Y-m-d',
+            'requerido'=>0,
+            'tamano'=>'col-12',
+            'permiso'=>'sp.parteB'
+        ]);
 
         \App\FormularioCampo::create([
             'formulario_id'=>$form->id,
@@ -247,6 +264,21 @@ class FormularioInformeServicioTecnico extends Seeder
             'tamano'=>'col-6',
             'permiso'=>'sp.parteC',
             'cambio_estatus'=>1
+        ]);
+
+        \App\FormularioCampo::create([
+            'formulario_id'=>$form->id,
+            'formulario_seccion_id'=>$form_sec->id,
+            'nombre'=>'foto_tecnico',
+            'etiqueta'=>'Foto',
+            'tipo'=>'files',
+            'icono'=>'create-outline',
+            'tipo_validacion'=>'texto',
+            'database_nombre'=>'nombre',
+            'formato_fecha'=>'',
+            'requerido'=>1,
+            'tamano'=>'col-12',
+            'permiso'=>'sp.parteB'
         ]);
 
 

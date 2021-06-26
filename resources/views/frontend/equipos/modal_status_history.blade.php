@@ -15,6 +15,9 @@
 
                     </div>
                     <!-- * timeline -->
+                    <div class="gallery" id="gallery">
+
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -28,6 +31,7 @@
 <script>
     $('#status_history_modal').on('show.bs.modal', function (e) {
         var id = $(e.relatedTarget).attr('data-id');
+        var path='{{ url('/') }}'
 
         $.ajax({
             url: '{{ url("api/formulario_registro_estatus") }}',
@@ -35,19 +39,19 @@
             data: "formulario_registro_id="+id,
             type: 'get',
             success: function(data) {
-
+                console.log(data);
                 var html = '';
                 var estatus='';
                 $.each(data.data, function( index, value ) {
 
                     var d = new Date(value.created_at);
-                    console.log(d);
+
                     var curr_date = d.getDate();
                     var curr_month = d.getMonth()+1;
                     var curr_year = d.getFullYear();
 
                     var usuario= value.user.first_name+' '+value.user.last_name;
-
+                    html2='';
                     html += '<div class="item">';
                     html +='<span class="time">'+curr_date+"-"+curr_month+"-"+curr_year+'<br/>'+d.toLocaleTimeString()+'</span>';
                     var estatus = '';
@@ -77,9 +81,17 @@
 
                     html +='</div>\n';
                     html +='</div>\n';
+
                 });
 
+                $.each(data.data[0].registro.files, function( index, value ) {
+                    console.log(value);
+                    html2 +='<div class="col-4 mb-2">\n';
+                        html2 +='<img src="'+path+'/'+value.ruta+'" alt="image" class="imaged w-100">\n';
+                    html2 +='</div>\n';
+                });
                 $('.timeline').html(html);
+                $('#gallery').html(html2);
             }
         });
     });

@@ -182,6 +182,20 @@ class FormularioCargaBateriaSeeder extends Seeder
             'permiso'=>'parteA'
         ]);
 
+        \App\FormularioCampo::create([
+            'formulario_id'=>$form->id,
+            'formulario_seccion_id'=>$form_sec->id,
+            'nombre'=>'foto',
+            'etiqueta'=>'Foto',
+            'tipo'=>'camera',
+            'icono'=>'document-text-outline',
+            'tipo_validacion'=>'texto',
+            'database_nombre'=>'nombre',
+            'requerido'=>0,
+            'tamano'=>'col-12',
+            'permiso'=>'parteA'
+        ]);
+
 
     }
 }
