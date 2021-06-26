@@ -26,12 +26,14 @@
 
     <div class="section full mt-1">
         <div class="wide-block pt-2 pb-2">
+            @if(\Sentinel::hasAccess('usuarios.password'))
             <a href="#" class="btn btn-success" data-toggle="modal" data-target="#modal_change_password"
                data-photo="@empty(!$data->photo){{\Storage::url($data->photo)}}@endempty"
                data-action="{{ route('usuarios.update_password',$data->id) }}">
                     <ion-icon name="finger-print-outline" class="md hydrated" aria-label="logo android"></ion-icon>
                     Cambiar Contraseña
             </a>
+            @endif
             <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#modal_change_photo" data-action="{{ route('usuarios.update_photo',$data->id) }}">
                 <ion-icon name="camera-outline" role="img" class="md hydrated" aria-label="logo apple"></ion-icon>
                 Actualizar foto de perfil
@@ -100,6 +102,8 @@
             {{ Form::close() }}
         </div>
     </div>
-    @include('frontend.usuarios.modal_change_password')
+    @if(\Sentinel::hasAccess('usuarios.password'))
+        @include('frontend.usuarios.modal_change_password')
+    @endif
     @include('frontend.usuarios.modal_change_photo')
 @stop

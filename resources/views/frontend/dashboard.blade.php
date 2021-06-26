@@ -71,7 +71,7 @@
                 @endphp
                 <div class="card text-white bg-light">
                     <div class="card-header">
-                        <span id="tot_title"><ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon> Daily Check<br/>
+                        <span ><ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon> Daily Check<br/>
                         <span class="card-title" id="tot_equipos">{{$totdc}} </span>Pendientes de firma</span>
                     </div>
                     <div class="card-body">
@@ -91,7 +91,7 @@
                 <br/>
                 <div class="card text-white bg-light">
                     <div class="card-header">
-                        <span id="tot_title"><ion-icon  class="text-secondary" size="large" name="build-outline"></ion-icon>Mantenimiento preventivo<br/>
+                        <span><ion-icon  class="text-secondary" size="large" name="build-outline"></ion-icon>Mantenimiento preventivo<br/>
                         <span class="card-title" id="tot_equipos">{{$totmp}} </span>Pendientes de firma</span>
                     </div>
                     <div class="card-body">
@@ -111,7 +111,7 @@
                 <br/>
                 <div class="card text-white bg-light">
                     <div class="card-header">
-                        <span id="tot_title"><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
+                        <span ><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
                         <span class="card-title" id="tot_equipos">{{$totstp}} </span>Pendientes por asignar técnico</span>
                     </div>
                     <div class="card-body">
@@ -154,7 +154,7 @@
             @endphp
                 <div class="card text-white bg-light">
                     <div class="card-header">
-                        <span id="tot_title"><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
+                        <span ><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
                         <span class="card-title" id="tot_equipos">{{$totsta}} </span>Pendientes de iniciar</span>
                     </div>
                     <div class="card-body">
@@ -174,7 +174,7 @@
                 <br/>
                 <div class="card text-white bg-light">
                     <div class="card-header">
-                        <span id="tot_title"><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
+                        <span ><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
                         <span class="card-title" id="tot_equipos">{{$totstpr}} </span>Por cerrar</span>
                     </div>
                     <div class="card-body">
@@ -195,7 +195,7 @@
             @if(current_user()->isOnGroup('operadorc') or current_user()->isOnGroup('programador'))
                 <div class="card text-white bg-light">
                     <div class="card-header">
-                        <span id="tot_title">
+                        <span >
                             <ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon>
                             Equipos pendientes por Daily Check<br/>
 
@@ -216,7 +216,7 @@
             @if(current_user()->isOnGroup('supervisorc') or current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador'))
                 <div class="card text-white bg-light">
                     <div class="card-header">
-                        <span id="tot_title">
+                        <span >
                             <ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon>
                             Últimos reportes de servicio técnico<br/>
                         </span>
@@ -241,7 +241,7 @@
             @if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador'))
                 <div class="card text-white bg-light">
                     <div class="card-header">
-                        <span id="tot_title">
+                        <span>
                             <ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon>
                             Daily Check de equipos
                         </span>
@@ -257,7 +257,7 @@
                             @foreach($data['global_sin_daily_check_hoy'] as $dce)
                             <tr>
                                 <td>
-                                    <a href="#" class="chip  chip-media ml-05 mb-05"  style="width:100%;background-color:#e4f0ff">
+                                    <a href="#" class="chip  chip-media ml-05 mb-05"  style="width:100%;background-color:#b9d1ee">
                                         <i class="chip-icon2 bg-primary">
                                             {{$dce["equipos"]}}
                                         </i>

@@ -24,42 +24,78 @@
             @endif
             @if(\Sentinel::hasAccess('equipos.create_daily_check'))
                 <li>
-                    <a href="{{ route('equipos.create_daily_check',$e->id) }}" class="item">
+                   <div class="item">
                         <div class="icon-box bg-secondary">
                             <ion-icon name="list-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
                         </div>
                         <div class="in">
                             <div>Daily check</div>
+                            <div class="iconsshortchuts">
+                                <a href="{{ route('equipos.create_daily_check',$e->id) }}"  title="Crear">
+                                    <span class="iconedbox bg-primary">
+                                    <ion-icon name="create-outline"></ion-icon>
+                                    </span>
+                                </a>                                
+                                <a href="{{route('equipos.detail',['id'=>$e->id])}}?show=rows&tab=1"   title="Ver">
+                                    <span class="iconedbox bg-success">
+                                    <ion-icon name="eye-outline"></ion-icon>
+                                    </span>
+                                </a>                                
+                            </div>
                         </div>
-                    </a>
+                    </div>
                 </li>
             @endif
             @if((!empty($e->tipo_equipos_id) or !empty($e->tipo_motore_id)) && \Sentinel::hasAccess('equipos.create_mant_prev'))
                 <li>
-                    <a href="@if($e->sub_equipos_id==1)
-                        {{ route('equipos.create_mant_prev',[$e->id,$e->tipo_motore_id]) }}
-                    @else
-                        {{ route('equipos.create_mant_prev',[$e->id,$e->tipo_equipos_id]) }}
-                    @endif" class="item">
+                    <div class="item">
                         <div class="icon-box bg-info">
                             <ion-icon name="hammer-outline" role="img" class="md hydrated" aria-label="hammer-outline"></ion-icon>
                         </div>
                         <div class="in">
                             <div>Mantenimiento preventivo</div>
+                            <div class="iconsshortchuts">
+                                <a href="@if($e->sub_equipos_id==1)
+                                            {{ route('equipos.create_mant_prev',[$e->id,$e->tipo_motore_id]) }}
+                                        @else
+                                            {{ route('equipos.create_mant_prev',[$e->id,$e->tipo_equipos_id]) }}
+                                        @endif""  title="Crear">
+                                    <span class="iconedbox bg-primary">
+                                    <ion-icon name="create-outline"></ion-icon>
+                                    </span>
+                                </a>                                
+                                <a href="{{route('equipos.detail',['id'=>$e->id])}}?show=rows&tab=2"   title="Ver">
+                                    <span class="iconedbox bg-success">
+                                    <ion-icon name="eye-outline"></ion-icon>
+                                    </span>
+                                </a>                                
+                            </div>
                         </div>
-                    </a>
+                    </div>
                 </li>
             @endif
             @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
                 <li>
-                    <a href="{{ route('equipos.create_tecnical_support',$e->id) }}" class="item">
+                    <div class="item">
                         <div class="icon-box bg-warning">
                             <ion-icon name="alert-circle-outline" role="img" class="md hydrated" aria-label="alert-circle-outline"></ion-icon>
                         </div>
                         <div class="in">
                             <div>Informe de servicio tecnico</div>
+                            <div class="iconsshortchuts">
+                                <a href="{{ route('equipos.create_tecnical_support',$e->id) }}" title="Crear">
+                                    <span class="iconedbox bg-primary">
+                                    <ion-icon name="create-outline"></ion-icon>
+                                    </span>
+                                </a>                                
+                                <a href="{{route('equipos.detail',['id'=>$e->id])}}?show=rows&tab=3"  title="Ver">
+                                    <span class="iconedbox bg-success">
+                                    <ion-icon name="eye-outline"></ion-icon>
+                                    </span>
+                                </a>                                
+                            </div>
                         </div>
-                    </a>
+                    </div>
                 </li>
             @endif
         </ul>

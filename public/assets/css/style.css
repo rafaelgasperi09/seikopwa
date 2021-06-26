@@ -1907,7 +1907,19 @@ a.badge-dark {
   top: 50%;
   margin-top: -8px;
 }
-
+.image-listview > li div.item:after{
+  background-image: url("data:image/svg+xml,%0A%3Csvg width='10px' height='16px' viewBox='0 0 10 16' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg id='Listview' transform='translate(-112.000000, -120.000000)' stroke='%23A1A1A2' stroke-width='2.178'%3E%3Cpolyline id='Path' points='114 122 120 128 114 134'%3E%3C/polyline%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 16px;
+  height: 16px;
+  content: "";
+  position: absolute;
+  right: 12px;
+  opacity: 0.5;
+  top: 50%;
+  margin-top: -8px;
+}
 .image-listview.text > li:after {
   left: 16px;
 }
@@ -1958,7 +1970,7 @@ a.badge-dark {
 
 .multi-level ul > li a,
 .multi-level ul > li .item {
-  padding-left: 68px !important;
+  padding-left: 68px ;
 }
 
 .multi-level.active > a:after {
@@ -2007,7 +2019,7 @@ a.badge-dark {
 .image-listview.media .link-listview .item,
 .image-listview.media .image-listview a,
 .image-listview.media .image-listview .item {
-  padding-left: 96px !important;
+  padding-left: 96px ;
 }
 
 .card {
@@ -8517,6 +8529,16 @@ ion-icon {
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{
   color: #909090 !important;
+}
+.iconsshortchuts{
+  right: 16px;
+  position: relative;
+}
+.iconsshortchuts a{
+  padding:2px !important;
+}
+.item:hover{
+  background: #dddddd38;
 }
 @media screen and (max-width: 768px){
   .signModal .modal-dialog{

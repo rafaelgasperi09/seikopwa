@@ -10,6 +10,7 @@ return [
        "usuarios.update"=>"Actualizar Usuario",
        "usuarios.profile"=>"Ver Perfil",
        "usuarios.delete"=>"Desactivar Usuario",
+       "usuarios.password"=>"Modificar password",
    ),
    "Roles"=>array(
        "role.index"=>"Listar Roles",
