@@ -137,9 +137,17 @@ class DashboardController extends Controller
         //servicio tecnico PENDIENTES DE INICIAR
         $data['serv_tec_pi_a']=$this->getPendings('serv_tec','A');        
         //servicio tecnico ABIERTAS
-        $data['serv_tec_a']=$this->getPendings('serv_tec','A',' formulario_registro.tecnico_asignado='.current_user()->id);
+       if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
+            $cond1='';
+        else
+            $cond1=' formulario_registro.tecnico_asignado='.current_user()->id;        
+        $data['serv_tec_a']=$this->getPendings('serv_tec','A',$cond1);
         //servicio tecnico EN PROCESO
-        $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',' formulario_registro.tecnico_asignado='.current_user()->id);
+        if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
+            $cond2='';
+        else
+            $cond2=' formulario_registro.tecnico_asignado='.current_user()->id;
+        $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',$cond2);
          //servicio tecnico EN PROCESO
          $data['serv_tec_10']=array();
 
