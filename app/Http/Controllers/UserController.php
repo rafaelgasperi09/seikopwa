@@ -7,6 +7,7 @@ use App\MontacargaUser;
 use App\Notifications\NewUser;
 use App\Rol;
 use App\User;
+use Carbon\Carbon;
 use Cartalyst\Sentinel\Laravel\Facades\Activation;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -104,7 +105,9 @@ class UserController extends Controller
         ));
 
         $role->users()->attach($user);
-        $user->have_to_change_password = 1;
+        $user->have_to_change_password = 0;
+        $user->date_last_password_changed = Carbon::now();
+
 
         if($role->tipo == 'cliente'){
             $user->crm_cliente_id = $request->crm_cliente_id;
