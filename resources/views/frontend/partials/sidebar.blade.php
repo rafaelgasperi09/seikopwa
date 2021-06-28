@@ -43,7 +43,8 @@
                     <li>
                         <a href="{{ route('equipos.index') }}" class="item" title="Equipos">
                             <div class="icon-box bg-primary">
-                                <ion-icon name="train-outline" title="equipos"></ion-icon>
+                                <img src="{{url('/images/icons/mcwhite.png')}}" width="22px">
+                                {{--}}<ion-icon name="train-outline" title="equipos"></ion-icon>{{--}}
                             </div>
                             <div class="in">
                                 Equipo
