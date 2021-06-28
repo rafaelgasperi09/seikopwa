@@ -22,7 +22,7 @@
                     </a>
                 </li>
             @endif
-            @if(\Sentinel::hasAccess('equipos.create_daily_check'))
+            @if(\Sentinel::hasAnyAccess(['equipos.create_daily_check','equipos.see_daily_check']))
                 <li>
                    <div class="item">
                         <div class="icon-box bg-secondary">
@@ -31,22 +31,26 @@
                         <div class="in">
                             <div>Daily check</div>
                             <div class="iconsshortchuts">
+                                @if(\Sentinel::hasAccess('equipos.create_daily_check'))
                                 <a href="{{ route('equipos.create_daily_check',$e->id) }}"  title="Crear">
                                     <span class="iconedbox bg-primary">
                                     <ion-icon name="create-outline"></ion-icon>
                                     </span>
-                                </a>                                
+                                </a>
+                                @endif
+                                @if(\Sentinel::hasAccess('equipos.see_daily_check'))
                                 <a href="{{route('equipos.detail',['id'=>$e->id])}}?show=rows&tab=1"   title="Ver">
                                     <span class="iconedbox bg-success">
                                     <ion-icon name="eye-outline"></ion-icon>
                                     </span>
-                                </a>                                
+                                </a>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </li>
             @endif
-            @if((!empty($e->tipo_equipos_id) or !empty($e->tipo_motore_id)) && \Sentinel::hasAccess('equipos.create_mant_prev'))
+            @if((!empty($e->tipo_equipos_id) or !empty($e->tipo_motore_id)))
                 <li>
                     <div class="item">
                         <div class="icon-box bg-info">
@@ -55,26 +59,28 @@
                         <div class="in">
                             <div>Mantenimiento preventivo</div>
                             <div class="iconsshortchuts">
+                                @if(\Sentinel::hasAccess('equipos.create_mant_prev'))
                                 <a href="@if($e->sub_equipos_id==1)
                                             {{ route('equipos.create_mant_prev',[$e->id,$e->tipo_motore_id]) }}
                                         @else
                                             {{ route('equipos.create_mant_prev',[$e->id,$e->tipo_equipos_id]) }}
-                                        @endif""  title="Crear">
+                                        @endif"  title="Crear">
                                     <span class="iconedbox bg-primary">
                                     <ion-icon name="create-outline"></ion-icon>
                                     </span>
-                                </a>                                
+                                </a>
+                                @endif
                                 <a href="{{route('equipos.detail',['id'=>$e->id])}}?show=rows&tab=2"   title="Ver">
                                     <span class="iconedbox bg-success">
                                     <ion-icon name="eye-outline"></ion-icon>
                                     </span>
-                                </a>                                
+                                </a>
                             </div>
                         </div>
                     </div>
                 </li>
             @endif
-            @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
+            @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.assign_tecnical_support','equipos.start_tecnical_support']))
                 <li>
                     <div class="item">
                         <div class="icon-box bg-warning">
@@ -83,16 +89,20 @@
                         <div class="in">
                             <div>Informe de servicio tecnico</div>
                             <div class="iconsshortchuts">
+                                @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
                                 <a href="{{ route('equipos.create_tecnical_support',$e->id) }}" title="Crear">
                                     <span class="iconedbox bg-primary">
                                     <ion-icon name="create-outline"></ion-icon>
                                     </span>
-                                </a>                                
+                                </a>
+                                @endif
+                                @if(\Sentinel::hasAnyAccess(['equipos.assign_tecnical_support','equipos.start_tecnical_support']))
                                 <a href="{{route('equipos.detail',['id'=>$e->id])}}?show=rows&tab=3"  title="Ver">
                                     <span class="iconedbox bg-success">
                                     <ion-icon name="eye-outline"></ion-icon>
                                     </span>
-                                </a>                                
+                                </a>
+                                @endif
                             </div>
                         </div>
                     </div>
