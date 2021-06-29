@@ -52,7 +52,7 @@ class UserController extends Controller
     public function profile($id){
 
         $data = User::findOrFail($id);
-        $roles = Rol::pluck('name','id');
+        $roles = Rol::where('id','<>',1)->get()->pluck('full_name','id');
         return view('frontend.usuarios.profile',compact('data','roles'));
     }
 
@@ -60,8 +60,7 @@ class UserController extends Controller
 
         $roles = Rol::where('id','<>',1)->get()->pluck('full_name','id');
 
-        $clientes = Cliente::whereNotIn('id',User::whereNotNull('crm_cliente_id')->pluck('crm_cliente_id'))
-                ->whereHas('equipos')
+        $clientes = Cliente::whereHas('equipos')
                 ->orderBy('nombre')
                 ->get()
                 ->pluck('full_name','id');

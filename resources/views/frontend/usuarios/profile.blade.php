@@ -45,7 +45,7 @@
         <div class="wide-block pb-1 pt-2">
             {{ Form::model($data, array('route' => array('usuarios.update', $data->id), 'method' => 'PUT' , 'role' => 'form','class'=>'form-horizontal')) }}
             <div class="section mt-2 mb-5">
-                @if(current_user()->isOnGroup('administradores'))
+                @if(\Sentinel::hasAccess('usuarios.editar_rol'))
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="label" for="rol_id">Rol</label>

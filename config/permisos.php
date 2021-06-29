@@ -9,6 +9,7 @@ return [
        "usuarios.detail"=>"Mostrar Usuario",
        "usuarios.update"=>"Actualizar Usuario",
        "usuarios.profile"=>"Ver Perfil",
+       "usuarios.editar_rol"=>"Editar Rol",
        "usuarios.delete"=>"Desactivar Usuario",
        "usuarios.password"=>"Modificar password",
    ),

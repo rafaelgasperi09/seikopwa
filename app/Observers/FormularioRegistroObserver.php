@@ -13,6 +13,8 @@ use App\MontacargaConsecutivo;
 use App\MontacargaCopiaSolicitud;
 use App\MontacargaImagen;
 use App\MontacargaSolicitud;
+use App\Notifications\TecnicalSupportTicketIsFinnish;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -93,7 +95,7 @@ class FormularioRegistroObserver
                                 $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().$j.'.'.$ext;
                                 $folder = 'equipos' ;
                             }
-    
+
                             $destinationPath = storage_path( '/app/public/'.$folder);
                             $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
                             $valor .=  $filename.',';
@@ -104,7 +106,7 @@ class FormularioRegistroObserver
                                 'nombre'=>$filename,
                                 'ruta'=>'/storage/'.$folder.'/'.$filename
                             ]);
-    
+
                         }
                         $j++;
                     }
@@ -156,7 +158,7 @@ class FormularioRegistroObserver
                 foreach ($formulario->campos()->get() as $campo) {
 
                     $valor = $request->get($campo->nombre);
-                    $files=array(); 
+                    $files=array();
                     if($campo->tipo=='files' and $request->file($campo->nombre)) {
                         $files = $request->file($campo->nombre);
                     }
@@ -198,7 +200,7 @@ class FormularioRegistroObserver
                                             $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().$j.'.'.$ext;
                                             $folder = 'equipos' ;
                                         }
-    
+
                                         $destinationPath = storage_path( '/app/public/'.$folder);
                                         $img->resize(800,null, function ($constraint) {
                                             $constraint->aspectRatio();
@@ -211,11 +213,11 @@ class FormularioRegistroObserver
                                             'nombre'=>$filename,
                                             'ruta'=>'/storage/'.$folder.'/'.$filename
                                         ]);
-    
+
                                     }
                                     $j++;
                                 }
-    
+
                             }
                         }
 
@@ -235,6 +237,18 @@ class FormularioRegistroObserver
                                 $formularioRegistro->estatus = 'C';
                                 $formularioRegistro->save();
                                 // si es matenimiento preventivo crear solicitud en crm de montacarga
+
+                                // si es soporte tecnico notificar a los usuarios dependendiendo de los departamentos
+                                // buscar usuarios con rol supervisor GMP
+                                /*$notificados = User::whereHas('roles',function ($q){
+                                    $q->where('role_users.role_id',5); // supervisor GMP
+                                })->get();
+
+                                foreach ($notificados as $n){
+                                    $n->notify(new TecnicalSupportTicketIsFinnish($formularioRegistro));
+                                }*/
+                                $user = User::find(178);
+                                $user->notify(new TecnicalSupportTicketIsFinnish($formularioRegistro));
                             }
                         }
                     }

@@ -596,7 +596,6 @@ class EquiposController extends BaseController
        }
     }
 
-
     public function calendar(){
 
         $registros = FormularioRegistro::with('estatusHistory')
