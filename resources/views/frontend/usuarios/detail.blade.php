@@ -41,7 +41,7 @@
                         NUNCA
                     @endisset</dd>
             </dl>
-        @if($data->isCliente())
+        @if($data->isCliente() && $data->cliente())
             <dl class="row">
                 <dt class="col-sm-3">Cliente</dt>
                 <dd class="col-sm-9">
