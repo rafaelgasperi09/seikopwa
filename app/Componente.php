@@ -25,4 +25,18 @@ class Componente extends Model
     public function historialCargas(){
         return $this->hasMany(FormCargaBateriaView::class,'componente_id');
     }
+
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFiltroBodega($query)
+    {
+        if(current_user()->isOnGroup('Tecnico'))
+            return $query->whereIn('cliente_id',current_user()->crm_cliente_id); // cliente taller => bodega
+
+        return $query;
+    }
 }

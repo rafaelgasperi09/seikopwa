@@ -9,7 +9,13 @@
                 @endif
             </div>
             <div class="in">
-                <div>{{$dato->getFullName()}}<br/><small>{{ $dato->email }}</small> </div>
+                <div>{{$dato->getFullName()}}
+                    @if($dato->isCliente())
+                        ({{ $dato->cliente()->nombre }})
+                    @endif
+                    <br/>
+                    <small>{{ $dato->email }}</small>
+                </div>
                 <br/>
                 <small>({{ $dato->roles()->first()->name }})</small>
             </div>

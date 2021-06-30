@@ -79,9 +79,12 @@
             }else if($(this).val() == 3 || $(this).val() == 4){ // supervisor_operador-clinete
                 $('#group_crm_user_id').hide();
                 $('#group_crm_cliente_id').show();
-            }else if($(this).val() == 5 || $(this).val() == 6){ // operador-tecnico_gmp
+            }else if($(this).val() == 5){ // operador
                 $('#group_crm_user_id').show();
                 $('#group_crm_cliente_id').hide();
+            }else if($(this).val() == 6){ // tecnico_gmp
+                $('#group_crm_user_id').show();
+                $('#group_crm_cliente_id').show();
             }
         });
     </script>

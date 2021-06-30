@@ -83,17 +83,8 @@
                         </i>
                     </div>
                 </div>
-                @if(current_user()->isOnGroup('administradores'))
-                <div class="form-group boxed">
-                    <div class="input-wrapper">
-                        <label class="label" for="crm_user_id">CRM ID</label>
-                        {{ Form::number('crm_user_id',null,  array("class" => "form-control",'placeholder'=>'CRM ID'))  }}
-                        <i class="clear-input">
-                            <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
-                        </i>
-                    </div>
-                    <small style="color: red;">Este es el identificador unico del usuario con el mismo correo en el CRM</small>
-                </div>
+                @if(current_user()->isOnGroup('Programador') || current_user()->isOnGroup('Administrador'))
+                    @include('frontend.partials.typeahead',array('field_label'=>'Cliente','field_name'=>'crm_cliente_id','items'=>$clientes,'value'=>[$data->crm_cliente_id,$data->cliente()->nombre],'small'=>'Esta selección sirve para determinar que equipos pertecen a este nuevo cliente usando la información del CRM.'))
                 @endif
             </div>
             <div class="modal-footer">

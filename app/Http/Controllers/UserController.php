@@ -53,7 +53,8 @@ class UserController extends Controller
 
         $data = User::findOrFail($id);
         $roles = Rol::where('id','<>',1)->get()->pluck('full_name','id');
-        return view('frontend.usuarios.profile',compact('data','roles'));
+        $clientes = Cliente::whereHas('equipos')->orderBy('nombre')->get()->pluck('full_name','id');
+        return view('frontend.usuarios.profile',compact('data','roles','clientes'));
     }
 
     public function create(){
@@ -112,6 +113,7 @@ class UserController extends Controller
             $user->crm_cliente_id = $request->crm_cliente_id;
         }elseif($role->tipo == 'gmp'){
             $user->crm_user_id = $request->crm_user_id;
+            if($request->has('crm_cliente_id')) $user->crm_cliente_id = $request->crm_cliente_id;
         }
 
         if($user->save()){
