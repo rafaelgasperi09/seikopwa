@@ -84,8 +84,12 @@
                     </div>
                 </div>
                 @if(current_user()->isOnGroup('Programador') || current_user()->isOnGroup('Administrador'))
-                    @include('frontend.partials.typeahead',array('field_label'=>'Cliente','field_name'=>'crm_cliente_id','items'=>$clientes,'value'=>[$data->crm_cliente_id,$data->cliente()->nombre],'small'=>'Esta selección sirve para determinar que equipos pertecen a este nuevo cliente usando la información del CRM.'))
-                @endif
+                    @if($data->cliente())
+                            @include('frontend.partials.typeahead',array('field_label'=>'Cliente','field_name'=>'crm_cliente_id','items'=>$clientes,'value'=>['',''],'small'=>'Esta selección sirve para determinar que equipos pertecen a este nuevo cliente usando la información del CRM.'))
+                        @else
+                            @include('frontend.partials.typeahead',array('field_label'=>'Cliente','field_name'=>'crm_cliente_id','items'=>$clientes,'value'=>[$data->crm_cliente_id,$data->cliente()->nombre],'small'=>'Esta selección sirve para determinar que equipos pertecen a este nuevo cliente usando la información del CRM.'))
+                        @endif
+                    @endif
             </div>
             <div class="modal-footer">
                 @include('frontend.partials.btnSubmit')
