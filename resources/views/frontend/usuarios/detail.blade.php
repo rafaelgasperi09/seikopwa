@@ -1,18 +1,40 @@
 @extends('frontend.main-layout')
 @section('content')
-    @include('frontend.partials.title',array('title'=>'Usuario','subtitle'=>'Sr(a) '.$data->getFullName()))
-    <div class="divider mt-2 mb-3"></div>
-    <div class="section  full mt-2" data-toggle="collapse" href="#detail" aria-expanded="false">
-        <div class="section-title">Detalles
-           <div class="right">
-               @if(\Sentinel::hasAccess('usuarios.profile')  or $data->id == current_user()->id)
-                   <a href="{{ route('usuarios.profile',$data->id) }}" class="btn btn-success">
-                       <ion-icon name="person-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
-                       Editar Perfil
-                   </a>
-               @endif
-           </div>
+    @include('frontend.partials.title',array('title'=>'Usuario','subtitle'=>''))
+    <div class="section mt-2">
+        <div class="profile-head">
+            <div class="avatar">
+                @empty(!$data->photo)
+                    <img src="{{\Storage::url($data->photo)}}" alt="avatar" class="imaged w64 rounded">
+                @else
+                    <img src="{{ url('assets/img/user.png') }}" alt="avatar" class="imaged w64 rounded">
+                @endempty
+            </div>
+            <div class="in">
+                <h3 class="name">Sr(a) {{ $data->getFullName() }}</h3>
+                <h5 class="subtext">
+                    Ult Ingreso :
+                    @isset($data->last_login)
+                        {{ \Carbon\Carbon::parse($data->last_login)->diffForHumans() }}
+                    @else
+                        NUNCA
+                    @endisset
+                </h5>
+            </div>
         </div>
+    </div>
+    @if(\Sentinel::hasAccess('usuarios.profile')  or $data->id == current_user()->id)
+    <div class="section full mt-1">
+        <div class="wide-block pt-2 pb-2">
+            <a href="{{ route('usuarios.profile',$data->id) }}" class="btn btn-success">
+                <ion-icon name="person-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
+                Editar Perfil
+            </a>
+        </div>
+    </div>
+    @endif
+    <div class="section  full mt-2" data-toggle="collapse" href="#detail" aria-expanded="false">
+        <div class="section-title">DETALLE</div>
         <div class="wide-block pt-2 pb-2" id="detail">
             <dl class="row">
                 <dt class="col-sm-3">Rol</dt>
@@ -31,15 +53,6 @@
             <dl class="row">
                 <dt class="col-sm-3">Correo Electrónico</dt>
                 <dd class="col-sm-9">{{ $data->email }}</dd>
-            </dl>
-            <dl class="row">
-                <dt class="col-sm-3">Ult Ingreso</dt>
-                <dd class="col-sm-9">
-                    @isset($data->last_login)
-                        {{ \Carbon\Carbon::parse($data->last_login)->diffForHumans() }}
-                    @else
-                        NUNCA
-                    @endisset</dd>
             </dl>
         @if($data->isCliente() && $data->cliente())
             <dl class="row">

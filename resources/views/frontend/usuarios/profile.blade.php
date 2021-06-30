@@ -1,6 +1,6 @@
 @extends('frontend.main-layout')
 @section('content')
-    <br/><br/>
+    @include('frontend.partials.title',array('title'=>'Usuario','subtitle'=>''))
     <div class="section mt-2">
         <div class="profile-head">
             <div class="avatar">
@@ -40,9 +40,9 @@
             </a>
         </div>
     </div>
-    @include('frontend.partials.title',array('title'=>'Usuario','subtitle'=>'Editar perfil'))
-    <div class="section full mt-2 mb-2">
-        <div class="wide-block pb-1 pt-2">
+    <div class="section  full mt-2" data-toggle="collapse" href="#detail" aria-expanded="false">
+        <div class="section-title">EDITAR PERFIL</div>
+        <div class="wide-block pt-2 pb-2" id="profile">
             {{ Form::model($data, array('route' => array('usuarios.update', $data->id), 'method' => 'PUT' , 'role' => 'form','class'=>'form-horizontal')) }}
             <div class="section mt-2 mb-5">
                 @if(\Sentinel::hasAccess('usuarios.editar_rol'))
