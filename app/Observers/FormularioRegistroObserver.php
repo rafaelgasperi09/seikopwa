@@ -240,15 +240,13 @@ class FormularioRegistroObserver
 
                                 // si es soporte tecnico notificar a los usuarios dependendiendo de los departamentos
                                 // buscar usuarios con rol supervisor GMP
-                                /*$notificados = User::whereHas('roles',function ($q){
+                                $notificados = User::whereHas('roles',function ($q){
                                     $q->where('role_users.role_id',5); // supervisor GMP
                                 })->get();
 
                                 foreach ($notificados as $n){
                                     $n->notify(new TecnicalSupportTicketIsFinnish($formularioRegistro));
-                                }*/
-                                $user = User::find(178);
-                                $user->notify(new TecnicalSupportTicketIsFinnish($formularioRegistro));
+                                }
                             }
                         }
                     }

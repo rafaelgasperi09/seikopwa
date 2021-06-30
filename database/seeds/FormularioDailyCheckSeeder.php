@@ -499,7 +499,8 @@ class FormularioDailyCheckSeeder extends Seeder
             'database_nombre'=>'nombre',
             'requerido'=>1,
             'tamano'=>'col-12',
-            'permiso'=>'parteA'
+            'cambio_estatus'=>1,
+            'permiso'=>'parteB'
         ]);
 
         \App\FormularioCampo::create([

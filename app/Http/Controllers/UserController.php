@@ -142,6 +142,9 @@ class UserController extends Controller
         $user->fill($request->all());
 
         if($user->save()){
+            if($request->has('rol_id'))
+                $user->roles()->sync([$request->rol_id]);
+
             session()->flash('message.success', 'Usuario creado con éxito.');
         }else{
             session()->flash('message.error', 'Hubo un error y no se pudo modificar.');
@@ -195,7 +198,6 @@ class UserController extends Controller
         return redirect(route('usuarios.profile',$user->id));
 
     }
-
 
     public function import($id){
 
