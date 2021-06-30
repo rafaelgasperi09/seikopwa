@@ -16,7 +16,7 @@
         <div class="wide-block pt-2 pb-2" id="detail">
             <dl class="row">
                 <dt class="col-sm-3">Rol</dt>
-                <dd class="col-sm-9">{{ $data->roles()->first()->name }}</dd>
+                <dd class="col-sm-9">@if($data->roles()->first()){{ $data->roles()->first()->name }}@else N/A @endif</dd>
             </dl>
             <dl class="row">
                 <dt class="col-sm-3">Nombre</dt>
