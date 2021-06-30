@@ -196,7 +196,7 @@ $cFirma='style="border-bottom:1px solid black"';
                         @if($key==0)
                         <small style="width:650px">Imagenes (tecnico)</small><br/>
                         @endif
-                        <img src="{{url('storage/equipos/'.$ft)}}" width="500px" style="max-height:400px">
+                        <img src="{{storage_path('app/public/equipos/'.$ft)}}" width="500px" style="max-height:400px">
                     </td>
                 </tr>
                 @endif
