@@ -1,6 +1,6 @@
 @extends('frontend.main-layout')
 @section('content')
-    @include('frontend.partials.title',array('title'=>'Usuario','subtitle'=>''))
+    @include('frontend.partials.title',array('title'=>'Usuario','subtitle'=>'','route_back'=>route('usuarios.index')))
     <div class="section mt-2">
         <div class="profile-head">
             <div class="avatar">
