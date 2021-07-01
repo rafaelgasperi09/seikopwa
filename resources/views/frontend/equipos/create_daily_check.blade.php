@@ -76,8 +76,8 @@
                     </div>
                 </div>
             </div>
-            <div class="section-title">NOTA:Este formulario debe hacerse por el operdor del equipo diariamente al comienzo del turno. Ciertos articulos enumerados no son incluidos en algunos modelos. Compruebe todos los articulos aplicables a su unidad.</div>
-            <div class="section-title">OK => Buen Estado , M => Mal Estado , R => Revisar</div>
+            <div class="section-title">NOTA:Este formulario debe hacerse por el operador del equipo diariamente al comienzo del turno. Ciertos articulos enumerados no son incluidos en algunos modelos. Compruebe todos los articulos aplicables a su unidad.</div>
+            <div class="section-title">OK => Buen Estado , M => Mal Estado , R => Revisar , N/A => No Aplica</div>
         </div>
     </div>
     {{Form::open(array("method" => "POST","action" => "EquiposController@storeDailyCheck","role" => "form",'class'=>'form-horizontal','files'=>true))}}

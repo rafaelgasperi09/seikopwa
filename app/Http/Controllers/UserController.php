@@ -147,7 +147,7 @@ class UserController extends Controller
             if($request->has('rol_id'))
                 $user->roles()->sync([$request->rol_id]);
 
-            session()->flash('message.success', 'Usuario creado con éxito.');
+            session()->flash('message.success', 'Usuario modificado con éxito.');
         }else{
             session()->flash('message.error', 'Hubo un error y no se pudo modificar.');
         }

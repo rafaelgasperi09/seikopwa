@@ -4,7 +4,7 @@
 @if(!isset($placeholder)) <?php $placeholder='Buscar '.$field_label.' Nombre';?>  @endif
 <div class="form-group boxed" id="group_{{ $field_name }}" style="display: {{ $display }}">
     <div class="input-wrapper">
-        <label class="label" for="crm_user_id">{{ $field_label }}</label>
+        <label class="label" for="crm_user_id">{{ $field_label }}<div style="float: right;display: inline-block;"><span id="quitar_{{ $field_name }}">Quitar</span></div> </label>
         {{ Form::text('typeheadfield',$value[1],array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_'.$field_name,'data-field_name'=>$field_name,'data-provide'=>'typeahead','data-items'=>10,'placeholder'=>$placeholder)) }}
         {{ Form::hidden($field_name,$value[0],array('id'=>$field_name)) }}
         <i class="clear-input">
@@ -17,7 +17,6 @@
 </div>
 <script>
 var fieldName = '{{ $field_name }}';
-
 $(document).ready(function(){
     var fieldName = '{{ $field_name }}';
     var api_token = '{{ current_user()->api_token }}'
@@ -44,5 +43,12 @@ $(document).ready(function(){
             }
         }
     });
+    $( "#quitar_{{ $field_name }}" ).click(function() {
+        console.log('aquiiiiiiii');
+        $('#typehead_'+fieldName).val('');
+        $('#'+fieldName).val('');
+    });
+
+
 });
 </script>
