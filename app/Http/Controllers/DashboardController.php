@@ -101,12 +101,12 @@ class DashboardController extends Controller
             $tipoEquiposArray[$t->sub_equipos_id]['tipos'][$t->tipo_motore_id]['GMtotal']=$t->GMtotal;
         }
 
-   
+
         $data['total_equipos'] =  $tipoEquiposArray;
 
 
         ////////////// TOTAL BATERIAS ////////////////////////////////
-        $data['total_baterias'] =Componente::whereTipoComponenteId(2)->count();
+        $data['total_baterias'] =Componente::FiltroBodega()->whereTipoComponenteId(2)->count();
 
         ////////////// TOTAL EQUIPOS SIN DAILY CHECK ////////////////////////
         $data['equipos_sin_daily_check_hoy'] = array();
@@ -135,12 +135,12 @@ class DashboardController extends Controller
         //servicio tecnico PENDIENTES
         $data['serv_tec_p']=$this->getPendings('serv_tec');
         //servicio tecnico PENDIENTES DE INICIAR
-        $data['serv_tec_pi_a']=$this->getPendings('serv_tec','A');        
+        $data['serv_tec_pi_a']=$this->getPendings('serv_tec','A');
         //servicio tecnico ABIERTAS
        if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
             $cond1='';
         else
-            $cond1=' formulario_registro.tecnico_asignado='.current_user()->id;        
+            $cond1=' formulario_registro.tecnico_asignado='.current_user()->id;
         $data['serv_tec_a']=$this->getPendings('serv_tec','A',$cond1);
         //servicio tecnico EN PROCESO
         if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
