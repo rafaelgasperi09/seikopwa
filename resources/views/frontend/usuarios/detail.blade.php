@@ -54,7 +54,7 @@
                 <dt class="col-sm-3">Correo Electrónico</dt>
                 <dd class="col-sm-9">{{ $data->email }}</dd>
             </dl>
-        @if($data->isCliente() && $data->cliente())
+        @if($data->cliente())
             <dl class="row">
                 <dt class="col-sm-3">Cliente</dt>
                 <dd class="col-sm-9">
