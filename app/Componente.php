@@ -35,7 +35,7 @@ class Componente extends Model
     public function scopeFiltroBodega($query)
     {
         if(!empty(current_user()->crm_cliente_id))
-            return $query->whereIn('cliente_id',current_user()->crm_cliente_id); // cliente taller => bodega
+            return $query->where('cliente_id',current_user()->crm_cliente_id); // cliente taller => bodega
 
         return $query;
     }
