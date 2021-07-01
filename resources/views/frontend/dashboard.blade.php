@@ -101,7 +101,7 @@
                         <a href="@if(Sentinel::getUser()->hasAccess('equipos.edit_mant_prev'))
                             {{ route('equipos.edit_mant_prev',array('id'=>$mp->id)) }}
                         @else
-                            {{ route('equipos.detail',array('id'=>$dc->equipo_id)) }}?show=rows&tab=2
+                            {{ route('equipos.detail',array('id'=>$mp->equipo_id)) }}?show=rows&tab=2
                         @endif"  class="chip chip-warning chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
