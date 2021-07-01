@@ -98,7 +98,11 @@
                     <div class="card-body">
                     @if(count($data['mant_prev']))
                         @foreach($data['mant_prev'] as $mp)
-                        <a href="@if(Sentinel::getUser()->hasAccess('equipos.edit_mant_prev')) {{ route('equipos.edit_mant_prev',array('id'=>$mp->id)) }} @else {{ route('equipos.detail',array('id'=>$dc->equipo_id)) }}?show=rows#mant_prev @endif"  class="chip chip-warning chip-media ml-05 mb-05" style="width:100%">
+                        <a href="@if(Sentinel::getUser()->hasAccess('equipos.edit_mant_prev'))
+                            {{ route('equipos.edit_mant_prev',array('id'=>$mp->id)) }}
+                        @else
+                            {{ route('equipos.detail',array('id'=>$dc->equipo_id)) }}?show=rows&tab=2
+                        @endif"  class="chip chip-warning chip-media ml-05 mb-05" style="width:100%">
                             <i class="chip-icon">
                                 Ir
                             </i>
@@ -202,7 +206,7 @@
                                 else
                                      $transcurrido=$diff->format('%hh %im');
 
-                            @endphp                            
+                            @endphp
                             <span class="chip-label">{{$stpr->equipo()->numero_parte}} </span>
                             <div  class="fecha pull-right" >
                                 <span title="Fecha de Inicio">
@@ -210,9 +214,9 @@
                                 </span><br/>
                                 <span title="Tiempo transcurrido">
                                      {{$transcurrido}}
-                                </span>                                
+                                </span>
                             </div>
-     
+
 
                         </a>
                         @endforeach
