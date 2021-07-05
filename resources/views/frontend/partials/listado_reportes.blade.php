@@ -26,7 +26,7 @@
                    </a>
                @endif
                @if($d->estatus  == 'C')
-                <a href="{{ Storage::url($d->nombre_archivo) }}" class="btn btn-primary btn-sm mr-1 ">
+                <a href="{{ route('equipos.imprimir_mant_prev',$d->id) }}" class="btn btn-primary btn-sm mr-1 " target="_blanks">
                     <ion-icon name="print-outline" title="Ver detalle"></ion-icon>Imprimir
                 </a>
                @endif

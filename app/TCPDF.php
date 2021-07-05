@@ -103,7 +103,7 @@ class TCPDF extends \TCPDF
         $this->SetFillColor(0, 0, 0);
         $this->SetTextColor(0, 0, 0);
         $this->SetFont('helvetica', 'B', 14);
-        $this->Cell(200, 0, html_entity_decode("SERVICIO INDUSTRIAL DE MONTACARGAS, S.A"), 0, 0, 'C');
+        $this->Cell(200, 0, html_entity_decode("MONTACARGAS Y REPUESTOS, S.A"), 0, 0, 'C');
         $this->Ln();
 
         $this->SetTextColor(217, 83, 79);
@@ -123,7 +123,7 @@ class TCPDF extends \TCPDF
         $x = $this->GetX() + 5;
         $this->SetXY($x, $y);
         $this->Cell(60, 10, html_entity_decode($nombre), 0, 0, 'C');
-        $this->Rect($x, $y, 60, 10, 'D', array('all' => $this->borderDashed()));
+        $this->Rect($x, $y, 60, 10, 'D', array('all' => $this->borderSolid()));
         $this->Ln();
 
         $this->SetFillColor(0, 0, 0);

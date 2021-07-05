@@ -43,6 +43,10 @@ class FormularioRegistro extends BaseModel
         return $this->hasMany(FormularioRegistroEstatus::class);
     }
 
+    public function solicitud(){
+        return MontacargaSolicitud::find($this->solicitud_id);
+    }
+
     public function createSolicitudMontacarga(){
 
         if($this->estatus =='C'){
@@ -94,7 +98,7 @@ class FormularioRegistro extends BaseModel
                 $copia_sol->equipo = $equipo->numero_parte;
                 $copia_sol->save();
                 // creams el pdf de la solicitud
-                $pdf = $this->savePdf($equipo,$solicitud);
+                $pdf = $this->savePdf($solicitud);
 
                 MontacargaImagen::create([
                     'name' =>$pdf['url'],
@@ -123,23 +127,39 @@ class FormularioRegistro extends BaseModel
         }
     }
 
-    public function savePdf($equipo,$solicitud)
+    public function savePdf($solicitud,$uploadFile=true)
     {
         //$formularioRegistro = FormularioRegistro::find($this->id);
+        $equipo = Equipo::find($this->equipo_id);
         $formulario = Formulario::find($this->formulario_id);
         $consecutivo = $solicitud->consecutivo_exportable;
         $horometro = $solicitud->horometro;
         $observacion = $solicitud->descripcion;
         $width = 297;
-        $height = 420;
+        //$height = 420;
         $y_max_pos = 300;
         if(in_array($equipo->tipo->name,['stock-picker']))  {
-            $height = 440;
-            $y_max_pos = 332;
+            $height = 448;
+            $y_max_pos = 343;
         }elseif(in_array($equipo->tipo->name,['reach'])){
             $height = 448;
             $y_max_pos = 343;
+        }elseif(in_array($equipo->tipo->name,['counter-sc'])){
+            $height = 400;
+            $y_max_pos = 300;
         }
+        elseif(in_array($equipo->tipo->name,['we/ws','wp','wv'])){
+            $height = 420;
+            //$y_max_pos = 253;
+            $y_max_pos = 253;
+        }elseif(in_array($equipo->tipo->name,['pallet-pe'])){
+            $height = 400;
+            $y_max_pos = 310;
+        }elseif(!empty($equipo->tipo_motore_id)){
+            $height = 500;
+            $y_max_pos = 343;
+        }
+        $height = $y_max_pos+100;
         $pageLayout = array($width, $height);
         $pdf = new TCPDF('P', 'mm', $pageLayout, true, 'UTF-8', false);
         $pdf->SetConfigInforme();
@@ -155,22 +175,22 @@ class FormularioRegistro extends BaseModel
         $y = $pdf->GetY();
         $pdf->SetXY($x, $y + 3);
         $pdf->Cell(20, 6, "CLIENTE", 0, 0, 'L');
-        $pdf->Rect($x, $y + 3, 20, 6, 'D', array('all' => $pdf->borderDashed()));
+        $pdf->Rect($x, $y + 3, 20, 6, 'D', array('all' => $pdf->borderSolid()));
 
         $pdf->SetTextColor(76, 76, 76);
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x + 3, $y);
-        $clinete = $solicitud->clientes ? $solicitud->clientes->nombre : "";
+        $clinete = $solicitud->cliente ? $solicitud->cliente->nombre : "";
         $pdf->Cell(50, 6,  html_entity_decode($clinete), 0, 0, 'L');
-        $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderDashed()));
+        $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderSolid()));
 
         $pdf->SetTextColor(153, 153, 153);
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x + 3, $y);
         $pdf->Cell(20, 6, "EQUIPO", 0, 0, 'L');
-        $pdf->Rect($x + 3, $y, 20, 6, 'D', array('all' => $pdf->borderDashed()));
+        $pdf->Rect($x + 3, $y, 20, 6, 'D', array('all' => $pdf->borderSolid()));
 
         $pdf->SetTextColor(76, 76, 76);
         $x = $pdf->GetX();
@@ -178,7 +198,7 @@ class FormularioRegistro extends BaseModel
         $pdf->SetXY($x + 3, $y);
 
         $pdf->Cell(50, 6,  html_entity_decode($equipo->numero_parte), 0, 0, 'L');
-        $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderDashed()));
+        $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderSolid()));
 
         $pdf->SetTextColor(76, 76, 76);
         $x = $pdf->GetX();
@@ -186,23 +206,23 @@ class FormularioRegistro extends BaseModel
         $pdf->SetXY($x + 3, $y);
         $tipo_equipo = $equipo->subTipo ? $equipo->subTipo->display_name : "";
         $pdf->Cell(50, 6,  html_entity_decode($tipo_equipo), 0, 0, 'L');
-        $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderDashed()));
+        $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderSolid()));
 
         $pdf->SetTextColor(153, 153, 153);
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x + 3, $y);
         $horometros = $horometro ? $horometro : "";
-        $pdf->Cell(60, 6, html_entity_decode("Horometro: " . $horometros), 0, 0, 'L');
-        $pdf->Rect($x + 3, $y, 60, 6, 'D', array('all' => $pdf->borderDashed()));
+        $pdf->Cell(60, 6, html_entity_decode("HOROMETRO: " . $horometros), 0, 0, 'L');
+        $pdf->Rect($x + 3, $y, 60, 6, 'D', array('all' => $pdf->borderSolid()));
         $pdf->Ln();
 
         $pdf->SetTextColor(153, 153, 153);
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x, $y + 3);
-        $pdf->Cell(20, 6, "Marca", 0, 0, 'L');
-        $pdf->Rect($x, $y + 3, 20, 6, 'D', array('all' => $pdf->borderDashed()));
+        $pdf->Cell(20, 6, "MARCA", 0, 0, 'L');
+        $pdf->Rect($x, $y + 3, 20, 6, 'D', array('all' => $pdf->borderSolid()));
 
         $pdf->SetTextColor(76, 76, 76);
         $x = $pdf->GetX();
@@ -210,14 +230,14 @@ class FormularioRegistro extends BaseModel
         $pdf->SetXY($x + 3, $y);
         $marca = $equipo->marca ? $equipo->marca->display_name : "";
         $pdf->Cell(50, 6,  html_entity_decode($marca), 0, 0, 'L');
-        $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderDashed()));
+        $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderSolid()));
 
         $pdf->SetTextColor(153, 153, 153);
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x + 3, $y);
-        $pdf->Cell(20, 6, "Modelo", 0, 0, 'L');
-        $pdf->Rect($x + 3, $y, 20, 6, 'D', array('all' => $pdf->borderDashed()));
+        $pdf->Cell(20, 6, "MODELO", 0, 0, 'L');
+        $pdf->Rect($x + 3, $y, 20, 6, 'D', array('all' => $pdf->borderSolid()));
 
         $pdf->SetTextColor(76, 76, 76);
         $x = $pdf->GetX();
@@ -225,22 +245,51 @@ class FormularioRegistro extends BaseModel
         $pdf->SetXY($x + 3, $y);
         //$modelo = $solicitud->equipos ? $solicitud->equipos->modelo : "";
         $pdf->Cell(50, 6,  html_entity_decode($equipo->modelo), 0, 0, 'L');
-        $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderDashed()));
+        $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderSolid()));
 
         $pdf->SetTextColor(153, 153, 153);
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x + 3, $y);
-        $pdf->Cell(50, 6, "Serie", 0, 0, 'L');
-        $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderDashed()));
+
+        if(!empty($equipo->tipo_motore_id)) {
+            $pdf->Cell(17, 6, "SERIE", 0, 0, 'L');
+            $pdf->Rect($x + 3, $y, 17, 6, 'D', array('all' => $pdf->borderSolid()));
+        }else{
+            $pdf->Cell(50, 6, "SERIE", 0, 0, 'L');
+            $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderSolid()));
+        }
 
         $pdf->SetTextColor(76, 76, 76);
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x + 3, $y);
         //$serie = $solicitud->equipos ? $solicitud->equipos->serie : "";
-        $pdf->Cell(60, 6,  html_entity_decode($equipo->serie), 0, 0, 'L');
-        $pdf->Rect($x + 3, $y, 60, 6, 'D', array('all' => $pdf->borderDashed()));
+        if(!empty($equipo->tipo_motore_id)) {
+            $pdf->Cell(32, 6,  html_entity_decode($equipo->serie), 0, 0, 'L');
+            $pdf->Rect($x + 3, $y, 30, 6, 'D', array('all' => $pdf->borderSolid()));
+        }else{
+            $pdf->Cell(60, 6,  html_entity_decode($equipo->serie), 0, 0, 'L');
+            $pdf->Rect($x + 3, $y, 60, 6, 'D', array('all' => $pdf->borderSolid()));
+        }
+
+
+
+        if(!empty($equipo->tipo_motore_id)){
+            $pdf->SetTextColor(153, 153, 153);
+            $x = $pdf->GetX();
+            $y = $pdf->GetY();
+            $pdf->SetXY($x, $y);
+            $pdf->Cell(20, 6, "MOTOR", 0, 0, 'L');
+            $pdf->Rect($x , $y, 20, 6, 'D', array('all' => $pdf->borderSolid()));
+            $pdf->SetTextColor(76, 76, 76);
+            $x = $pdf->GetX();
+            $y = $pdf->GetY();
+            $pdf->SetXY($x + 3, $y);
+            $pdf->Cell(32, 6,  html_entity_decode($equipo->motor->display_name), 0, 0, 'L');
+            $pdf->Rect($x + 3, $y, 38, 6, 'D', array('all' => $pdf->borderSolid()));
+            //motor
+        }
         $pdf->Ln();
 
         $index = 0;
@@ -447,14 +496,18 @@ class FormularioRegistro extends BaseModel
             $pdf->Image($firmasPath[2],  '', '', 50, 14, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
         }
 
-        $name = 'mant_prev_frm_reg_'.$this->id.'.pdf';
-        $path = storage_path('app/public/pdf/'.$name);
+        if($uploadFile){
+            $name = 'mant_prev_frm_reg_'.$this->id.'.pdf';
+            $path = storage_path('app/public/pdf/'.$name);
 
-        $pdf->Output($path, 'F');
+            $pdf->Output($path, 'F');
 
-        return  ['path'=>$path,'url'=>'pdf/'.$name];
+            return  ['path'=>$path,'url'=>'pdf/'.$name];
+        }else{
+            return $pdf;
+        }
+
     }
-
 
     public function savePdfDC()
     {

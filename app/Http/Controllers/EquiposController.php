@@ -430,6 +430,12 @@ class EquiposController extends BaseController
         }
     }
 
+    public function imprimirMantPrev($id){
+
+        $formularioRegistro = FormularioRegistro::find($id);
+        $pdf = $formularioRegistro->savePdf($formularioRegistro->solicitud(),false);
+        return $pdf->Output('mantenimiento_preventivo.pdf', 'I');
+    }
     /******************* FORM DE SOPORTE TECNICO **************************/
 
     public function createTecnicalSupport($id){

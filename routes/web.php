@@ -79,6 +79,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
             Route::put('/{id}/update', array('as' => 'equipos.update_mant_prev', 'uses' => 'EquiposController@updateMantPrev'));
 
+            Route::get('/{id}/imprimir', array('as' => 'equipos.imprimir_mant_prev', 'uses' => 'EquiposController@imprimirMantPrev'));
+
         });
 
         Route::group(array('prefix' => 'tecnical_support'), function() {
