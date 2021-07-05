@@ -28,6 +28,7 @@ return [
      "equipos.create_daily_check"=>"Crear Daily Check",
      "equipos.edit_daily_check"=>"Actualizar Daily Check",
      "equipos.create_mant_prev"=>"Crear Ticket Mantenimiento Preventivo",
+     "equipos.see_mant_prev"=>"Ver Ticket Mantenimiento Preventivo",
      "equipos.edit_mant_prev"=>"Actualizar Ticket Mantenimiento Preventivo",
      "equipos.create_tecnical_support"=>"Crear Servicio Soporte Técnico",
      "equipos.assign_tecnical_support"=>"Asignar Servicio de Soporte Técnico",

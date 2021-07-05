@@ -120,7 +120,7 @@
                             </div>
                         </div>
                         @endif
-                        @if(!empty($data->tipo_equipos_id) or \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev']))
+                        @if(!empty($data->tipo_equipos_id) or \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev','equipos.see_mant_prev']))
                         <div class="tab-pane  {{$tab_content['t2']}}" id="mant_prev" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Mantenimiento Preventivo
