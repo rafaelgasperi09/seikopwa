@@ -112,7 +112,7 @@ class FormularioRegistro extends BaseModel
                 $this->nombre_archivo = $pdf['url'];
 
                 // enviar notificacion al o los supervisores gmp
-                $notificados = User::FilterByRoles([1,5])->get();
+                $notificados = User::FilterByRoles([5])->get();
                 $when = now()->addMinutes(1);
                 foreach ($notificados as $noti){
                     if(current_user()->id <> $noti->id)
@@ -136,27 +136,18 @@ class FormularioRegistro extends BaseModel
         $horometro = $solicitud->horometro;
         $observacion = $solicitud->descripcion;
         $width = 297;
-        //$height = 420;
         $y_max_pos = 300;
         if(in_array($equipo->tipo->name,['stock-picker']))  {
-            $height = 448;
             $y_max_pos = 343;
         }elseif(in_array($equipo->tipo->name,['reach'])){
-            $height = 448;
             $y_max_pos = 343;
         }elseif(in_array($equipo->tipo->name,['counter-sc'])){
-            $height = 400;
             $y_max_pos = 300;
-        }
-        elseif(in_array($equipo->tipo->name,['we/ws','wp','wv'])){
-            $height = 420;
-            //$y_max_pos = 253;
+        }elseif(in_array($equipo->tipo->name,['we/ws','wp','wv'])){
             $y_max_pos = 253;
         }elseif(in_array($equipo->tipo->name,['pallet-pe'])){
-            $height = 400;
             $y_max_pos = 310;
         }elseif(!empty($equipo->tipo_motore_id)){
-            $height = 500;
             $y_max_pos = 343;
         }
         $height = $y_max_pos+100;
