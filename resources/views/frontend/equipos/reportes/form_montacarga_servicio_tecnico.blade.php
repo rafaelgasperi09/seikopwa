@@ -60,7 +60,7 @@ $cFirma='style="border-bottom:1px solid black"';
                     </tr>
                     <tr>
                         <td align="left">
-                            <p style="font-size:18px;font-weight:bold;margin-bottom:5px">No. <span style="color:red">{{$datos['cab']->id}}</span></p>
+                            <p style="font-size:18px;font-weight:bold;margin-bottom:1px">No. <span style="color:red">{{$datos['cab']->id}}</span></p>
                         </td>
 
                     </tr>
@@ -136,40 +136,40 @@ $cFirma='style="border-bottom:1px solid black"';
                         </td>
                     </tr>
                 </table>
-                <br/>
             </td>
         </tr>
         <tr>
             <td>
-            <table width="100%">
+            <table width="100%" style="margin-top:8px">
                 <thead>
+                <tr>{!!getOptionsRadioSelected($datos['det'][0]->estado)!!}</tr>
                 <tr>
-                    <td {!!$cTD2!!} >
+                    <td {!!$cTD2!!} colspan="5" >
                     <b style="font-size:12px">FALLA REPORTADA:</b>
                     <br>{{$datos['det'][0]->falla_reportada}}
                     </td>
                 </tr>
                 <tr>
-                <td {!!$cTD2!!}>
+                <td {!!$cTD2!!} colspan="5" >
                     <b style="font-size:12px">CAUSA DE LOS DAÑOS:</b>
                     <br>{{$datos['det'][0]->causa_de_danos}}
                 </td>
                 </tr>
                 <tr>
-                    <td {!!$cTD2!!}>
+                    <td {!!$cTD2!!} colspan="5" >
                         <b style="font-size:12px">TRABAJOS REALIZADOS:</b>
                         <br>{{$datos['det'][0]->trabajos_realizados}}
                     </td>
                 </tr>
                 <tr>
-                    <td {!!$cTD2!!}>
+                    <td {!!$cTD2!!} colspan="5" >
                         <b style="font-size:12px">COTIZAR:</b>
                         <br>{{$datos['det'][0]->cotizar}}
 
                     </td>
                 </tr>
                 <tr>
-                    <td {!!$cTD2!!}>
+                    <td {!!$cTD2!!} colspan="5" >
                         <b style="font-size:12px">OTROS COMENTARIOS:</b>
                         <br>{{$datos['det'][0]->comentarios}}
                         <br >

@@ -88,11 +88,29 @@
                                     {{ Form::time($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                 @elseif($campo->tipo == 'number')
                                     {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
-                                @elseif($campo->tipo == 'checkbox')
+                                @elseif($campo->tipo == 'checkbox' and strlen($campo->opciones)=='')
 
                                     <div class="custom-control custom-switch col-4">
-                                        <input name="{{ $campo->nombre }}" {{ $readonly }}type="checkbox" class="custom-control-input" id="customSwitch_{{ $campo->nombre }}">
+                                        <input name="{{ $campo->nombre }}" {{ $readonly }} type="checkbox" class="custom-control-input" id="customSwitch_{{ $campo->nombre }}">
                                         <label class="custom-control-label" for="customSwitch_{{ $campo->nombre }}"></label>
+                                    </div>
+                                @elseif($campo->tipo == 'checkbox' and $campo->opciones<>'')
+                                    <div class="wide-block pt-2 pb-2">
+                                         @php
+                                            $i=0;
+                                            $checked='';
+                                            if(current_user()->isOnGroup('programador') && empty($value)) $value="C";
+                                        @endphp
+                                        @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
+                                            {{getOptionsRadio($o,$formulario->nombre)}}
+                                            <div class="custom-control custom-checkbox d-inline">
+                                                <input name="{{$campo->nombre.'[]'}}" type="checkbox" class="custom-control-input" value="{{$o}}" id="{{$campo->nombre.$i}}">
+                                                <label class="custom-control-label p-0" for="{{$campo->nombre.$i}}"></label>
+                                            </div>
+             
+                                            <?php $i++;
+                                            $checked=''; ?>
+                                        @endforeach
                                     </div>
 
                                 @elseif($campo->tipo == 'radio')

@@ -213,8 +213,8 @@ function  getEquipoIconBySubTipo($sub_tipo_id,$tipo=1){
 }
 
 function getOptionsRadio($status,$tipo){
-    $text=array('D'=>'Diagnostico',
-                'C'=>'Comprar',
+    $text=array('D'=>'Defectuoso',
+                'C'=>'Cotizar',
                 'F'=>'Facturar',
                 'S'=>'Seguimiento',
                 'G'=>'Garantía');
@@ -224,6 +224,25 @@ function getOptionsRadio($status,$tipo){
         return $status;
 }
 
+function getOptionsRadioSelected($selected){
+    $datos=explode(',',$selected);
+    $text=array('D'=>'Defectuoso',
+    'C'=>'Cotizar',
+    'F'=>'Facturar',
+    'S'=>'Seguimiento',
+    'G'=>'Garantía');
+    $result='';
+    $class='style="border:1px solid black;padding:5px;width:20%;text-align:center';
+    $class2=$class.';color:#888';
+    foreach($text as $key=>$val){
+        if(in_array($key,$datos)){
+            $result.='<td '.$class.'"><small>'.$val.'</small>[X]</td>';
+        }else{
+            $result.='<td '.$class2.'"><small>'.$val.'</small>[ ]</td>';
+        }
+    }
+    return $result;
+}
 function traducirMes($mes,$return=false,$format='corto'){
     if($format=='corto')
         $meses = array("Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic");
