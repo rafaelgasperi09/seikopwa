@@ -10,7 +10,7 @@
             </div>
             <div class="in">
                 <div>{{$dato->getFullName()}}
-                    @if($dato->isCliente())
+                    @if($dato->isCliente() && $dato->cliente())
                         ({{ $dato->cliente()->nombre }})
                     @endif
                     <br/>
