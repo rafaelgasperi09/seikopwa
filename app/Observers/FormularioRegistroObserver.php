@@ -112,7 +112,9 @@ class FormularioRegistroObserver
                     }
                 }
             }
-
+            if($campo->tipo == 'checkbox'  and $campo->opciones<>''){
+                $valor =implode(',',$valor);
+            }
             $form_data = FormularioData::create([
                 'formulario_registro_id' => $formularioRegistro->id,
                 'formulario_campo_id' => $campo->id,
@@ -224,7 +226,9 @@ class FormularioRegistroObserver
                         if($campo->nombre == 'hora_salida'){
                             $valor = date('H:i');
                         }
-
+                        if($campo->tipo == 'checkbox'  and $campo->opciones<>''){
+                            $valor =implode(',',$valor);
+                        }
                         $form_data = FormularioData::whereFormularioRegistroId($formularioRegistro->id)->whereFormularioCampoId($campo->id)->first();
                         $form_data->valor = $valor;
                         $form_data->user_id = current_user()->id;
@@ -243,10 +247,10 @@ class FormularioRegistroObserver
                                 $notificados = User::whereHas('roles',function ($q){
                                     $q->where('role_users.role_id',5); // supervisor GMP
                                 })->get();
-
+                                /*
                                 foreach ($notificados as $n){
                                     $n->notify(new TecnicalSupportTicketIsFinnish($formularioRegistro));
-                                }
+                                }*/
                             }
                         }
                     }
