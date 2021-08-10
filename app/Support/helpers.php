@@ -243,6 +243,15 @@ function getOptionsRadioSelected($selected){
     }
     return $result;
 }
+
+function multiline($str){
+    $datos=$str;
+    if(strlen($str)>68){
+        $datos=str_split($str,68);
+        $datos=implode('<br/>',$datos);
+    }
+   return $datos;
+}
 function traducirMes($mes,$return=false,$format='corto'){
     if($format=='corto')
         $meses = array("Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic");

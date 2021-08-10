@@ -227,7 +227,8 @@ class FormularioRegistroObserver
                             $valor = date('H:i');
                         }
                         if($campo->tipo == 'checkbox'  and $campo->opciones<>''){
-                            $valor =implode(',',$valor);
+                            if(isset($valor))
+                                $valor =implode(',',$valor);
                         }
                         $form_data = FormularioData::whereFormularioRegistroId($formularioRegistro->id)->whereFormularioCampoId($campo->id)->first();
                         $form_data->valor = $valor;
