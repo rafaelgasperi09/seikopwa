@@ -113,7 +113,8 @@ class FormularioRegistroObserver
                 }
             }
             if($campo->tipo == 'checkbox'  and $campo->opciones<>''){
-                $valor =implode(',',$valor);
+                if(strlen($valor)>0)
+                    $valor =implode(',',$valor);
             }
             $form_data = FormularioData::create([
                 'formulario_registro_id' => $formularioRegistro->id,
@@ -227,7 +228,7 @@ class FormularioRegistroObserver
                             $valor = date('H:i');
                         }
                         if($campo->tipo == 'checkbox'  and $campo->opciones<>''){
-                            if(isset($valor))
+                            if(strlen($valor)>0)
                                 $valor =implode(',',$valor);
                         }
                         $form_data = FormularioData::whereFormularioRegistroId($formularioRegistro->id)->whereFormularioCampoId($campo->id)->first();
