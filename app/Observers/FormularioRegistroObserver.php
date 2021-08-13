@@ -113,7 +113,7 @@ class FormularioRegistroObserver
                 }
             }
             if($campo->tipo == 'checkbox'  and $campo->opciones<>''){
-                if(strlen($valor)>0)
+                if(count($valor)>0)
                     $valor =implode(',',$valor);
             }
             $form_data = FormularioData::create([
