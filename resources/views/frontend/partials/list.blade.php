@@ -4,6 +4,7 @@
     </ul>
     <div id="cargando" hidden align="center"><img src="{{ url('/assets/img/Spinner-3.gif') }}"></div>
 </div>
+@if(isset($page_url) and $page_url<>'')
 <script>
     let page =2
     const cargando    =     document.getElementById("cargando")
@@ -47,3 +48,4 @@
         }
     }
 </script>
+@endif

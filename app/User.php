@@ -78,7 +78,8 @@ class User extends Authenticatable
         $sentryUser = Sentinel::findUserById($this->id);
         $rolSup = Sentinel::findRoleById(3); // supervisor cliente
         $grolOp = Sentinel::findRoleById(4); // operador cliente
-        return $sentryUser->inRole($rolSup) or $sentryUser->inRole($grolOp);
+        $grolVer = Sentinel::findRoleById(7); // operador cliente
+        return $sentryUser->inRole($rolSup) or $sentryUser->inRole($grolOp) or $sentryUser->inRole($grolVer);
     }
 
     public function getFullName(){

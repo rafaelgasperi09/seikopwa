@@ -41,7 +41,6 @@ class EquiposController extends BaseController
                          ->where('equipos.sub_equipos_id','=',2)
                          ->whereNotNull('equipos.tipo_equipos_id')
                          ->get();
-
         $tipoEquiposArray=array();
         foreach($tipoEquiposElectricos as $t){
             $tipoEquiposArray[$t->sub_equipos_id][$t->tipo_equipos_id]=$t->display_name;
@@ -79,7 +78,7 @@ class EquiposController extends BaseController
         }else{
             $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->whereNull('tipo_equipos_id')->where('tipo_motore_id',$id)->paginate(10);
         }
-
+       
         return view('frontend.equipos.index')->with('equipos',$equipos)->with('datos',$datos);
     }
 
