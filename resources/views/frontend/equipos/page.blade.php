@@ -80,7 +80,7 @@
                     </div>
                 </li>
             @endif
-            @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.assign_tecnical_support','equipos.start_tecnical_support']))
+            @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.assign_tecnical_support','equipos.start_tecnical_support','equipos.see_tecnical_support']))
                 <li>
                     <div class="item">
                         <div class="icon-box bg-warning">
@@ -96,7 +96,7 @@
                                     </span>
                                 </a>
                                 @endif
-                                @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.assign_tecnical_support','equipos.start_tecnical_support']))
+                                @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.assign_tecnical_support','equipos.start_tecnical_support','equipos.see_tecnical_support']))
                                 <a href="{{route('equipos.detail',['id'=>$e->id])}}?show=rows&tab=3"  title="Ver">
                                     <span class="iconedbox bg-success">
                                     <ion-icon name="eye-outline"></ion-icon>

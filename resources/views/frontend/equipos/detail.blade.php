@@ -84,7 +84,7 @@
                                 </a>
                             </li>
                             @endif
-                            @if(!empty($data->tipo_equipos_id) or \Sentinel::hasAnyAccess(['equipos.create_mant_prev','equipos.edit_mant_prev']))
+                            @if(!empty($data->tipo_equipos_id) or \Sentinel::hasAnyAccess(['equipos.see_mant_prev','equipos.create_mant_prev','equipos.edit_mant_prev']))
                             <li class="nav-item">
                                 <a class="nav-link  {{$tab['t2']}} " data-toggle="tab" href="#mant_prev" role="tab" aria-selected="true">
                                         <ion-icon name="hammer-outline" class="text-info" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
@@ -92,7 +92,7 @@
                                 </a>
                             </li>
                             @endif
-                            @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.edit_tecnical_support']))
+                            @if(\Sentinel::hasAnyAccess(['equipos.see_tecnical_support','equipos.create_tecnical_support','equipos.edit_tecnical_support']))
                             <li class="nav-item">
                                 <a class="nav-link {{$tab['t3']}} " data-toggle="tab" href="#serv_tec" role="tab" aria-selected="true">
                                         <ion-icon name="alert-circle-outline" class="text-warning" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
@@ -145,7 +145,7 @@
                             </div>
                         </div>
                         @endif
-                        @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.edit_tecnical_support']))
+                        @if(\Sentinel::hasAnyAccess(['equipos.see_tecnical_support','equipos.create_tecnical_support','equipos.edit_tecnical_support']))
                         <div class="tab-pane   {{$tab_content['t3']}}" id="serv_tec" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Reporte Servicio Técnico

@@ -30,6 +30,7 @@ return [
      "equipos.create_mant_prev"=>"Crear Ticket Mantenimiento Preventivo",
      "equipos.see_mant_prev"=>"Ver Ticket Mantenimiento Preventivo",
      "equipos.edit_mant_prev"=>"Actualizar Ticket Mantenimiento Preventivo",
+     "equipos.see_tecnical_support"=>"Ver Servicio Soporte Técnico",
      "equipos.create_tecnical_support"=>"Crear Servicio Soporte Técnico",
      "equipos.assign_tecnical_support"=>"Asignar Servicio de Soporte Técnico",
      "equipos.start_tecnical_support"=>"Iniciar Servicio de Soporte Técnico",
