@@ -593,7 +593,9 @@ class FormularioRegistro extends BaseModel
                       154,161,168,178,186,
                       192,198,206,212,255,276);
 
-        $vars=array('identificacion'=>53,
+        $vars=array(
+        'prioridad'=>45,    
+        'identificacion'=>53,
         'seguridad'=>61,
         'danos_estructura'=>67,
         'fugas'=>74,
@@ -635,6 +637,7 @@ class FormularioRegistro extends BaseModel
                     }
 
                 }
+
                 if(isset($vars[$datos["nombre"]])){
                     $valor=$datos[$dias[$xkey]];
                     $pdf->SetXY($vx,$vars[$datos["nombre"]]);
@@ -642,8 +645,10 @@ class FormularioRegistro extends BaseModel
                     if(in_array($datos["nombre"],['operador','ok_supervisor','lectura_horometro'])){
                         $pdf->StartTransform();
                         $pdf->Rotate(90);
-                        if($datos["nombre"]=='lectura_horometro')
+                        if($datos["nombre"]=='lectura_horometro'){
                             $pdf->Cell(2, 6, $valor, 0, 0, 'L');
+                            
+                        }
                         else{
 
                             $pdf->Image(storage_path('app/public/firmas/'.$valor),  '', '', 20, 10, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
@@ -651,6 +656,10 @@ class FormularioRegistro extends BaseModel
 
                         $pdf->StopTransform();
                     }else{
+                       if($valor=='M' or $valor=='R')
+                        $pdf->SetTextColor(254, 0, 0);
+                       else
+                        $pdf->SetTextColor(0, 0, 0,100);
                         $pdf->Cell(2, 6, $valor, 0, 0, 'L');
 
                     }

@@ -278,4 +278,11 @@ function transletaDate($fecha,$showTime=false){
 	}
 
 }
+function checkBoxDetail($char){
+    $desc=array('M'=>'(Mal estado)','R'=>'(Revisar)');
+    if(in_array($char,['M','R'])){
+        return $desc[$char];
+    }
+    return '';
+}
 ?>

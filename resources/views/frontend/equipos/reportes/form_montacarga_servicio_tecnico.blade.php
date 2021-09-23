@@ -62,7 +62,9 @@ $cFirma='style="border-bottom:1px solid black"';
                         <td align="left">
                             <p style="font-size:18px;font-weight:bold;margin-bottom:1px">No. <span style="color:red">{{$datos['cab']->id}}</span></p>
                         </td>
-
+                        <td align="right">
+                            <p style="font-size:18px;font-weight:bold;margin-bottom:1px">Prioridad <span style="color:#555">{{$datos['det'][0]->prioridad}}</span></p>
+                        </td>
                     </tr>
                 </table>
                 </th>

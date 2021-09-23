@@ -1,10 +1,10 @@
-@php $remove='';@endphp
+@php $remove='';$linea=0;@endphp
 @foreach($formulario->secciones()->get() as $key=>$seccion)
     <div class="section full mt-2 mb-2" id='seccion{{$key}}'>
         <div class="section-title">{{ $seccion->titulo }}</div>
         <div class="wide-block pb-1 pt-2">
             <div class="row">
-                @php $campos=false;$firmas=0; @endphp
+                @php $campos=false;$firmas=0;    @endphp
                 @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->get() as $campo)
 
                     @if(mostrarCampo($campo->tipo))
@@ -98,6 +98,7 @@
                                     <div class="wide-block pt-2 pb-2">
                                          @php
                                             $i=0;
+                                           
                                             $checked='';
                                             if(current_user()->isOnGroup('programador') && empty($value)) $value="C";
                                         @endphp
@@ -114,21 +115,23 @@
                                     </div>
 
                                 @elseif($campo->tipo == 'radio')
-                                    <div class="wide-block pt-2 pb-2">
-                                        @php
-                                            $i=0;
-                                            $checked='';
-                                            if(current_user()->isOnGroup('programador') && empty($value)) $value="C";
-                                        @endphp
+                                     @php
+                                        $i=0;
+                                        $linea++;
+                                        $checked='';
+                                        if(current_user()->isOnGroup('programador') && empty($value)) $value="C";
+                                    @endphp
 
+                                    <div class="wide-block pt-2 pb-2"  id="dcrow{{$linea}}">
+                                        
                                         @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
 
                                             <div class="custom-control custom-radio d-inline">
 
                                              @if($value == $o)
-                                                {{ Form::radio($campo->nombre,$o,$value,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$checked,$readonly)) }}
+                                                {{ Form::radio($campo->nombre,$o,$value,array('class'=>'custom-control-input radiofield',$requerido,'id'=>$campo->nombre.$i,$checked,$readonly,'lineaId'=>$linea)) }}
                                              @else
-                                                {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input',$requerido,'id'=>$campo->nombre.$i,$readonly)) }}
+                                                {{ Form::radio($campo->nombre,$o,null,array('class'=>'custom-control-input radiofield',$requerido,'id'=>$campo->nombre.$i,$readonly,'lineaId'=>$linea)) }}
                                              @endif
                                             <label class="custom-control-label p-0" for="{{ $campo->nombre }}{{$i}}">{{getOptionsRadio($o,$formulario->nombre)}}</label>
                                             </div>
@@ -174,4 +177,18 @@
 @include('frontend.partials.firmaNew')
 <script>
     {!!$remove!!}
+    $('.radiofield').click(function(){
+        var val=$(this).val();
+        var target="#dcrow"+$(this).attr('lineaId');
+        if(val!='OK')
+            {
+               
+                $(target).addClass("bg-danger");
+                //alert();
+            }
+        else{
+               $(target).removeClass("bg-danger");
+        }
+      //  alert(val);
+    });
 </script>

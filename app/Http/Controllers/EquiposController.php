@@ -249,7 +249,7 @@ class EquiposController extends BaseController
     }
 
     public function storeDailyCheck(Request $request){
-
+       
         try{
             $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;
@@ -290,6 +290,16 @@ class EquiposController extends BaseController
             //$u->notify((new NewDailyCheck($model))->delay($when));
 
             $request->session()->flash('message.success','Registro creado con éxito');
+            $not_ok=false;
+            foreach ($request->all() as $r){
+                if($r=='M' or $r=='R'){
+                    $not_ok=true;
+                    break;
+                }
+            }
+            if($not_ok and $model->status=='C'){
+                 return redirect(route('equipos.create_tecnical_support_prefilled',[$equipo_id,$model->id]));
+            }          
             return redirect(route('equipos.detail',$equipo_id));
 
         }catch (\Exception $e){
@@ -313,9 +323,17 @@ class EquiposController extends BaseController
 
             $formulario_registro_id = $request->formulario_registro_id;
             $model = FormularioRegistro::findOrFail($formulario_registro_id);
+
+
             $model->updated_at =Carbon::now();
             $model->save();
+
+
             $request->session()->flash('message.success', 'Registro guardado con éxito');
+            
+            if($model->data()->wherein('valor',['M','R'])->count()>0){
+                return redirect(route('equipos.create_tecnical_support_prefilled',[$model->equipo_id,$model->id]));
+            } 
             return redirect(route('equipos.detail', $model->equipo_id));
 
         } catch (\Exception $e) {
@@ -437,15 +455,29 @@ class EquiposController extends BaseController
     }
     /******************* FORM DE SOPORTE TECNICO **************************/
 
-    public function createTecnicalSupport($id){
-
+    public function createTecnicalSupport($id,$dailycheck=0){
+        $detalleIni='';
+        if($dailycheck>0){
+             $dc=FormularioRegistro::findOrFail($dailycheck);
+             if($dc){
+                $data=FormularioData::where('formulario_registro_id',$dc->id)->whereTipo('radio')->where('valor','<>','OK')->get();
+                foreach ($data as $d){
+                $detalleIni.= $d->campo->etiqueta.' '.checkBoxDetail($d->valor).'\\ \r\n'; 
+                    
+                }
+             }
+             //dd($detalleIni);
+        }
         $data = Equipo::findOrFail($id);
         if(!current_user()->can('see',$data)){
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
         }
         $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
-        return view('frontend.equipos.create_tecnical_support_report')->with('data',$data)->with('formulario',$formulario);
+        return view('frontend.equipos.create_tecnical_support_report')
+                    ->with('data',$data)
+                    ->with('formulario',$formulario)
+                    ->with('detalle',$detalleIni);
 
     }
 

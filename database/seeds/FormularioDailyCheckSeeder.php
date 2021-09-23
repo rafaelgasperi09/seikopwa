@@ -271,7 +271,7 @@ class FormularioDailyCheckSeeder extends Seeder
 
         $form_sec = \App\FormularioSeccion::create([
             'formulario_id'=>$form->id,
-            'titulo'=>'Chequeso Operacionales',
+            'titulo'=>'Chequeos Operacionales',
             'descripcion'=>''
         ]);
 

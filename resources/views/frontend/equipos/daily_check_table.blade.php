@@ -102,8 +102,12 @@
                         }else{
                             valor='';
                         }
+                        var bglinea='';
+                        if(valor=="M" || valor=="R"){
+                             var bglinea='bg-danger';
+                        }
 
-                        html +='<dl class="row">\n' +
+                        html +='<dl class="row sss '+bglinea+'">\n' +
                                     '<dt class="col-sm-3">'+value.campo.etiqueta+' :</dt>\n' +
                                     '<dd class="col-sm-9">'+valor+'</dd>\n' +
                                '</dl>'

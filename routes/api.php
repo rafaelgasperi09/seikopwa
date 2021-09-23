@@ -23,7 +23,8 @@ Route::get('/formulario_data', function (Request $request) {
     ->when($request->has('formulario_registro_id'),function ($q) use($request){
         $q->where('formulario_registro_id',$request->formulario_registro_id);
 
-    })->get();
+    })->join('formulario_campos','formulario_data.formulario_campo_id','formulario_campos.id')
+    ->orderBy('formulario_seccion_id')->get();
 
     return response()->json(['success' => true,
         "draw"=> 1,

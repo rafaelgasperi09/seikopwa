@@ -87,6 +87,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
             Route::get('/create/{id}', array('as' => 'equipos.create_tecnical_support', 'uses' => 'EquiposController@createTecnicalSupport'))->middleware('hasAccess');
 
+            Route::get('/create/{id}/{dailycheck}', array('as' => 'equipos.create_tecnical_support_prefilled', 'uses' => 'EquiposController@createTecnicalSupport'))->middleware('hasAccess');
+            
             Route::get('/{id}/edit', array('as' => 'equipos.edit_tecnical_support', 'uses' => 'EquiposController@editTecnicalSupport'));
 
             Route::put('/{id}/assign', array('as' => 'equipos.assign_tecnical_support', 'uses' => 'EquiposController@assignTecnicalSupport'))->middleware('hasAccess');

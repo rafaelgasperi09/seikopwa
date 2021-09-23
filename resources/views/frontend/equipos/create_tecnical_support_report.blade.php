@@ -94,4 +94,7 @@
             @include('frontend.partials.btnSubmit')
         </div>
     {{ Form::close() }}
+    <script>
+        $("#falla_reportada").text('{{$detalle}}');
+    </script>
 @stop

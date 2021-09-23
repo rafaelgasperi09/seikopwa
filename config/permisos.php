@@ -32,6 +32,7 @@ return [
      "equipos.edit_mant_prev"=>"Actualizar Ticket Mantenimiento Preventivo",
      "equipos.see_tecnical_support"=>"Ver Servicio Soporte Técnico",
      "equipos.create_tecnical_support"=>"Crear Servicio Soporte Técnico",
+     "equipos.create_tecnical_support_prefilled"=>"Crear Servicio Soporte Técnico desde daily check",
      "equipos.assign_tecnical_support"=>"Asignar Servicio de Soporte Técnico",
      "equipos.start_tecnical_support"=>"Iniciar Servicio de Soporte Técnico",
      "equipos.edit_tecnical_support"=>"Terminar Servicio Soporte Técnico",
