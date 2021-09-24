@@ -1,10 +1,10 @@
-@php $remove='';$linea=0;@endphp
+@php $remove='';$linea=0;$showclear=true;@endphp
 @foreach($formulario->secciones()->get() as $key=>$seccion)
     <div class="section full mt-2 mb-2" id='seccion{{$key}}'>
         <div class="section-title">{{ $seccion->titulo }}</div>
         <div class="wide-block pb-1 pt-2">
             <div class="row">
-                @php $campos=false;$firmas=0;    @endphp
+                @php $campos=false;$firmas=0;   @endphp
                 @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->get() as $campo)
 
                     @if(mostrarCampo($campo->tipo))
@@ -13,6 +13,7 @@
                         $readonly='';
                         $part = "$campo->permiso";
                         $value=null;
+                        $showclear=true;
                         $files=array();
                         if($campo->requerido) $requerido = 'required';
                         if(!Sentinel::getUser()->hasAccess($campo->permiso)){
@@ -47,7 +48,12 @@
                                     <?php $api = new \App\HcaApi($campo->api_endpoint);?>
                                     @include('partials.typehead_field',array('field_label'=>$campo->etiqueta,'field_name'=>$campo->nombre,'items'=>$api->result(),$readonly))
                                 @elseif($campo->tipo == 'date')
+                                    @if($campo->opciones=='hoy' and $value==null)
+                                    {{ Form::date($campo->nombre,date('Y-m-d'),array('class'=>'form-control date',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,'readonly')) }}
+                                    @php $showclear=false; @endphp
+                                    @else
                                     {{ Form::date($campo->nombre,$value,array('class'=>'form-control date',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,$readonly)) }}
+                                    @endif
                                 @elseif($campo->tipo == 'file')
                                     <div class="custom-file-upload">
                                         {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*')) }}
@@ -85,7 +91,11 @@
                                         </label>
                                     </div>
                                 @elseif($campo->tipo == 'time')
-                                    {{ Form::time($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
+                                    @if($campo->opciones=='hora' and $value==null)
+                                        {{ Form::time($campo->nombre,date('H:i:s'),array('class'=>'form-control',$requerido,'id'=>$campo->nombre,'readonly')) }}
+                                    @else
+                                        {{ Form::time($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
+                                    @endif
                                 @elseif($campo->tipo == 'number')
                                     {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                 @elseif($campo->tipo == 'checkbox' and strlen($campo->opciones)=='')
@@ -155,9 +165,11 @@
                                     <img id="img_operador" width="100%" style="max-width:550px" data-toggle="modal"  data-field="operador" src="/storage/firmas/{{$value}}" class="imgSignRequest">
                                     @endif
                                 @endif
+                                @if($showclear)
                                 <i class="clear-input">
                                     <ion-icon name="{{ $campo->icono }}"></ion-icon>
                                 </i>
+                                @endif
                             </div>
                         </div>
 
