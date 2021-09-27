@@ -62,7 +62,7 @@
                 
                 
             });
-            $('.del_client').on('click',function(){
+            $(document).on('click','.del_client',function(){
                 var client_id=$(this).attr('clientid');
                 var input=$("#crm_clientes_id").val().split(',');
                 for( var i = 0; i < input.length; i++){        
