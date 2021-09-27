@@ -1,5 +1,6 @@
 @if(!isset($value[0])) <?php $value[0]=''?> @endif
-@if(!isset($data->crm_clientes_id)) <?php $clientes_id=''?> @else $clientes_id=$data->crm_clientes_id;  @endif
+@php $clientes_id=''; @endphp
+@if(isset($data->crm_clientes_id))  $clientes_id=$data->crm_clientes_id;  @endif
 @if(!isset($value[1])) <?php $value[1]=''?> @endif
 @if(!isset($display)) <?php $display='block'?> @endif
 @if(!isset($placeholder)) <?php $placeholder='Buscar '.$field_label.' Nombre';?>  @endif
@@ -30,7 +31,7 @@
                 <tbody id="clientes_list">
 
                     @if(isset($data))
-                    @foreach($listaClientes as $cliente)
+                    @foreach($data->clientes() as $cliente)
                     <tr id="cid{{$cliente->id}}">
                         <td>{{$cliente->nombre}}</td>
                         <td><span clientid="{{$cliente->id}}" class="btn btn-sm btn-outline-danger rounded shadowed mr-1 mb-1 del_client">Borrar</span></td>
