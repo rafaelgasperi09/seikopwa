@@ -18,8 +18,8 @@ class EquipoPolicy
     }
 
     public function see(User $user,Equipo $equipo){
-
-        if($user->isCliente() && $equipo->cliente_id == $user->crm_cliente_id)
+        $clientes=explode(',',$user->crm_clientes_id);
+        if($user->isCliente() && in_array($equipo->cliente_id ,$clientes))
             return true;
 
         return false;
