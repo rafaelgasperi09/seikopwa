@@ -44,38 +44,42 @@ class notificarChequeoDiario extends Command
 
         $this->info('------------------START CHEQUEO DIARIO JOB -------------------');
         $notificados['users'] = array();
-        foreach (User::whereNotNull('crm_cliente_id')->get() as $user){
+        foreach (User::whereNotNull('crm_clientes_id')->get() as $user){
 
             if(date('D') <> 'Sun'){
-                $cliente = $user->cliente();
+                $clientes = $user->clientes();
+                
                 $form = Formulario::whereNombre('form_montacarga_daily_check')->first();
+                foreach($clientes->get() as $cliente){
+                    // verificar si el cliente tiene al menos un equipo en su poder
+                    if($cliente->equipos()->count()> 0){  //tiene al menos un equipo verificar si ya hizo el chequeo diario de todos
+                        //
+                        foreach ($cliente->equipos()->get() as $equipo){  
+                            if(!FormularioRegistro::whereRaw("date_format(created_at,'%Y-%m-%d') = '".date('Y-m-d')."'")
+                                ->whereClienteId($cliente->id)
+                                ->whereEquipoId($equipo->id)
+                                ->whereFormularioId($form->id)
+                                ->first()){
 
-                // verificar si el cliente tiene al menos un equipo en su poder
-                if($cliente->equipos()->count()> 0){  //tiene al menos un equipo verificar si ya hizo el chequeo diario de todos
-                    //
-                    foreach ($cliente->equipos()->get() as $equipo){
-
-                        if(!FormularioRegistro::whereRaw("date_format(created_at,'%Y-%m-%d') = '".date('Y-m-d')."'")
-                            ->whereClienteId($cliente->id)
-                            ->whereEquipoId($equipo->id)
-                            ->whereFormularioId($form->id)
-                            ->first()){
-
-                            $notificados['users'][$user->id]['id'] =$user->id;
-                            $notificados['users'][$user->id]['cliente_id'] =$cliente->id;
-                            $notificados['users'][$user->id]['cliente'] =$cliente->nombre;
-                            $notificados['users'][$user->id]['equipos'][$equipo->id]['equipo_id'] =$equipo->id;
-                            $notificados['users'][$user->id]['equipos'][$equipo->id]['equipo'] =$equipo->numero_parte;
+                                $notificados['users'][$user->id]['id'] =$user->id;
+                                $notificados['users'][$user->id]['cliente_id'] =$cliente->id;
+                                $notificados['users'][$user->id]['cliente'] =$cliente->nombre;
+                                $notificados['users'][$user->id]['equipos'][$equipo->id]['equipo_id'] =$equipo->id;
+                                $notificados['users'][$user->id]['equipos'][$equipo->id]['equipo'] =$equipo->numero_parte;
+                            }
                         }
-                    }
 
+                    }   
                 }
+
             }
+
+
+            
         }
 
         $title = 'Tiene equipos sin chequeo diario.';
         foreach ($notificados['users'] as $noti){
-
             $tot =0;
             $user = User::find($noti['id']);
             $message = 'Equipos :';
@@ -91,7 +95,7 @@ class notificarChequeoDiario extends Command
             }
 
             $user->notify(new DailyCheck($title,$message,route('equipos.index')));
-            $this->info($cliente->nombre);
+            $this->info($noti["cliente"]);
             $this->info('body :'.$message);
             $this->info('------------------------------------------');
         }

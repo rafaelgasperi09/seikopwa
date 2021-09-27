@@ -10,8 +10,14 @@
             </div>
             <div class="in">
                 <div>{{$dato->getFullName()}}
-                    @if($dato->isCliente() && $dato->cliente())
-                        ({{ $dato->cliente()->nombre }})
+                    @if($dato->isCliente() && $dato->clientes())
+                        @php $clientes=array();
+                        foreach($dato->clientes() as $c){
+                        $clientes[]=$c->nombre;
+                        }   
+                        $clientes=implode(" , ",$clientes);
+                        @endphp
+                        ( {{$clientes}} )
                     @endif
                     <br/>
                     <small>{{ $dato->email }}</small>

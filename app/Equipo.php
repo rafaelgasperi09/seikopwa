@@ -56,8 +56,10 @@ class Equipo extends BaseModel
      */
     public function scopeFiltroCliente($query)
     {
-        if(current_user()->isCliente())
-             return $query->where('cliente_id', current_user()->crm_cliente_id);
+        if(current_user()->isCliente()){
+            $clientes=explode(',',current_user()->crm_clientes_id);
+            return $query->whereIn('cliente_id',$clientes); // cliente taller => bodega
+        }
 
         return $query;
     }

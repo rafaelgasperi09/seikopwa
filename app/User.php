@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','first_name','last_name','crm_cliente_id','crm_user_id',
+        'name', 'email', 'password','first_name','last_name','crm_user_id','crm_clientes_id',
     ];
 
     /**
@@ -90,8 +90,10 @@ class User extends Authenticatable
         return $this->first_name.' '.$this->last_name; //Change the format to whichever you desire
     }
 
-    public function cliente(){
-        return Cliente::find($this->crm_cliente_id);
+
+
+    public function clientes(){
+        return Cliente::whereIn('id',explode(',',$this->crm_clientes_id))->get();
     }
 
     /**
@@ -114,7 +116,7 @@ class User extends Authenticatable
     public function scopeFilterClientes($query)
     {
         if(current_user()->isOnGroup('supervisor'))
-            return $query->whereNull('crm_cliente_id');
+            return $query->whereNull('crm_clientes_id');
 
         return $query;
     }

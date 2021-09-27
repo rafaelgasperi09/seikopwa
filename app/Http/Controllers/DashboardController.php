@@ -15,8 +15,9 @@ class DashboardController extends Controller
 {
     private function getPendings($formType,$status='P',$filterExtra='',$equipos=true,$pluck=''){
         $userFilter='';
-        if(current_user()->crm_cliente_id)
-            $userFilter='WHERE cliente_id='.current_user()->crm_cliente_id;
+        if(current_user()->crm_clientes_id)
+            $userFilter='WHERE cliente_id in ('.current_user()->crm_clientes_id.')';
+        
        $idqeuipos=DB::connection('crm')->select(DB::raw('SELECT id FROM montacarga.equipos '.$userFilter));
        $lista=array();
        foreach($idqeuipos as $k=>$i){

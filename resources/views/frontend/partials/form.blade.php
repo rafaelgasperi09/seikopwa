@@ -186,9 +186,11 @@
     }
     @endphp
 @endforeach
+
 @include('frontend.partials.firmaNew')
 <script>
     {!!$remove!!}
+    @if($formulario->nombre=="form_montacarga_daily_check")
     $('.radiofield').click(function(){
         var val=$(this).val();
         var target="#dcrow"+$(this).attr('lineaId');
@@ -203,4 +205,5 @@
         }
       //  alert(val);
     });
+    @endif
 </script>

@@ -55,7 +55,7 @@ class ImportarClienteCrm extends Command
                     $role = Sentinel::findRoleById(3); // rol cliente
                     $role->users()->attach($user);
                     $user->have_to_change_password = 1;
-                    $user->crm_cliente_id = $cliente->id;
+                    $user->crm_clientes_id = $cliente->id;
 
                     if($user->save()){
                        $this->info('Cliente '.$cliente->nombre.' creado con exito como usuario.');

@@ -54,12 +54,14 @@
                 <dt class="col-sm-3">Correo Electrónico</dt>
                 <dd class="col-sm-9">{{ $data->email }}</dd>
             </dl>
-        @if($data->cliente())
+        @if($data->clientes())
             <dl class="row">
-                <dt class="col-sm-3">Cliente</dt>
+                <dt class="col-sm-3">Cliente(s)</dt>
                 <dd class="col-sm-9">
-                    {{ $data->cliente()->nombre }}
-                    <small>( {{ $data->cliente()->direccion }} )</small>
+                    @foreach( $data->clientes() as $cliente)
+                    {{$cliente->nombre }}
+                    <small>( {{  $cliente->direccion }} )</small><br/>
+                    @endforeach
                 </dd>
             </dl>
             @endif
