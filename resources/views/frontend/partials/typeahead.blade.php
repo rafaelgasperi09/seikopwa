@@ -1,6 +1,9 @@
 @if(!isset($value[0])) <?php $value[0]=''?> @endif
-@php $clientes_id=''; @endphp
-@if(isset($data->crm_clientes_id))  $clientes_id=$data->crm_clientes_id;  @endif
+@php $clientes_id='';
+    if(isset($data->crm_clientes_id)){
+          $clientes_id=$data->crm_clientes_id;
+    }
+@endphp
 @if(!isset($value[1])) <?php $value[1]=''?> @endif
 @if(!isset($display)) <?php $display='block'?> @endif
 @if(!isset($placeholder)) <?php $placeholder='Buscar '.$field_label.' Nombre';?>  @endif
