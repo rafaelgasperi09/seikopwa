@@ -190,7 +190,6 @@
                     <div class="card-body">
                     @if(count($data['serv_tec_pr']))
                         @foreach($data['serv_tec_pr'] as $stpr)
-                            @if()
                         <a href="{{ route('equipos.detail',array('id'=>$stpr->equipo()->id)) }}?show=rows&tab=3"  class="chip chip-danger chip-media ml-05 mb-05" style="padding:18px;width:100%">
                             <i class="chip-icon">
                                 Ir
