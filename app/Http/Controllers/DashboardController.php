@@ -17,7 +17,7 @@ class DashboardController extends Controller
         $userFilter='';
         if(current_user()->crm_clientes_id)
             $userFilter='WHERE cliente_id in ('.current_user()->crm_clientes_id.')';
-        
+
        $idqeuipos=DB::connection('crm')->select(DB::raw('SELECT id FROM montacarga.equipos '.$userFilter));
        $lista=array();
        foreach($idqeuipos as $k=>$i){
@@ -25,7 +25,9 @@ class DashboardController extends Controller
        }
        $lista=implode(',',$lista);
 
-       $r=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','formularios.id')
+       $r=FormularioRegistro::selectRaw('formulario_registro.*')
+        ->join('formularios','formulario_registro.formulario_id','formularios.id')
+         ->whereNotNull('equipo_id')
         ->where('formularios.tipo',$formType)
         ->When(!empty($status),function($q)use($status){
             $q->where('formulario_registro.estatus',$status);
