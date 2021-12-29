@@ -78,7 +78,7 @@ class EquiposController extends BaseController
         }else{
             $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->whereNull('tipo_equipos_id')->where('tipo_motore_id',$id)->paginate(10);
         }
-       
+
         return view('frontend.equipos.index')->with('equipos',$equipos)->with('datos',$datos);
     }
 
@@ -239,7 +239,9 @@ class EquiposController extends BaseController
         $datos=array();
 
         foreach($formulario->campos as $c){
-            $datos[$c->nombre]=$formularioData[$c->id];
+            if(isset($formularioData[$c->id])){
+                $datos[$c->nombre]=$formularioData[$c->id];
+            }
         }
 
         return view('frontend.equipos.edit_daily_check')
@@ -249,7 +251,7 @@ class EquiposController extends BaseController
     }
 
     public function storeDailyCheck(Request $request){
-       
+
         try{
             $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;
@@ -299,7 +301,7 @@ class EquiposController extends BaseController
             }
             if($not_ok and $model->status=='C'){
                  return redirect(route('equipos.create_tecnical_support_prefilled',[$equipo_id,$model->id]));
-            }          
+            }
             return redirect(route('equipos.detail',$equipo_id));
 
         }catch (\Exception $e){
@@ -330,10 +332,10 @@ class EquiposController extends BaseController
 
 
             $request->session()->flash('message.success', 'Registro guardado con éxito');
-            
+
             if($model->data()->wherein('valor',['M','R'])->count()>0){
                 return redirect(route('equipos.create_tecnical_support_prefilled',[$model->equipo_id,$model->id]));
-            } 
+            }
             return redirect(route('equipos.detail', $model->equipo_id));
 
         } catch (\Exception $e) {
@@ -462,8 +464,8 @@ class EquiposController extends BaseController
              if($dc){
                 $data=FormularioData::where('formulario_registro_id',$dc->id)->whereTipo('radio')->where('valor','<>','OK')->get();
                 foreach ($data as $d){
-                $detalleIni.= $d->campo->etiqueta.' '.checkBoxDetail($d->valor).'\\ \r\n'; 
-                    
+                $detalleIni.= $d->campo->etiqueta.' '.checkBoxDetail($d->valor).'\\ \r\n';
+
                 }
              }
              //dd($detalleIni);
