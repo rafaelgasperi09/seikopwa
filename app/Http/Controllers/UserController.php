@@ -85,10 +85,11 @@ class UserController extends Controller
             'password'         => 'required',
             'password_confirmation' => 'required|same:password'
         ]);
+      
 
         $role = Sentinel::findRoleById($request->get('rol_id'));
 
-        if($role->tipo == 'cliente' && empty($request->crm_cliente_id)){
+        if($role->tipo == 'cliente' && empty($request->crm_cliente_id) && empty($request->crm_clientes_id)){
             session()->flash('message.error', 'Para rol de cliente la selección de la lista de contactos del CRM es requerida.');
             return redirect(route('usuarios.create'));
         }elseif($role->tipo == 'gmp' && empty($request->crm_user_id)){
@@ -110,7 +111,18 @@ class UserController extends Controller
 
 
         if($role->tipo == 'cliente'){
-            $user->crm_cliente_id = $request->crm_cliente_id;
+            $clientes=trim($request->crm_clientes_id,',');
+            $cliente=$request->crm_cliente_id;
+            if($request->filled('crm_cliente_id'))
+               { 
+                $clientes=$request->crm_cliente_id.','.$request->crm_clientes_id;
+               }else{
+                $cliente=explode(',',$clientes);
+                $cliente=end($cliente);
+               }
+            $user->crm_cliente_id = $cliente;
+            $user->crm_clientes_id = $clientes;
+
         }elseif($role->tipo == 'gmp'){
             $user->crm_user_id = $request->crm_user_id;
             if($request->has('crm_cliente_id')) $user->crm_cliente_id = $request->crm_cliente_id;
