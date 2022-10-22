@@ -149,6 +149,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         Route::delete('/{id}', array('as' => 'usuarios.delete', 'uses' => 'UserController@delete'))->middleware('hasAccess');
 
+        Route::get('/{id}/notifica', array('as' => 'usuarios.notifica', 'uses' => 'UserController@notifica'));
+
     });
 
     Route::group(array('prefix' => 'roles'), function() {

@@ -227,4 +227,13 @@ class UserController extends Controller
         return redirect(route('usuarios.index'));
     }
 
+    public function notifica($user_id){
+
+            $u = User::find($user_id);
+            $u->notify(new NewUser($u,'test'));
+            session()->flash('message.success', 'Usuario creado con éxito. Se ha enviado un correo con los datos de acceso.');
+
+        
+    }
+
 }
