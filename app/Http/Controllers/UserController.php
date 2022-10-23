@@ -50,11 +50,15 @@ class UserController extends Controller
     }
 
     public function profile($id){
-
-        $data = User::findOrFail($id);
-        $roles = Rol::where('id','<>',1)->get()->pluck('full_name','id');
-        $clientes = Cliente::whereHas('equipos')->orderBy('nombre')->get()->pluck('full_name','id');
-        return view('frontend.usuarios.profile',compact('data','roles','clientes'));
+        if(current_user()->id==$id or (current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))){
+            $data = User::findOrFail($id);
+            $roles = Rol::where('id','<>',1)->get()->pluck('full_name','id');
+            $clientes = Cliente::whereHas('equipos')->orderBy('nombre')->get()->pluck('full_name','id');
+            return view('frontend.usuarios.profile',compact('data','roles','clientes'));
+        }else{
+            return response()->view('frontend.noaccess', [], 403);
+        }
+   
     }
 
     public function create(){
@@ -169,24 +173,27 @@ class UserController extends Controller
     }
 
     public function updatePassword(Request $request,$id){
+        if(current_user()->id==$id or (current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))){
+            $this->validate($request, [
+                'password'         => 'required',
+                'password_confirmation' => 'required|same:password'
+            ]);
 
-        $this->validate($request, [
-            'password'         => 'required',
-            'password_confirmation' => 'required|same:password'
-        ]);
+            $user = User::findOrFail($id);
+            $user->password = $request->password;
+            $user->have_to_change_password = 0;
+            $user->date_last_password_changed = date('Y-m-d');
 
-        $user = User::findOrFail($id);
-        $user->password = $request->password;
-        $user->have_to_change_password = 0;
-        $user->date_last_password_changed = date('Y-m-d');
+            if($user->save()){
+                session()->flash('message.success', 'Cambio de contraseña éxitoso.');
+            }else{
+                session()->flash('message.error', 'Hubo un error y no se pudo modificar.');
+            }
 
-        if($user->save()){
-            session()->flash('message.success', 'Cambio de contraseña éxitoso.');
+            return redirect(route('usuarios.profile',$user->id));
         }else{
-            session()->flash('message.error', 'Hubo un error y no se pudo modificar.');
+            return response()->view('frontend.noaccess', [], 403);
         }
-
-        return redirect(route('usuarios.profile',$user->id));
 
     }
 
