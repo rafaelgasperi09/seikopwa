@@ -118,7 +118,16 @@
                     if(supervisorAccess ){
                         console.log(estatus);
                         if(estatus!='C'){
-                            $('.modal-footer').html('<a href="daily_check/'+id+'/edit" class="btn btn-success btn-sm"><ion-icon name="create-outline" title="Editar"></ion-icon>Editar</a>');
+                            var buttons='\
+                            <a href="daily_check/'+id+'/edit" class="btn btn-success btn-sm">\
+                                <ion-icon name="create-outline" title="Editar">\
+                                </ion-icon>Editar\
+                            </a>\
+                            <a href="daily_check/'+id+'/delete" class="btn btn-danger btn-sm">\
+                                <ion-icon name="create-outline" title="Borrar">\
+                                </ion-icon>Borrar\
+                            </a>';
+                            $('.modal-footer').html(buttons);
                         }
 
                     }
