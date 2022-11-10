@@ -47,9 +47,22 @@
                                 {{--}}<ion-icon name="train-outline" title="equipos"></ion-icon>{{--}}
                             </div>
                             <div class="in">
-                                Equipo
+                                Equipos
                             </div>
                         </a>
+                        <ul>
+                            <li>
+                                <a href="{{ route('equipos.lista') }}" class="item" title="Listado">
+                                    <div class="icon-box bg-primary">
+                                        <img src="{{url('/images/icons/mcwhite.png')}}" width="22px">
+                                        {{--}}<ion-icon name="train-outline" title="equipos"></ion-icon>{{--}}
+                                    </div>
+                                    <div class="in">
+                                        Listado
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     @endif
                     @if(\Sentinel::hasAccess('baterias.index'))

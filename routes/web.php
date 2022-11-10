@@ -47,6 +47,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         Route::get('/', array('as' => 'equipos.index', 'uses' => 'EquiposController@index'))->middleware('hasAccess');
 
+        Route::get('/lista', array('as' => 'equipos.lista', 'uses' => 'EquiposController@lista'));
+
         Route::get('/{sub}/tipo/{id}', array('as' => 'equipos.tipo', 'uses' => 'EquiposController@tipo'));
 
         Route::get('/search/{sub}/{id}', array('as' => 'equipos.search', 'uses' => 'EquiposController@search'));
@@ -67,6 +69,7 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
             Route::put('/{id}/update', array('as' => 'equipos.update_daily_check', 'uses' => 'EquiposController@updateDailyCheck'));
 
+            Route::get('/{id}/delete', array('as' => 'equipos.delete_daily_check', 'uses' => 'EquiposController@deleteRegistroForm'));
         });
 
         Route::group(array('prefix' => 'mantenimiento_preventivo'), function() {
@@ -80,6 +83,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
             Route::put('/{id}/update', array('as' => 'equipos.update_mant_prev', 'uses' => 'EquiposController@updateMantPrev'));
 
             Route::get('/{id}/imprimir', array('as' => 'equipos.imprimir_mant_prev', 'uses' => 'EquiposController@imprimirMantPrev'));
+
+            Route::get('/{id}/delete', array('as' => 'equipos.delete_mant_prev', 'uses' => 'EquiposController@deleteRegistroForm'));
 
         });
 
@@ -96,8 +101,10 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
             Route::put('/{id}/start', array('as' => 'equipos.start_tecnical_support', 'uses' => 'EquiposController@startTecnicalSupport'))->middleware('hasAccess');
 
             Route::put('/{id}/update', array('as' => 'equipos.update_tecnical_support', 'uses' => 'EquiposController@updateTecnicalSupport'));
-
+            
             Route::post('/store', array('as' => 'equipos.store_tecnical_support', 'uses' => 'EquiposController@storeTecnicalSupport'));
+           
+            Route::get('/{id}/delete', array('as' => 'equipos.delete_tecnical_support', 'uses' => 'EquiposController@deleteRegistroForm'));          
 
         });
 
@@ -170,6 +177,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::put('/{id}/update', array('as' => 'role.update','uses' => 'RolController@update'))->where('id', '[0-9]+')->middleware('hasAccess');
         /* ELIMINANDO ROLES */
         Route::delete('/{id}', array('as' => 'role.destroy','uses' => 'RolController@destroy'))->where('id', '[0-9]+')->middleware('hasAccess');
+        /* ELIMINANDO ROLES */
+        Route::get('/search', array('as' => 'role.search','uses' => 'RolController@search'));
     });
 
 

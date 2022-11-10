@@ -15,16 +15,21 @@ class DashboardController extends Controller
 {
     private function getPendings($formType,$status='P',$filterExtra='',$equipos=true,$pluck=''){
         $userFilter='';
+        
         if(current_user()->crm_clientes_id)
             $userFilter='WHERE cliente_id in ('.current_user()->crm_clientes_id.')';
 
        $idqeuipos=DB::connection('crm')->select(DB::raw('SELECT id FROM montacarga.equipos '.$userFilter));
        $lista=array();
+       
        foreach($idqeuipos as $k=>$i){
            $lista[]=$i->id;
        }
        $lista=implode(',',$lista);
+       if(empty($lista))
+        $lista='0';
 
+        $equipos=DB::connection('crm')->select(DB::raw('SELECT * FROM montacarga.equipos WHERE cliente_id in ('.$lista.')'));
        $r=FormularioRegistro::selectRaw('formulario_registro.*')
         ->join('formularios','formulario_registro.formulario_id','formularios.id')
          ->whereNotNull('equipo_id')
@@ -32,8 +37,7 @@ class DashboardController extends Controller
         ->When(!empty($status),function($q)use($status){
             $q->where('formulario_registro.estatus',$status);
         })
-        ->whereNull('formulario_registro.deleted_at')
-        ->When($equipos,function($q)use($userFilter,$lista){
+        ->When(!empty($userFilter),function($q)use($userFilter,$lista){
             $q->whereRaw(' equipo_id IN ('.$lista.')');
         })
         ->When(!empty($filterExtra),function($q)use($filterExtra){

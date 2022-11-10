@@ -19,7 +19,7 @@ class CheckIfPasswordIsValid
     public function handle($request, Closure $next)
     {
         $data = User::find(current_user()->id);
-        if($data->have_to_change_password)
+        if($data->have_to_change_password and \Request::route()->getName()<>'logout')
         {
             return redirect(route('usuarios.update_password_view',current_user()->id));
         }

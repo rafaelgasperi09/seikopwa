@@ -44,6 +44,7 @@
                     <a href="{{ url('/equipos/reportes/form_montacarga_daily_check/'.$d->id) }}" target="_blank" class="btn btn-primary btn-sm mr-1 ">
                         <ion-icon name="print-outline" title="Ver detalle"></ion-icon>Imprimir
                     </a>
+                    
                 </td>
             </tr>
         @endforeach
@@ -116,20 +117,25 @@
                     $('#daily_check_modal_body').html(html);
 
                     if(supervisorAccess ){
+                        var buttons='';
                         console.log(estatus);
                         if(estatus!='C'){
-                            var buttons='\
+                             buttons='\
                             <a href="daily_check/'+id+'/edit" class="btn btn-success btn-sm">\
                                 <ion-icon name="create-outline" title="Editar">\
                                 </ion-icon>Editar\
                             </a>\
-                            <a href="daily_check/'+id+'/delete" class="btn btn-danger btn-sm">\
-                                <ion-icon name="create-outline" title="Borrar">\
-                                </ion-icon>Borrar\
+                            ';
+                        }
+                        @if(\Sentinel::hasAccess('equipos.delete_daily_check'))
+                        buttons=buttons+'<a href="daily_check/'+id+'/delete" class="btn btn-danger btn-sm">\
+                            <ion-icon name="trash-outline" title="Borrar reporte">\
+                            </ion-icon>Borrar\
                             </a>';
+                        @endif
+                        if(buttons!=''){
                             $('.modal-footer').html(buttons);
                         }
-
                     }
                     if(html.length>0)
                     $('#DailyCheckModal').modal('show');

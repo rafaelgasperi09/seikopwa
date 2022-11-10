@@ -5,6 +5,11 @@
     <div id="cargando" hidden align="center"><img src="{{ url('/assets/img/Spinner-3.gif') }}"></div>
 </div>
 @if(isset($page_url) and $page_url<>'')
+    @php
+        $dom='';
+        if(isset($dominio))
+            $dom=$dominio;
+    @endphp
 <script>
     let page =2
     const cargando    =     document.getElementById("cargando")
@@ -14,7 +19,7 @@
 
             if(!tope)
                 cargando.removeAttribute('hidden')
-            fetch('{{ $page_url }}?q='+search_button.value+'&page='+page,{
+            fetch('{{ $page_url }}?q='+search_button.value+'&page='+page+'&dominio={{$dom}}',{
                 method:'get'
             })
             .then(response => response.text())

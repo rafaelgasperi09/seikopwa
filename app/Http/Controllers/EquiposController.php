@@ -63,6 +63,29 @@ class EquiposController extends BaseController
 
     }
 
+    public function lista(Request $request){
+        $filtro='';
+        $dominio=$request->dominio;
+        if(in_array($dominio,['cliente','gmp'])){
+            if($dominio=='gmp'){
+                $filtro="SUBSTR(equipos.numero_parte,1,2)='GM'";
+            }else{
+                $filtro="SUBSTR(equipos.numero_parte,1,2)<>'GM'";
+            }
+        }
+        $equipos=Equipo::FiltroCliente()
+                ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
+                ->when($filtro<>'',function($q) use($filtro){
+                    $q->whereRaw($filtro);
+                })
+                ->paginate(10);
+        $datos=array('sub'=>'todos',
+            'tipo'=>'todos',
+            'subName'=>'Lista',
+            'tipoName'=>'Todos');
+        return view('frontend.equipos.lista')->with('equipos',$equipos)->with('datos',$datos)->with('dominio',$dominio);
+    }
+
     public function tipo($sub,$id){
 
         $datos=array('sub'=>$sub,
@@ -83,8 +106,28 @@ class EquiposController extends BaseController
     }
 
     public function search(Request $request,$sub,$id){
+        
+        if($id=='todos' and $sub=='todos'){
 
-        if($id=='todos'){
+            $filtro='';
+            $dominio=$request->dominio;
+            if(in_array($dominio,['cliente','gmp'])){
+                if($dominio=='gmp'){
+                    $filtro="SUBSTR(equipos.numero_parte,1,2)='GM'";
+                }else{
+                    $filtro="SUBSTR(equipos.numero_parte,1,2)<>'GM'";
+                }
+            }
+            $equipos=Equipo::selectRaw('equipos.*')->FiltroCliente()
+            ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
+            ->when($filtro<>'',function($q) use($filtro){
+                $q->whereRaw($filtro);
+            })
+            ->whereRaw("(numero_parte like '%".$request->q."%' or contactos.nombre like '%".$request->q."%')")
+            ->paginate(10);
+        }
+
+        if($id=='todos' and $sub!='todos'){
             $equipos=Equipo::selectRaw('equipos.*')->FiltroCliente()
                 ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
                 ->where('sub_equipos_id',getSubEquipo($sub))
@@ -344,6 +387,18 @@ class EquiposController extends BaseController
         }
     }
 
+    public function deleteRegistroForm($id,Request $request){
+        $model = FormularioRegistro::findOrFail($id);
+        $model->deleted_by=current_user()->id;
+        $model->deleted_at = Carbon::now();
+        if($model->save()){
+            $request->session()->flash('message.success', 'Registro eliminado con éxito');
+        }else{
+            $request->session()->flash('message.error', 'Registro no se pudo eliminar');
+        }
+        return redirect(route('equipos.detail', $model->equipo_id));
+ 
+    }
     /******************* FORMS DE MANTENIMIENTO PREVENTIVO **************************/
 
     public function createMantPrev($id,$tipo){
@@ -500,7 +555,7 @@ class EquiposController extends BaseController
     }
 
     public function storeTecnicalSupport(Request $request){
-
+       
         $this->validate($request, [
             'equipo_id'  => 'required',
             'formulario_id'  => 'required',
@@ -520,9 +575,16 @@ class EquiposController extends BaseController
             $model->equipo_id = $request->equipo_id;
             $model->cliente_id = $request->cliente_id;
             $model->estatus = 'P';
-
-            if(!$model->save())
+            if($model->save())
             {
+                if(count($request->all())>=26 and \Sentinel::hasAccess('sp.parteB')){
+                    $model->tecnico_asignado=current_user()->id;
+                    $model->fecha_asignacion=\Carbon\Carbon::now();
+                    $model->estatus = 'A';
+                    $model->save();
+                }
+                
+            }else{
                 Throw new \Exception('Hubo un problema y no se creo el registro!');
             }
         });

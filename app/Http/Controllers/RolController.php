@@ -22,7 +22,7 @@ class RolController extends Controller
             $data = Rol::get();
         }else{
             $data = Rol::where('id','>',1)->get();
-    }
+        }
 
         return view('frontend.roles.index')->with('data',$data);
     }
@@ -180,5 +180,17 @@ class RolController extends Controller
     {
         $request->session()->flash('message.error', 'Funcion no disponible');
         return redirect(route('Rol.index'));
+    }
+
+    public function search(Request $request)
+    {
+ 
+            $data = Rol::when(current_user()->id<>1,function($q){
+                $q->where('id','>',1);
+            })
+            ->whereRaw("(name like '%".$request->q."%' or tipo like '%".$request->q."%')")
+            ->paginate(10);
+     
+        return view('frontend.roles.page')->with('data',$data);
     }
 }

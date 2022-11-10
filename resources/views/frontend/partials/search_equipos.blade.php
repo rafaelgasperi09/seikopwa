@@ -1,9 +1,14 @@
+@php 
+$gmpfilter=false;
+if(\Sentinel::hasAccess('equipos.dominio'))
+    $gmpfilter=true;
+@endphp
 <!-- Search Component -->
 <div class="extraHeader">
     <div class='container-fluid'>
         <div class='row'>
             
-            <div class='col-md-12'>
+            <div class='@if($gmpfilter) col-md-8 @else col-md-12 @endif'>
                 <form class="search-form" action="">
                     <div class="form-group searchbox">
                         <input name="q" type="text" class="form-control" value="" placeholder="{{ $title }}" id="searchButton" autocomplete="off">
@@ -13,7 +18,12 @@
                     </div>
                 </form>
             </div>
-           
+            @if($gmpfilter) 
+            <div class='col-md-4'>
+            {{ Form::select('dominio',[''=>'Todos','gmp'=>'GMP','cliente'=>'Cliente'],request('dominio'),array('class'=>'form-control','autocomplete'=>'off','id'=>'dominio')) }}
+                      
+            </div>
+            @endif
             
         </div>
     </div>
@@ -26,7 +36,7 @@
     search_button.onkeyup = () =>{
         tope=false;
         cargando.removeAttribute('hidden')
-        fetch('{{ $search_url }}?q='+search_button.value,{
+        fetch('{{ $search_url }}?q='+search_button.value+'&dominio={{request('dominio')}}',{
             method:'get'
         })
         .then(response => response.text())
@@ -54,4 +64,12 @@
 
     }
 
+    $('#dominio').on('change',function(){
+        //redirect when dominio is diferent to todos
+        if(this.value != 'todos') {
+            window.location.href = "{{ url(route('equipos.lista')) }}?dominio="+this.value;
+        }
+
+
+    });
 </script>

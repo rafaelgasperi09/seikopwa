@@ -146,7 +146,7 @@ class FormularioRegistroObserver
     public function updated(FormularioRegistro $formularioRegistro)
     {
 
-        if($formularioRegistro->isDirty('estatus')){
+        if($formularioRegistro->isDirty('estatus') or $formularioRegistro->isDirty('tecnico_asignado')){
             FormularioRegistroEstatus::create([
                 'formulario_registro_id'=>$formularioRegistro->id,
                 'user_id'=>current_user()->id,

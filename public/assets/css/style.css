@@ -2022,6 +2022,10 @@ a.badge-dark {
   padding-left: 96px ;
 }
 
+.botones {
+  min-width: 89px;
+}
+
 .card {
   background: #ffffff;
   border-radius: 6px;
