@@ -177,7 +177,7 @@ class FormularioRegistroObserver
                         }
                         if(in_array($campo->tipo,['camera','file'])){
                             $file = $request->file($campo->nombre);
-                            dd($file);
+                        
                             if($file){
                                 $img = Image::make($file->path());
                                 $ext = $file->getClientOriginalExtension();
