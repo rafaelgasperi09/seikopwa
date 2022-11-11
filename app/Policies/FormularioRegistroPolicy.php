@@ -19,7 +19,8 @@ class FormularioRegistroPolicy
 
     public function edit(User $user,FormularioRegistro $formularoRegistro){
 
-        if($formularoRegistro->estatus <> 'C' && $user->isOnGroup('SupervisorC'))
+        if($formularoRegistro->estatus <> 'C' 
+            && ($user->isOnGroup('SupervisorC') or $user->isOnGroup('Supervisor')))
             return true;
 
         return false;

@@ -145,17 +145,18 @@ class FormularioRegistroObserver
      */
     public function updated(FormularioRegistro $formularioRegistro)
     {
-
+        
         if($formularioRegistro->isDirty('estatus') or $formularioRegistro->isDirty('tecnico_asignado')){
             FormularioRegistroEstatus::create([
                 'formulario_registro_id'=>$formularioRegistro->id,
                 'user_id'=>current_user()->id,
                 'estatus'=>$formularioRegistro->estatus
             ]);
+      
         }else{
             $formulario = Formulario::find($formularioRegistro->formulario_id);
             $request = request();
-
+           
             DB::transaction(function () use ($request, $formulario,$formularioRegistro) {
 
                 foreach ($formulario->campos()->get() as $campo) {
@@ -176,7 +177,7 @@ class FormularioRegistroObserver
                         }
                         if(in_array($campo->tipo,['camera','file'])){
                             $file = $request->file($campo->nombre);
-
+                            dd($file);
                             if($file){
                                 $img = Image::make($file->path());
                                 $ext = $file->getClientOriginalExtension();
@@ -209,6 +210,7 @@ class FormularioRegistroObserver
                                             $constraint->aspectRatio();
                                         })->save($destinationPath.'/'.$filename);
                                         $valor .=  $filename.',';
+                                        
                                         File::create([
                                             'user_id'=>current_user()->id,
                                             'tabla'=>'formulario_registro',
