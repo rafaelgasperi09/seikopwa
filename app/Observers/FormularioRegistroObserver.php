@@ -156,7 +156,7 @@ class FormularioRegistroObserver
         }else{
             $formulario = Formulario::find($formularioRegistro->formulario_id);
             $request = request();
-           
+
             DB::transaction(function () use ($request, $formulario,$formularioRegistro) {
 
                 foreach ($formulario->campos()->get() as $campo) {
@@ -166,7 +166,7 @@ class FormularioRegistroObserver
                     if($campo->tipo=='files' and $request->file($campo->nombre)) {
                         $files = $request->file($campo->nombre);
                     }
-
+                    
                     if(!empty($valor) or count($files) > 0){
 
                         if($campo->tipo=='firma'){
@@ -177,17 +177,18 @@ class FormularioRegistroObserver
                         }
                         if(in_array($campo->tipo,['camera','file'])){
                             $file = $request->file($campo->nombre);
-                        
+                          
                             if($file){
                                 $img = Image::make($file->path());
                                 $ext = $file->getClientOriginalExtension();
                                 $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().'.'.$ext;
+                               
                                 $destinationPath = storage_path('/app/public/equipos');
                                 $img->resize(800,null, function ($constraint) {
                                     $constraint->aspectRatio();
                                 })->save($destinationPath.'/'.$filename);
                                 $valor =  $filename;
-
+                             
                             }
                         }
                         if(isset($files)){
@@ -251,10 +252,11 @@ class FormularioRegistroObserver
                                 $notificados = User::whereHas('roles',function ($q){
                                     $q->where('role_users.role_id',5); // supervisor GMP
                                 })->get();
-                                /*
+                               // $notificados = User::where('id',$formularioRegistro->creado_por)->get();
+                                
                                 foreach ($notificados as $n){
                                     $n->notify(new TecnicalSupportTicketIsFinnish($formularioRegistro));
-                                }*/
+                                }
                             }
                         }
                     }

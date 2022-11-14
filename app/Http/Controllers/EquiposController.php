@@ -357,8 +357,9 @@ class EquiposController extends BaseController
 
     public function updateDailyCheck(Request $request)
     {
+      
         try {
-            
+          
             $this->validate($request, [
                 'equipo_id'              => 'required',
                 'formulario_id'          => 'required',
@@ -369,11 +370,12 @@ class EquiposController extends BaseController
             $formulario_registro_id = $request->formulario_registro_id;
             $model = FormularioRegistro::findOrFail($formulario_registro_id);
 
-
+          
             $model->updated_at =Carbon::now();
+         
             $model->save();
           
-
+    
             $request->session()->flash('message.success', 'Registro guardado con éxito');
 
             if($model->data()->wherein('valor',['M','R'])->count()>0){

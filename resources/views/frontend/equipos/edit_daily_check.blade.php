@@ -80,7 +80,7 @@
             <div class="section-title">OK => Buen Estado , M => Mal Estado , R => Revisar</div>
         </div>
     </div>
-    {{ Form::model($data, array('route' => array('equipos.update_daily_check', $data->id), 'method' => 'PUT' , 'role' => 'form','class'=>'form-horizontal')) }}
+    {{ Form::model($data, array('route' => array('equipos.update_daily_check', $data->id), 'method' => 'PUT' , 'role' => 'form','class'=>'form-horizontal','files'=>true)) }}
     {{ Form::hidden('equipo_id',$data->id,array('required')) }}
     {{ Form::hidden('formulario_id',$formulario->id,array('required')) }}
     {{ Form::hidden('turno_chequeo_diario',$data->turno_chequeo_diario,array('required')) }}
