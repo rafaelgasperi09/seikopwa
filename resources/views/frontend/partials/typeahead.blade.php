@@ -15,7 +15,7 @@
             <span class="btn btn-sm btn-outline-primary rounded shadowed mr-1 mb-1" id="add_{{ $field_name }}">Agregar</span>
             @endif
             <span class="btn btn-sm btn-outline-warning rounded shadowed mr-1 mb-1" id="quitar_{{ $field_name }}">Limpiar</span></div> </label>
-        {{ Form::text('typeheadfield',$value[1],array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_'.$field_name,'data-field_name'=>$field_name,'data-provide'=>'typeahead','data-items'=>10,'placeholder'=>$placeholder,"autocomplete"=>"off" )) }}
+        {{ Form::text('typeheadfield'.$field_name,$value[1],array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_'.$field_name,'data-field_name'=>$field_name,'data-provide'=>'typeahead','data-items'=>10,'placeholder'=>$placeholder,"autocomplete"=>"off" )) }}
         {{ Form::hidden($field_name,$value[0],array('id'=>$field_name)) }}
         <i class="clear-input">
             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
