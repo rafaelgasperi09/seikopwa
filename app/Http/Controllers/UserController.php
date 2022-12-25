@@ -122,9 +122,12 @@ class UserController extends Controller
             if($request->filled('crm_cliente_id'))
                { 
                 $clientes=$request->crm_cliente_id.','.$request->crm_clientes_id;
-               }else{
+                $clientes=trim($clientes,',');
+               }
+            if($request->filled('crm_clientes_id')){
                 $cliente=explode(',',$clientes);
                 $cliente=end($cliente);
+                $clientes=str_replace(',,',',',$clientes);
                }
             $user->crm_cliente_id = $cliente;
             $user->crm_clientes_id = $clientes;
