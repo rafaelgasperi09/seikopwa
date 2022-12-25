@@ -157,15 +157,27 @@ class UserController extends Controller
             'email'      => 'required|email|max:255',
         ]);
 
-       dd($request->all());
+      
         $user = User::findOrFail($id);
         $user->fill($request->all());
-        if(!empty($request->crm_clientes_id))
-            $user->crm_clientes_id=limpiar_lista($request->crm_clientes_id);
-        else
-            $user->crm_clientes_id=$request->crm_cliente_id;
-
+        $clientes=trim($request->crm_clientes_id,',');
+        $cliente=$request->crm_cliente_id;
+        
+        if($request->filled('crm_cliente_id'))
+           { 
+            $clientes=$request->crm_cliente_id.','.$request->crm_clientes_id;
+            $clientes=trim($clientes,',');
+           }
+        if($request->filled('crm_clientes_id')){
+            $cliente=explode(',',$clientes);
+            $cliente=end($cliente);
+           }
+        
+        $user->crm_cliente_id = $cliente;
+        $user->crm_clientes_id = $clientes;
+         
         if($user->save()){
+           
             if($request->has('rol_id'))
                 $user->roles()->sync([$request->rol_id]);
 
