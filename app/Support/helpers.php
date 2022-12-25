@@ -287,12 +287,6 @@ function checkBoxDetail($char){
 }
 
 function limpiar_lista($lista){
-    $listado=explode(',',current_user()->crm_clientes_id);
-    foreach($listado as $k=>$c){
-        if($c=='')
-            unset($listado[$k]);
-    }
-    $listado=implode(',',$listado);
-    return $listado;
+    return trim($lista,",");
 }
 ?>
