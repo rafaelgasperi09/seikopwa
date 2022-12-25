@@ -160,6 +160,7 @@ class UserController extends Controller
       
         $user = User::findOrFail($id);
         $user->fill($request->all());
+       
         $clientes=trim($request->crm_clientes_id,',');
         $cliente=$request->crm_cliente_id;
         
@@ -171,11 +172,12 @@ class UserController extends Controller
         if($request->filled('crm_clientes_id')){
             $cliente=explode(',',$clientes);
             $cliente=end($cliente);
+            $clientes=str_replace(',,',',',$clientes);
            }
         
         $user->crm_cliente_id = $cliente;
         $user->crm_clientes_id = $clientes;
-         
+
         if($user->save()){
            
             if($request->has('rol_id'))
