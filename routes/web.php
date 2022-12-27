@@ -150,7 +150,7 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         Route::post('/store', array('as' => 'usuarios.store', 'uses' => 'UserController@store'));
 
-        Route::put('/{id}/edit', array('as' => 'usuarios.update', 'uses' => 'UserController@update'));
+        Route::put('/{id}/edit', array('as' => 'usuarios.update', 'uses' => 'UserController@update'))->middleware('hasAccess');;
 
         Route::put('/{id}/photo', array('as' => 'usuarios.update_photo', 'uses' => 'UserController@updatePhoto'));
 

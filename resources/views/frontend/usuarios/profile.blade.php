@@ -59,7 +59,11 @@
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="label" for="email">Correo Electronico</label>
+                        @if(\Sentinel::hasAccess('usuarios.update'))
                         {{ Form::email('email',null,array('class'=>'form-control','placeholder'=>'Correo Electrónico','required')) }}
+                        @else
+                            <span class="">{{$data->email}}</span>
+                        @endif
                         <i class="clear-input">
                             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                         </i>
@@ -68,7 +72,11 @@
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="label" for="first_name">Nombre</label>
+                        @if(\Sentinel::hasAccess('usuarios.update'))
                         {{ Form::text('first_name',null,array('class'=>'form-control','placeholder'=>'Nombre','required')) }}
+                        @else
+                            <span class="">{{$data->first_name}}</span>
+                        @endif
                         <i class="clear-input">
                             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                         </i>
@@ -77,7 +85,11 @@
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="label" for="last_name">Apellido</label>
+                        @if(\Sentinel::hasAccess('usuarios.update'))
                         {{ Form::text('last_name',null,array('class'=>'form-control','placeholder'=>'Apellido','required')) }}
+                        @else
+                            <span class="">{{$data->last_name}}</span>
+                        @endif
                         <i class="clear-input">
                             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                         </i>
@@ -90,7 +102,9 @@
                     @endif
             </div>
             <div class="modal-footer">
-                @include('frontend.partials.btnSubmit')
+                @if(\Sentinel::hasAccess('usuarios.update'))
+                    @include('frontend.partials.btnSubmit')
+                @endif
             </div>
             {{ Form::close() }}
         </div>
