@@ -93,8 +93,8 @@ class notificarChequeoDiario extends Command
                 $message .= $e['equipo'].',';
                 $tot++;
             }
-
-            $user->notify(new DailyCheck($title,$message,route('equipos.index')));
+            $when = now()->addMinutes(1);
+            $user->notify((new DailyCheck($title,$message,route('equipos.index')))->delay($when));
             $this->info($noti["cliente"]);
             $this->info('body :'.$message);
             $this->info('------------------------------------------');

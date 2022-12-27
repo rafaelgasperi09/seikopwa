@@ -255,7 +255,8 @@ class FormularioRegistroObserver
                                // $notificados = User::where('id',$formularioRegistro->creado_por)->get();
                                 
                                 foreach ($notificados as $n){
-                                    $n->notify(new TecnicalSupportTicketIsFinnish($formularioRegistro));
+                                    $when = now()->addMinutes(1);
+                                    $n->notify((new TecnicalSupportTicketIsFinnish($formularioRegistro))->delay($when));
                                 }
                             }
                         }

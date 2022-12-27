@@ -115,8 +115,9 @@ class FormularioRegistro extends BaseModel
                 $notificados = User::FilterByRoles([5])->get();
                 $when = now()->addMinutes(1);
                 foreach ($notificados as $noti){
+                    $when = now()->addMinutes(1);
                     if(current_user()->id <> $noti->id)
-                        $noti->notify(new NewMantenimientoPreventivo($this));
+                        $noti->notify((new NewMantenimientoPreventivo($this))->delay($when));
                 }
 
                 FormularioRegistro::withoutEvents(function (){
