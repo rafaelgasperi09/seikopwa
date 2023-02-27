@@ -46,6 +46,7 @@ class NewDailyCheck extends Notification
             ->subject('Nuevo DailyCheck')
                     ->line('Se ha creado un nuevo formulario daily check que requiere su firma.')
                     ->line('Equipo :'.$this->model->equipo()->numero_parte)
+                    ->line('Usuario :'.$this->model->creador()->getFullName)
                     ->action('Firmar',route('equipos.edit_daily_check',$this->model->id))
                     ->line('Gracias por usar nuestra aplicación '.env('APP_NAME'));
     }
