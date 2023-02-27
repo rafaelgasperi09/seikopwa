@@ -90,7 +90,7 @@ class FormularioMantenimientoPreventivoCounterRC extends Seeder
                     $campos = ['Unidad de control direccional fija','Estado de las mangueras y los conectores','Fugas'];
                     break;
                 case 9:
-                    $campos = ['Nivel del fluido hidráulico','Fugas','Tapas del respiradero','Estado de la mangueras y los conectores','Filtro','Filtro de aspiración'];
+                    $campos = ['Nivel del fluído hidráulico','Fugas','Tapas del respiradero','Estado de la mangueras y los conectores','Filtro','Filtro de aspiración'];
                     break;
                 case 10:
                     $campos = ['Rendimiento y rastreo:desgaste o daño','Estado de la cadena de levante:desgaste','Ajuste de la cadena de levante','Controlar el ajuste de los pernos en los bloques del pivote del mástil',
