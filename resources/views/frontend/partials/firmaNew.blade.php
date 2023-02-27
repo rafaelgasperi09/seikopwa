@@ -9,7 +9,8 @@
 
                 <div style="width:94%;max-width:800px;height:auto;margin:auto;padding: 20px 0;background-color:#eee;color:#FFF;" id="padcontainer">
                         {{ Form::hidden('firma_base','',['id'=>'firma_base']) }}
-                        @if(isset($supervisores))
+                        @if(isset($supervisores) and count($supervisores)>0)
+                         
                             <div class="form-group" style="margin: 10px 20px;">
                                 <div class="col-md-11" id="userListBlock" style="display: none;">
                                     <label class="label"><h3>Seleccionar el supervisor que firma</h3></label>
