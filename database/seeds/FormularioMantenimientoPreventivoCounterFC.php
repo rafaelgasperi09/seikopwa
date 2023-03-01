@@ -74,7 +74,7 @@ class FormularioMantenimientoPreventivoCounterFC extends Seeder
                         'Interruptor del sujetador de la batería','Rodillos de las baterias'];
                     break;
                 case 3:
-                    $campos = ['Blow off truck','Limpiar con aire a baja presión todos los paneles eléctricos','Luricar todos los engrasadores',
+                    $campos = ['Blow off truck','Limpiar con aire a baja presión todos los paneles eléctricos','Lubricar todos los engrasadores',
                         'Lubricar el acoplamiento del freno','Lubricar Steering Botton (8 Zerks)','Lubricar el montaje del mástil y del rodillo',
                         'Lubricar las cadenas elevadoras','Lubrique los enlaces diversos','Rodillos de baterias','Lubricar los soportes del cilindro de inclinacion','Alzar/Inclinar/Aux. Palanca Asm.'];
                     break;

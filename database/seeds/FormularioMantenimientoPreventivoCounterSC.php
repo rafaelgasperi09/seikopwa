@@ -74,7 +74,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
                         'Todos los conectores del arnés','Rodillos de las baterias'];
                     break;
                 case 3:
-                   $campos = ['Limpiar la montacarga con aire a presión','Limpiar con aire a baja presión todos los paneles eléctricos','Luricar todos los engrasadores',
+                   $campos = ['Limpiar la montacarga con aire a presión','Limpiar con aire a baja presión todos los paneles eléctricos','Lubricar todos los engrasadores',
                         'Lubricar el acoplamiento del freno','Montaje de la palanca aux. de elevación/ inclinación','Lubricar el montaje del mástil y del rodillo',
                         'Lubricar las cadenas elevadoras'];
                     break;

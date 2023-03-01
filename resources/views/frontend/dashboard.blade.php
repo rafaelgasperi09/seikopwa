@@ -246,7 +246,10 @@
                 </div>  <br/>
             @endif
 
-            @if(current_user()->isOnGroup('supervisorc') or current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador'))
+            @if(current_user()->isOnGroup('supervisorc') or 
+                current_user()->isOnGroup('administrador') or 
+                current_user()->isOnGroup('programador') or
+                current_user()->isOnGroup('supervisor') )
                 <div class="card text-white bg-light">
                     <div class="card-header">
                         <span >
