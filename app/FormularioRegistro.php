@@ -488,6 +488,11 @@ class FormularioRegistro extends BaseModel
             $pdf->Image($firmasPath[2],  '', '', 50, 14, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
         }
 
+        $pdf->SetFont('helvetica', 'B', 20);
+        $x = $pdf->GetX()/2;
+        $pdf->SetXY(16, -50);
+        $pdf->Cell(265, 6, '"Satisfacción y confianza"', 0, 0, 'C');
+
         if($uploadFile){
             $name = 'mant_prev_frm_reg_'.$this->id.'.pdf';
             $path = storage_path('app/public/pdf/'.$name);

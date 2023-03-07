@@ -307,6 +307,11 @@ class PdfController extends Controller
         $pdf->MultiCell(265, 30, $solicitud->descripcion, 1, 'L');
         $pdf->Ln();
 
+        $pdf->SetFont('helvetica', 'B', 20);
+        $x = $pdf->GetX();
+        $pdf->SetXY($x, -35);
+        $pdf->Cell(265, 6, "Satisfacción y confianza", 0, 0, 'C');
+
         $pdf->SetFont('helvetica', 'B', 14);
         $x = $pdf->GetX();
         $pdf->SetXY($x, -40);

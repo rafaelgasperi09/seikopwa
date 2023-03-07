@@ -71,7 +71,7 @@ class FormularioMantenimientoPreventivoPallet extends Seeder
                     $campos = ['Estado de la batería','Nivel de electrolito','Agua agregada','Estado del Retenedor de baterías','Estado de los cables','Estado del conector de la batería','Separadores de la batería','Estado el timón de control para desconectar la batería (opc.)'];
                     break;
                 case 3:
-                    $campos = ['Limpiar el equipo con aire a presión','Limpiar con aire a baja presión el panel eléctrico','Luricar todos los engrasadores',
+                    $campos = ['Limpiar el equipo con aire a presión','Limpiar con aire a baja presión el panel eléctrico','Lubricar todos los engrasadores',
                         'Pivote de la unidad motriz','Acoplamiento de elevación superior','Pivote del cilindro de elevación superior','Rodamientos de la unidad motriz',
                         'Eje de la unidad motriz','Ruedas caster y mecanismo','Acoplamiento de elevación inferiror','Barras de tensión','Elevadores','Pivote y eje de la rueda de carga','Rodamientos de salida',
                         'Lubricar el acoplamiento del freno','Lubricar los rodamientos de las baterías (opc.)','Lubricar las visagras de la puerta','Lubricar lo pivotes del timón de control',
@@ -89,7 +89,7 @@ class FormularioMantenimientoPreventivoPallet extends Seeder
                     $campos = ['Estado del cable de alimentación','Conexiones del cable de alimentación','Conexiones del resistidor'];
                     break;
                 case 7:
-                    $campos = ['Estato del Cableado','Conexiones del cableado','Conectores de arnés','Interruptores de control en el timón de control','Interruptor de reversa',
+                    $campos = ['Estado del Cableado','Conexiones del cableado','Conectores de arnés','Interruptores de control en el timón de control','Interruptor de reversa',
                         'Interruptor limitador de elevación','Interruptores de control en la barra de sujeción','Selenoide de la bomba','Interruptores del retenedor de las baterías','Interruptor de frenos'];
                     break;
                 case 8:

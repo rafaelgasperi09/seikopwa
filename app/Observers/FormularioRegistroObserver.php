@@ -14,7 +14,7 @@ use App\MontacargaCopiaSolicitud;
 use App\MontacargaImagen;
 use App\MontacargaSolicitud;
 use App\Notifications\TecnicalSupportTicketIsFinnish;
-use App\Notifications\NewDailyCheck;
+use App\Notifications\DailyCheckIsFinnish;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -133,6 +133,19 @@ class FormularioRegistroObserver
                 if($formularioCampo->cambio_estatus && !empty($form_data->valor)) {
                     $formularioRegistro->estatus = 'C';
                     $formularioRegistro->save();
+
+                    $notificados = User::whereHas('roles',function ($q){
+                        $q->where('role_users.role_id',5); // supervisor GMP
+                    })->get();
+
+                    
+                    foreach ($notificados as $n){
+                        $when = now()->addMinutes(1);
+                        if($formularioCampo->formulario->nombre=='form_montacarga_servicio_tecnico')
+                            $n->notify((new TecnicalSupportTicketIsFinnish($formularioRegistro))->delay($when));
+                        if($formularioCampo->formulario->nombre=='form_montacarga_daily_check')
+                            $n->notify((new DailyCheckIsFinnish($formularioRegistro))->delay($when));
+                    }
                     // si es matenimiento preventivo crear solicitud en crm de montacarga
                 }
             }
@@ -167,9 +180,9 @@ class FormularioRegistroObserver
                     if($campo->tipo=='files' and $request->file($campo->nombre)) {
                         $files = $request->file($campo->nombre);
                     }
-                   
+                    
                     if(!empty($valor) or count($files) > 0){
-                        
+
                         if($campo->tipo=='firma'){
                             $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
                             $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
@@ -257,10 +270,10 @@ class FormularioRegistroObserver
                                 
                                 foreach ($notificados as $n){
                                     $when = now()->addMinutes(1);
-                                    if($formularioCampo->formulario->nombre=="form_montacarga_servicio_tecnico")
+                                    if($formularioCampo->formulario->nombre=='form_montacarga_servicio_tecnico')
                                         $n->notify((new TecnicalSupportTicketIsFinnish($formularioRegistro))->delay($when));
-                                    if($formularioCampo->formulario->nombre=="form_montacarga_daily_check")
-                                        $n->notify((new NewDailyCheck($formularioRegistro))->delay($when));
+                                    if($formularioCampo->formulario->nombre=='form_montacarga_daily_check')
+                                        $n->notify((new DailyCheckIsFinnish($formularioRegistro))->delay($when));
                                 }
                             }
                         }

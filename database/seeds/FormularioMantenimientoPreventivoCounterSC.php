@@ -74,12 +74,12 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
                         'Todos los conectores del arnés','Rodillos de las baterias'];
                     break;
                 case 3:
-                   $campos = ['Limpiar la montacarga con aire a presión','Limpiar con aire a baja presión todos los paneles eléctricos','Luricar todos los engrasadores',
+                   $campos = ['Limpiar la montacarga con aire a presión','Limpiar con aire a baja presión todos los paneles eléctricos','Lubricar todos los engrasadores',
                         'Lubricar el acoplamiento del freno','Montaje de la palanca aux. de elevación/ inclinación','Lubricar el montaje del mástil y del rodillo',
                         'Lubricar las cadenas elevadoras'];
                     break;
                 case 4:
-                    $campos =$campos = ['Montaje Fijo','Estato de mangueras y conectores','Fugas1','Estado del inducido y de la escobilla','Limpiar con aire a presión el polvo de la escobilla del motor',
+                    $campos =$campos = ['Montaje Fijo','Estado de mangueras y conectores','Fugas1','Estado del inducido y de la escobilla','Limpiar con aire a presión el polvo de la escobilla del motor',
                         'Conexiones de los cables','Funcionamiento de la bomba'];
                     break;
                 case 5:
@@ -90,7 +90,7 @@ class FormularioMantenimientoPreventivoCounterSC extends Seeder
                     $campos = ['Estado del cable de alimentación','Conexiones del cable de alimentación fijas','Estado del cableado','Estado del cableado fijo'];
                     break;
                 case 7:
-                    $campos = ['Estado del tip de la bomba','Estato del tip de la línea'];
+                    $campos = ['Estado del tip de la bomba','Estado del tip de la línea'];
                     break;
                 case 8:
                     $campos = ['Funcionamiento del pedal','Ajuste del interruptor de frenos','Ajuste Freno Derecho','Ajuste freno izquierdo','Pastilla de freno',

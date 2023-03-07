@@ -74,12 +74,12 @@ class FormularioMantenimientoPreventivoCounterFC extends Seeder
                         'Interruptor del sujetador de la batería','Rodillos de las baterias'];
                     break;
                 case 3:
-                    $campos = ['Blow off truck','Limpiar con aire a baja presión todos los paneles eléctricos','Luricar todos los engrasadores',
+                    $campos = ['Blow off truck','Limpiar con aire a baja presión todos los paneles eléctricos','Lubricar todos los engrasadores',
                         'Lubricar el acoplamiento del freno','Lubricar Steering Botton (8 Zerks)','Lubricar el montaje del mástil y del rodillo',
                         'Lubricar las cadenas elevadoras','Lubrique los enlaces diversos','Rodillos de baterias','Lubricar los soportes del cilindro de inclinacion','Alzar/Inclinar/Aux. Palanca Asm.'];
                     break;
                 case 4:
-                    $campos = ['Montaje Fijo','Estato de mangueras y conectores','Fugas','Estado del inducido y de la escobilla','Limpiar con aire a presión el polvo de la escobilla del motor',
+                    $campos = ['Montaje Fijo','Estado de mangueras y conectores','Fugas','Estado del inducido y de la escobilla','Limpiar con aire a presión el polvo de la escobilla del motor',
                         'Conexiones de los cables','Funcionamiento de la bomba'];
                     break;
                 case 5:
@@ -89,7 +89,7 @@ class FormularioMantenimientoPreventivoCounterFC extends Seeder
                     $campos = ['Estado del cable de alimentación','Conexiones del cable de alimentación fijas','Estado del cableado','Estado del cableado fijo'];
                     break;
                 case 7:
-                    $campos = ['Estato del tip de la línea','Condicion del extremo S','Condicion del extremo P (opcion levantamiento DC)'];
+                    $campos = ['Estado del tip de la línea','Condicion del extremo S','Condicion del extremo P (opcion levantamiento DC)'];
                     break;
                 case 8:
                     $campos = ['Funcionamiento del pedal','Ajuste del interruptor de frenos','Fuga del piston de freno','Lineas de freno','Pastillas de freno',
