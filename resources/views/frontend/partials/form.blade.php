@@ -97,7 +97,11 @@
                                         {{ Form::time($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                     @endif
                                 @elseif($campo->tipo == 'number')
-                                    {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
+                                    @if(in_array($campo->nombre,[ 'horometro','lectura_horometro']))
+                                        {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>$data->ult_horometro())) }}
+                                    @else
+                                        {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
+                                    @endif
                                 @elseif($campo->tipo == 'checkbox' and strlen($campo->opciones)=='')
 
                                     <div class="custom-control custom-switch col-4">
@@ -195,15 +199,14 @@
         var val=$(this).val();
         var target="#dcrow"+$(this).attr('lineaId');
         if(val!='OK')
-            {
-               
+            {  
                 $(target).addClass("bg-danger");
                 //alert();
             }
         else{
                $(target).removeClass("bg-danger");
-        }
-      //  alert(val);
+            }
+            // alert(val);
     });
     @endif
 </script>

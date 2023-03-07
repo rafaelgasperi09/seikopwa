@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use DB;
 class Equipo extends BaseModel
 {
     use SoftDeletes;
@@ -46,6 +46,28 @@ class Equipo extends BaseModel
         return $this->belongsTo(TipoMastil::class,'tipo_mastil_id')->withDefault([
             'nombre'=>'N/A'
         ]);
+    }
+
+    public function ult_horometro(){
+        $ult_form = FormularioRegistro::whereEquipoId($this->id)->orderBy('created_at','desc')->first();
+        if($ult_form){
+
+           // $campos=\DB::select(DB::Raw(" SELECT id FROM formulario_campos WHERE nombre IN ('lectura_horometro', 'horometro') AND tipo = 'number'
+           // AND formulario_campos.deleted_at IS NULL"));
+            $campos=FormularioCampo::whereIn('nombre',['lectura_horometro','horometro'])->where('tipo','number')->pluck('id');
+            $horometro=$ult_form->data->whereIn('formulario_campo_id',$campos);
+
+            if(count($horometro)>0){
+               
+                $horometro=$horometro->first()->valor;
+            }else{
+                $horometro=0;
+            }
+        }
+        else{
+            $horometro=0;
+        }
+        return $horometro;
     }
 
     /**

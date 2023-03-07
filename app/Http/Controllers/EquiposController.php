@@ -235,7 +235,7 @@ class EquiposController extends BaseController
     public function createDailyCheck($id){
 
         $data = Equipo::findOrFail($id);
-
+        
         if(!current_user()->can('see',$data)){
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
@@ -248,6 +248,7 @@ class EquiposController extends BaseController
              ->whereRaw('created_at >= CURDATE()')
              ->orderBy('id','DESC')
              ->first();
+       
 
          if($formulario_registro){
              $turno = $formulario_registro->turno_chequeo_diario+1;

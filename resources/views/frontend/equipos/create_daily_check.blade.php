@@ -90,7 +90,18 @@
     </div>
     {{ Form::close() }}
 
-<script>
+    <script>
+        $('input').click(function(){
+            var name=$(this).attr('name');
+            var value=$(this).val();
+            var errores = ['fugas','cadenas_cables_mangueras','frenos','freno'];
+           
+            
+            if(errores.includes(name) && value!='OK'){
+                $("#prioridad").val('No usar este equipo');
+            }
+        })
+    
 
-</script>
+    </script>
 @stop
