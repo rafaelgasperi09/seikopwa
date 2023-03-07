@@ -19,7 +19,9 @@
                         if(!Sentinel::getUser()->hasAccess($campo->permiso)){
                              $readonly='disabled';
                         }
+                        
                         if(isset($datos)) {
+                           
                               $vd = $datos->data()->where('formulario_campo_id',$campo->id)->first();
                               if($vd) $value = $vd->valor;
                         }

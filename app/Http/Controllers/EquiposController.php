@@ -369,6 +369,7 @@ class EquiposController extends BaseController
             ]);
 
             $formulario_registro_id = $request->formulario_registro_id;
+            
             $model = FormularioRegistro::findOrFail($formulario_registro_id);
 
           
