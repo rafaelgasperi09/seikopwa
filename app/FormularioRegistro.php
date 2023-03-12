@@ -35,6 +35,10 @@ class FormularioRegistro extends BaseModel
         return Equipo::find($this->equipo_id);
     }
 
+    public function ult_horometro(){
+        return $this-> equipo()->ult_horometro();
+    }
+
     public function tecnicoAsignado(){
         return $this->belongsTo(User::class,'tecnico_asignado');
     }
@@ -477,7 +481,7 @@ class FormularioRegistro extends BaseModel
         $pdf->SetFont('helvetica', 'B', 14);
         $x = $pdf->GetX();
         $pdf->SetXY($x, -40);
-        $pdf->Cell(265, 6, "Trabajos bien hecho al precio correcto", 0, 0, 'C');
+        //$pdf->Cell(265, 6, "Trabajos bien hecho al precio correcto", 0, 0, 'C');
         if(isset($firmasPath[1])){
             $pdf->SetXY($firma1['x']+18, $firma1['y']);
             $pdf->Image($firmasPath[1],  '', '', 50, 14, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
@@ -490,7 +494,7 @@ class FormularioRegistro extends BaseModel
 
         $pdf->SetFont('helvetica', 'B', 20);
         $x = $pdf->GetX()/2;
-        $pdf->SetXY(16, -50);
+        $pdf->SetXY(16, -40);
         $pdf->Cell(265, 6, '"Satisfacción y confianza"', 0, 0, 'C');
 
         if($uploadFile){
@@ -519,28 +523,31 @@ class FormularioRegistro extends BaseModel
        //$dias=array('Lunes','Martes','Miercoles','Jueves','Viernes','Sabado');
         $dias=array('Lunes1','Lunes2','Martes1','Martes2','Miercoles1','Miercoles2','Jueves1','Jueves2','Viernes1','Viernes2','Sabado1','Sabado2');
        $dataQuery="SELECT
-       fr.semana,fr.ano,fd.formulario_campo_id,fc.nombre,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Lunes1' THEN fd.valor ELSE '' END) AS Lunes1,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Lunes2' THEN fd.valor ELSE '' END) AS Lunes2,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Martes1' THEN fd.valor ELSE '' END) AS Martes1,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Martes2' THEN fd.valor ELSE '' END) AS Martes2,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Miercoles1' THEN fd.valor ELSE '' END) AS Miercoles1,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Miercoles2' THEN fd.valor ELSE '' END) AS Miercoles2,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Jueves1' THEN fd.valor ELSE '' END) AS Jueves1,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Jueves2' THEN fd.valor ELSE '' END) AS Jueves2,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Viernes1' THEN fd.valor ELSE '' END) AS Viernes1,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Viernes2' THEN fd.valor ELSE '' END) AS Viernes2,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Sabado1' THEN fd.valor ELSE '' END) AS Sabado1,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Sabado2' THEN fd.valor ELSE '' END) AS Sabado2
+       fr.semana,fr.ano,fd.formulario_campo_id,fc.nombre,fc.tipo,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Lunes1' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Lunes1,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Lunes2' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Lunes2,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Martes1' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Martes1,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Martes2' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Martes2,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Miercoles1' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Miercoles1,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Miercoles2' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Miercoles2,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Jueves1' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Jueves1,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Jueves2' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Jueves2,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Viernes1' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Viernes1,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Viernes2' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Viernes2,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Sabado1' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Sabado1,
+                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Sabado2' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Sabado2
                 FROM formulario_registro fr,formulario_data fd,formulario_campos fc
                 WHERE fr.id=fd.formulario_registro_id
                 AND fd.formulario_campo_id=fc.id
-
                 AND fr.semana=$formularioRegistro->semana
                 AND fr.ano=$formularioRegistro->ano
-                GROUP BY fr.semana,fr.ano,fd.formulario_campo_id ";
+                GROUP BY fr.semana,fr.ano,fd.formulario_campo_id,fc.nombre,fc.tipo ";
 
         $data=\DB::select(DB::Raw($dataQuery));
+       
+        $users=\DB::select(DB::Raw("SELECT id,CONCAT(IFNULL(first_name,''),' ',IFNULL(last_name,'')) AS name FROM users"));
+        $users = array_column($users,'name','id');
+
         $width = 220;
         $height = 380;
         $pageLayout = array($width, $height);
@@ -555,7 +562,7 @@ class FormularioRegistro extends BaseModel
         $y = $pdf->GetY();
         $pdf->SetXY($x-12, $y-10);
 
-        $pdf->Image(public_path('images/dce2.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+        $pdf->Image(public_path('images/dce3.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
         $name = 'daily_check-'.$formularioRegistro->id.'.svg';
         $path = storage_path('app/public/pdf/'.$name);
 
@@ -622,14 +629,17 @@ class FormularioRegistro extends BaseModel
         'frenos'=>178,
         'freno'=>186,
         'carga_bateria'=>192,
-        'indicador_descarga_bateria'=>198,
-        'desconector_poder'=>206,
-        'luces_alarma_retroceso'=>212,
-        'lectura_horometro'=>235,
-        'operador'=>255,
-        'ok_supervisor'=>276);
+        'nivel_carga_bateria'=>198,
+        'indicador_descarga_bateria'=>204,
+        'desconector_poder'=>211,
+        'luces_alarma_retroceso'=>218,
+        'lectura_horometro'=>240,
+        'operador'=>261,
+        'ok_supervisor'=>281);
        $comentarios='';$contador=0;
+
        foreach($data as $d){
+
             $datos=json_decode(json_encode($d), true);
             foreach($matrizx as $xkey=>$vx){
                 if($datos["nombre"]=='comentarios'){
@@ -643,23 +653,40 @@ class FormularioRegistro extends BaseModel
                     }
 
                 }
-
+                
                 if(isset($vars[$datos["nombre"]])){
                     $valor=$datos[$dias[$xkey]];
+                    $valor=explode('|',$valor);
+                    
+                    if($datos["nombre"]=='operador'){
+                        
+                        if(isset($users[end($valor)]))
+                            $valor=substr($users[end($valor)],0,12);
+                        else   {
+                            $valor="";
+                        } 
+                           
+                    }
+                    else
+                        $valor=$valor[0];
+
                     $pdf->SetXY($vx,$vars[$datos["nombre"]]);
-
+                    
                     if(in_array($datos["nombre"],['operador','ok_supervisor','lectura_horometro'])){
-                        $pdf->StartTransform();
-                        $pdf->Rotate(90);
-                        if($datos["nombre"]=='lectura_horometro'){
-                            $pdf->Cell(2, 6, $valor, 0, 0, 'L');
-                            
-                        }
-                        else{
-
+                           
+                        if($datos["nombre"]=='ok_supervisor'){
+                            $pdf->StartTransform();
+                            $pdf->Rotate(90);
                             $pdf->Image(storage_path('app/public/firmas/'.$valor),  '', '', 20, 10, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+                        }else{
+                            $size = $pdf->getSizeFont(4);//$numero
+                            $pdf->SetFont('helvetica', 'B', $size);
+                            $pdf->SetXY($vx-4,$vars[$datos["nombre"]]);
+                            $pdf->StartTransform();
+                            $pdf->Rotate(70);
+                            $pdf->Cell(2, 6, $valor, 0, 0, 'L');
                         }
-
+                        
                         $pdf->StopTransform();
                     }else{
                        if($valor=='M' or $valor=='R')
