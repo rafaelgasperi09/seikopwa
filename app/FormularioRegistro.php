@@ -316,6 +316,7 @@ class FormularioRegistro extends BaseModel
         $_y = 0;
         $posicion_x_inicial = 90;
         $firmasPath=array();
+        $nombreTecnico="";
         foreach($secciones as $i => $seccion) {
             if($seccion->titulo=='Informacion Adicional'){
                 foreach($seccion->campos()->get() as $campo) {
@@ -327,6 +328,9 @@ class FormularioRegistro extends BaseModel
 
                         if($campo->nombre=='trabajo_realizado_por'){
                             $firmasPath[2] =  storage_path('/app/public/firmas/'.$this->data()->whereFormularioCampoId($campo->id)->first()->valor);
+                            $nombreTecnico=$this->data()->whereFormularioCampoId($campo->id)->first()->user_id;
+                            $nombreTecnico=User::find( $nombreTecnico)->full_name;
+                          
                         }
                     }
                 }
@@ -490,6 +494,9 @@ class FormularioRegistro extends BaseModel
         if(isset($firmasPath[2])){
             $pdf->SetXY($firma2['x']+18, $firma2['y']);
             $pdf->Image($firmasPath[2],  '', '', 50, 14, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+            $pdf->SetFont('helvetica', 'P', 10);
+            $pdf->SetXY(33, -90);
+            $pdf->Cell(265, 6,$nombreTecnico, 0, 0, 'C');
         }
 
         $pdf->SetFont('helvetica', 'B', 20);

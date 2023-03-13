@@ -12,7 +12,7 @@ class EquipoPolicy
 
     public function before($user, $ability)
     {
-        if ($user->isOnGroup('Programador') or $user->isOnGroup('Administrador') or $user->isOnGroup('Supervisor') or $user->isOnGroup('Tecnico')) {
+        if ($user->isOnGroup('programador') or $user->isOnGroup('administrador') or $user->isSupervisor() or $user->isOnGroup('tecnico')) {
             return true;
         }
     }

@@ -65,8 +65,7 @@ class UserController extends Controller
 
     public function create(){
 
-        $roles = Rol::where('id','<>',1)->get()->pluck('full_name','id');
-
+        $roles = Rol::where('id','<>',1)->select('name','id','tipo')->get();
         $clientes = Cliente::whereHas('equipos')
                 ->orderBy('nombre')
                 ->get()

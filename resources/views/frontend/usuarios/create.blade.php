@@ -8,7 +8,14 @@
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="label" for="rol_id">Rol</label>
-                        {{ Form::select('rol_id',$roles,null,array('class'=>'form-control','placeholder'=>'Seleccionar rol','required','id'=>'rol')) }}
+                        <select class="form-control" required="" id="rol" name="rol_id">
+                            
+                            <option selected="selected" value="">Seleccionar rol</option>
+                            @foreach($roles as $r)
+                            <option selected="selected" data-tipo='{{$r->tipo}}' value="{{$r->id}}">{{$r->name}} ({{$r->tipo}})</option>
+                            @endforeach
+                        </select>
+                        
                         <i class="clear-input">
                             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                         </i>
@@ -71,7 +78,13 @@
         </div>
     </div>
     <script>
-          if($("#rol").val() == 2){
+        function contiene(texto, buscado) {
+            return texto.indexOf(buscado);
+        }
+        
+
+
+         /* if($("#rol").text() == 2){
                 $('#group_crm_user_id').show();
                 $('#group_crm_cliente_id').hide();
             }else if($("#rol").val() == 3 || $("#rol").val() == 4){ // supervisor_operador-clinete
@@ -84,9 +97,20 @@
                 $('#group_crm_user_id').show();
                 $('#group_crm_cliente_id').show();
             }
+            */
         $("#rol").change(function (){
+            var selec=$('option:selected', this).attr('data-tipo');
+             if(selec=='gmp'){
+                $('#group_crm_cliente_id').hide();
+                $('#group_crm_user_id').show();
+             }
 
-            if($("#rol").val() == 2){
+             if(selec=='cliente'){
+                $('#group_crm_cliente_id').show();
+                $('#group_crm_user_id').hide();
+             }
+            console.log(selec);
+            /*if($("#rol").val() == 2){
                 $('#group_crm_user_id').show();
                 $('#group_crm_cliente_id').hide();
             }else if($(this).val() == 3 || $(this).val() == 4){ // supervisor_operador-clinete
@@ -98,7 +122,7 @@
             }else if($(this).val() == 6){ // tecnico_gmp
                 $('#group_crm_user_id').show();
                 $('#group_crm_cliente_id').show();
-            }
+            }*/
         });
     </script>
 @stop

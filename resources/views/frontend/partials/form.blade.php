@@ -104,6 +104,8 @@
                                     @else
                                         {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                     @endif
+                                @elseif($campo->tipo=='porcentaje')
+                                    {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>0,'max'=>100)) }}
                                 @elseif($campo->tipo == 'checkbox' and strlen($campo->opciones)=='')
 
                                     <div class="custom-control custom-switch col-4">
@@ -200,7 +202,7 @@
     $('.radiofield').click(function(){
         var val=$(this).val();
         var target="#dcrow"+$(this).attr('lineaId');
-        if(val!='OK')
+        if(val!='OK' && val!='N/A')
             {  
                 $(target).addClass("bg-danger");
                 //alert();

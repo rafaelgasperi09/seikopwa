@@ -69,17 +69,17 @@ class User extends Authenticatable
     public function isOnGroup($group_name)
     {
         $sentryUser = Sentinel::findUserById($this->id);
-        $group = Sentinel::findRoleByName($group_name);
+        $group = Sentinel::findRoleBySlug($group_name); 
         return $sentryUser->inRole($group);
     }
 
     public function isCliente()
     {
         $sentryUser = Sentinel::findUserById($this->id);
-        $rolSup = Sentinel::findRoleById(3); // supervisor cliente
-        $grolOp = Sentinel::findRoleById(4); // operador cliente
-        $grolVer = Sentinel::findRoleById(7); // operador cliente
-        return $sentryUser->inRole($rolSup) or $sentryUser->inRole($grolOp) or $sentryUser->inRole($grolVer);
+        if(!empty($sentryUser->crm_cliente_id) or !empty($sentryUser->crm_clientes_id))
+            return true;
+        else
+            return false;
     }
 
     public function getFullName(){
@@ -96,26 +96,30 @@ class User extends Authenticatable
         return Cliente::whereIn('id',explode(',',$this->crm_clientes_id))->get();
     }
 
-    /**
-     * Scope a query to only include popular users.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
+    public function isSupervisor()
+    {
+        $a=$this->isOnGroup('supervisor');
+        $b=$this->isOnGroup('supervisor_alq');
+        $c=$this->isOnGroup('supervisor_serv_tec');
+        $d=$this->isOnGroup('supervisor_rep');
+        $r=$this->roles;
+
+        
+        if($a or $b or $c or $d)
+            return true;
+
+        return false;
+    }
+
     public function scopeIsActive($query)
     {
       return $query->join('activations', 'users.id','=','activations.user_id')->where('activations.completed',1);
     }
-
-    /**
-     * Scope a query to only include popular users.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
+    
     public function scopeFilterClientes($query)
     {
-        if(current_user()->isOnGroup('supervisor'))
+        $cu=current_user();
+        if($cu->isSupervisor())
             return $query->whereNull('crm_clientes_id');
 
         return $query;

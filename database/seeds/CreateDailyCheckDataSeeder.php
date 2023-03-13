@@ -70,7 +70,7 @@ class CreateDailyCheckDataSeeder extends Seeder
                                     $valor = $faker->randomElement(['OK','M','R']);
                                 }elseif($campo->nombre== 'lectura_horometro'){
                                     $valor = rand ( 10000 , 99999 );
-                                }elseif(in_array($campo->nombre,['operador','ok_supervidor'])){
+                                }elseif(in_array($campo->nombre,['operador','ok_supervisor'])){
                                     $valor = '1618934906.png';
                                 }else{
                                     $valor = $faker->text(50);

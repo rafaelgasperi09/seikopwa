@@ -23,7 +23,9 @@
                     <small>{{ $dato->email }}</small>
                 </div>
                 <br/>
-                <small>({{ $dato->roles()->first()->name }})</small>
+                @if(count($dato->roles)>0)
+                <small>({{ $dato->roles->first()->name }})</small>
+                @endif
             </div>
         </a>
         <!-- sub menu -->
@@ -52,7 +54,7 @@
                 </a>
             </li>
             @endif
-            @if(\Sentinel::hasAccess('usuarios.delete') && !$dato->isOnGroup('Programador'))
+            @if(\Sentinel::hasAccess('usuarios.delete') && !$dato->isOnGroup('programador'))
             <li>
                 <a href="#" class="item" data-toggle="modal" data-target="#deleteModal"
                 data-action="{{ route('usuarios.delete',$dato->id) }}" data-message="Estas seguro que deseas desactivar a este usuario ?">

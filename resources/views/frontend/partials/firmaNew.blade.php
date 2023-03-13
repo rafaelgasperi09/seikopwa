@@ -84,7 +84,7 @@
             console.log('campo fien name :'+campo_firma);
             $('#userListBlock').hide();
             $('#firm_input').attr('disabled','disabled');
-            if(campo_firma=='ok_supervidor') {
+            if(campo_firma=='ok_supervisor') {
                 $('#userListBlock').show();
                 $('#firm_input').removeAttr('disabled');
             }
@@ -123,7 +123,7 @@
     var limpiar = document.getElementById("clearButton");
     var canvas = document.getElementById("signPad");
     var ctx = canvas.getContext("2d");
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 8;
     var cw = canvas.width = 300,
     cx = cw / 2;
     var ch = canvas.height = 200,
@@ -249,6 +249,7 @@
     function alisarTrazado(ry) {
     if (ry.length > 1) {
         var ultimoPunto = ry.length - 1;
+        ctx.lineWidth = 10;
         ctx.beginPath();
         ctx.moveTo(ry[0].x, ry[0].y);
         for (i = 1; i < ry.length - 2; i++) {

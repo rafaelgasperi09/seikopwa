@@ -41,7 +41,7 @@ $cFirma='style="border-bottom:1px solid black"';
     </head>
     <body>
         <table align="center" width="100%" style="border:0px solid #ddd;">
-        <thead >
+        <thead>
             <tr>
                 <th>
                 <table align="center" width="100%">
@@ -69,8 +69,7 @@ $cFirma='style="border-bottom:1px solid black"';
                 </table>
                 </th>
             </tr>
-        </thead >
-
+        </thead>
         <tr>
             <td>
                 <table width="100%" cellpadding="0" cellspacing="0" align="center" >
@@ -224,7 +223,7 @@ $cFirma='style="border-bottom:1px solid black"';
                     <tr>
                         <td style="font-size:12px">FIRMA DEL CLIENTE</td>
                         <td>&nbsp;</td>
-                        <td style="font-size:12px">FIRMA DEL TÉCNICO</td>
+                        <td style="font-size:12px">FIRMA DEL TÉCNICO: <b>{{strtoupper($datos['det'][0]->tecnico_asignado)}}</b></td>
                     </tr>
                 </table>
             </td>
@@ -245,7 +244,7 @@ $cFirma='style="border-bottom:1px solid black"';
                     </table>
                 </td>
             </tr>
-        <tfoot>
+        </tfoot>
         </table>
     </body>
 </html>

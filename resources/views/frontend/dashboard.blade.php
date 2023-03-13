@@ -62,7 +62,7 @@
         </div>
         @endif
         <div class=" mb-2 col-md-6 col">
-            @if(current_user()->isOnGroup('supervisor') or current_user()->isOnGroup('programador') or current_user()->isOnGroup('supervisorC'))
+            @if(current_user()->isSupervisor() or current_user()->isOnGroup('programador') or current_user()->isOnGroup('supervisorc'))
                 @php
                 $totdc=0; $totmp=0;$totstp=0;
                 if(count($data['daily_check'])){  $totdc=count($data['daily_check']); }
@@ -252,7 +252,7 @@
             @if(current_user()->isOnGroup('supervisorc') or 
                 current_user()->isOnGroup('administrador') or 
                 current_user()->isOnGroup('programador') or
-                current_user()->isOnGroup('supervisor') )
+                current_user()->isSupervisor())
                 <div class="card text-white bg-light">
                     <div class="card-header">
                         <span >

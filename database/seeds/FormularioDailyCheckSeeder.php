@@ -490,7 +490,7 @@ class FormularioDailyCheckSeeder extends Seeder
         \App\FormularioCampo::create([
             'formulario_id'=>$form->id,
             'formulario_seccion_id'=>$form_sec->id,
-            'nombre'=>'ok_supervidor',
+            'nombre'=>'ok_supervisor',
             'etiqueta'=>'Ok del Supervisor (Nombre o Firma)',
             'subetiqueta'=>'',
             'tipo'=>'firma',

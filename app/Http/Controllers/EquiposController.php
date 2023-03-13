@@ -365,7 +365,7 @@ class EquiposController extends BaseController
                 'equipo_id'              => 'required',
                 'formulario_id'          => 'required',
                 'formulario_registro_id' => 'required',
-                'ok_supervidor'          => 'required',
+                'ok_supervisor'          => 'required',
             ]);
 
             $formulario_registro_id = $request->formulario_registro_id;
@@ -408,6 +408,8 @@ class EquiposController extends BaseController
     public function createMantPrev($id,$tipo){
 
         $data = Equipo::findOrFail($id);
+        $ver=current_user()->can('see',$data);
+
         if(!current_user()->can('see',$data)){
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
@@ -512,6 +514,7 @@ class EquiposController extends BaseController
     public function imprimirMantPrev($id){
 
         $formularioRegistro = FormularioRegistro::find($id);
+        
         $pdf = $formularioRegistro->savePdf($formularioRegistro->solicitud(),false);
         return $pdf->Output('mantenimiento_preventivo.pdf', 'I');
     }
@@ -679,7 +682,11 @@ class EquiposController extends BaseController
        if($reporte=='form_montacarga_servicio_tecnico'){
             $datos['det']=getFormData($datos['cab']->formulario->nombre,0,0,$id);
             //dd($datos);
-            $pdf = PDF::loadView('frontend.equipos.reportes.form_montacarga_servicio_tecnico',compact('datos'));
+            $orientation = 'landscape';
+            $customPaper = array(0,0,950,950);
+
+            $pdf = PDF::loadView('frontend.equipos.reportes.form_montacarga_servicio_tecnico',compact('datos'))
+                    ->setPaper($customPaper, $orientation); 
             return $pdf->stream('pdfview.pdf');
             return view('frontend.equipos.reportes.form_montacarga_servicio_tecnico')->with('datos',$datos);
        }
@@ -695,7 +702,7 @@ class EquiposController extends BaseController
        if($reporte=='form_montacarga_daily_check'){
 
         $file= $datos['cab']->savePdfDC();
-
+        
         return Response::make(file_get_contents($file), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; prevew.pdf',
