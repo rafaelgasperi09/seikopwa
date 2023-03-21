@@ -577,7 +577,7 @@ class FormularioRegistro extends BaseModel
         $pdf->SetTextColor(50, 50, 50);
 
         $x = 20;
-        $y = 15;
+        $y = 12;
         $pdf->SetXY($x, $y);
         $pdf->Cell(55, 6, $formularioRegistro->equipo()->cliente->nombre, 0, 0, 'L');
         $x = $pdf->GetX()+17;
@@ -593,16 +593,19 @@ class FormularioRegistro extends BaseModel
         $pdf->SetXY($x, $y);
         $pdf->Cell(6, 6, "21 ", 0, 0, 'L');
         $x = 20;
-        $y = 19;
+        $y = 16;
         $pdf->SetXY($x, $y);
         $pdf->Cell(40, 8,$formularioRegistro->equipo()->marca()->first()->display_name, 0, 0, 'L');
         $y = $pdf->GetY()+5;
         $pdf->SetXY($x, $y);
         $pdf->Cell(40, 8, $formularioRegistro->equipo()->modelo, 0, 0, 'L');
         $x = $pdf->GetX()+35;
+        $y = $pdf->GetY()+1;
+        $pdf->SetXY($x, $y);
         $pdf->SetX($x);
+        
         $pdf->Cell(30, 6, $formularioRegistro->equipo()->serie, 0, 0, 'L');
-        $pdf->SetXY(160,30);
+        $pdf->SetXY(160,29);
         $pdf->Cell(10, 6, $formularioRegistro->equipo()->numero_parte, 0, 0, 'L');
         $matrizx=array(77,89,101,111,122,
                        132,143,155,166,175,
