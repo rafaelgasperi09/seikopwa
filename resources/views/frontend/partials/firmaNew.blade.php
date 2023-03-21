@@ -123,7 +123,7 @@
     var limpiar = document.getElementById("clearButton");
     var canvas = document.getElementById("signPad");
     var ctx = canvas.getContext("2d");
-    ctx.lineWidth = 8;
+    ctx.lineWidth = 10;
     var cw = canvas.width = 300,
     cx = cw / 2;
     var ch = canvas.height = 200,

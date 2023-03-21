@@ -551,7 +551,7 @@ class FormularioRegistro extends BaseModel
                 GROUP BY fr.semana,fr.ano,fd.formulario_campo_id,fc.nombre,fc.tipo ";
 
         $data=\DB::select(DB::Raw($dataQuery));
-       
+    
         $users=\DB::select(DB::Raw("SELECT id,CONCAT(IFNULL(first_name,''),' ',IFNULL(last_name,'')) AS name FROM users"));
         $users = array_column($users,'name','id');
 
@@ -569,8 +569,8 @@ class FormularioRegistro extends BaseModel
         $y = $pdf->GetY();
         $pdf->SetXY($x-12, $y-10);
 
-        $pdf->Image(public_path('images/dce3.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
-        $name = 'daily_check-'.$formularioRegistro->id.'.svg';
+        $pdf->Image(public_path('images/dce4.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+        $name = 'daily_check-'.$formularioRegistro->id.'.pdf';
         $path = storage_path('app/public/pdf/'.$name);
 
         $pdf->SetFont('helvetica', 'B', 10);
@@ -604,7 +604,7 @@ class FormularioRegistro extends BaseModel
         $pdf->Cell(30, 6, $formularioRegistro->equipo()->serie, 0, 0, 'L');
         $pdf->SetXY(160,30);
         $pdf->Cell(10, 6, $formularioRegistro->equipo()->numero_parte, 0, 0, 'L');
-        $matrizx=array(79,89,101,111,122,
+        $matrizx=array(77,89,101,111,122,
                        132,143,155,166,175,
                        186,199  );
         $matrizy=array(53,61,67,74,79,
@@ -614,35 +614,37 @@ class FormularioRegistro extends BaseModel
                       192,198,206,212,255,276);
 
         $vars=array(
-        'prioridad'=>45,    
-        'identificacion'=>53,
-        'seguridad'=>61,
+           
+        'identificacion'=>52,
+        'seguridad'=>60,
         'danos_estructura'=>67,
-        'fugas'=>74,
-        'ruedas'=>79,
-        'horquillas'=>86,
-        'cadenas_cables_mangueras'=>93,
-        'bateria'=>100,
-        'conector_bateria'=>107,
-        'protectores'=>113,
-        'dispositivos_seguridad'=>121,
-        'control_handle'=>128,
-        'extintor'=>134,
-        'horometro'=>140,
-        'pito'=>147,
-        'direccion'=>154,
-        'control_traccion'=>161,
-        'control_hidraulicos'=>168,
-        'frenos'=>178,
-        'freno'=>186,
-        'carga_bateria'=>192,
-        'nivel_carga_bateria'=>198,
-        'indicador_descarga_bateria'=>204,
-        'desconector_poder'=>211,
-        'luces_alarma_retroceso'=>218,
-        'lectura_horometro'=>240,
-        'operador'=>261,
-        'ok_supervisor'=>281);
+        'fugas'=>72,
+        'ruedas'=>78,
+        'horquillas'=>85,
+        'cadenas_cables_mangueras'=>91,
+        'bateria'=>97,
+        'conector_bateria'=>104,
+        'protectores'=>110,
+        'dispositivos_seguridad'=>118,
+        'control_handle'=>123,
+        'extintor'=>129,
+        'horometro'=>136,
+        'pito'=>141,
+        'direccion'=>148,
+        'control_traccion'=>155,
+        'control_hidraulicos'=>161,
+        'frenos'=>171,
+        'freno'=>179,
+        'carga_bateria'=>185,
+        'nivel_carga_bateria'=>191,
+        'pct_carga_bateria'=>193,
+        'indicador_descarga_bateria'=>198,
+        'desconector_poder'=>205,
+        'luces_alarma_retroceso'=>211,
+        'prioridad'=>218,
+        'lectura_horometro'=>239,
+        'operador'=>260,
+        'ok_supervisor'=>280);
        $comentarios='';$contador=0;
 
        foreach($data as $d){
@@ -688,7 +690,7 @@ class FormularioRegistro extends BaseModel
                         }else{
                             $size = $pdf->getSizeFont(4);//$numero
                             $pdf->SetFont('helvetica', 'B', $size);
-                            $pdf->SetXY($vx-4,$vars[$datos["nombre"]]);
+                            $pdf->SetXY($vx-3,$vars[$datos["nombre"]]);
                             $pdf->StartTransform();
                             $pdf->Rotate(70);
                             $pdf->Cell(2, 6, $valor, 0, 0, 'L');
@@ -710,7 +712,7 @@ class FormularioRegistro extends BaseModel
 
        $comentarios= explode('||',$comentarios);
        foreach($comentarios as $key=>$c){
-            $pdf->SetXY(10,278+($key*5));
+            $pdf->SetXY(10,286+($key*5));
             $pdf->Cell(200, 10, $c, 0, 0, 'L');
        }
 

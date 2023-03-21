@@ -69,6 +69,7 @@
                     <th>Horas de Uso.</th>
                     <th>H2O</th>
                     <th>ECU</th>
+                    <th>Estado de bateria</th>
                 </tr>
                 </thead>
             </table>
@@ -102,6 +103,7 @@
                 {data:'horas_uso_bateria'},
                 {data:'h2o'},
                 {data:'ecu'},
+                {data:'estado_de_bateria'},
             ]
         } );
     } );

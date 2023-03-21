@@ -17,6 +17,7 @@
     <td rowspan="2">Horas de Uso de la Batería</td>
     <td rowspan="2">H2O</td>
     <td rowspan="2">ECU</td>
+    <td rowspan="2">Estado de Bateria</td>
     <td rowspan="2">Obsevación</td>
   </tr>
   <tr>
@@ -39,6 +40,7 @@
     <td>{{ $dato->horas_uso_bateria }}</td>
     <td>{{ $dato->h2o }}</td>
     <td>{{ $dato->ecu }}</td>
+    <td>{{ $dato->estado_de_bateria }}</td>
     <td>{{ substr($dato->observacion,0,10) }}</td>
   </tr>
   @endforeach
