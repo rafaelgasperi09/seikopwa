@@ -12,7 +12,7 @@
                             
                             <option selected="selected" value="">Seleccionar rol</option>
                             @foreach($roles as $r)
-                            <option selected="selected" data-tipo='{{$r->tipo}}' value="{{$r->id}}">{{$r->name}} ({{$r->tipo}})</option>
+                            <option  data-tipo='{{$r->tipo}}' value="{{$r->id}}">{{$r->name}} ({{$r->tipo}})</option>
                             @endforeach
                         </select>
                         

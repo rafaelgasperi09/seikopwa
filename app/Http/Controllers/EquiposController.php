@@ -73,12 +73,13 @@ class EquiposController extends BaseController
                 $filtro="SUBSTR(equipos.numero_parte,1,2)<>'GM'";
             }
         }
-        $equipos=Equipo::FiltroCliente()
-                ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
-                ->when($filtro<>'',function($q) use($filtro){
-                    $q->whereRaw($filtro);
-                })
-                ->paginate(10);
+        $equipos=Equipo::selectRaw('equipos.*')->FiltroCliente()
+        ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
+        ->when($filtro<>'',function($q) use($filtro){
+            $q->whereRaw($filtro);
+        })->paginate(10);
+        
+ 
         $datos=array('sub'=>'todos',
             'tipo'=>'todos',
             'subName'=>'Lista',
@@ -154,7 +155,8 @@ class EquiposController extends BaseController
 
     public function detail(Request $request,$id){
         $data = Equipo::findOrFail($id);
-
+        $ver=current_user()->can('see',$data);
+        
         if(!current_user()->can('see',$data)){
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));

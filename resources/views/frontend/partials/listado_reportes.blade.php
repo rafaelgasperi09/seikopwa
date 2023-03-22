@@ -39,7 +39,7 @@
                     <ion-icon name="print-outline" title="Ver detalle"></ion-icon><small>Imprimir</small>
                 </a>
                @endif
-               @if(\Sentinel::hasAccess('equipos.delete_mant_prev'))
+               @if(\Sentinel::getUser()->hasAccess('equipos.delete_mant_prev'))
                     <a href="{{ route('equipos.delete_mant_prev',$d->id) }}" class="btn btn-danger btn-sm mr-1 botones">
                         <ion-icon name="trash-outline" title="Borrar"></ion-icon><small>Borrar</small>
                     </a>
@@ -71,7 +71,7 @@
                <a class="btn btn-info btn-sm mr-1 botones" data-toggle="modal" data-target="#status_history_modal" data-id="{{ $d->id }}" style="display: inline-block;">
                    <ion-icon name="file-tray-stacked-outline"></ion-icon><small>Historial</small>
                </a>
-               @if(\Sentinel::hasAccess('equipos.delete_tecnical_support'))
+               @if(\Sentinel::getUser()->hasAccess('equipos.delete_tecnical_support'))
                     <a href="{{ route('equipos.delete_tecnical_support',$d->id) }}" class="btn btn-danger btn-sm mr-1 botones">
                         <ion-icon name="trash-outline" title="Borrar"></ion-icon><small>Borrar</small>
                     </a>
