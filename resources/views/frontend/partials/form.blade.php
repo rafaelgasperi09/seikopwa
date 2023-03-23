@@ -5,7 +5,7 @@
         <div class="wide-block pb-1 pt-2">
             <div class="row">
                 @php $campos=false;$firmas=0;   @endphp
-                @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->get() as $campo)
+                @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->orderBy('orden')->orderBy('id')->get() as $campo)
 
                     @if(mostrarCampo($campo->tipo))
                         @php

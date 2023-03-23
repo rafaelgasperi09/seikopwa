@@ -51,7 +51,9 @@
         <div class="right">
             <a href="{{ route('baterias.download',$data->id) }}" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar PDF</a>
             <a href="{{ route('baterias.download',$data->id) }}?format=excel" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar Excel</a>
+            @if(Sentinel::getUser()->hasAccess('baterias.register_in_and_out'))
             <a href="{{ route('baterias.register_in_and_out',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
+            @endif
         </div>
     </div>
     <div class="wide-block p-1" id="historial">

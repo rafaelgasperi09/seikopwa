@@ -103,7 +103,6 @@ class User extends Authenticatable
         $c=$this->isOnGroup('supervisor_serv_tec');
         $d=$this->isOnGroup('supervisor_rep');
         $r=$this->roles;
-
         
         if($a or $b or $c or $d)
             return true;
