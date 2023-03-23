@@ -188,8 +188,7 @@ class FormularioRegistroObserver
             DB::transaction(function () use ($request, $formulario,$formularioRegistro) {
                 $nousar=false;
 
-                foreach ($formulario->campos()->get() as $campo) {
-
+                foreach ($formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get() as $campo) {
                     $valor = $request->get($campo->nombre);
                     if($campo->nombre =="prioridad" && $valor="No usar este equipo"){
                         $nousar=true;
@@ -283,7 +282,7 @@ class FormularioRegistroObserver
                                 // si es soporte tecnico notificar a los usuarios dependendiendo de los departamentos
                                 // buscar usuarios con rol supervisor GMP
                                 $notificados = User::whereHas('roles',function ($q){
-                                    $q->where('role_users.role_id',5); // supervisor GMP
+                                    $q->where('role_users.role_id',1); // supervisor GMP
                                 })->get();
                                // $notificados = User::where('id',$formularioRegistro->creado_por)->get();
                              

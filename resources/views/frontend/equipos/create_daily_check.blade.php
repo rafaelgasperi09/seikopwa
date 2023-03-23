@@ -91,7 +91,7 @@
     {{ Form::close() }}
 
     <script>
-        $('input').click(function(){
+        $('.radiofield').click(function(){
             var errores = ['fugas','cadenas_cables_mangueras','frenos','freno'];
             var cant_error=0;
             $('.radiofield').each(function(){
