@@ -141,7 +141,7 @@ class FormularioRegistroObserver
                     $formularioRegistro->save();
 
                     $notificados = User::whereHas('roles',function ($q){
-                        $q->where('role_users.role_id',1); // supervisor GMP
+                        $q->where('role_users.role_id',5); // supervisor GMP
                     })->get();
 
                     if(env('APP_ENV')!='local' or true){
@@ -283,7 +283,7 @@ class FormularioRegistroObserver
                                 // si es soporte tecnico notificar a los usuarios dependendiendo de los departamentos
                                 // buscar usuarios con rol supervisor GMP
                                 $notificados = User::whereHas('roles',function ($q){
-                                    $q->where('role_users.role_id',1); // supervisor GMP
+                                    $q->where('role_users.role_id',5); // supervisor GMP
                                 })->get();
                                // $notificados = User::where('id',$formularioRegistro->creado_por)->get();
                              
