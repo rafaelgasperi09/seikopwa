@@ -15,6 +15,7 @@ use App\MontacargaImagen;
 use App\MontacargaSolicitud;
 use App\Notifications\TecnicalSupportTicketIsFinnish;
 use App\Notifications\DailyCheckIsFinnish;
+use App\Notifications\EquipoInoperativo;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -40,16 +41,21 @@ class FormularioRegistroObserver
 
         $formulario = Formulario::find($formularioRegistro->formulario_id);
         $request = request();
-
-        foreach ($formulario->campos()->get() as $campo) {
+        $nousar=false;
+        
+        foreach ($formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get() as $campo) {
             $valor = '';
             $user_id = current_user()->id;
-            if(!empty($request->second_sign) && $campo->nombre == 'ok_supervidor'){
+            if(!empty($request->second_sign) && $campo->nombre == 'ok_supervisor'){
                 $user_id = $request->second_sign;
             }
             if($request->has($campo->nombre))
               $valor = $request->get($campo->nombre);
 
+            if($campo->nombre =="prioridad" && $valor="No usar este equipo"){
+                $nousar=true;
+            }
+   
             $files=array();
             if($campo->tipo=='files')  $files = $request->file($campo->nombre);
 
@@ -129,8 +135,8 @@ class FormularioRegistroObserver
             if (!$form_data) {
                 throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
             }else{
-                $formularioCampo = FormularioCampo::find($form_data->formulario_campo_id);
-                if($formularioCampo->cambio_estatus && !empty($form_data->valor)) {
+                //$formularioCampo = FormularioCampo::find($form_data->formulario_campo_id);
+                if($campo->cambio_estatus && !empty($form_data->valor)) {
                     $formularioRegistro->estatus = 'C';
                     $formularioRegistro->save();
 
@@ -138,13 +144,19 @@ class FormularioRegistroObserver
                         $q->where('role_users.role_id',5); // supervisor GMP
                     })->get();
 
-                    if(env('APP_ENV')!='local'){
+                    if(env('APP_ENV')!='local' or true){
                         foreach ($notificados as $n){
                             $when = now()->addMinutes(1);
-                            if($formularioCampo->formulario->nombre=='form_montacarga_servicio_tecnico')
+                            if($campo->formulario->nombre=='form_montacarga_servicio_tecnico')
                                 $n->notify((new TecnicalSupportTicketIsFinnish($formularioRegistro))->delay($when));
-                            if($formularioCampo->formulario->nombre=='form_montacarga_daily_check')
+                            if($campo->formulario->nombre=='form_montacarga_daily_check'){
                                 $n->notify((new DailyCheckIsFinnish($formularioRegistro))->delay($when));
+                                //$n->notify((new EquipoInoperativo($formularioRegistro))->delay($when));
+                                if($nousar){
+                                    $n->notify((new EquipoInoperativo($formularioRegistro))->delay($when));
+                                }
+                            }
+                                
                         }
                     }
                     
@@ -172,12 +184,16 @@ class FormularioRegistroObserver
         }else{
             $formulario = Formulario::find($formularioRegistro->formulario_id);
             $request = request();
-
+          
             DB::transaction(function () use ($request, $formulario,$formularioRegistro) {
+                $nousar=false;
 
-                foreach ($formulario->campos()->get() as $campo) {
-
+                foreach ($formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get() as $campo) {
                     $valor = $request->get($campo->nombre);
+                    if($campo->nombre =="prioridad" && $valor="No usar este equipo"){
+                        $nousar=true;
+                    }
+
                     $files=array();
                     if($campo->tipo=='files' and $request->file($campo->nombre)) {
                         $files = $request->file($campo->nombre);
@@ -269,13 +285,18 @@ class FormularioRegistroObserver
                                     $q->where('role_users.role_id',5); // supervisor GMP
                                 })->get();
                                // $notificados = User::where('id',$formularioRegistro->creado_por)->get();
-                                
+                             
                                 foreach ($notificados as $n){
                                     $when = now()->addMinutes(1);
                                     if($formularioCampo->formulario->nombre=='form_montacarga_servicio_tecnico')
                                         $n->notify((new TecnicalSupportTicketIsFinnish($formularioRegistro))->delay($when));
-                                    if($formularioCampo->formulario->nombre=='form_montacarga_daily_check')
+                                    if($formularioCampo->formulario->nombre=='form_montacarga_daily_check'){
                                         $n->notify((new DailyCheckIsFinnish($formularioRegistro))->delay($when));
+                                        if($nousar){
+                                            $n->notify((new EquipoInoperativo($formularioRegistro))->delay($when));
+                                        }
+                                    }
+                                       
                                 }
                             }
                         }

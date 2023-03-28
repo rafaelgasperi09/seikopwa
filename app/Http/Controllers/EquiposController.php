@@ -304,7 +304,7 @@ class EquiposController extends BaseController
             $formulario = Formulario::find($formulario_id);
             $equipo = Equipo::find($equipo_id);
             $model = new FormularioRegistro();
-
+           
             DB::transaction(function() use($model,$request,$formulario,$equipo){
 
                 $model->formulario_id = $formulario->id;
@@ -316,7 +316,7 @@ class EquiposController extends BaseController
                 $model->dia_semana = getDayOfWeek(date('N'));
                 $model->semana = date('W');
                 $model->ano = date('Y');
-
+                
                 if(!$model->save())
                 {
                     Throw new \Exception('Hubo un problema y no se creo el registro!');
