@@ -568,8 +568,9 @@ class FormularioRegistro extends BaseModel
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x-12, $y-10);
-
-        $pdf->Image(public_path('images/dce4.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+        $pdf->SetLineStyle(['width'=>0,'color'=>[255,255,255]]);
+        $pdf->SetLineWidth(0);
+        $pdf->Image(public_path('images/dce5.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
         $name = 'daily_check-'.$formularioRegistro->id.'.pdf';
         $path = storage_path('app/public/pdf/'.$name);
 
@@ -577,7 +578,7 @@ class FormularioRegistro extends BaseModel
         $pdf->SetTextColor(50, 50, 50);
 
         $x = 20;
-        $y = 12;
+        $y = 15;
         $pdf->SetXY($x, $y);
         $pdf->Cell(55, 6, $formularioRegistro->equipo()->cliente->nombre, 0, 0, 'L');
         $x = $pdf->GetX()+17;
@@ -593,7 +594,7 @@ class FormularioRegistro extends BaseModel
         $pdf->SetXY($x, $y);
         $pdf->Cell(6, 6, "21 ", 0, 0, 'L');
         $x = 20;
-        $y = 16;
+        $y =  $y+5;
         $pdf->SetXY($x, $y);
         $pdf->Cell(40, 8,$formularioRegistro->equipo()->marca()->first()->display_name, 0, 0, 'L');
         $y = $pdf->GetY()+5;
@@ -605,17 +606,12 @@ class FormularioRegistro extends BaseModel
         $pdf->SetX($x);
         
         $pdf->Cell(30, 6, $formularioRegistro->equipo()->serie, 0, 0, 'L');
-        $pdf->SetXY(160,29);
+        $pdf->SetXY($x+64,$y+8);
         $pdf->Cell(10, 6, $formularioRegistro->equipo()->numero_parte, 0, 0, 'L');
         $matrizx=array(77,89,101,111,122,
                        132,143,155,166,175,
                        186,199  );
-        $matrizy=array(53,61,67,74,79,
-                      86,93,100,107,113,
-                      121,128,134,140,147,
-                      154,161,168,178,186,
-                      192,198,206,212,255,276);
-
+       
         $vars=array(
            
         'identificacion'=>52,
@@ -629,26 +625,26 @@ class FormularioRegistro extends BaseModel
         'conector_bateria'=>104,
         'protectores'=>110,
         'dispositivos_seguridad'=>118,
-        'control_handle'=>123,
-        'extintor'=>129,
+        'control_handle'=>124,
+        'extintor'=>130,
         'horometro'=>136,
-        'pito'=>141,
-        'direccion'=>148,
+        'pito'=>142,
+        'direccion'=>149,
         'control_traccion'=>155,
         'control_hidraulicos'=>161,
         'frenos'=>171,
-        'freno'=>179,
+        'freno'=>180,
         'carga_bateria'=>185,
         'nivel_carga_bateria'=>191,
         'pct_carga_bateria'=>193,
         'indicador_descarga_bateria'=>198,
         'desconector_poder'=>205,
         'luces_alarma_retroceso'=>211,
-        'prioridad'=>218,
-        'lectura_horometro'=>239,
-        'operador'=>260,
-        'ok_supervisor'=>280);
-       $comentarios='';$contador=0;
+        'prioridad'=>220,
+        'lectura_horometro'=>245,
+        'operador'=>262,
+        'ok_supervisor'=>276);
+       $comentarios='';$contador=0;$firmante['operador']=$firmante['ok_supervisor']='';
 
        foreach($data as $d){
 
@@ -663,50 +659,49 @@ class FormularioRegistro extends BaseModel
                             $comentarios.='|';
                         }
                     }
-
                 }
                 
                 if(isset($vars[$datos["nombre"]])){
                     $valor=$datos[$dias[$xkey]];
                     $valor=explode('|',$valor);
                     
-                    if($datos["nombre"]=='operador'){
-                        
-                        if(isset($users[end($valor)]))
-                            $valor=substr($users[end($valor)],0,12);
-                        else   {
-                            $valor="";
-                        } 
-                           
+                    if(in_array($datos["nombre"],['operador','ok_supervisor'])){
+                        if(isset($users[end($valor)])){
+                            $firmante[$datos["nombre"]]=$users[end($valor)];
+                        }                       
                     }
-                    else
-                        $valor=$valor[0];
+                   $valor=$valor[0];
 
-                    $pdf->SetXY($vx,$vars[$datos["nombre"]]);
+                    if($valor=='M' or $valor=='R')
+                        $pdf->SetTextColor(254, 0, 0);
+                    else
+                        $pdf->SetTextColor(0, 0, 0,100);
+
+                    if($datos["nombre"]=='prioridad'){
+                            $valor=substr($valor,0,1);
+                            if($valor=='N')
+                                $pdf->SetTextColor(254, 0, 0);
+                        }
+
+                    $pdf->SetXY($vx,$vars[$datos["nombre"]]+4);
                     
                     if(in_array($datos["nombre"],['operador','ok_supervisor','lectura_horometro'])){
-                           
-                        if($datos["nombre"]=='ok_supervisor'){
-                            $pdf->StartTransform();
-                            $pdf->Rotate(90);
-                            $pdf->Image(storage_path('app/public/firmas/'.$valor),  '', '', 20, 10, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
-                        }else{
-                            $size = $pdf->getSizeFont(4);//$numero
-                            $pdf->SetFont('helvetica', 'B', $size);
-                            $pdf->SetXY($vx-3,$vars[$datos["nombre"]]);
-                            $pdf->StartTransform();
-                            $pdf->Rotate(70);
+                        $pdf->StartTransform();
+                        $size = $pdf->getSizeFont(4);//$numero
+                        $pdf->SetFont('helvetica', 'B', $size);
+                        $pdf->SetXY($vx,$vars[$datos["nombre"]]);
+                        $pdf->Rotate(90);
+  
+                        if($datos["nombre"]=='lectura_horometro'){
                             $pdf->Cell(2, 6, $valor, 0, 0, 'L');
+                        }else{
+                            $pdf->SetXY($vx,$vars[$datos["nombre"]]-2);
+                            $pdf->Image(storage_path('app/public/firmas/'.$valor),  '', '', 15, 10, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
                         }
-                        
                         $pdf->StopTransform();
-                    }else{
-                       if($valor=='M' or $valor=='R')
-                        $pdf->SetTextColor(254, 0, 0);
-                       else
-                        $pdf->SetTextColor(0, 0, 0,100);
-                        $pdf->Cell(2, 6, $valor, 0, 0, 'L');
-
+                       
+                    }else{                       
+                       $pdf->Cell(2, 6, $valor, 0, 0, 'L');
                     }
                 }
             }
@@ -715,11 +710,14 @@ class FormularioRegistro extends BaseModel
 
        $comentarios= explode('||',$comentarios);
        foreach($comentarios as $key=>$c){
-            $pdf->SetXY(10,286+($key*5));
+            $pdf->SetXY(10,280+($key*5));
             $pdf->Cell(200, 10, $c, 0, 0, 'L');
        }
-
-
+       $pdf->SetFont('helvetica', 'I', $size);
+       $pdf->SetXY(15,250);
+       $pdf->Cell(200, 10, $firmante['operador'], 0, 0, 'L');
+       $pdf->SetXY(15,263);
+       $pdf->Cell(200, 10, $firmante['ok_supervisor'], 0, 0, 'L');
 
         $pdf->Output($path, 'F');
 
