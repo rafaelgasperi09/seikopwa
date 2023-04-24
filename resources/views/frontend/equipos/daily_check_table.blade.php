@@ -127,7 +127,7 @@
                             </a>\
                             ';
                         }
-                        @if(\Sentinel::hasAccess('equipos.delete_daily_check'))
+                        @if(\Sentinel::hasAccess('equipos.delete_daily_check') or current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
                         buttons=buttons+'<a href="daily_check/'+id+'/delete" class="btn btn-danger btn-sm">\
                             <ion-icon name="trash-outline" title="Borrar reporte">\
                             </ion-icon>Borrar\
