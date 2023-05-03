@@ -113,8 +113,8 @@
                                     @endif
                                 </div>
                                 <div class="wide-block p-0">
-                                    <div class="table-responsive">
-                                    @include('frontend.equipos.daily_check_table',array('data'=>$form['dc'],'equipo'=>$data))
+                                    <div class="table-responsive" style="overflow-x:auto">
+                                    @include('frontend.equipos.daily_check_table',array('data'=>$form['dc'],'equipo'=>$data,'dias'=>$dias))
                                     </div>
                                 </div>
                             </div>

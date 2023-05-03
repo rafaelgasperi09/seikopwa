@@ -1,24 +1,25 @@
 <div class="section mt-2" >
-    <table class="table table-striped datatable responsive" >
+    <table class="datatable table  table-stripped responsive" style="border:1px solid #ccc;" >
         <thead>
         <tr>
-            <th scope="col">Semana</th>
-            <th>Lunes (T1)</th>
-            <th>Lunes (T2)</th>
-            <th>Martes (T1)</th>
-            <th>Martes (T2)</th>
-            <th>Miercoles (T1)</th>
-            <th>Miercoles (T2)</th>
-            <th>Jueves (T1)</th>
-            <th>Jueves (T2)</th>
-            <th>Viernes (T1)</th>
-            <th>Viernes (T2)</th>
-            <th>Sabado (T1)</th>
-            <th>Sabado (T2)</th>
-            <th  scope="col">Acciones</th>
+            <th scope="col" rowspan="2"  class="text-center" style=" vertical-align: top;">Semana</th>
+            <th  colspan="4" class="text-center">Lunes</th>
+            <th  colspan="4"  class="text-center">Martes</th>
+            <th  colspan="4"  class="text-center">Miercoles</th>
+            <th  colspan="4"  class="text-center">Jueves</th>
+            <th  colspan="4"  class="text-center">Viernes</th>
+            <th  colspan="4"  class="text-center">Sabado</th>
+            <th  scope="col" rowspan="2"  class="text-center" style=" vertical-align: top;">Acciones</th>
+        </tr>
+        <tr>
+        @for($d=0;$d<=5;$d++)
+            @for($i=1;$i<=4;$i++)
+                <th title="{{$dow[$d]}} Turno {{$i}}">T{{$i}}</th>
+            @endfor
+        @endfor
         </tr>
         </thead>
-        <tbody id="check_table" >
+        <tbody id="check_table" style="overflow-x:auto">
         @foreach($data as $d)
             @php
                 $date = \Carbon\Carbon::now();
@@ -28,18 +29,15 @@
                 <td data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ $date->startOfWeek()->format('Y-m-d') }} a {{ $date->endOfWeek()->format('Y-m-d')  }}" aria-describedby="tooltip112589" >
                     {{ $d->semana }}
                 </td>
-                <td data-id="{{ $d->Lunes1 }}" data-turno="1">@empty(!$d->Lunes1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td data-id="{{ $d->Lunes2 }}" data-turno="2">@empty(!$d->Lunes2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td data-id="{{ $d->Martes1 }}" data-turno="1">@empty(!$d->Martes1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td data-id="{{ $d->Martes2 }}" data-turno="2">@empty(!$d->Martes2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td data-id="{{ $d->Miercoles1 }}" data-turno="1">@empty(!$d->Miercoles1) <ion-icon class='checkday' name="checkmark-outline"  size="large"style="color:green;"  ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td data-id="{{ $d->Miercoles2 }}" data-turno="2">@empty(!$d->Miercoles2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td data-id="{{ $d->Jueves1 }}" data-turno="1">@empty(!$d->Jueves1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td data-id="{{ $d->Jueves2 }}" data-turno="2">@empty(!$d->Jueves2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td data-id="{{ $d->Viernes1 }}" data-turno="1">@empty(!$d->Viernes1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td data-id="{{ $d->Viernes2 }}" data-turno="2">@empty(!$d->Viernes2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td data-id="{{ $d->Sabado1 }}" data-turno="1">@empty(!$d->Sabado1) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
-                <td data-id="{{ $d->Sabado2 }}" data-turno="2">@empty(!$d->Sabado2) <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> @else <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  @endif</td>
+                @foreach($dias as $dia)
+                <td data-id="{{ $d->{$dia} }}" data-turno="1">
+                    @empty(!$d->{$dia}) 
+                        <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> 
+                    @else 
+                    <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  
+                    @endif
+                </td>
+                @endforeach
                 <td>
                     <a href="{{ url('/equipos/reportes/form_montacarga_daily_check/'.$d->id) }}" target="_blank" class="btn btn-primary btn-sm mr-1 ">
                         <ion-icon name="print-outline" title="Ver detalle"></ion-icon>Imprimir

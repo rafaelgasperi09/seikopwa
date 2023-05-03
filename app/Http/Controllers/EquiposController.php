@@ -161,20 +161,21 @@ class EquiposController extends BaseController
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
         }
-
-        $form['dc'] =FormularioRegistro::selectRaw("formulario_registro.semana,formulario_registro.ano,max(formulario_registro.id) as id,
-                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes1' THEN formulario_registro.id ELSE '' END) AS Lunes1,
-                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Lunes2' THEN formulario_registro.id ELSE '' END) AS Lunes2,
-                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Martes1' THEN formulario_registro.id ELSE '' END) AS Martes1,
-                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Martes2' THEN formulario_registro.id ELSE '' END) AS Martes2,
-                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Miercoles1' THEN formulario_registro.id ELSE '' END) AS Miercoles1,
-                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Miercoles2' THEN formulario_registro.id ELSE '' END) AS Miercoles2,
-                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Jueves1' THEN formulario_registro.id ELSE '' END) AS Jueves1,
-                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Jueves2' THEN formulario_registro.id ELSE '' END) AS Jueves2,
-                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Viernes1' THEN formulario_registro.id ELSE '' END) AS Viernes1,
-                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Viernes2' THEN formulario_registro.id ELSE '' END) AS Viernes2,
-                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Sabado1' THEN formulario_registro.id ELSE '' END) AS Sabado1,
-                                        MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN 'Sabado2' THEN formulario_registro.id ELSE '' END) AS Sabado2")
+        $dow=array('Lunes','Martes','Miercoles','Jueves','Viernes','Sabado');
+        $dias=array();
+        foreach($dow as $d){
+            for($i=1;$i<=4;$i++){
+                $dias[]=$d.$i;
+            }
+        }
+        $querySelect="formulario_registro.semana,formulario_registro.ano,max(formulario_registro.id) as id,".PHP_EOL;
+        foreach($dias as $k=>$dia){
+            $querySelect.="MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN '$dia' THEN formulario_registro.id ELSE '' END) AS $dia";
+            if($k+1<count($dias))
+                $querySelect.=','.PHP_EOL;
+        }
+       
+        $form['dc'] =FormularioRegistro::selectRaw($querySelect)
                                         ->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)
                                         ->where('formularios.nombre','form_montacarga_daily_check')
@@ -229,6 +230,8 @@ class EquiposController extends BaseController
             ->with('route_back',$route_back)
             ->with('form',$form)->with('mostrar',$mostrar)
             ->with('tab',$tab)
+            ->with('dias',$dias)
+            ->with('dow',$dow)
             ->with('tab_content',$tab_content);
     }
 

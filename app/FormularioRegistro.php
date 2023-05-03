@@ -527,31 +527,38 @@ class FormularioRegistro extends BaseModel
         if($formularioRegistro->data()->whereFormularioCampoId($horometro_campo->id)->first()) $horometo = $formularioRegistro->data()->whereFormularioCampoId($horometro_campo->id)->first()->valor;
         $datos=FormularioRegistro::where('ano',$formularioRegistro->ano)->where('semana',$formularioRegistro->semana)->get();
         $data=array();
-       //$dias=array('Lunes','Martes','Miercoles','Jueves','Viernes','Sabado');
-        $dias=array('Lunes1','Lunes2','Martes1','Martes2','Miercoles1','Miercoles2','Jueves1','Jueves2','Viernes1','Viernes2','Sabado1','Sabado2');
+        $dow=array('Lunes','Martes','Miercoles','Jueves','Viernes','Sabado');
+        $dias=array();
+        foreach($dow as $d){
+            for($i=1;$i<=4;$i++){
+                $dias[]=$d.$i;
+            }
+        }
+  
+        //$dias=array('Lunes1','Lunes2','Martes1','Martes2','Miercoles1','Miercoles2','Jueves1','Jueves2','Viernes1','Viernes2','Sabado1','Sabado2');
+       $matrizx=array();
+       $ind=69;
        $dataQuery="SELECT
-       fr.semana,fr.ano,fd.formulario_campo_id,fc.nombre,fc.tipo,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Lunes1' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Lunes1,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Lunes2' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Lunes2,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Martes1' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Martes1,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Martes2' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Martes2,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Miercoles1' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Miercoles1,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Miercoles2' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Miercoles2,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Jueves1' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Jueves1,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Jueves2' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Jueves2,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Viernes1' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Viernes1,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Viernes2' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Viernes2,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Sabado1' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Sabado1,
-                MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN 'Sabado2' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS Sabado2
+       fr.semana,fr.ano,fd.formulario_campo_id,fc.nombre,fc.tipo,";
+       foreach($dias as $k=>$dia){
+            $dataQuery.="MAX(CASE CONCAT(fr.dia_semana,fr.`turno_chequeo_diario`) WHEN '$dia' THEN CONCAT(fd.valor,'|',fd.user_id) ELSE '' END) AS $dia";
+            if($k+1<count($dias))
+                $dataQuery.=','.PHP_EOL;
+
+            $matrizx[]=$ind;
+            $ind+=6;
+        }
+
+        $dataQuery.="
                 FROM formulario_registro fr,formulario_data fd,formulario_campos fc
                 WHERE fr.id=fd.formulario_registro_id
                 AND fd.formulario_campo_id=fc.id
                 AND fr.semana=$formularioRegistro->semana
                 AND fr.ano=$formularioRegistro->ano
                 GROUP BY fr.semana,fr.ano,fd.formulario_campo_id,fc.nombre,fc.tipo ";
-
+        
         $data=\DB::select(DB::Raw($dataQuery));
-    
+
         $users=\DB::select(DB::Raw("SELECT id,CONCAT(IFNULL(first_name,''),' ',IFNULL(last_name,'')) AS name FROM users"));
         $users = array_column($users,'name','id');
 
@@ -570,7 +577,7 @@ class FormularioRegistro extends BaseModel
         $pdf->SetXY($x-12, $y-10);
         $pdf->SetLineStyle(['width'=>0,'color'=>[255,255,255]]);
         $pdf->SetLineWidth(0);
-        $pdf->Image(public_path('images/dce5.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+        $pdf->Image(public_path('images/dce6-a.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
         $name = 'daily_check-'.$formularioRegistro->id.'.pdf';
         $path = storage_path('app/public/pdf/'.$name);
 
@@ -585,19 +592,21 @@ class FormularioRegistro extends BaseModel
         $pdf->SetXY($x, $y);
         $pdf->Cell(30, 6, $formularioRegistro->equipo()->cliente->direccion, 0, 0, 'L');
         $x = $pdf->GetX()+38;
-        $pdf->SetXY($x, $y);
+        $pdf->SetXY($x, $y+8);
         $date = \Carbon\Carbon::now();
         $date->setISODate($formularioRegistro->ano,$formularioRegistro->semana);
 
         $pdf->Cell(30, 6, $date->startOfWeek()->format('Y-m-d'), 0, 0, 'L');
         $x = $pdf->GetX()+9;
-        $pdf->SetXY($x, $y);
-        $pdf->Cell(6, 6, "21 ", 0, 0, 'L');
+        $pdf->SetXY($x-4, $y+8);
+        $pdf->Cell(6, 6, $date->startOfWeek()->format('Y')-2000, 0, 0, 'L');
         $x = 20;
         $y =  $y+5;
-        $pdf->SetXY($x, $y);
+        $pdf->SetXY($x, $y+2);
         $pdf->Cell(40, 8,$formularioRegistro->equipo()->marca()->first()->display_name, 0, 0, 'L');
-        $y = $pdf->GetY()+5;
+        $pdf->SetXY($x+75, $y+3);
+        $pdf->Cell(10, 6, $formularioRegistro->equipo()->numero_parte, 0, 0, 'L');
+        $y = $pdf->GetY()+6;
         $pdf->SetXY($x, $y);
         $pdf->Cell(40, 8, $formularioRegistro->equipo()->modelo, 0, 0, 'L');
         $x = $pdf->GetX()+35;
@@ -606,44 +615,42 @@ class FormularioRegistro extends BaseModel
         $pdf->SetX($x);
         
         $pdf->Cell(30, 6, $formularioRegistro->equipo()->serie, 0, 0, 'L');
-        $pdf->SetXY($x+64,$y+8);
-        $pdf->Cell(10, 6, $formularioRegistro->equipo()->numero_parte, 0, 0, 'L');
-        $matrizx=array(77,89,101,111,122,
-                       132,143,155,166,175,
-                       186,199  );
+
+        
+           
        
         $vars=array(
            
-        'identificacion'=>52,
-        'seguridad'=>60,
-        'danos_estructura'=>67,
-        'fugas'=>72,
-        'ruedas'=>78,
-        'horquillas'=>85,
-        'cadenas_cables_mangueras'=>91,
-        'bateria'=>97,
-        'conector_bateria'=>104,
-        'protectores'=>110,
-        'dispositivos_seguridad'=>118,
-        'control_handle'=>124,
-        'extintor'=>130,
-        'horometro'=>136,
-        'pito'=>142,
-        'direccion'=>149,
-        'control_traccion'=>155,
-        'control_hidraulicos'=>161,
-        'frenos'=>171,
-        'freno'=>180,
-        'carga_bateria'=>185,
-        'nivel_carga_bateria'=>191,
-        'pct_carga_bateria'=>193,
-        'indicador_descarga_bateria'=>198,
-        'desconector_poder'=>205,
-        'luces_alarma_retroceso'=>211,
-        'prioridad'=>220,
-        'lectura_horometro'=>245,
-        'operador'=>262,
-        'ok_supervisor'=>276);
+        'identificacion'=>54,
+        'seguridad'=>62,
+        'danos_estructura'=>68,
+        'fugas'=>76,
+        'ruedas'=>82,
+        'horquillas'=>90,
+        'cadenas_cables_mangueras'=>98,
+        'bateria'=>105,
+        'conector_bateria'=>112,
+        'protectores'=>119,
+        'dispositivos_seguridad'=>126,
+        'control_handle'=>133,
+        'extintor'=>141,
+        'horometro'=>148,
+        'pito'=>156,
+        'direccion'=>162,
+        'control_traccion'=>170,
+        'control_hidraulicos'=>178,
+        'frenos'=>184,
+        'freno'=>192,
+        'carga_bateria'=>200,
+        'nivel_carga_bateria'=>208,
+        'pct_carga_bateria'=>206,
+        'indicador_descarga_bateria'=>212,
+        'desconector_poder'=>220,
+        'luces_alarma_retroceso'=>226,
+        'prioridad'=>234,
+        'lectura_horometro'=>258,
+        'operador'=>270,
+        'ok_supervisor'=>282);
        $comentarios='';$contador=0;$firmante['operador']=$firmante['ok_supervisor']='';
 
        foreach($data as $d){
@@ -700,8 +707,12 @@ class FormularioRegistro extends BaseModel
                         }
                         $pdf->StopTransform();
                        
-                    }else{                       
-                       $pdf->Cell(2, 6, $valor, 0, 0, 'L');
+                    }else{   
+                        $pdf->StartTransform();
+                        $size = $pdf->getSizeFont(4);//$numero
+                        $pdf->SetFont('helvetica', 'B', 8);                    
+                        $pdf->Cell(2, 6, $valor, 0, 0, 'L');
+                        $pdf->StopTransform();
                     }
                 }
             }

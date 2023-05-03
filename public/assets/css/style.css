@@ -8544,6 +8544,13 @@ ion-icon {
 .item:hover{
   background: #dddddd38;
 }
+.rotate{
+  -webkit-transform: rotate(-60deg); 
+  -moz-transform: rotate(-60deg);
+  -o-transform: rotate(-60deg);
+  transform: rotate(-60deg);
+  width: 12px !important;
+}
 @media screen and (max-width: 768px){
   .signModal .modal-dialog{
     width: 98%;
