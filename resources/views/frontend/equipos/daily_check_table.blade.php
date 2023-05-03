@@ -68,7 +68,7 @@
 <script>
     $(document).ready( function () {
         var supervisorAccess = false;
-            @if(\Sentinel::getUser()->hasAccess('equipos.edit_daily_check'))
+            @if(\Sentinel::getUser()->hasAccess('equipos.edit_daily_check') or \Sentinel::hasAccess('equipos.delete_daily_check'))
                 supervisorAccess = true;
             @endif
         $('.datatable').DataTable({
@@ -125,7 +125,7 @@
                             </a>\
                             ';
                         }
-                        @if(\Sentinel::hasAccess('equipos.delete_daily_check'))
+                        @if(\Sentinel::hasAccess('equipos.delete_daily_check') )
                         buttons=buttons+'<a href="daily_check/'+id+'/delete" class="btn btn-danger btn-sm">\
                             <ion-icon name="trash-outline" title="Borrar reporte">\
                             </ion-icon>Borrar\
