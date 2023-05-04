@@ -577,7 +577,11 @@ class FormularioRegistro extends BaseModel
         $pdf->SetXY($x-12, $y-10);
         $pdf->SetLineStyle(['width'=>0,'color'=>[255,255,255]]);
         $pdf->SetLineWidth(0);
-        $pdf->Image(public_path('images/dce6-a.png'),  1, 1, 220, 340, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+        $pdf->setPrintHeader(false);
+        $pdf->SetPrintFooter(false);
+        $pdf->SetMargins(0, 0, 0);
+        $pdf->SetAutoPageBreak(false, 0);
+        $pdf->Image(public_path('images/dce6-a.png'),  1, 1, 212, 378, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
         $name = 'daily_check-'.$formularioRegistro->id.'.pdf';
         $path = storage_path('app/public/pdf/'.$name);
 
@@ -585,7 +589,7 @@ class FormularioRegistro extends BaseModel
         $pdf->SetTextColor(50, 50, 50);
 
         $x = 20;
-        $y = 15;
+        $y = 19;
         $pdf->SetXY($x, $y);
         $pdf->Cell(55, 6, $formularioRegistro->equipo()->cliente->nombre, 0, 0, 'L');
         $x = $pdf->GetX()+17;
@@ -623,34 +627,34 @@ class FormularioRegistro extends BaseModel
            
         'identificacion'=>54,
         'seguridad'=>62,
-        'danos_estructura'=>68,
-        'fugas'=>76,
-        'ruedas'=>82,
-        'horquillas'=>90,
-        'cadenas_cables_mangueras'=>98,
-        'bateria'=>105,
-        'conector_bateria'=>112,
-        'protectores'=>119,
-        'dispositivos_seguridad'=>126,
-        'control_handle'=>133,
-        'extintor'=>141,
-        'horometro'=>148,
-        'pito'=>156,
-        'direccion'=>162,
-        'control_traccion'=>170,
-        'control_hidraulicos'=>178,
-        'frenos'=>184,
-        'freno'=>192,
-        'carga_bateria'=>200,
-        'nivel_carga_bateria'=>208,
-        'pct_carga_bateria'=>206,
-        'indicador_descarga_bateria'=>212,
-        'desconector_poder'=>220,
-        'luces_alarma_retroceso'=>226,
-        'prioridad'=>234,
-        'lectura_horometro'=>258,
-        'operador'=>270,
-        'ok_supervisor'=>282);
+        'danos_estructura'=>70,
+        'fugas'=>80,
+        'ruedas'=>88,
+        'horquillas'=>96,
+        'cadenas_cables_mangueras'=>104,
+        'bateria'=>112,
+        'conector_bateria'=>120,
+        'protectores'=>128,
+        'dispositivos_seguridad'=>136,
+        'control_handle'=>144,
+        'extintor'=>152,
+        'horometro'=>160,
+        'pito'=>168,
+        'direccion'=>176,
+        'control_traccion'=>186,
+        'control_hidraulicos'=>196,
+        'frenos'=>204,
+        'freno'=>212,
+        'carga_bateria'=>220,
+        'nivel_carga_bateria'=>224,
+        'pct_carga_bateria'=>230,
+        'indicador_descarga_bateria'=>238,
+        'desconector_poder'=>246,
+        'luces_alarma_retroceso'=>254,
+        'prioridad'=>262,
+        'lectura_horometro'=>291,
+        'operador'=>304,
+        'ok_supervisor'=>318);
        $comentarios='';$contador=0;$firmante['operador']=$firmante['ok_supervisor']='';
 
        foreach($data as $d){
@@ -690,7 +694,7 @@ class FormularioRegistro extends BaseModel
                                 $pdf->SetTextColor(254, 0, 0);
                         }
 
-                    $pdf->SetXY($vx,$vars[$datos["nombre"]]+4);
+                    $pdf->SetXY($vx,$vars[$datos["nombre"]]+13);
                     
                     if(in_array($datos["nombre"],['operador','ok_supervisor','lectura_horometro'])){
                         $pdf->StartTransform();
@@ -700,10 +704,11 @@ class FormularioRegistro extends BaseModel
                         $pdf->Rotate(90);
   
                         if($datos["nombre"]=='lectura_horometro'){
+                            $pdf->SetFont('helvetica', 'I', 6);
                             $pdf->Cell(2, 6, $valor, 0, 0, 'L');
                         }else{
-                            $pdf->SetXY($vx,$vars[$datos["nombre"]]-2);
-                            $pdf->Image(storage_path('app/public/firmas/'.$valor),  '', '', 15, 10, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+                            $pdf->SetXY($vx,$vars[$datos["nombre"]]);
+                            $pdf->Image(storage_path('app/public/firmas/'.$valor),  '', '', 13.5, 5, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
                         }
                         $pdf->StopTransform();
                        
@@ -718,16 +723,16 @@ class FormularioRegistro extends BaseModel
             }
 
        }
-
+     
        $comentarios= explode('||',$comentarios);
        foreach($comentarios as $key=>$c){
-            $pdf->SetXY(10,280+($key*5));
+            $pdf->SetXY(10,322+($key*5));
             $pdf->Cell(200, 10, $c, 0, 0, 'L');
        }
        $pdf->SetFont('helvetica', 'I', $size);
-       $pdf->SetXY(15,250);
+       $pdf->SetXY(15,295);
        $pdf->Cell(200, 10, $firmante['operador'], 0, 0, 'L');
-       $pdf->SetXY(15,263);
+       $pdf->SetXY(15,310);
        $pdf->Cell(200, 10, $firmante['ok_supervisor'], 0, 0, 'L');
 
         $pdf->Output($path, 'F');
