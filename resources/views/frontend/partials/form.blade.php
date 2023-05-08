@@ -6,7 +6,7 @@
             <div class="row">
                 @php $campos=false;$firmas=0;   @endphp
                 @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->orderBy('orden')->orderBy('id')->get() as $campo)
-
+                   
                     @if(mostrarCampo($campo->tipo))
                         @php
                         $requerido ='';

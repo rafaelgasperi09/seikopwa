@@ -726,7 +726,8 @@ class FormularioRegistro extends BaseModel
      
        $comentarios= explode('||',$comentarios);
        foreach($comentarios as $key=>$c){
-            $pdf->SetXY(10,322+($key*5));
+            $pdf->SetFont('helvetica', '', 6);
+            $pdf->SetXY(10,322+($key*3));
             $pdf->Cell(200, 10, $c, 0, 0, 'L');
        }
        $pdf->SetFont('helvetica', 'I', $size);

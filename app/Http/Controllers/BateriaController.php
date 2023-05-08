@@ -51,6 +51,23 @@ class BateriaController extends Controller
         return view('frontend.baterias.register_in_and_out',compact('data','formulario'));
     }
 
+    public function ServicioTecnico($id){
+        $data = Componente::findOrFail($id);
+        $formulario = Formulario::whereNombre('form_bat_serv_tec')->first();
+
+        return view('frontend.baterias.servicio_tecnico',compact('data','formulario'));
+      
+    }
+
+    public function ServicioTecnicoStore($id){
+        $data = Componente::findOrFail($id);
+        $formulario = Formulario::whereNombre('form_bat_serv_tec')->first();
+
+        return view('frontend.baterias.servicio_tecnico',compact('data','formulario'));
+      
+    }
+
+
     public function guardarEntredaSalida(Request $request){
 
         $this->validate($request, [

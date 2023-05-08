@@ -125,8 +125,12 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::get('/{id}/download', array('as' => 'baterias.download', 'uses' => 'BateriaController@download'));
 
         Route::get('/{id}/register_in_and_out', array('as' => 'baterias.register_in_and_out', 'uses' => 'BateriaController@registrarEntradaSalida'))->middleware('hasAccess');
-
+    
         Route::post('/store_in_and_out', array('as' => 'baterias.store_in_and_out', 'uses' => 'BateriaController@guardarEntredaSalida'));
+    
+        Route::get('/{id}/servicio_tecnico', array('as' => 'baterias.serv_tec', 'uses' => 'BateriaController@ServicioTecnico'));
+        Route::post('/{id}/servicio_tecnico_store', array('as' => 'baterias.serv_tec_store', 'uses' => 'BateriaController@ServicioTecnicoStore'));
+
     });
 
     Route::group(array('prefix' => 'exportar'), function() {
