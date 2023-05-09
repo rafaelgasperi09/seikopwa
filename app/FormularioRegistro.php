@@ -121,7 +121,10 @@ class FormularioRegistro extends BaseModel
                 foreach ($notificados as $noti){
                     $when = now()->addMinutes(1);
                     if(current_user()->id <> $noti->id)
-                        $noti->notify((new NewMantenimientoPreventivo($this))->delay($when));
+                        notifica($noti,(new NewMantenimientoPreventivo($this))->delay($when));
+                        if(env('APP_ENV')=='local'){
+                            break;
+                        }
                 }
 
                 FormularioRegistro::withoutEvents(function (){

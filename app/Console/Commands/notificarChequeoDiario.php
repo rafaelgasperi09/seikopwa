@@ -94,10 +94,13 @@ class notificarChequeoDiario extends Command
                 $tot++;
             }
             $when = now()->addMinutes(1);
-            $user->notify((new DailyCheck($title,$message,route('equipos.index')))->delay($when));
+            notifica($user,(new DailyCheck($title,$message,route('equipos.index')))->delay($when));
             $this->info($noti["cliente"]);
             $this->info('body :'.$message);
             $this->info('------------------------------------------');
+            if(env('APP_ENV')=='local'){
+                break;
+            }
         }
     }
 }

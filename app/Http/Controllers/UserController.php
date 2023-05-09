@@ -139,7 +139,7 @@ class UserController extends Controller
         if($user->save()){
             $u = User::find($user->id);
             $when = now()->addMinutes(1);
-            $u->notify((new NewUser($u,$request->password))->delay($when));
+            notifica($u,(new NewUser($u,$request->password))->delay($when));
             session()->flash('message.success', 'Usuario creado con éxito. Se ha enviado un correo con los datos de acceso.');
 
         }else{
@@ -262,7 +262,7 @@ class UserController extends Controller
             $u = User::find($user_id);
             $when = now()->addMinutes(1);
            
-            $u->notify((new NewUser($u,'test'))->delay($when));
+            notifica($u,(new NewUser($u,'test'))->delay($when));
             session()->flash('message.success', 'Usuario creado con éxito. Se ha enviado un correo con los datos de acceso.');
 
         

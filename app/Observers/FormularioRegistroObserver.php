@@ -148,15 +148,17 @@ class FormularioRegistroObserver
                         foreach ($notificados as $n){
                             $when = now()->addMinutes(1);
                             if($campo->formulario->nombre=='form_montacarga_servicio_tecnico')
-                                $n->notify((new TecnicalSupportTicketIsFinnish($formularioRegistro))->delay($when));
+                                notifica($n,(new TecnicalSupportTicketIsFinnish($formularioRegistro))->delay($when));
                             if($campo->formulario->nombre=='form_montacarga_daily_check'){
-                                $n->notify((new DailyCheckIsFinnish($formularioRegistro))->delay($when));
-                                //$n->notify((new EquipoInoperativo($formularioRegistro))->delay($when));
+                                notifica($n,(new DailyCheckIsFinnish($formularioRegistro))->delay($when));
+                                //notifica($n,(new EquipoInoperativo($formularioRegistro))->delay($when));
                                 if($nousar){
-                                    $n->notify((new EquipoInoperativo($formularioRegistro))->delay($when));
+                                    notifica($n,(new EquipoInoperativo($formularioRegistro))->delay($when));
                                 }
                             }
-                                
+                            if(env('APP_ENV')=='local'){
+                                break;
+                            }   
                         }
                     }
                     
@@ -289,14 +291,16 @@ class FormularioRegistroObserver
                                 foreach ($notificados as $n){
                                     $when = now()->addMinutes(1);
                                     if($formularioCampo->formulario->nombre=='form_montacarga_servicio_tecnico')
-                                        $n->notify((new TecnicalSupportTicketIsFinnish($formularioRegistro))->delay($when));
+                                        notifica($n,(new TecnicalSupportTicketIsFinnish($formularioRegistro))->delay($when));
                                     if($formularioCampo->formulario->nombre=='form_montacarga_daily_check'){
-                                        $n->notify((new DailyCheckIsFinnish($formularioRegistro))->delay($when));
+                                        notifica($n,(new DailyCheckIsFinnish($formularioRegistro))->delay($when));
                                         if($nousar){
-                                            $n->notify((new EquipoInoperativo($formularioRegistro))->delay($when));
+                                            notifica($n,(new EquipoInoperativo($formularioRegistro))->delay($when));
                                         }
                                     }
-                                       
+                                    if(env('APP_ENV')=='local'){
+                                        break;
+                                    }
                                 }
                             }
                         }

@@ -76,10 +76,13 @@ class notificarBateriasSinHidratar extends Command
 
         foreach ($notificados as $user){
             $when = now()->addMinutes(1);
-            $user->notify((new BateriasNoHidratadas($title,$message,route('baterias.index')))->delay($when));
+            notifica($user,(new BateriasNoHidratadas($title,$message,route('baterias.index')))->delay($when));
             $this->info($user->getFullName());
             $this->info('body :'.$message);
             $this->info('------------------------------------------');
+            if(env('APP_ENV')=='local'){
+                break;
+            }
         }
     }
 }

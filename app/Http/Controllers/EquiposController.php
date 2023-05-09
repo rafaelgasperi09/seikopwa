@@ -333,12 +333,12 @@ class EquiposController extends BaseController
             $when = now()->addMinutes(1);
             /*foreach (User::whereCrmClienteId(current_user()->crm_cliente->id)->get() as $u){
                 if($u->isOnGroup('SupervisorC')){
-                    $u->notify((new NewDailyCheck($model))->delay($when));
+                    notifica($u,(new NewDailyCheck($model))->delay($when));
                 }
             }*/
 
             $u = new User(['id'=>1,'email'=>'rafaelgasperi@clic.com.pa']);
-            //$u->notify((new NewDailyCheck($model))->delay($when));
+            //notifica($u,(new NewDailyCheck($model))->delay($when));
 
             $request->session()->flash('message.success','Registro creado con éxito');
             $not_ok=false;
@@ -645,7 +645,7 @@ class EquiposController extends BaseController
         if($model->save()){
             // crear notificacion al tecnico asignado
             $when = now()->addMinutes(1);
-            $user->notify((new NewTecnicalSupportAssignTicket($model))->delay($when));
+            notifica($user,(new NewTecnicalSupportAssignTicket($model))->delay($when));
             $request->session()->flash('message.success', 'Se a asignado el servicio de soporte técnico a '.$user->getFullName().' de forma exitosa.');
         }else{
             $request->session()->flash('message.error', 'Se a asignado el servicio de soporte técnico de forma exitosa.');

@@ -289,4 +289,13 @@ function checkBoxDetail($char){
 function limpiar_lista($lista){
     return trim($lista,",");
 }
-?>
+
+function notifica($user,$notification)
+{   
+    if(env('APP_ENV')=='local'){
+        $user_local=\App\User::find(1);
+        return $user_local->notify($notification);
+    }   
+    return $user->notify($notification);
+
+}

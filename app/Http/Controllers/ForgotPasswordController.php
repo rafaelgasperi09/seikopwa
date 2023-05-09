@@ -27,7 +27,7 @@ class ForgotPasswordController extends Controller
 
                 if ($user && $reminder) {
                     $when = now()->addMinutes(1);
-                    $u->notify((new PasswordRecovery($reminder))->delay($when));
+                    notifica($u,(new PasswordRecovery($reminder))->delay($when));
                     $request->session()->flash('message.success', 'Se envio un correo a ' . $request->get('email') . ' para que complete el proceso de recuperación de contraseña!');
 
                 }
