@@ -31,9 +31,10 @@
                         @endphp
                         <div class="form-group boxed {{$campo->tamano}}">
                             <div class="input-wrapper">
-
+                                @if(!in_array($campo->tipo,['database','api']))
                                 <label class="label" for="{{ $campo->nombre }}">{{ $campo->etiqueta }}</label>
                                 <small>{{ $campo->subetiqueta }}</small>
+                                @endif
                                 @if($campo->tipo == 'hidden')
                                     {{ Form::hidden($campo->nombre,$value) }}
                                 @elseif($campo->tipo == 'text')
@@ -45,10 +46,10 @@
                                 @elseif($campo->tipo == 'combo')
                                     {{ Form::select($campo->nombre,getCombo($campo->tipo_combo,'Seleccione '.$campo->etiqueta),$value,array('class'=>'form-control',$requerido,$readonly)) }}
                                 @elseif($campo->tipo == 'database')
-                                    @include('partials.typehead_field',array('field_label'=>$campo->etiqueta,$readonly,'field_name'=>$campo->nombre,'items'=>getModelList('\App\\'.$campo->modelo,getFormDatabaseNameByModule('\App\\'.$campo->modelo))))
+                                    @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,'field_name'=>$campo->nombre,'items'=>getModelList('\App\\'.$campo->modelo,$campo->database_nombre,$campo->database_nombre)))
                                 @elseif($campo->tipo == 'api')
                                     <?php $api = new \App\HcaApi($campo->api_endpoint);?>
-                                    @include('partials.typehead_field',array('field_label'=>$campo->etiqueta,'field_name'=>$campo->nombre,'items'=>$api->result(),$readonly))
+                                    @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,'field_name'=>$campo->nombre,'items'=>$api->result(),$readonly))
                                 @elseif($campo->tipo == 'date')
                                     @if($campo->opciones=='hoy' and $value==null)
                                     {{ Form::date($campo->nombre,date('Y-m-d'),array('class'=>'form-control date',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,'readonly')) }}

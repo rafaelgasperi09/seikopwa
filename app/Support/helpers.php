@@ -164,6 +164,19 @@ function getListUsersByRol($rol_name){
     return $arr;
 }
 
+function getModelList($table_name = '\App\Patient',$id='id',$name='name',$title='',$where=''){
+
+    $arr['']='Seleccione '.$title;
+    $modelo=$table_name::when(!empty($where),function ($q) use($where){
+        $q->whereRaw($where);
+    })->orderBy($name)->get();
+    foreach ($modelo as $a){
+        $arr[$a->$id] = $a->$name;
+    }
+    return $arr;
+}
+
+
 function  getEquipoIconBySubTipo($sub_tipo_id,$tipo=1){
 
     if($tipo == 2){
