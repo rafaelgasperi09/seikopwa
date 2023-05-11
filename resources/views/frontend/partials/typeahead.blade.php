@@ -7,14 +7,18 @@
 @if(!isset($value[1])) <?php $value[1]=''?> @endif
 @if(!isset($display)) <?php $display='block'?> @endif
 @if(!isset($placeholder)) <?php $placeholder='Buscar '.$field_label.' Nombre';?>  @endif
-<div class="form-group boxed" id="group_{{ $field_name }}" style="display: {{ $display }}">
+<div class="form-group" id="group_{{ $field_name }}" style="display: {{ $display }}">
     <div class="input-wrapper">
         <label class="label" for="crm_user_id">{{ $field_label }}
             <div style="float: right;display: inline-block;">
             @if($field_name=='crm_cliente_id')
             <span class="btn btn-sm btn-outline-primary rounded shadowed mr-1 mb-1" id="add_{{ $field_name }}">Agregar</span>
             @endif
-            <span class="btn btn-sm btn-outline-warning rounded shadowed mr-1 mb-1" id="quitar_{{ $field_name }}">Limpiar</span></div> </label>
+            
+            <span class="btn btn-sm btn-outline-warning rounded shadowed mr-1 mb-1" id="quitar_{{ $field_name }}">Limpiar</span>
+            
+            </div> 
+        </label>
         {{ Form::text('typeheadfield'.$field_name,$value[1],array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_'.$field_name,'data-field_name'=>$field_name,'data-provide'=>'typeahead','data-items'=>10,'placeholder'=>$placeholder,"autocomplete"=>"off" )) }}
         {{ Form::hidden($field_name,$value[0],array('id'=>$field_name)) }}
         <i class="clear-input">

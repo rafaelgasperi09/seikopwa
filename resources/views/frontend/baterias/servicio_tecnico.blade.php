@@ -2,6 +2,7 @@
 @section('content')
     @include('frontend.partials.title',array('title'=>'Registrar Carga Bateria','subtitle'=>$data->id_componente))
     <!-------------------------------------------------------------------->
+    {{Form::open(array("method" => "POST",'route' => array('baterias.serv_tec_store', $data->id),"role" => "form",'class'=>'form-horizontal','files'=>true))}}
     <div class="section full mt-2 mb-2">
         <div class="section-title">{{$formulario->titulo}}</div>
         <div class="wide-block pb-3 pt-2">
@@ -83,16 +84,17 @@
     <div class="section full mt-2 mb-2">
         <div class="section-title">Bateria : {{ $data->voltaje }}V</div>
         <div class="wide-block pb-1 pt-2">
-            {{Form::open(array("method" => "POST",'route' => array('baterias.serv_tec', $data->id),"role" => "form",'class'=>'form-horizontal','files'=>true))}}
+           
             {{ Form::hidden('componente_id',$data->id) }}
             {{ Form::hidden('formulario_id',$formulario->id) }}
             @include('frontend.partials.form',array('formulario'=>$formulario))
             <div class="modal-footer">
                 @include('frontend.partials.btnSubmit')
             </div>
-            {{ Form::close() }}
+            
         </div>
     </div>
+    {{ Form::close() }}
 <script>
     
 </script>
