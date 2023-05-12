@@ -50,22 +50,19 @@
    
     <div class="wide-block p-1" id="historial">
         <ul class="nav nav-tabs style1 iconed" role="tablist">
-            @if(\Sentinel::hasAnyAccess(['equipos.see_daily_check','equipos.edit_daily_check']))
             <li class="nav-item">
                 <a class="nav-link {{$tab[0]}}" id="tab1" data-toggle="tab" href="#historial_cargas" role="tab" aria-selected="true">
                         <ion-icon name="list-outline" class="text-primary" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
                         Historial Cargas (Cuarto de maquinas)
                 </a>
             </li>
-            @endif
-            @if(!empty($data->tipo_equipos_id) or \Sentinel::hasAnyAccess(['equipos.see_mant_prev','equipos.create_mant_prev','equipos.edit_mant_prev']))
             <li class="nav-item">
                 <a class="nav-link {{$tab[1]}}" data-toggle="tab" id="tab2" href="#servicio_tecnico" role="tab" aria-selected="true">
                         <ion-icon name="hammer-outline" class="text-info" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
                         Servicio Tecnico
                 </a>
             </li>
-            @endif
+
         </ul>
         <div class="tab-content mt-1">
             <div class="tab-pane  {{$tab[0]}} tab1" id="historial_cargas" role="tabpanel">
@@ -99,6 +96,14 @@
                 </div>
             </div>
             <div class="tab-pane {{$tab[1]}}" id="servicio_tecnico" role="tabpanel">
+                <div class="section-title">
+                    <div class="right">
+                        @if(Sentinel::getUser()->hasAccess('baterias.register_in_and_out'))
+                        <a href="{{ route('baterias.serv_tec',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
+                        @endif
+                    </div>
+                </div>
+                @include('frontend.partials.listado_reportes',array('data'=>$form['st'],'nombre'=>'form_montacarga_servicio_tecnico'))
             </div>
         </div>
     </div>

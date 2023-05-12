@@ -46,7 +46,9 @@ class BateriaController extends Controller
                 $tab[1]='active';
         }
         $data = Componente::findOrFail($id);
-        return view('frontend.baterias.detail')->with('data',$data)->with('tab',$tab);
+        $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
+        ->where('equipo_id',$id)->where('formularios.tipo','serv_tec')->get();
+        return view('frontend.baterias.detail')->with('data',$data)->with('tab',$tab)->with('form',$form);
     }
 
     public function registrarEntradaSalida($id){
