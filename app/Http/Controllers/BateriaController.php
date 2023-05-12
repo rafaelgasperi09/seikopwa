@@ -37,10 +37,16 @@ class BateriaController extends Controller
     }
 
 
-    public function detail($id){
-
+    public function detail($id,Request $request){
+        $tab=array('','');
+        if(!empty($request->get('tab'))){
+            if($request->tab==1)
+                $tab[0]='active';
+            if($request->tab==2)
+                $tab[1]='active';
+        }
         $data = Componente::findOrFail($id);
-        return view('frontend.baterias.detail')->with('data',$data);
+        return view('frontend.baterias.detail')->with('data',$data)->with('tab',$tab);
     }
 
     public function registrarEntradaSalida($id){
@@ -63,10 +69,24 @@ class BateriaController extends Controller
       
         $data = Componente::findOrFail($id);
         $formulario = Formulario::whereNombre('form_bat_serv_tec')->first();
-        dd($formulario);
-  
+        $model = new FormularioRegistro();
+        DB::transaction(function() use($model,$request,$formulario){
 
-        return view('frontend.baterias.servicio_tecnico',compact('data','formulario'));
+            $model->formulario_id = $formulario->id;
+            $model->creado_por = Sentinel::getUser()->id;
+            $model->componente_id = $request->componente_id;
+            $model->estatus = 'P';
+
+            if(!$model->save())
+            {
+                Throw new \Exception('Hubo un problema y no se creo el registro!');
+            }
+        });
+
+        $request->session()->flash('message.success','Registro creado con éxito');
+        return redirect(route('baterias.detail',$id));
+
+       
       
     }
 

@@ -46,35 +46,60 @@
     </div>
 </div>
 <div class="divider  mt-2 mb-3"></div>
-<div class="section full mb-2">
-    <div class="section-title">Historial Cargas (Cuarto de maquinas)
-        <div class="right">
-            <a href="{{ route('baterias.download',$data->id) }}" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar PDF</a>
-            <a href="{{ route('baterias.download',$data->id) }}?format=excel" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar Excel</a>
-            @if(Sentinel::getUser()->hasAccess('baterias.register_in_and_out'))
-            <a href="{{ route('baterias.register_in_and_out',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
-            @endif
-        </div>
-    </div>
+<div class="section full mb-2" id='detalle'>
+   
     <div class="wide-block p-1" id="historial">
-        <div class="table-responsive">
-            <table class="table dataTables table-bordered table-striped table-actions">
-                <thead>
-                <tr>
-                    <th>Accion</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Horometro Salida.</th>
-                    <th>%Carga Salida.</th>
-                    <th>Horometro Entrada.</th>
-                    <th>%Carga Entrada.</th>
-                    <th>Horas de Uso.</th>
-                    <th>H2O</th>
-                    <th>ECU</th>
-                    <th>Estado de bateria</th>
-                </tr>
-                </thead>
-            </table>
+        <ul class="nav nav-tabs style1 iconed" role="tablist">
+            @if(\Sentinel::hasAnyAccess(['equipos.see_daily_check','equipos.edit_daily_check']))
+            <li class="nav-item">
+                <a class="nav-link {{$tab[0]}}" id="tab1" data-toggle="tab" href="#historial_cargas" role="tab" aria-selected="true">
+                        <ion-icon name="list-outline" class="text-primary" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
+                        Historial Cargas (Cuarto de maquinas)
+                </a>
+            </li>
+            @endif
+            @if(!empty($data->tipo_equipos_id) or \Sentinel::hasAnyAccess(['equipos.see_mant_prev','equipos.create_mant_prev','equipos.edit_mant_prev']))
+            <li class="nav-item">
+                <a class="nav-link {{$tab[1]}}" data-toggle="tab" id="tab2" href="#servicio_tecnico" role="tab" aria-selected="true">
+                        <ion-icon name="hammer-outline" class="text-info" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
+                        Servicio Tecnico
+                </a>
+            </li>
+            @endif
+        </ul>
+        <div class="tab-content mt-1">
+            <div class="tab-pane  {{$tab[0]}} tab1" id="historial_cargas" role="tabpanel">
+                <div class="section-title">
+                    <div class="right">
+                        <a href="{{ route('baterias.download',$data->id) }}" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar PDF</a>
+                        <a href="{{ route('baterias.download',$data->id) }}?format=excel" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar Excel</a>
+                        @if(Sentinel::getUser()->hasAccess('baterias.register_in_and_out'))
+                        <a href="{{ route('baterias.register_in_and_out',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
+                        @endif
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table dataTables table-bordered table-striped table-actions">
+                        <thead>
+                        <tr>
+                            <th>Accion</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Horometro Salida.</th>
+                            <th>%Carga Salida.</th>
+                            <th>Horometro Entrada.</th>
+                            <th>%Carga Entrada.</th>
+                            <th>Horas de Uso.</th>
+                            <th>H2O</th>
+                            <th>ECU</th>
+                            <th>Estado de bateria</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane {{$tab[1]}}" id="servicio_tecnico" role="tabpanel">
+            </div>
         </div>
     </div>
 </div>
@@ -109,7 +134,7 @@
             ]
         } );
     } );
-
+   
 </script>
 @stop
 
