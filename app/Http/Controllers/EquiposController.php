@@ -608,6 +608,7 @@ class EquiposController extends BaseController
 
     public function updateTecnicalSupport(Request $request)
     {
+      //  ini_set('error_reporting', E_STRICT);
         try {
 
             $this->validate($request, [

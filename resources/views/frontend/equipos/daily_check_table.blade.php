@@ -1,5 +1,5 @@
 <div class="section mt-2" >
-    <table class="datatable table  table-stripped responsive" style="border:1px solid #ccc;" >
+    <table class="datatable table  table-stripped responsive" width="100%" style="border:1px solid #ccc;" >
         <thead>
         <tr>
             <th scope="col" rowspan="2"  class="text-center" style=" vertical-align: top;">Semana</th>
