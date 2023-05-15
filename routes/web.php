@@ -115,6 +115,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::get('/', array('as' => 'baterias.index', 'uses' => 'BateriaController@index'))->middleware('hasAccess');
 
         Route::get('/datatable/{id}', array('as' => 'baterias.datatable', 'uses' => 'BateriaController@datatable'));
+      
+        Route::get('/datatable_st/{id}', array('as' => 'baterias.datatable_st', 'uses' => 'BateriaController@datatable_serv_tecnico'));
 
         Route::get('/page', array('as' => 'baterias.page', 'uses' => 'BateriaController@page'));
 
@@ -131,6 +133,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::get('/{id}/servicio_tecnico', array('as' => 'baterias.serv_tec', 'uses' => 'BateriaController@ServicioTecnico'));
         
         Route::post('/{id}/servicio_tecnico_store', array('as' => 'baterias.serv_tec_store', 'uses' => 'BateriaController@ServicioTecnicoStore'));
+       
+        Route::get('/{id}/servicio_tecnico_show', array('as' => 'baterias.serv_tec_show', 'uses' => 'BateriaController@ServicioTecnicoShow'));
 
     });
 

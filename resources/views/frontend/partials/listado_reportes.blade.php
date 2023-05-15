@@ -1,5 +1,5 @@
 <div class="section mt-2" style="overflow-x:auto">
-<table class="table table-striped datatable responsive">
+<table class="table table-striped datatable responsive" width="100%">
     <thead>
         <tr>
             <th scope="col">#</th>

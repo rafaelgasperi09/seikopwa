@@ -103,7 +103,22 @@
                         @endif
                     </div>
                 </div>
-                @include('frontend.partials.listado_reportes',array('data'=>$form['st'],'nombre'=>'form_montacarga_servicio_tecnico'))
+                <div class="table-responsive" style="overflow-x:auto">
+                    <table class="table table-striped datatable responsive serv_tec_datatable" width="100%">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="110px">Fecha Creación</th>
+                                <th scope="col" width="110px">Creado por</th>
+                                @foreach($campos as $k=>$c)
+                                <th scope="col">@if($c=='') {{$k}} @else {{$c}} @endif</th>
+                                @endforeach
+
+                                <th scope="col" width="110px">Acciones</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+              
             </div>
         </div>
     </div>
@@ -136,6 +151,30 @@
                 {data:'h2o'},
                 {data:'ecu'},
                 {data:'estado_de_bateria'},
+            ]
+        } );
+   
+    $('.serv_tec_datatable').DataTable( {
+            "language": {
+                processing: '<div id="cargando"  align="center"><img src="{{ url("/assets/img/Spinner-3.gif") }}"></div>'
+            },
+            "columnDefs": [
+                { "visible": false, "targets": [2] },
+            ],
+            "responsive": true,
+            "order": [[ 2, "desc" ]],
+            "processing": true,
+            "serverSide": true,
+            "autoWidth": false,
+            "ajax": "{{ route('baterias.datatable_st',array('id'=>$data->id)) }}",
+            "columns":[
+                {data:'created_at'},
+                {data:'creado_por'},
+                @foreach($campos as $k=>$c)
+                {data:'{{$k}}'},
+                @endforeach
+                {data:'accion'},
+               
             ]
         } );
     } );

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Componente;
 use App\Formulario;
 use App\FormularioData;
+use App\FormularioCampo;
 use App\FormularioRegistro;
 use App\PatientAbsence;
 use PDF;
@@ -46,9 +47,13 @@ class BateriaController extends Controller
                 $tab[1]='active';
         }
         $data = Componente::findOrFail($id);
-        $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
-        ->where('equipo_id',$id)->where('formularios.tipo','serv_tec')->get();
-        return view('frontend.baterias.detail')->with('data',$data)->with('tab',$tab)->with('form',$form);
+        $campos=FormularioCampo::where('formulario_id',12)->get()->pluck('etiqueta','nombre');
+ 
+        return view('frontend.baterias.detail')
+                    ->with('data',$data)
+                    ->with('tab',$tab)
+                 
+                    ->with('campos',$campos);
     }
 
     public function registrarEntradaSalida($id){
@@ -65,6 +70,32 @@ class BateriaController extends Controller
 
         return view('frontend.baterias.servicio_tecnico',compact('data','formulario'));
       
+    }
+
+    public function ServicioTecnicoShow($id,Request $request){
+ 
+        /*$datos=DB::table('form_serv_tec_bat_view')
+        ->where('formulario_registro_id',$id)
+        ->first();
+        $datos=collect($datos)->toArray();*/
+       
+        $data = FormularioRegistro::findOrFail($id);
+       
+        $componente = Componente::findOrFail($data->componente_id);
+        $formulario = Formulario::whereNombre('form_bat_serv_tec')->first();
+        $formularioData =$data->data()->get()->pluck('valor','formulario_campo_id');
+
+        $datos=array();
+
+        foreach($formulario->campos as $c){
+            if(isset($formularioData[$c->id])){
+                $datos[$c->nombre]=$formularioData[$c->id];
+            }
+        }
+
+  
+     
+        return view('frontend.baterias.servicio_tecnico_show',compact('data','formulario','datos','componente'));
     }
 
     public function ServicioTecnicoStore($id,Request $request){
@@ -131,6 +162,25 @@ class BateriaController extends Controller
             ->get();
 
         return DataTables::of($data)->make(true);
+    }
+
+    public function datatable_serv_tecnico($id){
+
+        $data = DB::table('form_serv_tec_bat_view')
+            ->where('componente_id',$id)
+            ->get();
+
+        return DataTables::of($data)
+        ->addColumn('accion', function($row){
+            $accion='<a href="'.route('baterias.serv_tec_show',$row->formulario_registro_id).'" target="_blank" title="Ver">
+                        <span class="iconedbox bg-success">
+                        <ion-icon name="eye-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
+                        </span>
+                    </a>';
+            return $accion;
+        })
+        ->rawColumns(['accion'])
+        ->make(true);
     }
 
     public function download($id){
