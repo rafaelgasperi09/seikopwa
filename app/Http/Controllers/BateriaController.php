@@ -74,11 +74,6 @@ class BateriaController extends Controller
 
     public function ServicioTecnicoShow($id,Request $request){
  
-        /*$datos=DB::table('form_serv_tec_bat_view')
-        ->where('formulario_registro_id',$id)
-        ->first();
-        $datos=collect($datos)->toArray();*/
-       
         $data = FormularioRegistro::findOrFail($id);
        
         $componente = Componente::findOrFail($data->componente_id);
@@ -93,9 +88,26 @@ class BateriaController extends Controller
             }
         }
 
-  
-     
         return view('frontend.baterias.servicio_tecnico_show',compact('data','formulario','datos','componente'));
+    }
+
+    public function ServicioTecnicoEdit($id,Request $request){
+ 
+        $data = FormularioRegistro::findOrFail($id);
+       
+        $componente = Componente::findOrFail($data->componente_id);
+        $formulario = Formulario::whereNombre('form_bat_serv_tec')->first();
+        $formularioData =$data->data()->get()->pluck('valor','formulario_campo_id');
+
+        $datos=array();
+
+        foreach($formulario->campos as $c){
+            if(isset($formularioData[$c->id])){
+                $datos[$c->nombre]=$formularioData[$c->id];
+            }
+        }
+
+        return view('frontend.baterias.servicio_tecnico_edit',compact('data','formulario','datos','componente'));
     }
 
     public function ServicioTecnicoStore($id,Request $request){
@@ -120,6 +132,21 @@ class BateriaController extends Controller
         return redirect(route('baterias.detail',$id));
 
        
+      
+    }
+
+    public function ServicioTecnicoUpdate($id,Request $request){
+        try{
+        $model = FormularioRegistro::findOrFail($id);
+        $model->updated_at =Carbon::now();
+        $model->save();
+        $request->session()->flash('message.success', 'Registro guardado con éxito');
+        return redirect(route('baterias.detail',$model->componente_id));
+
+        } catch (\Exception $e) {
+        $request->session()->flash('message.error', $e->getMessage());
+        return redirect(route('baterias.detail',$model->componente_id))->withInput($request->all());
+        }    
       
     }
 
@@ -168,6 +195,7 @@ class BateriaController extends Controller
 
         $data = DB::table('form_serv_tec_bat_view')
             ->where('componente_id',$id)
+            ->orderBy('created_at','desc')
             ->get();
 
         return DataTables::of($data)
@@ -177,9 +205,20 @@ class BateriaController extends Controller
                         <ion-icon name="eye-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
                         </span>
                     </a>';
+            if($row->estatus=='P'){
+                $accion.='<a href="'.route('baterias.serv_tec_edit',$row->formulario_registro_id).'" target="_blank" title="Ver">
+                <span class="iconedbox bg-primary">
+                <ion-icon name="create-outline" role="img" class="md hydrated" aria-label="Editar"></ion-icon>
+                </span>
+                </a>';
+            }
+            
             return $accion;
         })
-        ->rawColumns(['accion'])
+        ->editColumn('comentarios', function($row){
+            return '<span title="'.$row->comentarios.'">'.substr($row->comentarios,0,30).'</span>...';
+        })
+        ->rawColumns(['accion','comentarios'])
         ->make(true);
     }
 

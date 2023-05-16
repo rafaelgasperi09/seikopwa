@@ -16,11 +16,12 @@
                         $showclear=true;
                         $files=array();
                         if($campo->requerido) $requerido = 'required';
-                        if(!Sentinel::getUser()->hasAccess($campo->permiso) or true){
-                             $readonly='disabled';
-                        }
+                        $readonly='disabled';
+                        
                         if(isset($datos[$campo->nombre])) {
                             $value =$datos[$campo->nombre];
+                            if($campo->tipo=='firma' and $value=='')
+                                $readonly='';
                         }
                         if($campo->tipo=='files')
                             $files = \App\File::whereTabla('formulario_registro')->whereRegistroId($campo->formulario_registro_id)->get();

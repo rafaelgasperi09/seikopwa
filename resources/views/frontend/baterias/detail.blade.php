@@ -109,6 +109,7 @@
                             <tr>
                                 <th scope="col" width="110px">Fecha Creación</th>
                                 <th scope="col" width="110px">Creado por</th>
+                                <th scope="col">Estado</th>
                                 @foreach($campos as $k=>$c)
                                 <th scope="col">@if($c=='') {{$k}} @else {{$c}} @endif</th>
                                 @endforeach
@@ -158,11 +159,8 @@
             "language": {
                 processing: '<div id="cargando"  align="center"><img src="{{ url("/assets/img/Spinner-3.gif") }}"></div>'
             },
-            "columnDefs": [
-                { "visible": false, "targets": [2] },
-            ],
             "responsive": true,
-            "order": [[ 2, "desc" ]],
+            "order": [[ 1, "desc" ]],
             "processing": true,
             "serverSide": true,
             "autoWidth": false,
@@ -170,6 +168,7 @@
             "columns":[
                 {data:'created_at'},
                 {data:'creado_por'},
+                {data:'estatus'},
                 @foreach($campos as $k=>$c)
                 {data:'{{$k}}'},
                 @endforeach
