@@ -194,6 +194,12 @@ class BateriaController extends Controller
     public function datatable_serv_tecnico($id){
 
         $data = DB::table('form_serv_tec_bat_view')
+            ->selectRaw('*,concat(celda_1_1,",",celda_1_2,",",celda_1_3,",",celda_1_4,",",celda_1_5,",",celda_1_6,",<br/>  ",
+            celda_2_1,",",celda_2_2,",",celda_2_3,",",celda_2_4,",",celda_2_5,",",celda_2_6,",<br/>  ",
+            celda_3_1,",",celda_3_2,",",celda_3_3,",",celda_3_4,",",celda_3_5,",",celda_3_6,",<br/>  ",
+            celda_4_1,",",celda_4_2,",",celda_4_3,",",celda_4_4,",",celda_4_5,",",celda_4_6,",<br/>  ",
+            celda_5_1,",",celda_5_2,",",celda_5_3,",",celda_5_4,",",celda_5_5,",",celda_5_6,",<br/>  ",
+            celda_6_1,",",celda_6_2,",",celda_6_3,",",celda_6_4,",",celda_6_5,",",celda_6_6) as celdas')
             ->where('componente_id',$id)
             ->orderBy('created_at','desc')
             ->get();
@@ -218,7 +224,7 @@ class BateriaController extends Controller
         ->editColumn('comentarios', function($row){
             return '<span title="'.$row->comentarios.'">'.substr($row->comentarios,0,30).'</span>...';
         })
-        ->rawColumns(['accion','comentarios'])
+        ->rawColumns(['accion','comentarios','celdas'])
         ->make(true);
     }
 

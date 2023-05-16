@@ -110,9 +110,16 @@
                                 <th scope="col" width="110px">Fecha Creación</th>
                                 <th scope="col" width="110px">Creado por</th>
                                 <th scope="col">Estado</th>
-                                @foreach($campos as $k=>$c)
-                                <th scope="col">@if($c=='') {{$k}} @else {{$c}} @endif</th>
-                                @endforeach
+                                 @php $c=0; @endphp
+                                 @foreach($campos as $k=>$c)
+                                    @if(substr($k,0,5)!='celda')
+                                    <th scope="col">@if($c=='') {{$k}} @else {{$c}} @endif</th>
+                                    @else
+                                        @if($k=='celda_1_1')
+                                            <th scope="col" width="360px">Celdas</th>
+                                        @endif
+                                    @endif
+                                 @endforeach
 
                                 <th scope="col" width="110px">Acciones</th>
                             </tr>
@@ -164,13 +171,22 @@
             "processing": true,
             "serverSide": true,
             "autoWidth": false,
+            "columnDefs": [
+                            { "width": "200px", "targets": 0 }
+                        ] ,
             "ajax": "{{ route('baterias.datatable_st',array('id'=>$data->id)) }}",
             "columns":[
                 {data:'created_at'},
                 {data:'creado_por'},
                 {data:'estatus'},
                 @foreach($campos as $k=>$c)
-                {data:'{{$k}}'},
+                    @if(substr($k,0,5)!='celda')
+                        {data:'{{$k}}'},
+                    @else
+                        @if($k=='celda_1_1')
+                        {data:'celdas'},
+                        @endif
+                    @endif
                 @endforeach
                 {data:'accion'},
                
