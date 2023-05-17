@@ -32,36 +32,48 @@ $width=800;$height=1400;
         </tr>
              
     </table>
-    <p style="left:100px;top:40px;font-size:18;color:red">{{$data->formulario_registro_id}}</p>
-    @php $i=120;$x=0;
-    $coordx=array(0,115,410,660,
-    115,600,
-    115,350 ,
-                  200,200,200,
-                  220,220,
-                  270,270,
-                  290,290
-                  );
-    $coordy=array(0,120,120,
-                  120,140,140,
-                  160,160,
-                  200,200,200,
-                  220,220,
-                  270,270,
-                  290,290
-                  );
 
-    foreach($data as $k=>$d){
+    
+    @php $i=120;$x=0;
+    $cx=array(  100,
+                 125,410,660,
+                  115,600,
+                  95,365,575,
+                  200,200,200,
+                  220,220,
+                  270,270,
+                  290,290
+                  );
+    $cy=array(65,
+                120,120,120,
+                140,140,
+                160,160,160,
+                200,200,200,
+                220,220,
+                270,270,
+                290,290
+                );
+    
+    /*foreach($data as $k=>$d){
         if($x>=1){
             if(isset($coordy[$x]))
-        echo '<p class="{{$k}}" style="left:'.$coordx[$x].'px;top:'.$coordy[$x].'px">'.$d.'</p>';
+        echo '<p class="{{$k}}" style="left:'.$cx[$x].'px;top:'.$cy[$x].'px">'.$d.'</p>';
         }
         $x++;
-    } 
+    } */
    
     
-    $i+=20;
+    $i=0;
     @endphp
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px;font-size:18;color:red">{{$data->formulario_registro_id}}</p> {{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">{{$bateria->cliente->nombre}}</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">{{$bateria->cliente->contacto}}</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">{{\Carbon\Carbon::parse($data->created_at)->startOfWeek()->format('d-M-Y')}}</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">{{$bateria->cliente->direccion}}</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">{{$bateria->id_componente}}</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">{{$bateria->marca}}</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">{{$bateria->modelo}}</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">{{$bateria->serie}}</p>{{$i++}}
 </div>
 </body>
 </html>

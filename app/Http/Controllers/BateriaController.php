@@ -262,6 +262,7 @@ class BateriaController extends Controller
             ->where('formulario_registro_id',$id)
             ->first();
         //return view('frontend.baterias.pdf2')->with('data',$data);
+       
         $bateria = Componente::findOrFail($data->componente_id);
         if($format=='PDF'){
             $pdf = PDF::loadView('frontend.baterias.pdf2',compact('bateria','data'));
