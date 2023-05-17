@@ -121,7 +121,9 @@
                                     @endif
                                  @endforeach
 
-                                <th scope="col" width="110px">Acciones</th>
+                                <th scope="col" width="110px">
+                                    Acciones<span style="color:#FFF">__________</span>
+                                </th>
                             </tr>
                         </thead>
                     </table>

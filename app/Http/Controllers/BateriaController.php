@@ -39,10 +39,8 @@ class BateriaController extends Controller
 
 
     public function detail($id,Request $request){
-        $tab=array('','');
+        $tab=array('active','');
         if(!empty($request->get('tab'))){
-            if($request->tab==1)
-                $tab[0]='active';
             if($request->tab==2)
                 $tab[1]='active';
         }
@@ -211,6 +209,11 @@ class BateriaController extends Controller
                         <ion-icon name="eye-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
                         </span>
                     </a>';
+            $accion.='<a href="'.route('baterias.download_st',$row->formulario_registro_id).'" target="_blank" title="Ver">
+                        <span class="iconedbox bg-warning">
+                        <ion-icon name="download-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
+                        </span>
+                    </a>';
             if($row->estatus=='P'){
                 $accion.='<a href="'.route('baterias.serv_tec_edit',$row->formulario_registro_id).'" target="_blank" title="Ver">
                 <span class="iconedbox bg-primary">
@@ -242,6 +245,28 @@ class BateriaController extends Controller
             $pdf = PDF::loadView('frontend.baterias.pdf',compact('bateria','data'));
             $pdf->setPaper('a4', 'landscape');
             return $pdf->stream('historial_cargas.pdf');
+        }else{
+            return Excel::download(new BateriasExport($id), 'Equipo.xlsx');
+        }
+
+    }
+
+    public function download_st($id){
+        //dd($id);
+        $format='PDF';
+        if(request()->get('format')=='excel' ){
+            $format=request()->get('format');
+        }
+        
+        $data = DB::table('form_serv_tec_bat_view')
+            ->where('formulario_registro_id',$id)
+            ->first();
+        //return view('frontend.baterias.pdf2')->with('data',$data);
+        $bateria = Componente::findOrFail($data->componente_id);
+        if($format=='PDF'){
+            $pdf = PDF::loadView('frontend.baterias.pdf2',compact('bateria','data'));
+            $pdf->setPaper('legal', 'portrait');
+            return $pdf->stream('bateria_servicio_tecnico.pdf');
         }else{
             return Excel::download(new BateriasExport($id), 'Equipo.xlsx');
         }

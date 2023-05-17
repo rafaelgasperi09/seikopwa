@@ -140,6 +140,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
        
         Route::get('/{id}/servicio_tecnico_edit', array('as' => 'baterias.serv_tec_edit', 'uses' => 'BateriaController@ServicioTecnicoEdit'));
 
+        Route::get('/{id}/download_st', array('as' => 'baterias.download_st', 'uses' => 'BateriaController@download_st'));
+
     });
 
     Route::group(array('prefix' => 'exportar'), function() {
