@@ -43,7 +43,11 @@ $width=800;$height=1400;
                   115,460,
                   115,460,
                   270,730,
-                  290,290
+                  210,590,
+                  210,540,
+                  210,545,
+                  210,730,
+                  200,730,
                   );
     $cy=array(45,
                 120,120,120,
@@ -52,8 +56,12 @@ $width=800;$height=1400;
                 200,200,
                 220,220,
                 270,270,
-                285,285,
-                290,290
+                290,290,//Si NO
+                310,310,
+                328,328,
+                348,348,
+                364,364,
+                382,382,
                 );
     
     /*foreach($data as $k=>$d){
@@ -83,8 +91,18 @@ $width=800;$height=1400;
     <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXX</p>{{$i++}}
     <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXX</p>{{$i++}}
     <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXX</p>{{$i++}}
-    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">yyyyyyyyyyyyyy</p>{{$i++}}
-    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">yyyyyyyyyyyyyy</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]+43}}px;top:{{$cy[$i]}}px">X</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">X</p>{{$i++}}
+    <p style="left:{{$cx[$i]+43}}px;top:{{$cy[$i]}}px">Y</p>{{$i++}} // BAJO+43, SI -38
+    <p style="left:{{$cx[$i]-38}}px;top:{{$cy[$i]}}px">Y</p>{{$i++}} // NA+43, SI -38
 </div>
 </body>
 </html>
