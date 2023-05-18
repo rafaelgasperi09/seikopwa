@@ -39,18 +39,20 @@ $width=800;$height=1400;
                  125,410,660,
                   115,600,
                   95,365,575,
-                  200,200,200,
-                  220,220,
-                  270,270,
+                  170,460,
+                  115,460,
+                  115,460,
+                  270,730,
                   290,290
                   );
-    $cy=array(65,
+    $cy=array(45,
                 120,120,120,
                 140,140,
                 160,160,160,
-                200,200,200,
+                200,200,
                 220,220,
                 270,270,
+                285,285,
                 290,290
                 );
     
@@ -74,6 +76,15 @@ $width=800;$height=1400;
     <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">{{$bateria->marca}}</p>{{$i++}}
     <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">{{$bateria->modelo}}</p>{{$i++}}
     <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">{{$bateria->serie}}</p>{{$i++}}
+
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXX</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">yyyyyyyyyyyyyy</p>{{$i++}}
+    <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">yyyyyyyyyyyyyy</p>{{$i++}}
 </div>
 </body>
 </html>
