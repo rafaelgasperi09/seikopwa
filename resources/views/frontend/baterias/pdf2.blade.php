@@ -48,6 +48,9 @@ $width=800;$height=1400;
                   210,545,
                   210,730,
                   200,730,
+                  260,730,
+                  260,660,780,
+                  180,660,780,
                   );
     $cy=array(45,
                 120,120,120,
@@ -62,6 +65,9 @@ $width=800;$height=1400;
                 348,348,
                 364,364,
                 382,382,
+                420,420,
+                438,438,438,
+                453,453,453,
                 );
     
     /*foreach($data as $k=>$d){
@@ -101,8 +107,16 @@ $width=800;$height=1400;
     <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXX</p>{{$i++}}
     <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">XXXXXXXXXXX</p>{{$i++}}
     <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px">X</p>{{$i++}}
-    <p style="left:{{$cx[$i]+43}}px;top:{{$cy[$i]}}px">Y</p>{{$i++}} // BAJO+43, SI -38
-    <p style="left:{{$cx[$i]-38}}px;top:{{$cy[$i]}}px">Y</p>{{$i++}} // NA+43, SI -38
+    <p style="left:{{$cx[$i]+194}}px;top:{{$cy[$i]}}px">Y</p>{{$i++}} // BAJO+44, buen estado+144, seco+
+    <p style="left:{{$cx[$i]-38}}px;top:{{$cy[$i]}}px">Z</p>{{$i++}} // NA+43, SI -38
+    <p style="left:{{$cx[$i]-38}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXXXXXXXx</p>{{$i++}} 
+    <p style="left:{{$cx[$i]-38}}px;top:{{$cy[$i]}}px">X</p>{{$i++}} // NA+43, SI -38
+    <p style="left:{{$cx[$i]-38}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXXXXXXXx</p>{{$i++}} 
+    <p style="left:{{$cx[$i]-38}}px;top:{{$cy[$i]}}px">xxxxxxxx</p>{{$i++}} 
+    <p style="left:{{$cx[$i]-38}}px;top:{{$cy[$i]}}px">xxxxxx</p>{{$i++}} 
+    <p style="left:{{$cx[$i]-38}}px;top:{{$cy[$i]}}px">XXXXXXXXXXXXXXXXXXXx</p>{{$i++}} 
+    <p style="left:{{$cx[$i]-38}}px;top:{{$cy[$i]}}px">xxxxxx</p>{{$i++}} 
+    <p style="left:{{$cx[$i]-38}}px;top:{{$cy[$i]}}px">xxxxxx</p>{{$i++}} 
 </div>
 </body>
 </html>
