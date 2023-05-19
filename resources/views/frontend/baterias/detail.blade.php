@@ -98,7 +98,7 @@
             <div class="tab-pane {{$tab[1]}}" id="servicio_tecnico" role="tabpanel">
                 <div class="section-title">
                     <div class="right">
-                        @if(Sentinel::getUser()->hasAccess('baterias.serv_tec'))
+                        @if(Sentinel::getUser()->hasAccess('baterias.serv_tec_store'))
                         <a href="{{ route('baterias.serv_tec',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                         @endif
                     </div>

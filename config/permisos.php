@@ -51,10 +51,14 @@ return [
      "baterias.index"=>"Listar Baterias",
      "baterias.detail"=>"Detalle Bateria",
      "baterias.register_in_and_out"=>"Registrar entrada y salida de cuarto de maquinas",
+     "baterias.serv_tec"=>"Ver servicio tecnico",
+     "baterias.serv_tec_store"=>"Registrar servicio tecnico",
+     "baterias.serv_tec_update"=>"Firmar servicio tecnico",
    ),
    "Flujos Formulario"=>array(
      "parteA"=>"Primera Parte del proceso (creación)",
      "parteB"=>"Segunda Parte del proceso (edición)",
+     "parteC"=>"Firma del cliente",
    ),
    "Flujos soporte Tecnico"=>array(
      "sp.parteA"=>"Primera Parte del proceso (creación)",

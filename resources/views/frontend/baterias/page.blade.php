@@ -51,12 +51,12 @@
         <li>
             <div class="item">
                 <div class="icon-box bg-warning">
-                    <ion-icon name="alert-circle-outline" role="img" class="md hydrated" aria-label="Informe de servicio técnicoS"></ion-icon>
+                    <ion-icon name="alert-circle-outline" role="img" class="md hydrated" aria-label="Informe de servicio técnico"></ion-icon>
                 </div>
                 <div class="in">
                     <div>Informe de Servicio técnico</div>
                     <div class="iconsshortchuts">
-                        @if(\Sentinel::hasAccess('baterias.serv_tec'))
+                        @if(\Sentinel::hasAccess('baterias.serv_tec_store'))
                         <a href="{{ route('baterias.serv_tec',$dato->id) }}"  title="Crear">
                             <span class="iconedbox bg-primary">
                             <ion-icon name="create-outline"></ion-icon>

@@ -207,13 +207,13 @@ class BateriaController extends Controller
                         <ion-icon name="eye-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
                         </span>
                     </a>';
-            $accion.='<a href="'.route('baterias.download_st',$row->formulario_registro_id).'" target="_blank" title="Ver">
+            $accion.='<a href="'.route('baterias.download_st',$row->formulario_registro_id).'" target="_blank" title="Descargar">
                         <span class="iconedbox bg-warning">
                         <ion-icon name="download-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
                         </span>
                     </a>';
-            if($row->estatus=='P'){
-                $accion.='<a href="'.route('baterias.serv_tec_edit',$row->formulario_registro_id).'" target="_blank" title="Ver">
+            if($row->estatus=='P' and Sentinel::getUser()->hasAccess('baterias.serv_tec_update')){
+                $accion.='<a href="'.route('baterias.serv_tec_edit',$row->formulario_registro_id).'" target="_blank" title="Firmar">
                 <span class="iconedbox bg-primary">
                 <ion-icon name="create-outline" role="img" class="md hydrated" aria-label="Editar"></ion-icon>
                 </span>
