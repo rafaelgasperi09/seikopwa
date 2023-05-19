@@ -98,7 +98,7 @@
             <div class="tab-pane {{$tab[1]}}" id="servicio_tecnico" role="tabpanel">
                 <div class="section-title">
                     <div class="right">
-                        @if(Sentinel::getUser()->hasAccess('baterias.register_in_and_out'))
+                        @if(Sentinel::getUser()->hasAccess('baterias.serv_tec'))
                         <a href="{{ route('baterias.serv_tec',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                         @endif
                     </div>
@@ -119,6 +119,9 @@
                                             <th scope="col" width="360px">Celdas</th>
                                         @endif
                                     @endif
+                                    @php
+                                    if($k=='voltaje'){break;}  //QUIEBRA EN VOLTAJE
+                                    @endphp
                                  @endforeach
 
                                 <th scope="col" width="110px">
@@ -181,15 +184,13 @@
                 {data:'created_at'},
                 {data:'creado_por'},
                 {data:'estatus'},
-                @foreach($campos as $k=>$c)
-                    @if(substr($k,0,5)!='celda')
-                        {data:'{{$k}}'},
-                    @else
-                        @if($k=='celda_1_1')
-                        {data:'celdas'},
-                        @endif
-                    @endif
-                @endforeach
+                {data:'placa_id_mont'},
+                {data:'placa_marca'},
+                {data:'placa_modelo'},
+                {data:'placa_serie'},
+                {data:'amperaje'},
+                {data:'voltaje'},
+               
                 {data:'accion'},
                
             ]

@@ -24,25 +24,53 @@
         @endif
         @if(\Sentinel::hasAccess('baterias.register_in_and_out'))
         <li>
-            <a href="{{ route('baterias.register_in_and_out',$dato->id) }}" class="item">
+            <div class="item">
                 <div class="icon-box bg-secondary">
                     <ion-icon name="list-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
                 </div>
                 <div class="in">
                     <div>Registro De Entrada y Salida</div>
+                    <div class="iconsshortchuts">
+                        @if(\Sentinel::hasAccess('baterias.register_in_and_out'))
+                        <a href="{{ route('baterias.register_in_and_out',$dato->id) }}"  title="Crear">
+                            <span class="iconedbox bg-primary">
+                            <ion-icon name="create-outline"></ion-icon>
+                            </span>
+                        </a>
+                        @endif
+                        <a href="{{ route('baterias.detail',$dato->id) }}?tab=1"   title="Ver">
+                            <span class="iconedbox bg-success">
+                            <ion-icon name="eye-outline"></ion-icon>
+                            </span>
+                        </a>
+                    </div>
                 </div>
                 
-            </a>
+            </div>
         </li>
         <li>
-            <a href="{{ route('baterias.serv_tec',$dato->id) }}" class="item">
+            <div class="item">
                 <div class="icon-box bg-warning">
                     <ion-icon name="alert-circle-outline" role="img" class="md hydrated" aria-label="Informe de servicio técnicoS"></ion-icon>
                 </div>
                 <div class="in">
                     <div>Informe de Servicio técnico</div>
+                    <div class="iconsshortchuts">
+                        @if(\Sentinel::hasAccess('baterias.serv_tec'))
+                        <a href="{{ route('baterias.serv_tec',$dato->id) }}"  title="Crear">
+                            <span class="iconedbox bg-primary">
+                            <ion-icon name="create-outline"></ion-icon>
+                            </span>
+                        </a>
+                        @endif
+                        <a href="{{ route('baterias.detail',$dato->id) }}?tab=2"   title="Ver">
+                            <span class="iconedbox bg-success">
+                            <ion-icon name="eye-outline"></ion-icon>
+                            </span>
+                        </a>
+                    </div>
                 </div>
-            </a>
+            </div>
         </li>
         @endif
     </ul>

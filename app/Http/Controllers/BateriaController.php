@@ -42,7 +42,7 @@ class BateriaController extends Controller
         $tab=array('active','');
         if(!empty($request->get('tab'))){
             if($request->tab==2)
-                $tab[1]='active';
+               $tab=array('','active');
         }
         $data = Componente::findOrFail($id);
         $campos=FormularioCampo::where('formulario_id',12)->get()->pluck('etiqueta','nombre');
@@ -191,13 +191,11 @@ class BateriaController extends Controller
 
     public function datatable_serv_tecnico($id){
 
-        $data = DB::table('form_serv_tec_bat_view')
+       $data = DB::table('form_serv_tec_bat_view')
             ->selectRaw('*,concat(celda_1_1,",",celda_1_2,",",celda_1_3,",",celda_1_4,",",celda_1_5,",",celda_1_6,",<br/>  ",
             celda_2_1,",",celda_2_2,",",celda_2_3,",",celda_2_4,",",celda_2_5,",",celda_2_6,",<br/>  ",
             celda_3_1,",",celda_3_2,",",celda_3_3,",",celda_3_4,",",celda_3_5,",",celda_3_6,",<br/>  ",
-            celda_4_1,",",celda_4_2,",",celda_4_3,",",celda_4_4,",",celda_4_5,",",celda_4_6,",<br/>  ",
-            celda_5_1,",",celda_5_2,",",celda_5_3,",",celda_5_4,",",celda_5_5,",",celda_5_6,",<br/>  ",
-            celda_6_1,",",celda_6_2,",",celda_6_3,",",celda_6_4,",",celda_6_5,",",celda_6_6) as celdas')
+            celda_4_1,",",celda_4_2,",",celda_4_3,",",celda_4_4,",",celda_4_5,",",celda_4_6) as celdas')
             ->where('componente_id',$id)
             ->orderBy('created_at','desc')
             ->get();
@@ -261,9 +259,10 @@ class BateriaController extends Controller
         $data = DB::table('form_serv_tec_bat_view')
             ->where('formulario_registro_id',$id)
             ->first();
-        //return view('frontend.baterias.pdf2')->with('data',$data);
-       
+        
+       //dd($data);
         $bateria = Componente::findOrFail($data->componente_id);
+        //return view('frontend.baterias.pdf2')->with('data',$data)->with('bateria',$bateria);
         if($format=='PDF'){
             $pdf = PDF::loadView('frontend.baterias.pdf2',compact('bateria','data'));
             $pdf->setPaper('legal', 'portrait');
