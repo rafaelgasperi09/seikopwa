@@ -38,16 +38,20 @@
                             </span>
                         </a>
                         @endif
-                        <a href="{{ route('baterias.detail',$dato->id) }}?tab=1"   title="Ver">
+                        
+                        <a href="{{ route('baterias.detail',$dato->id) }}?tab=1#detalle"   title="Ver">
                             <span class="iconedbox bg-success">
                             <ion-icon name="eye-outline"></ion-icon>
                             </span>
                         </a>
+                    
                     </div>
                 </div>
                 
             </div>
         </li>
+        @endif
+        @if(\Sentinel::hasAccess('baterias.serv_tec'))
         <li>
             <div class="item">
                 <div class="icon-box bg-warning">
@@ -63,7 +67,7 @@
                             </span>
                         </a>
                         @endif
-                        <a href="{{ route('baterias.detail',$dato->id) }}?tab=2"   title="Ver">
+                        <a href="{{ route('baterias.detail',$dato->id) }}?tab=2#detalle"   title="Ver">
                             <span class="iconedbox bg-success">
                             <ion-icon name="eye-outline"></ion-icon>
                             </span>

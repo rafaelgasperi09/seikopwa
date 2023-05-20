@@ -65,6 +65,7 @@ $width=800;$height=1400;
                   190,285,375,460,555,645,
                   190,285,375,460,555,645,
                   50,
+                  50,
                   150,545,
                   150,
                   );
@@ -97,11 +98,12 @@ $width=800;$height=1400;
                 882,882,882,882,882,882,
                 968,968,968,968,968,968,
                 1080,
-                1200,   1200,
+                1150,
+                1200, 1200,
                 1225,
                 );
     $start=false;    $i=0;
-    
+
 
     @endphp
     <p style="left:{{$cx[$i]}}px;top:{{$cy[$i]}}px;font-size:18;color:red">{{$data->formulario_registro_id}}</p> {{$i++}}
@@ -121,11 +123,14 @@ $width=800;$height=1400;
        
        
         if($start){
-            if(isset($cx[$i])){
-                if(in_array($k,['trabajo_realizado_por','trabajo_recibido_por','firma_cliente']) and file_exists(public_path('storage/firmas/'.$d)))
-                echo '<img  width="101px" height="30px"  style="position:fixed;z-index:999;left:'.$cx[$i].'px;top:'.$cy[$i].'px"  src="'.public_path('storage/firmas/'.$d).'">';
-                else
-                echo '<p style="left:'.$cx[$i].'px;top:'.$cy[$i].'px">'.$d.'</p>';
+            if(isset($cx[$i]) and !empty($d)){
+                if(in_array($k,['trabajo_realizado_por','trabajo_recibido_por','firma_cliente']) and file_exists(public_path('storage/firmas/'.$d) )){
+                    echo '<img  width="101px" height="30px"  style="position:fixed;z-index:999;left:'.$cx[$i].'px;top:'.$cy[$i].'px"  src="'.public_path('storage/firmas/'.$d).'">';
+                }  
+                else{
+                    echo '<p style="left:'.$cx[$i].'px;top:'.$cy[$i].'px">'.$d.'</p>';
+                }
+               
             }
           
             $i++;

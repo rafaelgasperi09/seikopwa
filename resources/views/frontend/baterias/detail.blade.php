@@ -56,12 +56,14 @@
                         Historial Cargas (Cuarto de maquinas)
                 </a>
             </li>
+            @if(\Sentinel::hasAccess('baterias.serv_tec'))
             <li class="nav-item">
                 <a class="nav-link {{$tab[1]}}" data-toggle="tab" id="tab2" href="#servicio_tecnico" role="tab" aria-selected="true">
                         <ion-icon name="hammer-outline" class="text-info" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
                         Servicio Tecnico
                 </a>
             </li>
+            @endif
 
         </ul>
         <div class="tab-content mt-1">
@@ -95,6 +97,7 @@
                     </table>
                 </div>
             </div>
+            @if(\Sentinel::hasAccess('baterias.serv_tec'))
             <div class="tab-pane {{$tab[1]}}" id="servicio_tecnico" role="tabpanel">
                 <div class="section-title">
                     <div class="right">
@@ -131,7 +134,7 @@
                         </thead>
                     </table>
                 </div>
-              
+            @endif
             </div>
         </div>
     </div>

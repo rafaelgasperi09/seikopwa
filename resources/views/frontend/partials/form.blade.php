@@ -40,7 +40,7 @@
                                 @elseif($campo->tipo == 'text')
                                     {{ Form::text($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                 @elseif($campo->tipo == 'textarea')
-                                    {{ Form::textarea($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'maxlength'=>'300')) }}
+                                    {{ Form::textarea($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'maxlength'=>'200')) }}
                                 @elseif($campo->tipo == 'select')
                                     {{ Form::select($campo->nombre,getFormularioSelectOpciones($campo->opciones),$value,array('class'=>'form-control','id'=>$campo->nombre,$requerido,$readonly)) }}
                                 @elseif($campo->tipo == 'combo')

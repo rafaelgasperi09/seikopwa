@@ -65,7 +65,7 @@ class BateriaController extends Controller
     public function ServicioTecnico($id){
         $data = Componente::findOrFail($id);
         $formulario = Formulario::whereNombre('form_bat_serv_tec')->first();
-
+        
         return view('frontend.baterias.servicio_tecnico',compact('data','formulario'));
       
     }
