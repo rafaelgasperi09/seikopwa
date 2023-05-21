@@ -75,7 +75,9 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::group(array('prefix' => 'mantenimiento_preventivo'), function() {
 
             Route::get('/create/{id}/tipo/{tipo}', array('as' => 'equipos.create_mant_prev', 'uses' => 'EquiposController@createMantPrev'))->middleware('hasAccess');
-
+              
+            Route::get('{id}/show', array('as' => 'equipos.show_mant_prev', 'uses' => 'EquiposController@showMantPrev'));
+            
             Route::post('/store', array('as' => 'equipos.store_mant_prev', 'uses' => 'EquiposController@storeMantPrev'));
 
             Route::get('/{id}/edit', array('as' => 'equipos.edit_mant_prev', 'uses' => 'EquiposController@editMantPrev'))->middleware('hasAccess');
@@ -91,6 +93,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::group(array('prefix' => 'tecnical_support'), function() {
 
             Route::get('/create/{id}', array('as' => 'equipos.create_tecnical_support', 'uses' => 'EquiposController@createTecnicalSupport'))->middleware('hasAccess');
+            
+            Route::get('{id}/show', array('as' => 'equipos.show_tecnical_support', 'uses' => 'EquiposController@showTecnicalSupport'));
 
             Route::get('/create/{id}/{dailycheck}', array('as' => 'equipos.create_tecnical_support_prefilled', 'uses' => 'EquiposController@createTecnicalSupport'))->middleware('hasAccess');
             

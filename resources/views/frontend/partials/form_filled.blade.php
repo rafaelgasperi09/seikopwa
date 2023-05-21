@@ -17,7 +17,6 @@
                         $files=array();
                         if($campo->requerido) $requerido = 'required';
                         $readonly='disabled';
-                        
                         if(isset($datos[$campo->nombre])) {
                             $value =$datos[$campo->nombre];
                             if($campo->tipo=='firma' and $value=='')
@@ -119,14 +118,16 @@
                                     <div class="wide-block pt-2 pb-2">
                                          @php
                                             $i=0;
-                                           
                                             $checked='';
                                             if(current_user()->isOnGroup('programador') && empty($value)) $value="C";
                                         @endphp
                                         @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
                                             {{getOptionsRadio($o,$formulario->nombre)}}
+                                            @php 
+                                            if($value==$key){ $checked='checked';} 
+                                            @endphp
                                             <div class="custom-control custom-checkbox d-inline">
-                                                <input name="{{$campo->nombre.'[]'}}" type="checkbox" class="custom-control-input" value="{{$o}}" id="{{$campo->nombre.$i}}">
+                                                <input name="{{$campo->nombre.'[]'}}" type="checkbox" class="custom-control-input" value="{{$o}}" {{$checked}} {{$readonly}} id="{{$campo->nombre.$i}}">
                                                 <label class="custom-control-label p-0" for="{{$campo->nombre.$i}}"></label>
                                             </div>
              

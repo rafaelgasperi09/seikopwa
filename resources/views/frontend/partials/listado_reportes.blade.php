@@ -39,6 +39,9 @@
                     <ion-icon name="print-outline" title="Ver detalle"></ion-icon><small>Imprimir</small>
                 </a>
                @endif
+               <a class="btn btn-success btn-sm mr-1 botones" style="display: inline-block;" href="{{ route('equipos.show_mant_prev',$d->id) }}">
+                   <ion-icon name="eye-outline"></ion-icon><small>Ver</small>
+               </a>
                @if(\Sentinel::getUser()->hasAccess('equipos.delete_mant_prev'))
                     <a href="{{ route('equipos.delete_mant_prev',$d->id) }}" class="btn btn-danger btn-sm mr-1 botones">
                         <ion-icon name="trash-outline" title="Borrar"></ion-icon><small>Borrar</small>
@@ -70,6 +73,9 @@
                @endif
                <a class="btn btn-info btn-sm mr-1 botones" data-toggle="modal" data-target="#status_history_modal" data-id="{{ $d->id }}" style="display: inline-block;">
                    <ion-icon name="file-tray-stacked-outline"></ion-icon><small>Historial</small>
+               </a>
+               <a class="btn btn-success btn-sm mr-1 botones" style="display: inline-block;" href="{{ route('equipos.show_tecnical_support',$d->id) }}">
+                   <ion-icon name="eye-outline"></ion-icon><small>Ver</small>
                </a>
                @if(\Sentinel::getUser()->hasAccess('equipos.delete_tecnical_support'))
                     <a href="{{ route('equipos.delete_tecnical_support',$d->id) }}" class="btn btn-danger btn-sm mr-1 botones">

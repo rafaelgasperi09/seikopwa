@@ -11,6 +11,7 @@ use App\MontacargaImagen;
 use App\MontacargaSolicitud;
 use App\Notifications\NewDailyCheck;
 use App\Notifications\NewTecnicalSupportAssignTicket;
+use App\Notifications\NewTecnicalSupport;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -450,6 +451,33 @@ class EquiposController extends BaseController
             ->with('data',$data);
     }
 
+    public function showMantPrev($id){
+
+        $data = FormularioRegistro::findOrFail($id);
+        $equipo = Equipo::findOrFail($data->equipo_id);
+
+        if(!current_user()->can('see',$equipo)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
+            return redirect(route('equipos.index'));
+        }
+        $formulario = Formulario::findOrFail($data->formulario_id);
+
+        $formularioData =$data->data()->get()->pluck('valor','formulario_campo_id');
+
+        $datos=array();
+
+        foreach($formulario->campos as $c){
+            if(isset($formularioData[$c->id])){
+                $datos[$c->nombre]=$formularioData[$c->id];
+            }
+        }     
+        return view('frontend.equipos.show_mant_prev')
+            ->with('equipo',$equipo)
+            ->with('formulario',$formulario)
+            ->with('data',$data)
+            ->with('datos',$datos);
+    }
+
     public function storeMantPrev(SaveFormEquipoRequest $request)
     {
         try {
@@ -567,6 +595,32 @@ class EquiposController extends BaseController
             ->with('data',$data);
     }
 
+    public function showTecnicalSupport($id){
+
+        $data = FormularioRegistro::findOrFail($id);
+        $equipo = Equipo::findOrFail($data->equipo_id);
+        $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
+
+        $campos = $formulario->campos()->whereIn('nombre',['hora_entrada','hora_salida','tecnico_asignado'])->pluck('id');
+        $otrosDatos = $data->data()->whereIn('formulario_campo_id',$campos)->pluck('valor');
+
+        $formularioData =$data->data()->get()->pluck('valor','formulario_campo_id');
+
+        $datos=array();
+
+        foreach($formulario->campos as $c){
+            if(isset($formularioData[$c->id])){
+                $datos[$c->nombre]=$formularioData[$c->id];
+            }
+        }     
+        return view('frontend.equipos.show_tecnical_support_report')
+            ->with('equipo',$equipo)
+            ->with('formulario',$formulario)
+            ->with('otrosCampos',$otrosDatos)
+            ->with('data',$data)
+            ->with('datos',$datos);
+    }
+
     public function storeTecnicalSupport(Request $request){
        
         $this->validate($request, [
@@ -580,23 +634,41 @@ class EquiposController extends BaseController
         $tipo_equipos_id = $request->tipo_equipos_id;
         $formulario = Formulario::find($formulario_id);
         $model = new FormularioRegistro();
-
-        DB::transaction(function() use($model,$request,$formulario){
+        $equipo = Equipo::findOrFail($equipo_id);
+        $status='P';
+        if($model->status=='C')
+            $status='C';
+        DB::transaction(function() use($model,$request,$formulario,$equipo,$status){
 
             $model->formulario_id = $formulario->id;
             $model->creado_por = Sentinel::getUser()->id;
             $model->equipo_id = $request->equipo_id;
             $model->cliente_id = $request->cliente_id;
-            $model->estatus = 'P';
+            $model->estatus = $status;
             if($model->save())
             {
                 if(count($request->all())>=26 and \Sentinel::hasAccess('sp.parteB')){
                     $model->tecnico_asignado=current_user()->id;
                     $model->fecha_asignacion=\Carbon\Carbon::now();
-                    $model->estatus = 'A';
+                    if($status!='C')
+                        $status='A';
+                    $model->estatus = $status;
                     $model->save();
                 }
                 
+                $user = User::Join('role_users','users.id','role_users.user_id')
+                ->Join('roles','role_users.role_id','roles.id')
+                ->Join('activations','users.id','activations.user_id')
+                ->whereRaw("roles.slug='supervisorc'
+                            AND activations.completed=1
+                            AND (crm_clientes_id ='$equipo->cliente_id'  
+                            OR crm_clientes_id LIKE '%$equipo->cliente_id,%' 
+                            OR crm_clientes_id LIKE '%,$equipo->cliente_id%' 
+                            OR  crm_clientes_id LIKE '%,$equipo->cliente_id,%')")
+                ->get();
+                // crear notificacion al supervisor del cliente
+                $when = now()->addMinutes(1);
+                notifica($user,(new NewTecnicalSupport($model))->delay($when));
             }else{
                 Throw new \Exception('Hubo un problema y no se creo el registro!');
             }
@@ -620,6 +692,14 @@ class EquiposController extends BaseController
 
             $formulario_registro_id = $request->formulario_registro_id;
             $model = FormularioRegistro::findOrFail($formulario_registro_id);
+            $datos=FormularioData::Join('formulario_campos','formulario_data.formulario_campo_id','formulario_campos.id')
+                                    ->whereFormularioRegistroId($model->id)
+                                    ->where('cambio_estatus',1)
+                                    ->select('valor')
+                                    ->first()->toArray() ;
+            if(isset($datos['valor']) and !empty($datos['valor'])){
+                $model->estatus='C';
+            }
             $model->updated_at =Carbon::now();
             $model->save();
             $request->session()->flash('message.success', 'Registro guardado con éxito');
