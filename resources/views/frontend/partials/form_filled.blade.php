@@ -73,9 +73,11 @@
                                     
                                     <div class="row">
                                         @foreach($files as $file)
-                                        <div class="col-4 mb-2">
-                                            <a href="{{ url('/storage/equipos/'.$file) }}" download title="Clic para descargar"><img src="{{ url('/storage/equipos/'.$file) }}" alt="image" class="imaged w-100"></a>
-                                        </div>
+                                            @if($file<>'')
+                                            <div class="col-4 mb-2">
+                                                <a href="{{ url('/storage/equipos/'.$file) }}" download title="Clic para descargar"><img src="{{ url('/storage/equipos/'.$file) }}" alt="image" class="imaged w-100"></a>
+                                            </div>
+                                            @endif
                                         @endforeach
                                     </div>
                                 @elseif($campo->tipo == 'camera')
