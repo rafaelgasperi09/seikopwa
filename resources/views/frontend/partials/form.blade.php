@@ -137,11 +137,16 @@
                                      @php
                                         $i=0;
                                         $linea++;
-                                        $checked='';
-                                        if(current_user()->isOnGroup('programador') && empty($value)) $value="C";
+                                        $nosar=$checked='';
+                                        if(current_user()->isOnGroup('programador') && empty($value) and $formulario->tipo=='mant_prev') $value="C";
+                                        if(in_array($campo->nombre,['fugas','cadenas_cables_mangueras','frenos','freno']) and !in_array($value,['OK','N/A']) and !empty($value)){
+                                            $nosar="bg-danger";
+
+                                        }
+                                           
                                     @endphp
 
-                                    <div class="wide-block pt-2 pb-2"  id="dcrow{{$linea}}">
+                                    <div class="wide-block pt-2 pb-2 {{$nosar}}"  id="dcrow{{$linea}}">
                                         
                                         @foreach(getFormularioRadioOpciones($campo->opciones) as $key=>$o)
 
@@ -215,3 +220,34 @@
     });
     @endif
 </script>
+<script>
+        $('.radiofield').click(function(){
+            var errores = ['fugas','cadenas_cables_mangueras','frenos','freno'];
+            var cant_error=0;
+            $('.radiofield').each(function(){
+                var name=$(this).attr('name');
+                if(errores.includes(name) ){               
+                    var value='';
+                    if($(this).prop("checked")){
+                        value=$(this).val();
+                        console.log(value);
+                        if( value==='M' || value==='R'){
+                            cant_error++;
+                        }
+                    }                   
+                }
+            });
+            if(cant_error>0){
+                $("#prioridad").val('No usar este equipo');
+                $("#prioridad").attr('disabled','disabled')
+            }else{
+                var valor=$("#prioridad").val();
+                if(valor==='No usar este equipo')
+                $("#prioridad").val('');
+                $("#prioridad").removeAttr('disabled')
+            }
+            
+        })
+    
+
+    </script>
