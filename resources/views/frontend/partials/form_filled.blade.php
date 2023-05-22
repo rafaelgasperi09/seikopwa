@@ -23,8 +23,7 @@
                                 $readonly='';
                         }
                         if($campo->tipo=='files')
-                            $files = \App\File::whereTabla('formulario_registro')->whereRegistroId($campo->formulario_registro_id)->get();
-
+                            $files = explode(',',$value);
                         @endphp
                         <div class="form-group boxed {{$campo->tamano}}">
                             <div class="input-wrapper">
@@ -71,29 +70,23 @@
                                         </label>
                                     </div>
                                 @elseif($campo->tipo == 'files')
-                                    <div class="">
-                                        {{ Form::file($campo->nombre.'[]',array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*','multiple')) }}
-
-                                    </div>
+                                    
                                     <div class="row">
                                         @foreach($files as $file)
                                         <div class="col-4 mb-2">
-                                            <img src="{{ url($file->ruta) }}" alt="image" class="imaged w-100">
+                                            <a href="{{ url('/storage/equipos/'.$file) }}" download title="Clic para descargar"><img src="{{ url('/storage/equipos/'.$file) }}" alt="image" class="imaged w-100"></a>
                                         </div>
                                         @endforeach
                                     </div>
                                 @elseif($campo->tipo == 'camera')
-                                    <div class="custom-file-upload">
-                                        {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*','capture'=>'camera')) }}
-                                        <label for="{{ $campo->nombre }}" id="{{ $campo->nombre }}" style="background-image: url({{ url('storage/equipos/'.$value) }});background-size: cover;background-repeat: no-repeat;background-position: center;">
-                                            <span>
-                                                <strong>
-                                                    <ion-icon name="cloud-upload-outline" role="img" class="md hydrated" aria-label="cloud upload outline"></ion-icon>
-                                                    <i>Tomar foto</i>
-                                                </strong>
-                                            </span>
-                                        </label>
+                                    <div class="row">
+                                       
+                                        <div class="col-4 mb-2">
+                                            <a href="{{ url('/storage/equipos/'.$value) }}" download title="Clic para descargar"><img src="{{ url('/storage/equipos/'.$value) }}" alt="image" class="imaged w-100"></a>
+                                        </div>
+                                    
                                     </div>
+                                    
                                 @elseif($campo->tipo == 'time')
                                     @if($campo->opciones=='hora' and $value==null)
                                         {{ Form::time($campo->nombre,date('H:i:s'),array('class'=>'form-control',$requerido,'id'=>$campo->nombre,'readonly')) }}

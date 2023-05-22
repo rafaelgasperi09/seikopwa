@@ -60,7 +60,7 @@
             <div class="section-title">C => Correcto , A => Ajustar , R => Reparar , U => Urgente</div>
         </div>
     </div>
-    {{Form::open(array("method" => "POST","action" => "EquiposController@storeMantPrev","role" => "form",'class'=>'form-horizontal'))}}
+    {{Form::open(array("method" => "POST","action" => "EquiposController@storeMantPrev","role" => "form",'class'=>'form-horizontal','files'=>true))}}
     {{ Form::hidden('equipo_id',$data->id,array('required')) }}
     {{ Form::hidden('formulario_id',$formulario->id,array('required')) }}
     @include('frontend.partials.form',array('formulario'=>$formulario,'parte'=>'parteA'))

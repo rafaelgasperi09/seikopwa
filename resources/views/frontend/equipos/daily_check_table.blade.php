@@ -95,9 +95,9 @@
                             estatus=value.registro.estatus;
                         valor = value.valor;
                         if(index == 1) valor = value.valor+' (Turno '+turno+')';
-                        if(valor!=null){
+                        if(valor!=null && valor!=''){
                             if(value.campo.tipo == 'firma') valor = '<img src="../storage/firmas/'+valor+'">';
-                            if(value.campo.tipo == 'camera') valor = '<img src="../storage/equipos/'+valor+'" width="100%">';
+                            if(value.campo.tipo == 'camera') valor = '<a href="../storage/equipos/'+valor+'" download><img src="../storage/equipos/'+valor+'" width="100%" download></a>';
                         }else{
                             valor='';
                         }

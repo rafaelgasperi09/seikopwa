@@ -515,7 +515,7 @@ class EquiposController extends BaseController
 
     public function updateMantPrev(Request $request)
     {
-        
+     
         try {
 
             $this->validate($request, [

@@ -83,8 +83,11 @@ class FormularioRegistroObserver
                         $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().'.'.$ext;
                         $destinationPath = storage_path('/app/public/equipos');
                     }
-
-                    $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                    $image_info = getimagesize($_FILES[$campo->nombre]["tmp_name"]);
+                    $image_width = $image_info[0];
+                    $image_height = $image_info[1];
+                    $image_height=round(1200*$image_height/$image_width,0);
+                    $img->resize(1200, $image_height)->save($destinationPath.'/'.$filename);
                     $valor =  $filename;
 
                 }
