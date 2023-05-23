@@ -281,13 +281,15 @@ function transletaDate($fecha,$showTime=false){
 		echo '';
 	}
 	else{
-		$month = date("m",strtotime($fecha));
-        $html=traducirMes($month,true,'corto');
-
+        $nf=strtotime($fecha);
+		$month = date("m",$nf);
+        $dia=getDayOfWeek(date('N',$nf));
+        $html=traducirMes($month,true,'');
+      
         if($showTime)
-            return date('d',strtotime($fecha)).' '.$html.' '.date('Y',strtotime($fecha) ).' '.date('H;i',strtotime($fecha));
+            return $dia.' '.date('d',$nf).' '.$html.' '.date('Y',$nf ).' '.date('h:i a',$nf);
         else
-		    return date('d',strtotime($fecha)).' '.$html.' '.date('Y',strtotime($fecha));
+		    return date('d',$nf).' '.$html.' '.date('Y',$nf);
 	}
 
 }
@@ -301,6 +303,29 @@ function checkBoxDetail($char){
 
 function limpiar_lista($lista){
     return trim($lista,",");
+}
+
+function semana_rango($fecha,$semana){
+  
+    $numerosemana=$semana;
+    $ano = date('Y',strtotime($fecha));
+    if ($numerosemana > 0 and $numerosemana < 54) {
+        $numerosemana = $numerosemana;
+        $primerdia = $numerosemana * 7 -6;
+        $ultimodia = $numerosemana * 7 ;
+        $principioano = "$ano-01-01";
+        $fecha1 = date('Y-m-d', strtotime("$principioano + $primerdia DAY"));
+        $fecha2 = date('Y-m-d', strtotime ("$principioano + $ultimodia DAY"));
+        if ($fecha2 <= date('Y-m-d', strtotime("$ano-12-31"))) {
+            $fecha2 = $fecha2;
+        } 
+        else {
+            $fecha2 = date('Y-m-d',strtotime("$ano-12-31"));
+        }
+        return transletaDate($fecha1,false).' - '.transletaDate($fecha2,false);
+    }
+    return '';
+    
 }
 
 function notifica($user,$notification)

@@ -25,8 +25,8 @@
                 <div class="col-4">
                     <div class="form-group basic">
                         <div class="input-wrapper">
-                            <label class="label" for="name1">Semana</label>
-                            {{ Form::text('semana',\Carbon\Carbon::now()->startOfWeek()->format('d-m-Y').' a '.\Carbon\Carbon::now()->endOfWeek()->format('d-m-Y'),array('class'=>'form-control','readonly')) }}
+                            <label class="label" for="name1">Fecha</label>
+                            {{ Form::text('semana',transletaDate(date('Y-m-d')),array('class'=>'form-control','readonly')) }}
                         </div>
                     </div>
                 </div>
@@ -73,6 +73,14 @@
 
                             {{ Form::text('turno_chequeo_diario',$turno,array('class'=>'form-control','readonly')) }}
                         </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group basic">
+                        <div class="input-wrapper">
+                            <label class="label" for="name1">Semana   {{semana_rango(date('Y-m-d'),date('W'))}}</label>
+                            {{ Form::text('semana',date('W'),array('class'=>'form-control','readonly')) }}
+                          
                     </div>
                 </div>
             </div>

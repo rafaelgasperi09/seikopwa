@@ -25,11 +25,12 @@
                 <div class="col-4">
                     <div class="form-group basic">
                         <div class="input-wrapper">
-                            <label class="label" for="name1">Semana</label>
-                            {{ Form::text('semana',\Carbon\Carbon::now()->startOfWeek()->format('d-m-Y').' a '.\Carbon\Carbon::now()->endOfWeek()->format('d-m-Y'),array('class'=>'form-control','readonly')) }}
+                            <label class="label" for="name1">Fecha registro</label>
+                            {{ Form::text('fecha',"<b>$data->semana</b> ".transletaDate($data->created_at,true),array('class'=>'form-control','readonly')) }}
                         </div>
                     </div>
                 </div>
+                
             </div>
             <div class="row">
                 <div class="col-4">
@@ -75,6 +76,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-4">
+                    <div class="form-group basic">
+                        <div class="input-wrapper">
+                            <label class="label" for="name1">Semana</label>
+
+                            {{ Form::text('semana',semana_rango($data->created_at,$data->semana),array('class'=>'form-control','readonly')) }}
+                        </div>
+                    </div>
+                </div>
+                
             </div>
             <div class="section-title">NOTA:Este formulario debe hacerse por el operdor del equipo diariamente al comienzo del turno. Ciertos articulos enumerados no son incluidos en algunos modelos. Compruebe todos los articulos aplicables a su unidad.</div>
             <div class="section-title">OK => Buen Estado , M => Mal Estado , R => Revisar</div>

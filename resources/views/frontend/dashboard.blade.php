@@ -83,7 +83,7 @@
                                     Ir
                                 </i>
                                 <span class="chip-label">{{$dc->equipo()->numero_parte}} - turno {{$dc->turno_chequeo_diario}}</span>
-                                <span class="fecha pull-right" title="Fecha de creacion">{{transletaDate($dc->created_at)}}</span>
+                                <span class="fecha pull-right" title="Fecha de creacion">{{transletaDate($dc->created_at,true,'')}}</span>
                             </a>
                             @endif
                         @endforeach
@@ -108,7 +108,7 @@
                                 Ir
                             </i>
                             <span class="chip-label">{{$mp->equipo()->numero_parte}} </span>
-                            <span class="fecha pull-right" title="Fecha de creacion">{{transletaDate($mp->created_at)}}</span>
+                            <span class="fecha pull-right" title="Fecha de creacion">{{transletaDate($mp->created_at,true,'')}}</span>
                         </a>
                         @endforeach
 
@@ -131,7 +131,7 @@
                                     Ir
                                 </i>
                                 <span class="chip-label">{{$st->equipo()->numero_parte}} </span>
-                                <span class="fecha pull-right" title="Fecha de creacion de ticket">{{transletaDate($st->created_at)}}</span>
+                                <span class="fecha pull-right" title="Fecha de creacion de ticket">{{transletaDate($st->created_at,true,'')}}</span>
                             </a>
                             @endif
                         @endforeach
@@ -149,7 +149,7 @@
                                 Ir
                             </i>
                             <span class="chip-label">{{$st->equipo()->numero_parte}} </span>
-                            <div class="fecha pull-right"><span title="Fecha de asignacion de tecnico">{{transletaDate($st->fecha_asignacion)}}</span> <br/> <span title="Tecnico asignado"> {{$st->tecnicoAsignado->getFullName()}}</span></div>
+                            <div class="fecha pull-right"><span title="Fecha de asignacion de tecnico">{{transletaDate($st->fecha_asignacion,true,'')}}</span> <br/> <span title="Tecnico asignado"> {{$st->tecnicoAsignado->getFullName()}}</span></div>
                         </a>
                         @endforeach
                     </div>
@@ -176,7 +176,7 @@
                             </i>
                             <span class="chip-label">{{$sta->equipo()->numero_parte}} </span>
                             <span class="fecha pull-right" title="Fecha de asignacion de tecnico">
-                                 {{transletaDate($sta->estatusHistory()->orderBy('created_at','desc')->first()->created_at)}}
+                                 {{transletaDate($sta->estatusHistory()->orderBy('created_at','desc')->first()->created_at,true,'')}}
                             </span>
                         </a>
                         @endforeach
@@ -211,10 +211,10 @@
                                     <span class="chip-label">{{$stpr->equipo()->numero_parte}} </span>
                                     <div  class="fecha pull-right" >
                                         <span title="Fecha de Inicio">
-                                             {{transletaDate($fecha_sta)}}
+                                             {{transletaDate($fecha_sta,true,'')}}
                                         </span><br/>
                                         <span title="Tiempo transcurrido">
-                                             {{$transcurrido}}
+                                             Hace {{$transcurrido}}
                                         </span>
                                     </div>
                                 </a>

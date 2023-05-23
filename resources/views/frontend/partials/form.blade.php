@@ -101,7 +101,12 @@
                                     @endif
                                 @elseif($campo->tipo == 'number')
                                     @if(in_array($campo->nombre,[ 'horometro','lectura_horometro']))
-                                        {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>$data->ult_horometro())) }}
+                                       @php
+                                        $min='';
+                                        if($value=='')
+                                            $min=$data->ult_horometro();
+                                        @endphp
+                                        {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>$min)) }}
                                     @else
                                         {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                     @endif
@@ -202,6 +207,7 @@
 @endforeach
 
 @include('frontend.partials.firmaNew')
+@include('frontend.loading')
 <script>
     {!!$remove!!}
     @if($formulario->nombre=="form_montacarga_daily_check")
@@ -249,5 +255,7 @@
             
         })
     
-
+        $( "form" ).on('submit',function(e){
+            $('#loadingModal').modal('show');
+        });
     </script>

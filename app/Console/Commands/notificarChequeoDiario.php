@@ -45,12 +45,12 @@ class notificarChequeoDiario extends Command
         $this->info('------------------START CHEQUEO DIARIO JOB -------------------');
         $notificados['users'] = array();
         foreach (User::whereNotNull('crm_clientes_id')->get() as $user){
-
+           
             if(date('D') <> 'Sun'){
                 $clientes = $user->clientes();
-                
+                //dd(count($clientes));
                 $form = Formulario::whereNombre('form_montacarga_daily_check')->first();
-                foreach($clientes->get() as $cliente){
+                foreach($clientes as $cliente){
                     // verificar si el cliente tiene al menos un equipo en su poder
                     if($cliente->equipos()->count()> 0){  //tiene al menos un equipo verificar si ya hizo el chequeo diario de todos
                         //
@@ -94,8 +94,11 @@ class notificarChequeoDiario extends Command
                 $tot++;
             }
             $when = now()->addMinutes(1);
+            //$user=User::find(1);
             notifica($user,(new DailyCheck($title,$message,route('equipos.index')))->delay($when));
+            //$user->notify(new DailyCheck($title,$message,route('equipos.index')));
             $this->info($noti["cliente"]);
+            $this->info($user->email);
             $this->info('body :'.$message);
             $this->info('------------------------------------------');
             if(env('APP_ENV')=='local'){
