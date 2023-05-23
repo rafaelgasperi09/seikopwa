@@ -44,6 +44,10 @@ class notificarChequeoDiario extends Command
 
         $this->info('------------------START CHEQUEO DIARIO JOB -------------------');
         $notificados['users'] = array();
+        $turnos=array('07'=>1,'15'=>2,'22'=>3,'00'=>4);
+        $turno=1;
+        if(isset($turnos[date('H')]))
+        $turno=$turnos[date('H')];
         foreach (User::whereNotNull('crm_clientes_id')->get() as $user){
            
             if(date('D') <> 'Sun'){
@@ -58,6 +62,7 @@ class notificarChequeoDiario extends Command
                             if(!FormularioRegistro::whereRaw("date_format(created_at,'%Y-%m-%d') = '".date('Y-m-d')."'")
                                 ->whereClienteId($cliente->id)
                                 ->whereEquipoId($equipo->id)
+                                ->where('turno_chequeo_diario',$turno)
                                 ->whereFormularioId($form->id)
                                 ->first()){
 
@@ -84,19 +89,13 @@ class notificarChequeoDiario extends Command
             $user = User::find($noti['id']);
             $message = 'Equipos :';
             foreach ($noti['equipos'] as $e){
-                if($tot<3){
-
-                }else{
-                    $message .='...';
-                    break;
-                }
-                $message .= $e['equipo'].',';
+           
+                $message .= $e['equipo'].'|';
                 $tot++;
             }
             $when = now()->addMinutes(1);
-            //$user=User::find(1);
+            
             notifica($user,(new DailyCheck($title,$message,route('equipos.index')))->delay($when));
-            //$user->notify(new DailyCheck($title,$message,route('equipos.index')));
             $this->info($noti["cliente"]);
             $this->info($user->email);
             $this->info('body :'.$message);

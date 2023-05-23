@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
          $fec = date('d');
 
          $schedule->command('notificar:chequeo_diario')
-             ->dailyAt('10:00')
+            ->dailyAt('7:30')->dailyAt('15:30')->dailyAt('22:30')
              ->sendOutputTo(storage_path('logs/notificar_chequeo_diario-'.$fec.'.log'));
         $schedule->command('notificar:baterias_no_hidratadas')
              ->dailyAt('07:30')

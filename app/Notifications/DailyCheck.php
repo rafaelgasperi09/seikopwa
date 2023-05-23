@@ -36,7 +36,7 @@ class DailyCheck extends Notification
      */
     public function via($notifiable)
     {
-        return [WebPushChannel::class];
+        return ['mail',WebPushChannel::class];
     }
 
     /**
@@ -46,11 +46,20 @@ class DailyCheck extends Notification
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+    {   
+        $var=explode('|',$this->body);
+        $mail=new MailMessage;
+        $mail ->subject($this->title)
+        ->line("La siguiente lista no tiene chequeo diario");
+        foreach($var as $v){
+            $mail->line($v);
+        }
+        $mail->action('Equipos',route('dashboard'))
+        ->line('Gracias por usar nuestra aplicación '.env('APP_NAME'));
+        return ($mail);
+       
+           
+                
     }
 
     /**
