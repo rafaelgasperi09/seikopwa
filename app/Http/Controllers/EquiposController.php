@@ -656,7 +656,7 @@ class EquiposController extends BaseController
                     $model->save();
                 }
                 
-                $user = User::Join('role_users','users.id','role_users.user_id')
+                $users = User::Join('role_users','users.id','role_users.user_id')
                 ->Join('roles','role_users.role_id','roles.id')
                 ->Join('activations','users.id','activations.user_id')
                 ->whereRaw("roles.slug='supervisorc'
@@ -668,7 +668,10 @@ class EquiposController extends BaseController
                 ->get();
                 // crear notificacion al supervisor del cliente
                 $when = now()->addMinutes(1);
-                notifica($user,(new NewTecnicalSupport($model))->delay($when));
+                foreach($users as $user){
+                    notifica($user,(new NewTecnicalSupport($model))->delay($when));
+                }
+                    
             }else{
                 Throw new \Exception('Hubo un problema y no se creo el registro!');
             }
