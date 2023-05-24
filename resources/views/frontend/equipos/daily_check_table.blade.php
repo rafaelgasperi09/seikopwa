@@ -30,12 +30,22 @@
                     {{ $d->semana }}
                 </td>
                 @foreach($dias as $dia)
-                <td data-id="{{ $d->{$dia} }}" data-turno="1">
-                    @empty(!$d->{$dia}) 
-                        <ion-icon class='checkday' name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> 
-                    @else 
-                    <ion-icon name="close-outline" style="color:red;" size="large"></ion-icon>  
-                    @endif
+                @php
+                $turno=(int)filter_var($dia, FILTER_SANITIZE_NUMBER_INT);
+                $prioridad= explode('_',$d->{$dia});
+                $prioridad=end($prioridad);
+                if(!empty($d->{$dia})){
+                    if($prioridad=='No usar este equipo')
+                        $check='<ion-icon name="close-outline" style="color:#FE9500 ;" size="large"></ion-icon>';
+                    else
+                        $check=' <ion-icon class="checkday" name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> ';
+                }else{
+                    $check='<ion-icon name="close-outline" style="color:red;" size="large"></ion-icon> ';
+                }
+               
+                @endphp
+                <td data-id="{{ $d->{$dia} }}" data-turno="{{$turno}}">
+                   {!!$check!!}
                 </td>
                 @endforeach
                 <td>

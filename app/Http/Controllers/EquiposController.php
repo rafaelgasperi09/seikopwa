@@ -171,18 +171,20 @@ class EquiposController extends BaseController
         }
         $querySelect="formulario_registro.semana,formulario_registro.ano,max(formulario_registro.id) as id,".PHP_EOL;
         foreach($dias as $k=>$dia){
-            $querySelect.="MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN '$dia' THEN formulario_registro.id ELSE '' END) AS $dia";
+            $querySelect.="MAX(CASE CONCAT(formulario_registro.dia_semana,formulario_registro.`turno_chequeo_diario`) WHEN '$dia' THEN concat(formulario_registro.id,'_',formulario_data.valor) ELSE '' END) AS $dia";
             if($k+1<count($dias))
                 $querySelect.=','.PHP_EOL;
         }
        
         $form['dc'] =FormularioRegistro::selectRaw($querySelect)
                                         ->join('formularios','formulario_registro.formulario_id','=','formularios.id')
+                                        ->join('formulario_data','formulario_data.formulario_registro_id','=','formulario_registro.id')
+                                        ->where('formulario_data.formulario_campo_id',968)
                                         ->where('equipo_id',$id)
                                         ->where('formularios.nombre','form_montacarga_daily_check')
                                         ->groupBy('formulario_registro.semana','formulario_registro.ano')
                                         ->get();
-
+       
         $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)->where('formularios.tipo','serv_tec')->get();
 

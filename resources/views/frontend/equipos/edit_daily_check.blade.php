@@ -26,7 +26,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Fecha registro</label>
-                            {{ Form::text('fecha',"<b>$data->semana</b> ".transletaDate($data->created_at,true),array('class'=>'form-control','readonly')) }}
+                            {{ Form::text('fecha',transletaDate($data->created_at,true),array('class'=>'form-control','readonly')) }}
                         </div>
                     </div>
                 </div>
@@ -81,7 +81,8 @@
                         <div class="input-wrapper">
                             <label class="label" for="name1">Semana</label>
 
-                            {{ Form::text('semana',semana_rango($data->created_at,$data->semana),array('class'=>'form-control','readonly')) }}
+                            {{ Form::text('semana',$data->semana,array('class'=>'form-control','readonly')) }}
+                       {{semana_rango($data->created_at,$data->semana)}}
                         </div>
                     </div>
                 </div>
