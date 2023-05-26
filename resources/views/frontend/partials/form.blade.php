@@ -227,30 +227,37 @@
     @endif
 </script>
 <script>
+        $("#prioridad").val('Media');
+        $("#prioridad").attr('disabled','disabled');
         $('.radiofield').click(function(){
             var errores = ['fugas','cadenas_cables_mangueras','frenos','freno'];
             var cant_error=0;
+            var cant_warnings=0;
             $('.radiofield').each(function(){
                 var name=$(this).attr('name');
-                if(errores.includes(name) ){               
+                              
                     var value='';
                     if($(this).prop("checked")){
                         value=$(this).val();
                         console.log(value);
                         if( value==='M' || value==='R'){
+                            if(errores.includes(name) ){ 
                             cant_error++;
+                            }else{
+                            cant_warnings++;
+                            }
                         }
                     }                   
-                }
+               
             });
+            if(parseInt(cant_error)+parseInt(cant_warnings)==0){
+                $("#prioridad").val('Media');
+            }
             if(cant_error>0){
                 $("#prioridad").val('No usar este equipo');
-                $("#prioridad").attr('disabled','disabled')
-            }else{
-                var valor=$("#prioridad").val();
-                if(valor==='No usar este equipo')
-                $("#prioridad").val('');
-                $("#prioridad").removeAttr('disabled')
+            }
+            if(cant_warnings>0){
+                $("#prioridad").val('Alta');
             }
             
         })
