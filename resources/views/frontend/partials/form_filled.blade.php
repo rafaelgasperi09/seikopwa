@@ -169,7 +169,10 @@
                                         </div>
                                         @endif
                                     @else
-                                    <img id="img_operador" width="100%" style="max-width:550px" data-toggle="modal"  data-field="operador" src="/storage/firmas/{{$value}}" class="imgSignRequest">
+                                        @if(isset($creador[$campo->nombre]))
+                                        <p><i>{{$creador[$campo->nombre]}}</i></p>
+                                        @endif
+                                        <img id="img_operador" width="100%" style="max-width:550px" data-toggle="modal"  data-field="operador" src="/storage/firmas/{{$value}}" class="imgSignRequest">
                                     @endif
                                 @endif
                                 @if($showclear)

@@ -23,4 +23,8 @@ class FormularioData extends BaseModel
     public function archivo(){
         return $this->belongsTo(Archivo::class,'archivo_id');
     }
+
+    public function creador(){
+        return $this->belongsTo('App\User','user_id');
+    }
 }

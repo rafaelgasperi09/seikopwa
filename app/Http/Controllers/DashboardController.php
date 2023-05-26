@@ -46,7 +46,7 @@ class DashboardController extends Controller
             $q->whereRaw($filterExtra);
         });
         if(empty($pluck)){
-            return  $r->get();
+            return  $r->orderBy('created_at','desc')->get();
 
         }else{
             return $r->pluck('equipo_id');

@@ -467,16 +467,22 @@ class EquiposController extends BaseController
         $formularioData =$data->data()->get()->pluck('valor','formulario_campo_id');
 
         $datos=array();
-
+        $creador=array();
         foreach($formulario->campos as $c){
             if(isset($formularioData[$c->id])){
                 $datos[$c->nombre]=$formularioData[$c->id];
+               
+                if($c->tipo=='firma'){
+                    $data_firma=$data->data()->where('formulario_campo_id',$c->id)->first();
+                    $creador[$c->nombre]=$data_firma->creador->full_name;
+                }
             }
-        }     
+        } 
         return view('frontend.equipos.show_mant_prev')
             ->with('equipo',$equipo)
             ->with('formulario',$formulario)
             ->with('data',$data)
+            ->with('creador',$creador)
             ->with('datos',$datos);
     }
 
