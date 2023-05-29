@@ -49,6 +49,10 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         Route::get('/lista', array('as' => 'equipos.lista', 'uses' => 'EquiposController@lista'));
 
+        Route::get('/reportes_list', array('as' => 'equipos.reportes_list', 'uses' => 'EquiposController@reportes_list'));
+        
+        Route::get('/reportes_datatable', array('as' => 'equipos.reportes_datatable', 'uses' => 'EquiposController@reportes_datatable'));
+
         Route::get('/{sub}/tipo/{id}', array('as' => 'equipos.tipo', 'uses' => 'EquiposController@tipo'));
 
         Route::get('/search/{sub}/{id}', array('as' => 'equipos.search', 'uses' => 'EquiposController@search'));
@@ -66,6 +70,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
             Route::post('/store', array('as' => 'equipos.store_daily_check', 'uses' => 'EquiposController@storeDailyCheck'));
 
             Route::get('/{id}/edit', array('as' => 'equipos.edit_daily_check', 'uses' => 'EquiposController@editDailyCheck'))->middleware('hasAccess');
+            
+            Route::get('/{id}/show', array('as' => 'equipos.show_daily_check', 'uses' => 'EquiposController@showDailyCheck'));
 
             Route::put('/{id}/update', array('as' => 'equipos.update_daily_check', 'uses' => 'EquiposController@updateDailyCheck'));
 

@@ -63,6 +63,18 @@
                                 </a>
                             </li>
                         </ul>
+                        <ul>
+                            <li>
+                                <a href="{{ route('equipos.reportes_list') }}" class="item" title="Historial de reportes">
+                                    <div class="icon-box bg-primary">
+                                        <ion-icon name="list-outline" title="equipos"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        Historial de reportes
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     @endif
                     @if(\Sentinel::hasAccess('baterias.index'))

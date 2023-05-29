@@ -337,3 +337,21 @@ function notifica($user,$notification)
     return $user->notify($notification);
 
 }
+
+function tipo_form($tipo=''){
+    $tipos=array(   ''=>'Seleccione',
+                    'carga_baterias'=>'Carga de baterias',
+                    'daily_check'=>'Daily check',
+                    'mant_prev'=>'Mantenimiento preventivo',
+                    'serv_tec'=>'Servicio tecnico',
+                    'serv_tec_bat'=>'Servicio tecnico de Bateria'
+    );
+
+    if(empty($tipo))
+        return $tipos;
+    if(isset($tipos[$tipo])){
+        return $tipos[$tipo];
+
+    return $tipo;
+    }
+}

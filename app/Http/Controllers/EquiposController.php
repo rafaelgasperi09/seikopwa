@@ -28,6 +28,8 @@ use Sentinel;
 use Illuminate\Support\Facades\Storage;
 use PDF;
 use Response;
+use Yajra\DataTables\Facades\DataTables;
+
 class EquiposController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -86,6 +88,53 @@ class EquiposController extends BaseController
             'subName'=>'Lista',
             'tipoName'=>'Todos');
         return view('frontend.equipos.lista')->with('equipos',$equipos)->with('datos',$datos)->with('dominio',$dominio);
+    }
+
+    public function reportes_list(Request $request){
+        $filtro='false';
+        return view('frontend.equipos.reportes')->with('filtro',$filtro);
+    }
+
+    public function reportes_datatable(Request $request){
+        $clientes=explode(',',current_user()->crm_clientes_id);
+        $data = DB::table('formulario_registro')
+                ->join('formularios','formulario_registro.formulario_id','formularios.id')
+                ->join('users','formulario_registro.creado_por','users.id')
+                ->join('equipos_vw','formulario_registro.cliente_id','equipos_vw.id')
+                ->selectRaw('formulario_registro.*,users.first_name,users.last_name,formularios.tipo,equipos_vw.cliente,equipos_vw.numero_parte')
+                ->whereNull('formulario_registro.deleted_at')
+                ->when(!empty($request->fecha) ,function ($q) use($request){
+                    $q->where("created_at",">=",$request->fecha);
+                })
+                ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
+                    $q->whereIn("cliente_id",$clientes);
+                });
+
+    return DataTables::of($data)
+        ->editColumn('creado_por', function($row) {
+            return $row->first_name.' '.$row->last_name;
+        })
+        ->editColumn('numero_parte', function($row) {
+            return "<a target='_blank' href='".route('equipos.detail',$row->equipo_id)."'>$row->numero_parte</a>";
+        })
+        ->addColumn('tipo', function($row) {
+            return tipo_form($row->tipo);
+        })
+        ->addColumn('actions', function($row) {
+        $url='';
+        if($row->tipo=='daily_check')
+            $url=route('equipos.show_daily_check',$row->id);
+        if($row->tipo=='mant_prev')
+            $url=route('equipos.show_mant_prev',$row->id);    
+        if($row->tipo=='serv_tec')
+            $url=route('equipos.show_tecnical_support',$row->id);
+            return ' <a target="_blank" href="'.$url.'" target="_blank" class="btn btn-success btn-sm mr-1 ">
+                        <ion-icon name="eye-outline" title="Ver detalle"></ion-icon>Ver
+                    </a>';
+        })
+        ->rawColumns(['status','numero_parte', 'actions'])
+        ->toJson();
+
     }
 
     public function tipo($sub,$id){
@@ -300,6 +349,36 @@ class EquiposController extends BaseController
             ->with('equipo',$equipo)
             ->with('formulario',$formulario)
             ->with('data',$data);
+    }
+
+    public function showDailyCheck($id){
+
+        $data = FormularioRegistro::findOrFail($id);
+        $equipo = Equipo::findOrFail($data->equipo_id);
+        if(!current_user()->can('see',$equipo)){
+            request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
+            return redirect(route('equipos.index'));
+        }elseif(!current_user()->can('edit',$data)){
+            request()->session()->flash('message.error','Este registro no esta disponible para ser modificado.');
+            return redirect(route('equipos.detail',$equipo->id));
+        }
+
+        $formulario = Formulario::findOrFail($data->formulario_id);
+        $formularioData =$data->data()->get()->pluck('valor','formulario_campo_id');
+
+        $datos=array();
+
+        foreach($formulario->campos as $c){
+            if(isset($formularioData[$c->id])){
+                $datos[$c->nombre]=$formularioData[$c->id];
+            }
+        }
+
+        return view('frontend.equipos.show_daily_check')
+            ->with('equipo',$equipo)
+            ->with('formulario',$formulario)
+            ->with('data',$data)
+            ->with('datos',$datos);
     }
 
     public function storeDailyCheck(Request $request){
