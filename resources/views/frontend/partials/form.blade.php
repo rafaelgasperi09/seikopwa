@@ -238,6 +238,7 @@
     @endif
 </script>
 <script>
+   @if($formulario->nombre=="form_montacarga_daily_check")
         $("#prioridad").val('Media');
         $("#prioridad").attr('disabled','disabled');
         $('.radiofield').click(function(){
@@ -271,7 +272,8 @@
                 $("#prioridad").val('No usar este equipo');
             }
             
-        })
+        });
+    @endif
     
         $( "form" ).on('submit',function(e){
             $('#loadingModal').modal('show');
