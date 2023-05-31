@@ -43,7 +43,7 @@ class FormularioRegistroObserver
         $request = request();
         $nousar=false;
         $fcampos=$formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get();
-
+       
         foreach ($fcampos as $campo) {
             $valor = '';
             $user_id = current_user()->id;
@@ -59,7 +59,7 @@ class FormularioRegistroObserver
    
             $files=array();
             if($campo->tipo=='files')  $files = $request->file($campo->nombre);
-
+            
             if($campo->nombre == 'semana') {$valor = Carbon::now()->startOfWeek()->format('d-m-Y');}
             if($campo->nombre == 'dia_semana') {$valor = getDayOfWeek(date('N'));}
             if($campo->tipo=='firma' && $request->get($campo->nombre)){
@@ -72,7 +72,7 @@ class FormularioRegistroObserver
 
             if(in_array($campo->tipo,['camera','file'])){
                 $file = $request->file($campo->nombre);
-
+                
                 if($file){
                     $img = Image::make($file->path());
                     $ext = $file->getClientOriginalExtension();
@@ -92,7 +92,7 @@ class FormularioRegistroObserver
 
                 }
             }
-            if(isset($files)){
+            if(count($files)>0){
                 if(count($files) > 0){
                     $j=1;
                     foreach ($files as $file){
@@ -127,6 +127,7 @@ class FormularioRegistroObserver
                 if(!empty($valor) && count($valor)>0)
                     $valor =implode(',',$valor);
             }
+           
             $form_data = FormularioData::create([
                 'formulario_registro_id' => $formularioRegistro->id,
                 'formulario_campo_id' => $campo->id,
@@ -135,19 +136,21 @@ class FormularioRegistroObserver
                 'api_descripcion' => '',
                 'user_id'=>$user_id
             ]);
-
+           
             if (!$form_data) {
                 throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
             }else{
                 //$formularioCampo = FormularioCampo::find($form_data->formulario_campo_id);
+              
                 if($campo->cambio_estatus && !empty($form_data->valor)) {
+                    
                     $formularioRegistro->estatus = 'C';
                     $formularioRegistro->save();
-
+                    
                     $notificados = User::whereHas('roles',function ($q){
                         $q->where('role_users.role_id',5); // supervisor GMP
                     })->get();
-
+                    
                     if(env('APP_ENV')!='local' or true){
                         foreach ($notificados as $n){
                             $when = now()->addMinutes(1);

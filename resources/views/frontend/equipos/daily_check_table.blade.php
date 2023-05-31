@@ -36,7 +36,7 @@
                 $prioridad=end($prioridad);
                 if(!empty($d->{$dia})){
                     if($prioridad=='No usar este equipo')
-                        $check='<ion-icon name="close-outline" style="color:#FE9500 ;" size="large"></ion-icon>';
+                        $check='<ion-icon class="checkday" name="close-outline" style="color:#FE9500 ;" size="large"></ion-icon>';
                     else
                         $check=' <ion-icon class="checkday" name="checkmark-outline" size="large" style="color:green;"  ></ion-icon> ';
                 }else{

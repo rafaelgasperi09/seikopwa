@@ -46,7 +46,17 @@
                                 @elseif($campo->tipo == 'combo')
                                     {{ Form::select($campo->nombre,getCombo($campo->tipo_combo,'Seleccione '.$campo->etiqueta),$value,array('class'=>'form-control',$requerido,$readonly)) }}
                                 @elseif($campo->tipo == 'database')
-                                    @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,'field_name'=>$campo->nombre,'items'=>getModelList('\App\\'.$campo->modelo,$campo->database_nombre,$campo->database_nombre)))
+                                    @php 
+                                        $db_nombre=$campo->database_nombre; $db_id=$campo->database_nombre; 
+                                        if(strpos($campo->database_nombre, ',')!== false){
+                                            $campo_db=explode(',',$campo->database_nombre);
+                                            $db_id=$campo_db[0]; 
+                                            $db_nombre=$campo_db[1];
+                                            $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre);
+                                            
+                                        }
+                                    @endphp
+                                    @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,'field_name'=>$campo->nombre,'items'=>getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre)))
                                 @elseif($campo->tipo == 'api')
                                     <?php $api = new \App\HcaApi($campo->api_endpoint);?>
                                     @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,'field_name'=>$campo->nombre,'items'=>$api->result(),$readonly))
@@ -254,11 +264,11 @@
             if(parseInt(cant_error)+parseInt(cant_warnings)==0){
                 $("#prioridad").val('Media');
             }
-            if(cant_error>0){
-                $("#prioridad").val('No usar este equipo');
-            }
             if(cant_warnings>0){
                 $("#prioridad").val('Alta');
+            }
+            if(cant_error>0){
+                $("#prioridad").val('No usar este equipo');
             }
             
         })

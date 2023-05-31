@@ -415,7 +415,7 @@ class EquiposController extends BaseController
     }
 
     public function storeDailyCheck(Request $request){
-
+       
         try{
             $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;
@@ -446,13 +446,14 @@ class EquiposController extends BaseController
 
 
             $when = now()->addMinutes(1);
-            /*foreach (User::whereCrmClienteId(current_user()->crm_cliente->id)->get() as $u){
+            $notis= User::whereRaw("crm_clientes_id ='%$equipo->cliente_id%' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")->get() ;
+            foreach ($notis as $u){
                 if($u->isOnGroup('SupervisorC')){
                     notifica($u,(new NewDailyCheck($model))->delay($when));
                 }
-            }*/
+            }
 
-            $u = new User(['id'=>1,'email'=>'rafaelgasperi@clic.com.pa']);
+            //$u = new User(['id'=>1,'email'=>'rafaelgasperi@clic.com.pa']);
             //notifica($u,(new NewDailyCheck($model))->delay($when));
 
             $request->session()->flash('message.success','Registro creado con éxito');
