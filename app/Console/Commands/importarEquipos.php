@@ -6,6 +6,7 @@ use App\Cliente;
 use App\MontacargaUser;
 use App\User;
 use App\EquiposVw;
+use App\ClientesVw;
 use App\Equipo;
 use Sentinel;
 Use DB;
@@ -57,7 +58,7 @@ class ImportarEquipos extends Command
       WHERE e.cliente_id = c.id ';
         $data=\DB::select(DB::Raw($dataQuery));
         $data=json_decode(json_encode($data), true);
-        
+       
         foreach($data as $d){
             if($d['updated_at']>=date('Y-m-d',strtotime("-1 days"))){
                 $eq=EquiposVw::find($d['id']);
@@ -68,6 +69,31 @@ class ImportarEquipos extends Command
                 $obj =  EquiposVw::create($d);
                 if($obj){
                     $this->info("------------------INSERTADO EQUIPO ".$d['numero_parte']."-------------------");
+                }
+            }
+          
+
+        }
+
+        //importar clientes
+        $dataQuery='SELECT
+                        c.id,
+                        c.nombre,
+                        c.updated_at
+                    FROM montacarga.contactos c';
+        $data=\DB::select(DB::Raw($dataQuery));
+        $data=json_decode(json_encode($data), true);
+       
+        foreach($data as $d){
+            if($d['updated_at']>=date('Y-m-d',strtotime("-1 days"))){
+                $cl=ClientesVw::find($d['id']);
+                if($cl){
+                    $cl->delete();
+                    $this->info("------------------BORRANDO CLIENTE ".$d['nombre']."-------------------");
+                }
+                $obj =  ClientesVw::create($d);
+                if($obj){
+                    $this->info("------------------INSERTADO CLIENTE ".$d['nombre']."-------------------");
                 }
             }
           

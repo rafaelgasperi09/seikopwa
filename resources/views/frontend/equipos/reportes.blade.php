@@ -42,6 +42,14 @@
     <div class=""><br/></div>
 </div>
 <script>
+   var obj = {
+    @foreach(request()->all() as $k=>$v)
+        {{$k}}: '{{$v}}',
+    @endforeach
+    }
+  
+    var parameters=new URLSearchParams(obj).toString();
+    console.log(parameters);
   $('.datatable').DataTable( {
                 "language": {
                     processing: '<i style="position: fixed;left: 50%;top:50%;" class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
@@ -55,7 +63,7 @@
                 "order": [[ 0, "desc" ]],
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ route('equipos.reportes_datatable') }}",
+                "ajax": "{{ route('equipos.reportes_datatable') }}?"+parameters,
                 "columns":[
                     {data:'id'},
                     {data:'created_at'},
@@ -63,7 +71,7 @@
                     {data:'numero_parte',name:'equipos_vw.numero_parte'},
                     {data:'creado_por',name:'users.first_name'},
                     {data:'last_name',name:'users.last_name'},
-                    {data:'cliente',name:'equipos_vw.cliente'},
+                    {data:'nombre',name:'clientes_vw.nombre'},
                     {data:'estatus'},
                     {data:'semana'},
                     {data:'dia_semana'},

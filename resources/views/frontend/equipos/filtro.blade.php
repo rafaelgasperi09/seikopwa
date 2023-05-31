@@ -17,17 +17,18 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Equipo</label>
-                            {{ Form::select('equipo_id',\App\Equipo::orderBy('numero_parte')->get()->pluck('numero_parte','id')->prepend('Seleccione'),request('equipo_id'), array("class" => "form-control","id"=>"type"))  }}
-                           
+                            {{ Form::text('typeheadfield_equipo_id',request('typeheadfield_equipo_id'),array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_equipo_id','data-field_name'=>'equipo_id','data-provide'=>'typeahead','data-items'=>10,'placeholder'=>'',"autocomplete"=>"off" )) }}
+                            {{ Form::hidden('equipo_id',request('equipo_id'),array('id'=>'equipo_id')) }} 
                         </div>
                     </div>
                 </div>
+                
                 <div class="col-md-4 col-sm-6 col-12">
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Cliente</label>
-                            {{ Form::select('equipo_id',\App\Cliente::orderBy('nombre')->get()->pluck('nombre','id')->prepend('Seleccione'),request('equipo_id'), array("class" => "form-control","id"=>"type"))  }}
-                           
+                            {{ Form::text('typeheadfield_cliente_id',request('typeheadfield_cliente_id'),array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_cliente_id','data-field_name'=>'cliente_id','data-provide'=>'typeahead','data-items'=>10,'placeholder'=>'',"autocomplete"=>"off" )) }}
+                            {{ Form::hidden('cliente_id',request('cliente_id'),array('id'=>'cliente_id')) }} 
                         </div>
                     </div>
                 </div>
@@ -37,7 +38,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Estado</label>
-                            {{ Form::select('equipo_id',[''=>'Seleccione','C'=>'Cerrado','A'=>'Abierto','P'=>'Pendiente','PR'=>'Proceso'],request('equipo_id'), array("class" => "form-control","id"=>"type"))  }}
+                            {{ Form::select('estado',[''=>'Seleccione','C'=>'Cerrado','A'=>'Abierto','P'=>'Pendiente','PR'=>'Proceso'],request('estado'), array("class" => "form-control","id"=>"type"))  }}
                            
                         </div>
                     </div>
@@ -46,7 +47,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Fecha desde</label>
-                            {{ Form::date('desde',null,request('desde'), array("class" => "form-control ","id"=>"desde"))  }}
+                            {{ Form::date('desde',request('desde'), array("class" => "form-control ","id"=>"desde"))  }}
                            
                         </div>
                     </div>
@@ -55,7 +56,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Hasta</label>
-                            {{ Form::date('hasta',null,request('hasta'), array("class" => "form-control","id"=>"hasta"))  }}
+                            {{ Form::date('hasta',request('hasta'), array("class" => "form-control","id"=>"hasta"))  }}
                            
                         </div>
                     </div>
@@ -64,8 +65,8 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Registrado por</label>
-                            {{ Form::select('equipo_id',\App\User::orderBy('first_name')->get()->pluck('full_name','id')->prepend('Seleccione'),request('equipo_id'), array("class" => "form-control","id"=>"type"))  }}
-                           
+                            {{ Form::text('typeheadfield_created_by',request('typeheadfield_created_by'),array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_created_by','data-field_name'=>'created_by','data-provide'=>'typeahead','data-items'=>10,'placeholder'=>'',"autocomplete"=>"off" )) }}
+                            {{ Form::hidden('created_by',request('created_by'),array('id'=>'created_by')) }} 
                         </div>
                     </div>
                 </div>
@@ -92,3 +93,80 @@
     {{ Form::close() }}
     </div>
 </div>
+<script>
+$(document).ready(function(){
+$('#typehead_equipo_id').typeahead({
+        items:20,
+        source: [
+            @foreach(\App\Equipo::pluck('numero_parte','id') as $key=>$value)
+                {id: '{{ $key }}', name: '{{ trim($value) }}'},
+            @endforeach
+        ],
+        autoSelect: true
+    });
+
+    $('#typehead_equipo_id').change(function() {
+
+        var current = $(this).typeahead("getActive");
+        console.log(' curr :'+current);
+        if (current) {
+            // Some item from your model is active!
+            if (current.name == $(this).val()) {
+                // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
+                $('#equipo_id').val(current.id);
+            }
+        }
+    });
+
+    
+$('#typehead_cliente_id').typeahead({
+        items:20,
+        source: [
+            @foreach(\App\Cliente::orderBy('nombre')->pluck('nombre','id') as $key=>$value)
+                {id: '{{ $key }}', name: '{{ trim($value) }}'},
+            @endforeach
+        ],
+        autoSelect: true
+    });
+
+    $('#typehead_cliente_id').change(function() {
+
+        var current = $(this).typeahead("getActive");
+        console.log(' curr :'+current);
+        if (current) {
+            // Some item from your model is active!
+            if (current.name == $(this).val()) {
+                // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
+                $('#cliente_id').val(current.id);
+            }
+        }
+    });
+
+$('#typehead_created_by').typeahead({
+        items:20,
+        source: [
+            @foreach(\App\User::get()->pluck('full_name','id') as $key=>$value)
+                {id: '{{ $key }}', name: '{{ trim($value) }}'},
+            @endforeach
+        ],
+        autoSelect: true
+    });
+
+    $('#typehead_created_by').change(function() {
+
+        var current = $(this).typeahead("getActive");
+        console.log(' curr :'+current);
+        if (current) {
+            // Some item from your model is active!
+            if (current.name == $(this).val()) {
+                // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
+                $('#created_by').val(current.id);
+            }
+        }
+    });
+
+});
+
+   
+
+</script>

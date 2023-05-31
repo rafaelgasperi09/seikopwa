@@ -96,19 +96,40 @@ class EquiposController extends BaseController
     }
 
     public function reportes_datatable(Request $request){
+        //dd($request->all());
         $clientes=explode(',',current_user()->crm_clientes_id);
         $data = DB::table('formulario_registro')
                 ->join('formularios','formulario_registro.formulario_id','formularios.id')
                 ->join('users','formulario_registro.creado_por','users.id')
-                ->join('equipos_vw','formulario_registro.cliente_id','equipos_vw.id')
-                ->selectRaw('formulario_registro.*,users.first_name,users.last_name,formularios.tipo,equipos_vw.cliente,equipos_vw.numero_parte')
+                ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
+                ->join('clientes_vw','formulario_registro.cliente_id','clientes_vw.id')
+                ->selectRaw('formulario_registro.*,users.first_name,users.last_name,formularios.tipo,clientes_vw.nombre,equipos_vw.numero_parte')
                 ->whereNull('formulario_registro.deleted_at')
-                ->when(!empty($request->fecha) ,function ($q) use($request){
-                    $q->where("created_at",">=",$request->fecha);
-                })
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
                     $q->whereIn("cliente_id",$clientes);
-                });
+                })
+                ->when(!empty($request->equipo_id) and $request->equipo_id>0 ,function ($q) use($request){
+                    $q->where("equipo_id",$request->equipo_id);
+                })
+                ->when(!empty($request->cliente_id)  ,function ($q) use($request){
+                    $q->where("cliente_id",$request->cliente_id);
+                })
+                ->when(!empty($request->desde)  ,function ($q) use($request){
+                    $q->where("formulario_registro.created_at",'>=',$request->desde);
+                })
+                ->when(!empty($request->hasta)  ,function ($q) use($request){
+                    $q->where("formulario_registro.created_at",'<=',$request->hasta);
+                })
+                ->when(!empty($request->tipo)  ,function ($q) use($request){
+                    $q->where("formularios.tipo",$request->tipo);
+                })
+                ->when(!empty($request->estado)  ,function ($q) use($request){
+                    $q->where("estatus",$request->estado);
+                })
+                ->when(!empty($request->created_by)  ,function ($q) use($request){
+                    $q->where("formulario_registro.creado_por",$request->created_by);
+                })
+                ;
 
     return DataTables::of($data)
         ->editColumn('creado_por', function($row) {
@@ -122,14 +143,26 @@ class EquiposController extends BaseController
         })
         ->addColumn('actions', function($row) {
         $url='';
-        if($row->tipo=='daily_check')
+        $url2='';
+        if($row->tipo=='daily_check'){
             $url=route('equipos.show_daily_check',$row->id);
-        if($row->tipo=='mant_prev')
-            $url=route('equipos.show_mant_prev',$row->id);    
-        if($row->tipo=='serv_tec')
+            $url2=route('reporte.detalle',['form_montacarga_daily_check',$row->id]);   
+        }
+          
+        if($row->tipo=='mant_prev'){
+            $url=route('equipos.show_mant_prev',$row->id);  
+            $url2=route('equipos.imprimir_mant_prev',$row->id);  
+        }
+        if($row->tipo=='serv_tec'){
             $url=route('equipos.show_tecnical_support',$row->id);
+            $url2=route('reporte.detalle',['form_montacarga_servicio_tecnico',$row->id]); 
+        }
+          
             return ' <a target="_blank" href="'.$url.'" target="_blank" class="btn btn-success btn-sm mr-1 ">
                         <ion-icon name="eye-outline" title="Ver detalle"></ion-icon>Ver
+                    </a>
+                    <a target="_blank" href="'.$url2.'" target="_blank" class="btn btn-primary btn-sm mr-1 ">
+                        <ion-icon name="file-tray-stacked-outline" title="Imprimir formulario"></ion-icon>Imprimir
                     </a>';
         })
         ->rawColumns(['status','numero_parte', 'actions'])
