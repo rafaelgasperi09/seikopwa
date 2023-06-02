@@ -36,9 +36,10 @@ Route::get('/formulario_data', function (Request $request) {
 
 Route::get('/formulario_registro_estatus', function (Request $request) {
     $formulario_registro_id= (int)filter_var($request->formulario_registro_id, FILTER_SANITIZE_NUMBER_INT);
+    
     $data =  \App\FormularioRegistroEstatus::with('registro')
         ->with('user')
-        ->when($request->has('formulario_registro_id'),function ($q) use($request){
+        ->when($request->has('formulario_registro_id'),function ($q) use($request,$formulario_registro_id){
             $q->where('formulario_registro_id',$formulario_registro_id);
         })->get();
 
