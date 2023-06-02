@@ -72,19 +72,7 @@ class User extends Authenticatable
         $group = Sentinel::findRoleBySlug($group_name); 
         return $sentryUser->inRole($group);
     }
-    public function isInGroup($group_id)
-    {
-        $sentryUser = Sentinel::findUserById($this->id);
-        foreach ($sentryUser->getGroups() as $group)
-        {
-            if($group->id == $group_id)
-            {
-                return true;
-            }
-
-        }
-        return false;
-    }
+   
 
     public function isCliente()
     {
@@ -111,10 +99,11 @@ class User extends Authenticatable
 
     public function isSupervisor()
     {
-        $a=$this->isInGroup(4);
-        $b=$this->isInGroup(11);
-        $c=$this->isInGroup(12);
-        $r=$this->roles;
+        $sentryUser = Sentinel::findUserById($this->id);
+        $a=$sentryUser->inRole(4);
+        $b=$sentryUser->inRole(11);
+        $c=$sentryUser->inRole(12);
+
         
         if($a or $b or $c)
             return true;
