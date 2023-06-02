@@ -53,7 +53,7 @@ class FormularioRegistroObserver
             if($request->has($campo->nombre))
               $valor = $request->get($campo->nombre);
 
-            if($campo->nombre =="prioridad" && $valor="No usar este equipo"){
+            if($campo->nombre =="prioridad" && $valor=="No usar este equipo"){
                 $nousar=true;
             }
    
@@ -203,7 +203,7 @@ class FormularioRegistroObserver
                         
                         $valor = $request->get($campo->nombre);
       
-                        if($campo->nombre =="prioridad" && $valor="No usar este equipo"){
+                        if($campo->nombre =="prioridad" && $valor=="No usar este equipo"){
                             $nousar=true;
                         }
     
@@ -284,7 +284,6 @@ class FormularioRegistroObserver
                                 $fd_item =FormularioData::create([
                                     'formulario_registro_id' => $formularioRegistro->id,
                                     'formulario_campo_id' => $campo->id,
-                                    'valor' => '',
                                     'tipo' => $campo->tipo,
                                     'api_descripcion' => '',
                                     'user_id'=>current_user()->id
