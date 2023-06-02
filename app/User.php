@@ -74,7 +74,7 @@ class User extends Authenticatable
     }
     public function isInGroup($group_id)
     {
-        $sentryUser = Sentry::findUserById($this->id);
+        $sentryUser = Sentinel::findUserById($this->id);
         foreach ($sentryUser->getGroups() as $group)
         {
             if($group->id == $group_id)
