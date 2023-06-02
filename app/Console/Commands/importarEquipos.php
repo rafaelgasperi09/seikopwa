@@ -56,7 +56,7 @@ class ImportarEquipos extends Command
       FROM (montacarga.equipos e
          JOIN montacarga.contactos c)
       WHERE e.cliente_id = c.id ';
-        $data=\DB::select(DB::Raw($dataQuery));
+        $data=\DB::connection('crm')->select(DB::Raw($dataQuery));
         $data=json_decode(json_encode($data), true);
        
         foreach($data as $d){
@@ -81,7 +81,7 @@ class ImportarEquipos extends Command
                         c.nombre,
                         c.updated_at
                     FROM montacarga.contactos c';
-        $data=\DB::select(DB::Raw($dataQuery));
+        $data=\DB::connection('crm')->select(DB::Raw($dataQuery));
         $data=json_decode(json_encode($data), true);
        
         foreach($data as $d){
