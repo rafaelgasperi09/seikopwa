@@ -58,9 +58,9 @@ class ImportarEquipos extends Command
       WHERE e.cliente_id = c.id ';
         $data=\DB::connection('crm')->select(DB::Raw($dataQuery));
         $data=json_decode(json_encode($data), true);
-       
+        $registros=EquiposVw::get()->count();
         foreach($data as $d){
-            if($d['updated_at']>=date('Y-m-d',strtotime("-1 days"))){
+            if($d['updated_at']>=date('Y-m-d',strtotime("-1 days")) or $registros==0){
                 $eq=EquiposVw::find($d['id']);
                 if($eq){
                     $eq->delete();
@@ -83,9 +83,9 @@ class ImportarEquipos extends Command
                     FROM montacarga.contactos c';
         $data=\DB::connection('crm')->select(DB::Raw($dataQuery));
         $data=json_decode(json_encode($data), true);
-       
+        $registros=ClientesVw::get()->count();
         foreach($data as $d){
-            if($d['updated_at']>=date('Y-m-d',strtotime("-1 days"))){
+            if($d['updated_at']>=date('Y-m-d',strtotime("-1 days"))  or $registros==0){
                 $cl=ClientesVw::find($d['id']);
                 if($cl){
                     $cl->delete();
