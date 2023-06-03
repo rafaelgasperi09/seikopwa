@@ -168,7 +168,7 @@
                 </div>
             </div>
             @include('frontend.equipos.modal_assign_tecnico')
-            @if(!current_user()isCliente())
+            @if(!current_user()->isCliente())
                 @include('frontend.equipos.modals.modal_assign_status1')
             @endif
             @include('frontend.equipos.modal_status_history')
