@@ -432,6 +432,8 @@ class EquiposController extends BaseController
                 $model->turno_chequeo_diario = $request->turno_chequeo_diario;
                 $model->cliente_id = $equipo->cliente_id;
                 $model->estatus = 'P';
+                $model->equipo_status = 'O';
+                $model->repuesto_status = 'L';
                 $model->dia_semana = getDayOfWeek(date('N'));
                 $model->semana = date('W');
                 $model->ano = date('Y');
@@ -617,6 +619,8 @@ class EquiposController extends BaseController
                 $model->equipo_id = $request->equipo_id;
                 $model->cliente_id = $equipo->cliente_id;
                 $model->estatus = 'P';
+                $model->equipo_status = 'O';
+                $model->repuesto_status = 'L';
                 if (!$model->save()) {
                     throw new \Exception('Hubo un problema y no se creo el registro!');
                 }else{
@@ -767,6 +771,8 @@ class EquiposController extends BaseController
             $model->equipo_id = $request->equipo_id;
             $model->cliente_id = $request->cliente_id;
             $model->estatus = $status;
+            $model->equipo_status = 'O';
+            $model->repuesto_status = 'L';
             if($model->save())
             {
                 if(count($request->all())>=26 and \Sentinel::hasAccess('sp.parteB')){
