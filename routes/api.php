@@ -39,6 +39,7 @@ Route::get('/formulario_registro_estatus', function (Request $request) {
     
     $data =  \App\FormularioRegistroEstatus::with('registro')
         ->with('user')
+        ->whereNotNull('estatus')
         ->when($request->has('formulario_registro_id'),function ($q) use($request,$formulario_registro_id){
             $q->where('formulario_registro_id',$formulario_registro_id);
         })->get();

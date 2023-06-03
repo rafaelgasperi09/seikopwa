@@ -9,7 +9,7 @@
                     <div class="text-danger">
                         <ul>
                             @foreach($errors->all() as $e)
-                                <li/>{{ $e }}</li>
+                                <li/>{!! $e !!}</li>
                             @endforeach
                         </ul>
                     </div>
@@ -25,7 +25,7 @@
                 <div class="in">
                     <ion-icon name="close-circle" class="text-danger"></ion-icon>
                     <div class="text-danger">
-                        {{ Session::get('message.error') }}
+                        {!! Session::get('message.error') !!}
                     </div>
                 </div>
                 <button type="button" class="btn btn-sm btn-text-danger close-button">Cerrar</button>
@@ -38,7 +38,7 @@
                 <div class="in">
                     <ion-icon name="checkmark-circle" class="text-success"></ion-icon>
                     <div class="text-success">
-                        {{ Session::get('message.success') }}
+                        {!! Session::get('message.success') !!}
                     </div>
                 </div>
                 <button type="button" class="btn btn-sm btn-text-success close-button">Cerrar</button>

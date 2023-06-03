@@ -113,6 +113,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
             Route::put('/{id}/update', array('as' => 'equipos.update_tecnical_support', 'uses' => 'EquiposController@updateTecnicalSupport'));
             
             Route::post('/store', array('as' => 'equipos.store_tecnical_support', 'uses' => 'EquiposController@storeTecnicalSupport'));
+            
+            Route::post('/agregar_status', array('as' => 'equipos.agregar_status', 'uses' => 'EquiposController@agregar_status'));
            
             Route::get('/{id}/delete', array('as' => 'equipos.delete_tecnical_support', 'uses' => 'EquiposController@deleteRegistroForm'));          
 

@@ -168,6 +168,7 @@
                 </div>
             </div>
             @include('frontend.equipos.modal_assign_tecnico')
+            @include('frontend.equipos.modals.modal_assign_status1')
             @include('frontend.equipos.modal_status_history')
         </div>
     </div>

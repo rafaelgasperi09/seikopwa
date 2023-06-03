@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Formulario;
 use App\FormularioData;
 use App\FormularioRegistro;
+use App\FormularioRegistroEstatus;
 use App\Http\Requests\SaveFormEquipoRequest;
 use App\MontacargaConsecutivo;
 use App\MontacargaCopiaSolicitud;
@@ -954,5 +955,41 @@ class EquiposController extends BaseController
         //dd($eventos);
 
         return view('frontend.equipos.calendar',compact('eventos'));
+    }
+    
+    public function agregar_status(Request $request){
+        
+        $registros = FormularioRegistro::find($request->formulario_registro_id);      
+        $index=1;
+        if(!empty( $request->equipo_status)){
+            $registros->equipo_status=$request->equipo_status;
+            $registros->repuesto_status='L';
+            $var=$request->equipo_status;
+            $index=1;
+        }   
+        if(!empty( $request->repuesto_status)){
+            $registros->repuesto_status=$request->repuesto_status;
+            $registros->equipo_status='O';
+            $var=$request->repuesto_status;
+            $index=2;
+        }
+     
+        if($registros->save()){
+            $frs=FormularioRegistroEstatus::create([
+                'formulario_registro_id'=>$registros->id,
+                'user_id'=>current_user()->id,
+                'equipo_status'=>$request->equipo_status,
+                'repuesto_status'=>$request->repuesto_status,
+            ]);
+       
+            request()->session()->flash('message.success','Se ha cambiado el estado del '.$request->tipo.' a '.getStatusHtml($var,$index).' correctamente');
+        }else{
+            request()->session()->flash('message.error','Hubo un error cambiando el status');
+       
+        }
+       
+        return redirect($request->redirect_to);
+      
+      
     }
 }

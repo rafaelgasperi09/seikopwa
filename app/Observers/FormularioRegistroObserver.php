@@ -92,37 +92,37 @@ class FormularioRegistroObserver
 
                 }
             }
-            if(count($files)>0){
-                if(count($files) > 0){
-                    $j=1;
-                    foreach ($files as $file){
-                        if($file){
-                            $img = Image::make($file->path());
-                            $ext = $file->getClientOriginalExtension();
-                            if(!empty($formularioRegistro->componente_id)){
-                                $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->componente_id.'_'.time().$j.'.'.$ext;
-                                $folder = 'baterias' ;
-                            }else{
-                                $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().$j.'.'.$ext;
-                                $folder = 'equipos' ;
-                            }
-
-                            $destinationPath = storage_path( '/app/public/'.$folder);
-                            $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
-                            $valor .=  $filename.',';
-                            File::create([
-                                'user_id'=>current_user()->id,
-                                'tabla'=>'formulario_registro',
-                                'registro_id'=>$formularioRegistro->id,
-                                'nombre'=>$filename,
-                                'ruta'=>'/storage/'.$folder.'/'.$filename
-                            ]);
-
+        
+            if(is_array($files) and count($files) > 0){
+                $j=1;
+                foreach ($files as $file){
+                    if($file){
+                        $img = Image::make($file->path());
+                        $ext = $file->getClientOriginalExtension();
+                        if(!empty($formularioRegistro->componente_id)){
+                            $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->componente_id.'_'.time().$j.'.'.$ext;
+                            $folder = 'baterias' ;
+                        }else{
+                            $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().$j.'.'.$ext;
+                            $folder = 'equipos' ;
                         }
-                        $j++;
+
+                        $destinationPath = storage_path( '/app/public/'.$folder);
+                        $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
+                        $valor .=  $filename.',';
+                        File::create([
+                            'user_id'=>current_user()->id,
+                            'tabla'=>'formulario_registro',
+                            'registro_id'=>$formularioRegistro->id,
+                            'nombre'=>$filename,
+                            'ruta'=>'/storage/'.$folder.'/'.$filename
+                        ]);
+
                     }
+                    $j++;
                 }
             }
+        
             if($campo->tipo == 'checkbox'  and $campo->opciones<>''){
                 if(!empty($valor) && count($valor)>0)
                     $valor =implode(',',$valor);

@@ -2,16 +2,20 @@
 <table class="table table-striped datatable responsive" width="100%">
     <thead>
         <tr>
-            <th scope="col">#</th>
+            <th scope="col" width="10px">#</th>
             <th scope="col">Creado por</th>
             <th scope="col">Cliente</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Estado</th>
-            <th scope="col" width="110px">Acciones</th>
+            <th  width="80px">Fecha</th>
+            <th scope="col" width="20px">Estado</th>
+            @if($nombre == 'form_montacarga_servicio_tecnico')
+            <th scope="col" width="20px">Equipo</th>
+            <th scope="col" width="20px">Repuestos</th>
+            @endif
+            <th scope="col" width="195px">Acciones</th>
         </tr>
     </thead>
     <tbody>
-    @foreach($data as $d)
+    @foreach($data as $d) 
     <tr>
        <td>{{$d->id}}</td>
        <td>{{$d->creador->first_name.' '.$d->creador->last_name}}</td>
@@ -19,14 +23,21 @@
        <td>{{ \Carbon\Carbon::parse($d->created_at)->format('Y-m-d')}}</td>
        <td>
         {!!getStatusHtml($d->estatus)!!}
-        @if(\Sentinel::getUser()->hasAccess('equipos.assign_tecnical_support') &&  $d->estatus=='A')
-            &nbsp;
-            <a class="btn btn-success btn-sm mr-1 " data-toggle="modal" data-target="#assign_tecnico_modal"
-                data-action="{{ route('equipos.assign_tecnical_support',$d->id) }}">
-                <small>Cambiar Técnico</small>
-            </a>
-        @endif
        </td>
+       @if($nombre == 'form_montacarga_servicio_tecnico')
+       <td>
+        <a href="#" data-toggle="modal" data-target="#assign_status_modal"
+        data-id="{{$d->id}}" data-tipo='equipo'> 
+            {!!getStatusHtml($d->equipo_status,1)!!}
+        </a>
+       </td>
+       <td>
+        <a href="#" data-toggle="modal" data-target="#assign_status_modal"
+        data-id="{{$d->id}}" data-tipo='repuesto'> 
+            {!!getStatusHtml($d->repuesto_status,2)!!}
+        </a>
+       </td>
+        @endif
        <td>
            @if($nombre == 'mantenimiento_preventivo')
                @if(\Sentinel::getUser()->hasAccess('equipos.edit_mant_prev') && $d->estatus <> 'C')
@@ -54,6 +65,12 @@
                        <ion-icon name="build-outline" ></ion-icon><small>Asignar Técnico</small>
                    </a>
                @endif
+               @if(\Sentinel::getUser()->hasAccess('equipos.assign_tecnical_support') &&  $d->estatus=='A')
+                    <a class="btn btn-success btn-sm mr-1 " data-toggle="modal" data-target="#assign_tecnico_modal"
+                        data-action="{{ route('equipos.assign_tecnical_support',$d->id) }}">
+                        <small>Cambiar Técnico</small>
+                    </a>
+                @endif
                @if(\Sentinel::getUser()->hasAccess('equipos.start_tecnical_support') && $d->estatus == 'A')
                    {{ Form::model($data, array('route' => array('equipos.start_tecnical_support', $d->id), 'method' => 'PUT' , 'role' => 'form','class'=>'form-horizontal', 'style'=>"display: inline-block;")) }}
                        <button type="submit" class="btn btn-primary btn-sm mr-1 botones">
@@ -93,5 +110,6 @@
 <script>
 $(document).ready( function () {
     $('.datatable').DataTable();
+   
 } );
 </script>
