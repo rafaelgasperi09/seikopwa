@@ -168,7 +168,9 @@
                 </div>
             </div>
             @include('frontend.equipos.modal_assign_tecnico')
-            @include('frontend.equipos.modals.modal_assign_status1')
+            @if(!current_user()isCliente())
+                @include('frontend.equipos.modals.modal_assign_status1')
+            @endif
             @include('frontend.equipos.modal_status_history')
         </div>
     </div>
