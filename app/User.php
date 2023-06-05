@@ -99,9 +99,9 @@ class User extends Authenticatable
     public function isSupervisor()
     {
         $a=$this->isOnGroup('supervisor');
-        $b=$this->isOnGroup('supervisor_alq');
-        $c=$this->isOnGroup('supervisor_serv_tec');
-        $d=$this->isOnGroup('supervisor_rep');
+        $b=$this->isOnGroup('supervisor-alquiler');
+        $c=$this->isOnGroup('supervisor-servicio-tecnico');
+        $d=$this->isOnGroup('supervisor-repuestos');
         $r=$this->roles;
         
         if($a or $b or $c or $d)

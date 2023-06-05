@@ -127,11 +127,19 @@ function getFormFields($formName){
     return $campos;
 }
 
-function getStatusHtml($status){
+function getStatusHtml($status,$index=0){
+    
+    $estados[0]=array('P'=>'PENDIENTE','A'=>'ASIGNADO','PR'=>'EN PROCESO','C'=>'CERRADO',''=>'N/A');
+    $estados[1]=array('O'=>'operativo','I'=>'inoperativo');
+    $estados[2]=array('L'=>'listo','E'=>'en espera');
 
-    $estados=array('P'=>'PENDIENTE','A'=>'ASIGNADO','PR'=>'EN PROCESO','C'=>'CERRADO',''=>'N/A');
-    $colores=array('P'=>'warning','A'=>'success','PR'=>'primary','C'=>'secondary','ligth');
-    $html='<span class="badge badge-'.$colores[$status].'">'.$estados[$status].'</span>';
+    $colores[0]=array('P'=>'warning','A'=>'success','PR'=>'primary','C'=>'secondary','ligth');
+    $colores[1]=array('I'=>'danger','O'=>'success');
+    $colores[2]=array('E'=>'warning','L'=>'primary');
+    if(!isset($estados[$index][$status])){
+       return '';
+    }
+    $html='<span class="badge badge-'.$colores[$index][$status].'">'.$estados[$index][$status].'</span>';
     return $html;
 }
 

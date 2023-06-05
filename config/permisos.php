@@ -42,6 +42,7 @@ return [
      "equipos.detail"=>"Ver Detalle Equipo",
      "equipos.calendar"=>"Ver Calendario (Servicio Técnico)",
      "equipos.dominio"=>"Ver filtro de dominio",
+     "equipos.historial"=>"Ver historial de reportes",
     
    ),
    "Taller"=>array(

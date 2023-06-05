@@ -63,6 +63,7 @@
                                 </a>
                             </li>
                         </ul>
+                        @if(\Sentinel::hasAccess('equipos.historial'))
                         <ul>
                             <li>
                                 <a href="{{ route('equipos.reportes_list') }}" class="item" title="Historial de reportes">
@@ -75,6 +76,7 @@
                                 </a>
                             </li>
                         </ul>
+                        @endif
                     </li>
                     @endif
                     @if(\Sentinel::hasAccess('baterias.index'))

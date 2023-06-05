@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Formulario;
 use App\FormularioData;
 use App\FormularioRegistro;
+use App\FormularioRegistroEstatus;
 use App\Http\Requests\SaveFormEquipoRequest;
 use App\MontacargaConsecutivo;
 use App\MontacargaCopiaSolicitud;
@@ -431,6 +432,8 @@ class EquiposController extends BaseController
                 $model->turno_chequeo_diario = $request->turno_chequeo_diario;
                 $model->cliente_id = $equipo->cliente_id;
                 $model->estatus = 'P';
+                $model->equipo_status = 'O';
+                $model->repuesto_status = 'L';
                 $model->dia_semana = getDayOfWeek(date('N'));
                 $model->semana = date('W');
                 $model->ano = date('Y');
@@ -616,6 +619,8 @@ class EquiposController extends BaseController
                 $model->equipo_id = $request->equipo_id;
                 $model->cliente_id = $equipo->cliente_id;
                 $model->estatus = 'P';
+                $model->equipo_status = 'O';
+                $model->repuesto_status = 'L';
                 if (!$model->save()) {
                     throw new \Exception('Hubo un problema y no se creo el registro!');
                 }else{
@@ -766,6 +771,8 @@ class EquiposController extends BaseController
             $model->equipo_id = $request->equipo_id;
             $model->cliente_id = $request->cliente_id;
             $model->estatus = $status;
+            $model->equipo_status = 'O';
+            $model->repuesto_status = 'L';
             if($model->save())
             {
                 if(count($request->all())>=26 and \Sentinel::hasAccess('sp.parteB')){
@@ -954,5 +961,41 @@ class EquiposController extends BaseController
         //dd($eventos);
 
         return view('frontend.equipos.calendar',compact('eventos'));
+    }
+    
+    public function agregar_status(Request $request){
+        
+        $registros = FormularioRegistro::find($request->formulario_registro_id);      
+        $index=1;
+        if(!empty( $request->equipo_status)){
+            $registros->equipo_status=$request->equipo_status;
+            $registros->repuesto_status='L';
+            $var=$request->equipo_status;
+            $index=1;
+        }   
+        if(!empty( $request->repuesto_status)){
+            $registros->repuesto_status=$request->repuesto_status;
+            $registros->equipo_status='O';
+            $var=$request->repuesto_status;
+            $index=2;
+        }
+     
+        if($registros->save()){
+            $frs=FormularioRegistroEstatus::create([
+                'formulario_registro_id'=>$registros->id,
+                'user_id'=>current_user()->id,
+                'equipo_status'=>$request->equipo_status,
+                'repuesto_status'=>$request->repuesto_status,
+            ]);
+       
+            request()->session()->flash('message.success','Se ha cambiado el estado del '.$request->tipo.' a '.getStatusHtml($var,$index).' correctamente');
+        }else{
+            request()->session()->flash('message.error','Hubo un error cambiando el status');
+       
+        }
+       
+        return redirect($request->redirect_to);
+      
+      
     }
 }
