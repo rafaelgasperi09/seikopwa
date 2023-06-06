@@ -43,7 +43,8 @@ class FormularioRegistroObserver
         $request = request();
         $nousar=false;
         $fcampos=$formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get();
-       
+        $notificados=null;
+        
         foreach ($fcampos as $campo) {
             $valor = '';
             $user_id = current_user()->id;
@@ -145,11 +146,12 @@ class FormularioRegistroObserver
                     
                     $formularioRegistro->estatus = 'C';
                     $formularioRegistro->save();
-                    
-                    $notificados = User::whereHas('roles',function ($q){
-                        $q->where('role_users.role_id',5); // supervisor GMP
-                    })->get();
-                    
+                    if(empty($notificados)){
+                        $notificados = User::whereHas('roles',function ($q){
+                            $q->where('role_users.role_id',5); // supervisor GMP
+                        })->get();
+                    } 
+                   
                     if(env('APP_ENV')!='local' or true){
                         foreach ($notificados as $n){
                             $when = now()->addMinutes(1);

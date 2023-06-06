@@ -339,9 +339,14 @@ class EquiposController extends BaseController
              ->whereRaw('created_at >= CURDATE()')
              ->orderBy('id','DESC')
              ->first();
-       
+        
 
          if($formulario_registro){
+            if($formulario_registro->turno_chequeo_diario>=4){
+                $fecha=Carbon::parse($formulario_registro->created_at)->format('d/M/Y');
+                request()->session()->flash('message.error','Ya ha completado los cuatro turnos para el dia '.$fecha);
+                return redirect()->back();
+            }
              $turno = $formulario_registro->turno_chequeo_diario+1;
          }else{
              $turno=1;
@@ -416,14 +421,13 @@ class EquiposController extends BaseController
     }
 
     public function storeDailyCheck(Request $request){
-       
+        
         try{
             $equipo_id = $request->equipo_id;
             $formulario_id = $request->formulario_id;
             $formulario = Formulario::find($formulario_id);
             $equipo = Equipo::find($equipo_id);
             $model = new FormularioRegistro();
-           
             DB::transaction(function() use($model,$request,$formulario,$equipo){
 
                 $model->formulario_id = $formulario->id;
@@ -437,7 +441,7 @@ class EquiposController extends BaseController
                 $model->dia_semana = getDayOfWeek(date('N'));
                 $model->semana = date('W');
                 $model->ano = date('Y');
-                
+
                 if(!$model->save())
                 {
                     Throw new \Exception('Hubo un problema y no se creo el registro!');
@@ -449,13 +453,27 @@ class EquiposController extends BaseController
 
 
             $when = now()->addMinutes(1);
-            $notis= User::whereRaw("crm_clientes_id ='%$equipo->cliente_id%' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")->get() ;
+            if(!empty($request->supervisor_id)){
+                $notificados = User::where('id',$request->supervisor_id)->get();
+               
+                foreach($notificados as $n){
+                    notifica($n,(new NewDailyCheck($model,$n->full_name))->delay($when));
+                    if(env_local()){
+                        break;
+                    }
+                }
+             }
+            $notis= User::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")->get() ;
             foreach ($notis as $u){
                 if($u->isOnGroup('SupervisorC')){
-                    notifica($u,(new NewDailyCheck($model))->delay($when));
+                    notifica($u,(new NewDailyCheck($model,$u->full_name))->delay($when));
+                    if(env_local()){
+                        break;
+                    }
                 }
+                
             }
-
+            
             //$u = new User(['id'=>1,'email'=>'rafaelgasperi@clic.com.pa']);
             //notifica($u,(new NewDailyCheck($model))->delay($when));
 

@@ -47,8 +47,11 @@ class DailyCheckIsFinnish extends Notification
     public function toMail($notifiable)
     {
         $mail = new MailMessage();
-
-        $mail->subject('Daily check Terminado.')
+        $subject='Daily check Terminado. ';
+        if(env_local()){
+            $subject.=$this->model->email;
+        }
+        $mail->subject($subject)
             ->greeting('Se ha completado un daily check.')
             ->line('Equipo :'.$this->formularioRegistro->equipo()->numero_parte);
             if(!empty($this->formularioRegistro->cliente_id)){

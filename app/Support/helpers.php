@@ -338,7 +338,7 @@ function semana_rango($fecha,$semana){
 
 function notifica($user,$notification)
 {   
-    if(env('APP_ENV')=='local'){
+    if(env_local()){
         $user_local=\App\User::find(1);
         return $user_local->notify($notification);
     }   
@@ -362,4 +362,11 @@ function tipo_form($tipo=''){
 
     return $tipo;
     }
+}
+
+function env_local(){
+    if(env('APP_ENV')=='local'){
+        return true;
+    }
+    return false;
 }
