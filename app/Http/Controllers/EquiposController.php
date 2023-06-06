@@ -454,9 +454,13 @@ class EquiposController extends BaseController
 
 
             $when = now()->addMinutes(1);
+            $notificados = User::whereHas('roles',function ($q) use($request){
+                $q->where('role_users.role_id',5); // supervisor GMP
+            })->get();
             if(!empty($request->supervisor_id)){
                 $notificados = User::where('id',$request->supervisor_id)->get();
-               
+             }
+             if(count($notificados)>0){
                 foreach($notificados as $n){
                     notifica($n,(new NewDailyCheck($model,$n->full_name))->delay($when));
                     if(env_local()){
@@ -464,6 +468,7 @@ class EquiposController extends BaseController
                     }
                 }
              }
+            
             $notis= User::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")->get() ;
             foreach ($notis as $u){
                 if($u->isOnGroup('SupervisorC')){
