@@ -59,10 +59,10 @@
                                     @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre)))
                                 @elseif($campo->tipo == 'api')
                                     <?php $api = new \App\HcaApi($campo->api_endpoint);?>
-                                    @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$requerido,'field_name'=>$campo->nombre,'items'=>$api->result(),$readonly))
+                                    @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,'field_name'=>$campo->nombre,'items'=>$api->result(),$readonly))
                                 @elseif($campo->tipo == 'date')
                                     @if($campo->opciones=='hoy' and $value==null)
-                                    {{ Form::date($campo->nombre,date('Y-m-d'),array('class'=>'form-control date',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,'readonly')) }}
+                                    {{ Form::date($campo->nombre,date('Y-m-d'),array('class'=>'form-control date',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,'readonly',$requerido)) }}
                                     @php $showclear=false; @endphp
                                     @else
                                     {{ Form::date($campo->nombre,$value,array('class'=>'form-control date',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,$readonly)) }}

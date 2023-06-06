@@ -7,6 +7,7 @@
 @if(!isset($value[1])) <?php $value[1]=''?> @endif
 @if(!isset($display)) <?php $display='block'?> @endif
 @if(!isset($placeholder)) <?php $placeholder='Buscar '.$field_label.' Nombre';?>  @endif
+@if(!isset($requerido)) <?php $requerido='';?>  @endif
 <div class="form-group" id="group_{{ $field_name }}" style="display: {{ $display }}">
     <div class="input-wrapper">
         <label class="label" for="crm_user_id">{{ $field_label }}
@@ -19,8 +20,8 @@
             
             </div> 
         </label>
-        {{ Form::text('typeheadfield'.$field_name,$value[1],array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_'.$field_name,'data-field_name'=>$field_name,'data-provide'=>'typeahead','data-items'=>10,'placeholder'=>$placeholder,"autocomplete"=>"off" )) }}
-        {{ Form::hidden($field_name,$value[0],array('id'=>$field_name)) }}
+        {{ Form::text('typeheadfield'.$field_name,$value[1],array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_'.$field_name,'data-field_name'=>$field_name,'data-provide'=>'typeahead','data-items'=>10,'placeholder'=>$placeholder,"autocomplete"=>"off",$requerido )) }}
+        {{ Form::hidden($field_name,$value[0],array('id'=>$field_name,$requerido)) }}
         <i class="clear-input">
             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
         </i>
