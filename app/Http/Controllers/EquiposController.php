@@ -14,6 +14,7 @@ use App\Notifications\NewDailyCheck;
 use App\Notifications\NewTecnicalSupportAssignTicket;
 use App\Notifications\NewTecnicalSupport;
 use App\User;
+use App\Supervisor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
