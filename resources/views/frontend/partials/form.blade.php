@@ -52,11 +52,17 @@
                                             $campo_db=explode(',',$campo->database_nombre);
                                             $db_id=$campo_db[0]; 
                                             $db_nombre=$campo_db[1];
+                                            
                                             $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre);
+                                            if($campo->nombre=='supervisor_id'){
+                                                $where="crm_clientes_id ='$data->cliente_id' or crm_clientes_id like '%,$data->cliente_id%' or crm_clientes_id like '%$data->cliente_id,%'";
+                                                $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre,' el supervisor',$where);
+                                            }
+                                            
                                             
                                         }
                                     @endphp
-                                    @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre)))
+                                    @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>$dat))
                                 @elseif($campo->tipo == 'api')
                                     <?php $api = new \App\HcaApi($campo->api_endpoint);?>
                                     @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,'field_name'=>$campo->nombre,'items'=>$api->result(),$readonly))

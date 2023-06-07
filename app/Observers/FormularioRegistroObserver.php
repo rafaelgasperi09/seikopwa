@@ -16,7 +16,9 @@ use App\MontacargaSolicitud;
 use App\Notifications\TecnicalSupportTicketIsFinnish;
 use App\Notifications\DailyCheckIsFinnish;
 use App\Notifications\EquipoInoperativo;
+use App\Notifications\NewReport;
 use App\User;
+use App\Supervisor;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -43,7 +45,17 @@ class FormularioRegistroObserver
         $request = request();
         $nousar=false;
         $fcampos=$formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get();
-        $notificados=null;
+        $notificados = Supervisor::get();
+        //Notifica cuando se crea
+       
+        foreach ($notificados as $n){
+            $when = now()->addMinutes(1);
+            if(in_array($formulario->tipo,['serv_tec','daily_check','mant_prev']))
+                notifica($n,(new NewReport($formularioRegistro,$n->full_name))->delay($when));
+            if(env('APP_ENV')=='local'){
+                break;
+            }   
+        }
         
         foreach ($fcampos as $campo) {
             $valor = '';
@@ -146,12 +158,7 @@ class FormularioRegistroObserver
                     
                     $formularioRegistro->estatus = 'C';
                     $formularioRegistro->save();
-                    if(empty($notificados)){
-                        $notificados = User::whereHas('roles',function ($q){
-                            $q->where('role_users.role_id',5); // supervisor GMP
-                        })->get();
-                    } 
-                   
+                 
                     if(env('APP_ENV')!='local' or true){
                         foreach ($notificados as $n){
                             $when = now()->addMinutes(1);

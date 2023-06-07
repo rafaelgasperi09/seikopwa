@@ -10,7 +10,7 @@ use App\MontacargaConsecutivo;
 use App\MontacargaCopiaSolicitud;
 use App\MontacargaImagen;
 use App\MontacargaSolicitud;
-use App\Notifications\NewDailyCheck;
+use App\Notifications\NewReport;
 use App\Notifications\NewTecnicalSupportAssignTicket;
 use App\Notifications\NewTecnicalSupport;
 use App\User;
@@ -454,34 +454,19 @@ class EquiposController extends BaseController
 
 
             $when = now()->addMinutes(1);
-            $notificados = User::whereHas('roles',function ($q) use($request){
-                $q->where('role_users.role_id',5); // supervisor GMP
-            })->get();
-            if(!empty($request->supervisor_id)){
-                $notificados = User::where('id',$request->supervisor_id)->get();
-             }
-             if(count($notificados)>0){
-                foreach($notificados as $n){
-                    notifica($n,(new NewDailyCheck($model,$n->full_name))->delay($when));
-                    if(env_local()){
-                        break;
-                    }
-                }
-             }
             
             $notis= User::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")->get() ;
+            if(!empty($request->supervisor_id)){
+                $notis = User::where('id',$request->supervisor_id)->get();
+             }
             foreach ($notis as $u){
                 if($u->isOnGroup('SupervisorC')){
-                    notifica($u,(new NewDailyCheck($model,$u->full_name))->delay($when));
+                    notifica($u,(new NewReport($model,$u->full_name))->delay($when));
                     if(env_local()){
                         break;
                     }
                 }
-                
             }
-            
-            //$u = new User(['id'=>1,'email'=>'rafaelgasperi@clic.com.pa']);
-            //notifica($u,(new NewDailyCheck($model))->delay($when));
 
             $request->session()->flash('message.success','Registro creado con éxito');
             $not_ok=false;
@@ -626,7 +611,7 @@ class EquiposController extends BaseController
             ->with('datos',$datos);
     }
 
-    public function storeMantPrev(SaveFormEquipoRequest $request)
+    public function storeMantPrev(Request $request)
     {
         try {
             $equipo_id = $request->equipo_id;
@@ -659,7 +644,7 @@ class EquiposController extends BaseController
 
         } catch (\Exception $e) {
             $request->session()->flash('message.error', $e->getMessage());
-            return redirect(route('equipos.create_mant_prev', ['id'=>$equipo->id, 'tipo'=>$equipo->tipo_equipos_id]))->withInput($request->all());
+            return redirect()->back()->withInput($request->all());
         }
     }
 
