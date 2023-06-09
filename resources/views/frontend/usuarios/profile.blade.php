@@ -97,7 +97,7 @@
                 </div>
                 @if(current_user()->isOnGroup('programador') || current_user()->isOnGroup('administrador') )
         
-                            @include('frontend.partials.typeahead',array('field_label'=>'Cliente','field_name'=>'crm_cliente_id','items'=>$clientes,'value'=>['',''],'small'=>'Esta selección sirve para determinar que equipos pertecen a este nuevo cliente usando la información del CRM.'))
+                            @include('frontend.partials.typeahead',array('field_label'=>'Cliente','field_name'=>'crm_cliente_id','items'=>$clientes,'valor_th'=>['',''],'small'=>'Esta selección sirve para determinar que equipos pertecen a este nuevo cliente usando la información del CRM.'))
    
                     @endif
             </div>

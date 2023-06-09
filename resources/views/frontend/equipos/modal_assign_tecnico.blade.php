@@ -7,7 +7,7 @@
                 <h5 class="modal-title">Asignar Técnico a ticket de soporte</h5>
             </div>
             <div class="modal-body">
-                @include('frontend.partials.typeahead',array('field_label'=>'Tecnico','field_name'=>'tecnico_asignado','items'=>getListUsersByRol('tecnico'),'value'=>['',''],'display'=>'block'))
+                @include('frontend.partials.typeahead',array('field_label'=>'Tecnico','field_name'=>'tecnico_asignado','items'=>getListUsersByRol('tecnico'),'valor_th'=>['',''],'display'=>'block'))
             </div>
             <div class="modal-footer">
                 <div class="btn-inline">
