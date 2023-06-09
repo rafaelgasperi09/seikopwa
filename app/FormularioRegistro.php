@@ -714,7 +714,7 @@ class FormularioRegistro extends BaseModel
                             $pdf->Image(storage_path('app/public/firmas/'.$valor),  '', '', 13.5, 5, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
                            
                           $pdf->SetFont('helvetica', 'I', 3);
-                          //$pdf->SetTextColor(100, 35, 186);
+                          $pdf->SetTextColor(100, 35, 186);
                           $pdf->SetXY($vx-1,$vars[$datos["nombre"]]+2);
                           $pdf->Cell(2, 6, $firmante[$datos["nombre"]], 0, 0, 'L');
                           
