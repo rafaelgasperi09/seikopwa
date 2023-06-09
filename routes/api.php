@@ -25,7 +25,14 @@ Route::get('/formulario_data', function (Request $request) {
 
     })->join('formulario_campos','formulario_data.formulario_campo_id','formulario_campos.id')
     ->orderBy('formulario_seccion_id')->get();
-
+    foreach($data as $d){
+        if($d->formulario_campo_id==1069){
+            $sup=App\User::find($d->valor);
+            if($sup)
+            $d->valor=$sup->full_name;
+        }
+           
+    }
     return response()->json(['success' => true,
         "draw"=> 1,
         "recordsTotal"=> $data->count(),
