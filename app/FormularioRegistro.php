@@ -659,7 +659,7 @@ class FormularioRegistro extends BaseModel
         'operador'=>304,
         'ok_supervisor'=>318);
        $comentarios='';$contador=0;$firmante['operador']=$firmante['ok_supervisor']='';
-
+            
        foreach($data as $d){
 
             $datos=json_decode(json_encode($d), true);
@@ -678,7 +678,7 @@ class FormularioRegistro extends BaseModel
                 if(isset($vars[$datos["nombre"]])){
                     $valor=$datos[$dias[$xkey]];
                     $valor=explode('|',$valor);
-                    
+                    $firmante[$datos["nombre"]]='';
                     if(in_array($datos["nombre"],['operador','ok_supervisor'])){
                         if(isset($users[end($valor)])){
                             $firmante[$datos["nombre"]]=$users[end($valor)];
@@ -712,6 +712,12 @@ class FormularioRegistro extends BaseModel
                         }else{
                             $pdf->SetXY($vx,$vars[$datos["nombre"]]);
                             $pdf->Image(storage_path('app/public/firmas/'.$valor),  '', '', 13.5, 5, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
+                           
+                          $pdf->SetFont('helvetica', 'I', 3);
+                          //$pdf->SetTextColor(100, 35, 186);
+                          $pdf->SetXY($vx-1,$vars[$datos["nombre"]]+2);
+                          $pdf->Cell(2, 6, $firmante[$datos["nombre"]], 0, 0, 'L');
+                          
                         }
                         $pdf->StopTransform();
                        
