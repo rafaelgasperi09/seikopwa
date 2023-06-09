@@ -14,3 +14,4 @@ class Supervisor extends BaseModel
         return $this->first_name.' '.$this->last_name; //Change the format to whichever you desire
     }
 }
+
