@@ -46,7 +46,9 @@ class FormularioRegistroObserver
         $nousar=false;
         $fcampos=$formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get();
         $roles_form=[];
-        if(substr($formularioRegistro->equipo->numero_parte,0,2)=='GM')
+        $equipo=Equipo::find($formularioRegistro->equipo_id);
+        $roles_form[]=1;
+        if($equipo and substr($equipo->numero_parte,0,2)=='GM')
             $roles_form[]=5;
         if($formulario->tipo=='serv_tec'){
             $roles_form[]=11;
@@ -57,7 +59,7 @@ class FormularioRegistroObserver
         }
         $notificados = Supervisor::whereIn('roles_id',$roles_form)->get();
         //Notifica cuando se crea
-        dd($notificados);
+        
         foreach ($notificados as $n){
             $when = now()->addMinutes(1);
             if(in_array($formulario->tipo,['serv_tec','daily_check','mant_prev']))

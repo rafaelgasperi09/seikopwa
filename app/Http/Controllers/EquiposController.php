@@ -721,8 +721,8 @@ class EquiposController extends BaseController
         $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
 
         $campos = $formulario->campos()->whereIn('nombre',['hora_entrada','hora_salida','tecnico_asignado'])->pluck('id');
-        $otrosDatos = $data->data()->whereIn('formulario_campo_id',$campos)->pluck('valor');
-
+        $otrosDatos = $data->data()->whereIn('formulario_campo_id',$campos)->orderBy('formulario_campo_id','ASC')->pluck('valor');
+      
         return view('frontend.equipos.edit_tecnical_support_report')
             ->with('equipo',$equipo)
             ->with('formulario',$formulario)
@@ -737,7 +737,7 @@ class EquiposController extends BaseController
         $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
 
         $campos = $formulario->campos()->whereIn('nombre',['hora_entrada','hora_salida','tecnico_asignado'])->pluck('id');
-        $otrosDatos = $data->data()->whereIn('formulario_campo_id',$campos)->pluck('valor');
+        $otrosDatos = $data->data()->whereIn('formulario_campo_id',$campos)->orderBy('formulario_campo_id','ASC')->pluck('valor');
 
         $formularioData =$data->data()->get()->pluck('valor','formulario_campo_id');
 
@@ -807,6 +807,9 @@ class EquiposController extends BaseController
                 $when = now()->addMinutes(1);
                 foreach($users as $user){
                     notifica($user,(new NewTecnicalSupport($model))->delay($when));
+                    if(env('APP_ENV')=='local'){
+                        break;
+                    }   
                 }
                     
             }else{
