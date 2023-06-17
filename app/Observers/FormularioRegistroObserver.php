@@ -64,7 +64,7 @@ class FormularioRegistroObserver
         foreach ($notificados as $n){
             $when = now()->addMinutes(1);
             if(in_array($formulario->tipo,['serv_tec','mant_prev']))
-                notifica($n,(new NewReport($formularioRegistro,$n->full_name))->delay($when));
+                notifica($n,(new NewReport($formularioRegistro,$n,$notificados))->delay($when));
             if(env('APP_ENV')=='local'){
                 break;
             }   

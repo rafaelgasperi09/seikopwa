@@ -461,7 +461,7 @@ class EquiposController extends BaseController
              }
             foreach ($notis as $u){
                 if($u->isOnGroup('SupervisorC')){
-                    notifica($u,(new NewReport($model,$u->full_name))->delay($when));
+                    notifica($u,(new NewReport($model,$u,$notis))->delay($when));
                     if(env_local()){
                         break;
                     }

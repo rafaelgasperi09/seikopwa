@@ -12,18 +12,19 @@ class NewReport extends Notification
 {
     use Queueable;
     protected $model;
-    protected $user_name;
+    protected $user;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(FormularioRegistro $model,$user_name)
+    public function __construct(FormularioRegistro $model,$user,$notificados=array())
     {
         $this->model = $model;
-        $this->user_name = $user_name;
+        $this->user = $user;
         $this->ruta = '';
+        $this->notificados = $notificados;
     }
 
     /**
@@ -63,7 +64,13 @@ class NewReport extends Notification
         }
         $subject='Nuevo '.$tipo;
         if(env('APP_ENV')=='local'){
-            $subject.='('.$this->user_name.')';
+            $subject.='('.$this->user->full_name.')';
+        }
+        $mas_info='Notificados:'.PHP_EOL;
+        if($this->user->id==1){
+            foreach($this->notificados as $n){
+                $mas_info.=$n->email.','.PHP_EOL;
+            }
         }
         return (new MailMessage)
             ->subject($subject)
@@ -71,6 +78,7 @@ class NewReport extends Notification
                     ->line('Equipo :'.$this->model->equipo()->numero_parte)
                     ->line('Usuario :'.$this->model->creador->full_name)
                     ->action('Firmar',route('equipos.edit_daily_check',$this->model->id))
+                    ->line($mas_info)
                     ->line('Gracias por usar nuestra aplicación '.env('APP_NAME'));
     }
 
