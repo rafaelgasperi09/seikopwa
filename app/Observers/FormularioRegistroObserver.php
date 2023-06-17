@@ -48,8 +48,9 @@ class FormularioRegistroObserver
         $roles_form=[];
         $equipo=Equipo::find($formularioRegistro->equipo_id);
         $roles_form[]=1;
-        if($equipo and substr($equipo->numero_parte,0,2)=='GM')
+        if($equipo and substr($equipo->numero_parte,0,2)=='GM'){
             $roles_form[]=5;
+        }
         if($formulario->tipo=='serv_tec'){
             $roles_form[]=11;
             $roles_form[]=12;
@@ -62,7 +63,7 @@ class FormularioRegistroObserver
         
         foreach ($notificados as $n){
             $when = now()->addMinutes(1);
-            if(in_array($formulario->tipo,['serv_tec','daily_check','mant_prev']))
+            if(in_array($formulario->tipo,['serv_tec','mant_prev']))
                 notifica($n,(new NewReport($formularioRegistro,$n->full_name))->delay($when));
             if(env('APP_ENV')=='local'){
                 break;
