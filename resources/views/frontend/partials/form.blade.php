@@ -62,8 +62,8 @@
                                         }
                                     $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre);
                                     @endphp
-                                   
-                                    @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>$dat))
+                                    @if(($campo->nombre=='supervisor_id' and $create) or $campo->nombre!='supervisor_id')
+                                        @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>$dat))
                                     @endif
                                 @elseif($campo->tipo == 'api')
                                     <?php $api = new \App\HcaApi($campo->api_endpoint);?>

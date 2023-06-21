@@ -982,6 +982,8 @@ class EquiposController extends BaseController
         if(!empty( $request->equipo_status)){
             $registros->equipo_status=$request->equipo_status;
             $registros->repuesto_status='L';
+            if($request->equipo_status=='I')
+                $registros->repuesto_status='E';
             $var=$request->equipo_status;
             $index=1;
         }   
