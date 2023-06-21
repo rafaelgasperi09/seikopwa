@@ -66,7 +66,9 @@
     {{ Form::hidden('formulario_registro_id',$data->id,array('required')) }}
     @include('frontend.partials.form_filled',array('formulario'=>$formulario,'datos'=>$datos))
     <div class="modal-footer">
+        {{--}}
         @include('frontend.partials.btnSubmit')
+        {{--}}
     </div>
     {{ Form::close() }}
 @stop

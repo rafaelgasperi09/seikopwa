@@ -4,7 +4,7 @@
         <div class="section-title">{{ $seccion->titulo }}</div>
         <div class="wide-block pb-1 pt-2">
             <div class="row">
-                @php $campos=false;$firmas=0;   @endphp
+                @php $campos=false;$firmas=0; $dat=array();  @endphp
                 @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->orderBy('orden')->orderBy('id')->get() as $campo)
                    
                     @if(mostrarCampo($campo->tipo))
@@ -48,20 +48,22 @@
                                 @elseif($campo->tipo == 'database')
                                     @php 
                                         $db_nombre=$campo->database_nombre; $db_id=$campo->database_nombre; 
+                                       
                                         if(strpos($campo->database_nombre, ',')!== false){
                                             $campo_db=explode(',',$campo->database_nombre);
                                             $db_id=$campo_db[0]; 
                                             $db_nombre=$campo_db[1];
-                                            
-                                            $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre);
-                                            if($campo->nombre=='supervisor_id'){
-                                                
-                                                $where="crm_clientes_id ='$data->cliente_id' or crm_clientes_id like '%,$data->cliente_id%' or crm_clientes_id like '%$data->cliente_id,%'";
-                                                $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre,' el supervisor',$where);
-                                            }
-                                            
-                                            
                                         }
+                                        
+                                        $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre);
+                                        if($campo->nombre=='supervisor_id'){
+                                            
+                                            $where="crm_clientes_id ='$data->cliente_id' or crm_clientes_id like '%,$data->cliente_id%' or crm_clientes_id like '%$data->cliente_id,%'";
+                                            $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre,' el supervisor',$where);
+                                        }
+                                            
+                                            
+                                        
                                     @endphp
                                     @if(($campo->nombre=='supervisor_id' and $create) or $campo->nombre!='supervisor_id')
                                     @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>$dat))

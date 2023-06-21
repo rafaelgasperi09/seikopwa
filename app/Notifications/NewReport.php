@@ -51,15 +51,15 @@ class NewReport extends Notification
         switch($this->model->formulario->tipo){
             case 'daily_check': 
                 $tipo='DailyCheck ';
-                $this->ruta=route('equipos.edit_daily_check',$this->model->id);
+                $this->ruta=route('equipos.show_daily_check',$this->model->id);
                 break;
             case 'mant_prev': 
                 $tipo='Mantenimiento Preventivo ';
-                $this->ruta=route('equipos.edit_mant_prev',$this->model->id);
+                $this->ruta=route('equipos.show_mant_prev',$this->model->id);
                 break;
             case 'serv_tec': 
                 $tipo='Servicio Técnico ';
-                $this->ruta=route('equipos.edit_tecnical_support',$this->model->id);
+                $this->ruta=route('equipos.show_tecnical_support',$this->model->id);
                 break;
         }
         $subject='Nuevo '.$tipo;
@@ -77,7 +77,7 @@ class NewReport extends Notification
                     ->line("Se ha creado un nuevo formulario de $tipo  que requiere su firma.")
                     ->line('Equipo :'.$this->model->equipo()->numero_parte)
                     ->line('Usuario :'.$this->model->creador->full_name)
-                    ->action('Firmar',route('equipos.edit_daily_check',$this->model->id))
+                    ->action('Ver',$this->ruta)
                     ->line($mas_info)
                     ->line('Gracias por usar nuestra aplicación '.env('APP_NAME'));
     }
