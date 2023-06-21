@@ -1,10 +1,10 @@
-@php $remove='';$linea=0;$showclear=true;@endphp
+@php $remove='';$linea=0;$showclear=true;$create=true;@endphp
 @foreach($formulario->secciones()->get() as $key=>$seccion)
     <div class="section full mt-2 mb-2" id='seccion{{$key}}'>
         <div class="section-title">{{ $seccion->titulo }}</div>
         <div class="wide-block pb-1 pt-2">
             <div class="row">
-                @php $campos=false;$firmas=0;   @endphp
+                @php $campos=false;$firmas=0; $dat=array();  @endphp
                 @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->orderBy('orden')->orderBy('id')->get() as $campo)
                    
                     @if(mostrarCampo($campo->tipo))
@@ -21,7 +21,7 @@
                         }
                         
                         if(isset($datos)) {
-                           
+                             $create=false;
                               $vd = $datos->data()->where('formulario_campo_id',$campo->id)->first();
                               if($vd) $value = $vd->valor;
                         }
@@ -64,6 +64,7 @@
                                     @endphp
                                    
                                     @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>$dat))
+                                    @endif
                                 @elseif($campo->tipo == 'api')
                                     <?php $api = new \App\HcaApi($campo->api_endpoint);?>
                                     @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,'field_name'=>$campo->nombre,'items'=>$api->result(),$readonly))

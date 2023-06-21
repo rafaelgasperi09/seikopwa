@@ -1,13 +1,12 @@
-@if(!isset($value[0])) <?php $value[0]=''?> @endif
+@if(!isset($valor_th[0])) <?php $valor_th[0]=''?> @endif
 @php $clientes_id='';
     if(isset($data->crm_clientes_id)){
           $clientes_id=$data->crm_clientes_id;
     }
 @endphp
-@if(!isset($value[1])) <?php $value[1]=''?> @endif
+@if(!isset($valor_th[1])) <?php $valor_th[1]=''?> @endif
 @if(!isset($display)) <?php $display='block'?> @endif
 @if(!isset($placeholder)) <?php $placeholder='Buscar '.$field_label.' Nombre';?>  @endif
-@if(!isset($requerido)) <?php $requerido='';?>  @endif
 <div class="form-group" id="group_{{ $field_name }}" style="display: {{ $display }}">
     <div class="input-wrapper">
         <label class="label" for="crm_user_id">{{ $field_label }}
@@ -20,8 +19,8 @@
             
             </div> 
         </label>
-        {{ Form::text('typeheadfield'.$field_name,$value[1],array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_'.$field_name,'data-field_name'=>$field_name,'data-provide'=>'typeahead','data-items'=>10,'placeholder'=>$placeholder,"autocomplete"=>"off",$requerido )) }}
-        {{ Form::hidden($field_name,$value[0],array('id'=>$field_name,$requerido)) }}
+        {{ Form::text('typeheadfield'.$field_name,$valor_th[1],array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_'.$field_name,'data-field_name'=>$field_name,'data-provide'=>'typeahead','data-items'=>10,'placeholder'=>$placeholder,"autocomplete"=>"off" )) }}
+        {{ Form::hidden($field_name,$valor_th[0],array('id'=>$field_name)) }}
         <i class="clear-input">
             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
         </i>

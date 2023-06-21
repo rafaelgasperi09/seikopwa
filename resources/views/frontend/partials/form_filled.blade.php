@@ -1,4 +1,4 @@
-@php $remove='';$linea=0;$showclear=true;@endphp
+@php $remove='';$linea=0;$showclear=true;  $create=true;@endphp
 @foreach($formulario->secciones()->get() as $key=>$seccion)
     <div class="section full mt-2 mb-2" id='seccion{{$key}}'>
         <div class="section-title">{{ $seccion->titulo }}</div>
@@ -19,6 +19,7 @@
                         $readonly='disabled';
                         if(isset($datos[$campo->nombre])) {
                             $value =$datos[$campo->nombre];
+                            $create=false;
                             if($campo->tipo=='firma' and $value=='')
                                 $readonly='';
                         }
@@ -43,10 +44,28 @@
                                     {{ Form::select($campo->nombre,getCombo($campo->tipo_combo,'Seleccione '.$campo->etiqueta),$value,array('class'=>'form-control',$requerido,$readonly)) }}
                                 @elseif($campo->tipo == 'database')
                                     @php 
-                                    $lista=getModelList('\App\\'.$campo->modelo,$campo->database_nombre,$campo->database_nombre);
-                                    $value=$lista[$value];
+                                        $db_nombre=$campo->database_nombre; $db_id=$campo->database_nombre; 
+                                        if(strpos($campo->database_nombre, ',')!== false){
+                                            $campo_db=explode(',',$campo->database_nombre);
+                                            $db_id=$campo_db[0]; 
+                                            $db_nombre=$campo_db[1];
+                                            
+                                            $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre);
+                                            if($campo->nombre=='supervisor_id'){
+                                             
+                                                $where="crm_clientes_id ='$data->cliente_id' or crm_clientes_id like '%,$data->cliente_id%' or crm_clientes_id like '%$data->cliente_id,%'";
+                                                $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre,' el supervisor',$where);
+                                                
+                                            }
+                                            
+                                            
+                                        }
                                     @endphp
-                                    {{ Form::text($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
+                                    @if($campo->nombre=='supervisor_id' and isset($dat[$value]))
+                                    {{ Form::text($campo->nombre,$dat[$value],array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
+                                    @else
+                                    @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>$dat))
+                                    @endif
                                 @elseif($campo->tipo == 'api')
                                     <?php $api = new \App\HcaApi($campo->api_endpoint);?>
                                     @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,'field_name'=>$campo->nombre,'items'=>$api->result(),$readonly))
@@ -75,7 +94,9 @@
                                         @foreach($files as $file)
                                             @if($file<>'')
                                             <div class="col-4 mb-2">
+                                                @if(!empty($value)))
                                                 <a href="{{ url('/storage/equipos/'.$file) }}" download title="Clic para descargar"><img src="{{ url('/storage/equipos/'.$file) }}" alt="image" class="imaged w-100"></a>
+                                                @endif
                                             </div>
                                             @endif
                                         @endforeach
@@ -84,7 +105,9 @@
                                     <div class="row">
                                        
                                         <div class="col-4 mb-2">
+                                            @if(!empty($value)))
                                             <a href="{{ url('/storage/equipos/'.$value) }}" download title="Clic para descargar"><img src="{{ url('/storage/equipos/'.$value) }}" alt="image" class="imaged w-100"></a>
+                                            @endif
                                         </div>
                                     
                                     </div>

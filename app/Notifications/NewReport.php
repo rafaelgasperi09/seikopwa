@@ -12,18 +12,19 @@ class NewReport extends Notification
 {
     use Queueable;
     protected $model;
-    protected $user_name;
+    protected $user;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(FormularioRegistro $model,$user_name)
+    public function __construct(FormularioRegistro $model,$user,$notificados=array())
     {
         $this->model = $model;
-        $this->user_name = $user_name;
+        $this->user = $user;
         $this->ruta = '';
+        $this->notificados = $notificados;
     }
 
     /**
@@ -50,27 +51,34 @@ class NewReport extends Notification
         switch($this->model->formulario->tipo){
             case 'daily_check': 
                 $tipo='DailyCheck ';
-                $this->ruta=route('equipos.edit_daily_check',$this->model->id);
+                $this->ruta=route('equipos.show_daily_check',$this->model->id);
                 break;
             case 'mant_prev': 
                 $tipo='Mantenimiento Preventivo ';
-                $this->ruta=route('equipos.edit_mant_prev',$this->model->id);
+                $this->ruta=route('equipos.show_mant_prev',$this->model->id);
                 break;
             case 'serv_tec': 
                 $tipo='Servicio Técnico ';
-                $this->ruta=route('equipos.edit_tecnical_support',$this->model->id);
+                $this->ruta=route('equipos.show_tecnical_support',$this->model->id);
                 break;
         }
         $subject='Nuevo '.$tipo;
         if(env('APP_ENV')=='local'){
-            $subject.='('.$this->user_name.')';
+            $subject.='('.$this->user->full_name.')';
+        }
+        $mas_info='Notificados:'.PHP_EOL;
+        if($this->user->id==1){
+            foreach($this->notificados as $n){
+                $mas_info.=$n->email.','.PHP_EOL;
+            }
         }
         return (new MailMessage)
             ->subject($subject)
                     ->line("Se ha creado un nuevo formulario de $tipo  que requiere su firma.")
                     ->line('Equipo :'.$this->model->equipo()->numero_parte)
                     ->line('Usuario :'.$this->model->creador->full_name)
-                    ->action('Firmar',route('equipos.edit_daily_check',$this->model->id))
+                    ->action('Ver',$this->ruta)
+                    ->line($mas_info)
                     ->line('Gracias por usar nuestra aplicación '.env('APP_NAME'));
     }
 

@@ -19,6 +19,7 @@ use App\Notifications\EquipoInoperativo;
 use App\Notifications\NewReport;
 use App\User;
 use App\Supervisor;
+use App\SupervisorCli;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -45,13 +46,27 @@ class FormularioRegistroObserver
         $request = request();
         $nousar=false;
         $fcampos=$formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get();
-        $notificados = Supervisor::get();
+        $roles_form=[];
+        $equipo=Equipo::find($formularioRegistro->equipo_id);
+        $roles_form[]=1;
+
+        if($equipo and substr($equipo->numero_parte,0,2)=='GM'){
+            $roles_form[]=5;
+        }
+        if($formulario->tipo=='serv_tec'){
+            $roles_form[]=11;
+            $roles_form[]=12;
+        }
+        if($formulario->tipo=='mant_prev'){
+            $roles_form[]=12;
+        }
+        $notificados = Supervisor::whereIn('roles_id',$roles_form)->get();
         //Notifica cuando se crea
-       
+        
         foreach ($notificados as $n){
             $when = now()->addMinutes(1);
-            if(in_array($formulario->tipo,['serv_tec','daily_check','mant_prev']))
-                notifica($n,(new NewReport($formularioRegistro,$n->full_name))->delay($when));
+            if(in_array($formulario->tipo,['serv_tec','mant_prev']))
+                notifica($n,(new NewReport($formularioRegistro,$n,$notificados))->delay($when));
             if(env('APP_ENV')=='local'){
                 break;
             }   
@@ -153,29 +168,52 @@ class FormularioRegistroObserver
                 throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
             }else{
                 //$formularioCampo = FormularioCampo::find($form_data->formulario_campo_id);
-              
+                $supervisor_id='';
+                if($campo->nombre=='supervisor_id'){
+                    $supervisor_id= $form_data->valor;
+                }
+                
                 if($campo->cambio_estatus && !empty($form_data->valor)) {
                     
                     $formularioRegistro->estatus = 'C';
                     $formularioRegistro->save();
                  
                     if(env('APP_ENV')!='local' or true){
+                        //NOTIFICA SUPERVISORES GMP
                         foreach ($notificados as $n){
                             $when = now()->addMinutes(1);
                             if($campo->formulario->nombre=='form_montacarga_servicio_tecnico')
                                 notifica($n,(new TecnicalSupportTicketIsFinnish($formularioRegistro))->delay($when));
                             if($campo->formulario->nombre=='form_montacarga_daily_check'){
-                                notifica($n,(new DailyCheckIsFinnish($formularioRegistro))->delay($when));
+                                //notifica($n,(new DailyCheckIsFinnish($formularioRegistro))->delay($when));
                                 //notifica($n,(new EquipoInoperativo($formularioRegistro))->delay($when));
                                 if($nousar){
                                     notifica($n,(new EquipoInoperativo($formularioRegistro))->delay($when));
                                 }
                             }
-                            if(env('APP_ENV')=='local'){
+                            if(env_local()){
                                 break;
                             }   
                         }
+                        
                     }
+
+                    //NOTIFICA SUPERVISORES CLIENTES
+                  
+
+                    $notificadosCli = SupervisorCli::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")
+                                    ->when(!empty($supervisor_id),function($q) use($supervisor_id){
+                                        $q->where('id',$supervisor_id);
+                                    })    
+                                    ->get();
+                   
+                    foreach ($notificadosCli as $u){
+                            notifica($u,(new DailyCheckIsFinnish($formularioRegistro))->delay($when));
+                            if(env_local()){
+                                break;
+                            }
+                    }
+                 
                     
                     // si es matenimiento preventivo crear solicitud en crm de montacarga
                 }
@@ -315,9 +353,17 @@ class FormularioRegistroObserver
         
                                         // si es soporte tecnico notificar a los usuarios dependendiendo de los departamentos
                                         // buscar usuarios con rol supervisor GMP
-                                        $notificados = User::whereHas('roles',function ($q){
-                                            $q->where('role_users.role_id',5); // supervisor GMP
-                                        })->get();
+                                        if($equipo and substr($equipo->numero_parte,0,2)=='GM'){
+                                            $roles_form[]=5;
+                                        }
+                                        if($formulario->tipo=='serv_tec'){
+                                            $roles_form[]=11;
+                                            $roles_form[]=12;
+                                        }
+                                        if($formulario->tipo=='mant_prev'){
+                                            $roles_form[]=12;
+                                        }
+                                        $notificados = Supervisor::whereIn('roles_id',$roles_form)->get();
                                        // $notificados = User::where('id',$formularioRegistro->creado_por)->get();
                                      
                                         foreach ($notificados as $n){
@@ -325,7 +371,7 @@ class FormularioRegistroObserver
                                             if($formularioCampo->formulario->nombre=='form_montacarga_servicio_tecnico')
                                                 notifica($n,(new TecnicalSupportTicketIsFinnish($formularioRegistro))->delay($when));
                                             if($formularioCampo->formulario->nombre=='form_montacarga_daily_check'){
-                                                notifica($n,(new DailyCheckIsFinnish($formularioRegistro))->delay($when));
+                                               // notifica($n,(new DailyCheckIsFinnish($formularioRegistro))->delay($when));
                                                 if($nousar){
                                                     notifica($n,(new EquipoInoperativo($formularioRegistro))->delay($when));
                                                 }
@@ -333,6 +379,15 @@ class FormularioRegistroObserver
                                             if(env('APP_ENV')=='local'){
                                                 break;
                                             }
+                                        }
+                                        $equipo=Equipo::find($formularioRegistro->equipo_id);  
+                                        $notificadosCli = SupervisorCli::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")->get();
+
+                                        foreach ($notificadosCli as $u){
+                                                notifica($n,(new DailyCheckIsFinnish($formularioRegistro))->delay($when));
+                                                if(env_local()){
+                                                    break;
+                                                }
                                         }
                                     }
                                 }

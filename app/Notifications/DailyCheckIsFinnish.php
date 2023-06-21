@@ -48,9 +48,7 @@ class DailyCheckIsFinnish extends Notification
     {
         $mail = new MailMessage();
         $subject='Daily check Terminado. ';
-        if(env_local()){
-            $subject.=$this->model->email;
-        }
+     
         $mail->subject($subject)
             ->greeting('Se ha completado un daily check.')
             ->line('Equipo :'.$this->formularioRegistro->equipo()->numero_parte);
