@@ -12,7 +12,7 @@ class FormularioRegistroPolicy
 
     public function before($user, $ability)
     {
-        if ($user->isOnGroup('programador')) {
+        if ($user->isOnGroup('programador') or $user->isOnGroup('administrador') ) {
             return true;
         }
     }
