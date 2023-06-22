@@ -43,7 +43,8 @@ class FormularioRegistroObserver
         ]);
 
         $formulario = Formulario::find($formularioRegistro->formulario_id);
-        $request = request();
+        $request = request();            
+        $when = now()->addMinutes(1);
         $nousar=false;
         $fcampos=$formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get();
         $roles_form=[];
@@ -64,7 +65,6 @@ class FormularioRegistroObserver
         //Notifica cuando se crea
         
         foreach ($notificados as $n){
-            $when = now()->addMinutes(1);
             if(in_array($formulario->tipo,['serv_tec','mant_prev']))
                 notifica($n,(new NewReport($formularioRegistro,$n,$notificados))->delay($when));
             if(env('APP_ENV')=='local'){
@@ -242,6 +242,8 @@ class FormularioRegistroObserver
           
             DB::transaction(function () use ($request, $formulario,$formularioRegistro) {
                 $equipo=Equipo::find($formularioRegistro->equipo_id);
+                $roles_form=array();
+                $when = now()->addMinutes(1);
                 $nousar=false;
                 $fcampos=$formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get();
                 //dd($fcampos);
@@ -384,7 +386,7 @@ class FormularioRegistroObserver
  
                                         $notificadosCli = SupervisorCli::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")->get();
 
-                                        foreach ($notificadosCli as $u){
+                                        foreach ($notificadosCli as $n){
                                                 notifica($n,(new DailyCheckIsFinnish($formularioRegistro))->delay($when));
                                                 if(env_local()){
                                                     break;
