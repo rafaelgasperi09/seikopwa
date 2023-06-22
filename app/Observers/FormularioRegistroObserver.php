@@ -241,6 +241,7 @@ class FormularioRegistroObserver
             $request = request();
           
             DB::transaction(function () use ($request, $formulario,$formularioRegistro) {
+                $equipo=Equipo::find($formularioRegistro->equipo_id);
                 $nousar=false;
                 $fcampos=$formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get();
                 //dd($fcampos);
@@ -380,7 +381,7 @@ class FormularioRegistroObserver
                                                 break;
                                             }
                                         }
-                                        $equipo=Equipo::find($formularioRegistro->equipo_id);  
+ 
                                         $notificadosCli = SupervisorCli::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")->get();
 
                                         foreach ($notificadosCli as $u){
