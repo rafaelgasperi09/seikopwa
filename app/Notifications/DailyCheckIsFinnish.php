@@ -82,7 +82,9 @@ class DailyCheckIsFinnish extends Notification
 
 
 
-
+            if(current_user()->id==1){
+                dd($this->notificados);
+            }
         return $mail;
     }
 
