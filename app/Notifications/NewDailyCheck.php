@@ -12,7 +12,7 @@ class NewDailyCheck extends Notification
 {
     use Queueable;
     protected $model;
-
+    protected $user_name;
     /**
      * Create a new notification instance.
      *

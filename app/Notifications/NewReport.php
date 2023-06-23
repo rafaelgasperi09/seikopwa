@@ -13,6 +13,8 @@ class NewReport extends Notification
     use Queueable;
     protected $model;
     protected $user;
+    protected $ruta;
+    protected $notificados;
 
     /**
      * Create a new notification instance.

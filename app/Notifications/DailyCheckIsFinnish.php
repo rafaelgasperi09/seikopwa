@@ -15,7 +15,9 @@ use NotificationChannels\WebPush\WebPushMessage;
 class DailyCheckIsFinnish extends Notification
 {
     use Queueable;
-    var $formularioRegistro;
+    protected $formularioRegistro;
+    protected $user;
+    protected $notificados;
 
     /**
      * Create a new notification instance.
