@@ -384,7 +384,7 @@ class FormularioRegistroObserver
                                                 }
                                             }
                                             
-                                            $notificadosCli = SupervisorCli::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")->get();
+                                            $notificadosCli = User::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")->get();
                                          
                                             foreach ($notificadosCli as $n){
                                                     notifica($n,(new DailyCheckIsFinnish($formularioRegistro,$n,$notificadosCli))->delay($when));
