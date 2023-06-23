@@ -240,7 +240,7 @@ class FormularioRegistroObserver
             $formulario = Formulario::find($formularioRegistro->formulario_id);
             $request = request();
             try{
-                //DB::transaction(function () use ($request, $formulario,$formularioRegistro) {
+                DB::transaction(function () use ($request, $formulario,$formularioRegistro) {
                     $equipo=Equipo::find($formularioRegistro->equipo_id);
                     $roles_form=array();
                     $when = now()->addMinutes(1);
@@ -399,7 +399,7 @@ class FormularioRegistroObserver
                             }
                         } 
                     }
-                //});
+                });
             }catch (\Exception $e){
                 $request->session()->flash('message.error', $e->getMessage());
                 return back()->withInput();
