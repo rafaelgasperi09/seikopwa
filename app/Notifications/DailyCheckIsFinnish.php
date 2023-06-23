@@ -22,9 +22,11 @@ class DailyCheckIsFinnish extends Notification
      *
      * @return void
      */
-    public function __construct(FormularioRegistro $formularioRegistro)
+    public function __construct(FormularioRegistro $formularioRegistro,$user,$notificados=array())
     {
         $this->formularioRegistro = $formularioRegistro;
+        $this->user = $user;
+        $this->notificados=$notificados;
     }
 
     /**
@@ -48,7 +50,15 @@ class DailyCheckIsFinnish extends Notification
     {
         $mail = new MailMessage();
         $subject='Daily check Terminado. ';
-     
+        if(env('APP_ENV')=='local'){
+            $subject.='('.$this->user->full_name.')';
+        }
+        $mas_info='Notificados:'.PHP_EOL;
+        if($this->user->id==1){
+            foreach($this->notificados as $n){
+                $mas_info.=$n->email.','.PHP_EOL;
+            }
+        }
         $mail->subject($subject)
             ->greeting('Se ha completado un daily check.')
             ->line('Equipo :'.$this->formularioRegistro->equipo()->numero_parte);
@@ -68,6 +78,7 @@ class DailyCheckIsFinnish extends Notification
 
                 $mail->line('Tiempo Transcurrido :'.$fechaI->diffForHumans($fechFin));
             }
+            $mail->line($mas_info);
 
 
 
