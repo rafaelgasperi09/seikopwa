@@ -61,7 +61,9 @@ class FormularioRegistroObserver
         if($formulario->tipo=='mant_prev'){
             $roles_form[]=12;
         }
-        $notificados = Supervisor::whereIn('roles_id',$roles_form)->get();
+       
+        $lista_noti = Supervisor::whereIn('roles_id',$roles_form)->pluck('id');
+        $notificados=User::whereIn('id',$lista_noti)->get();
         //Notifica cuando se crea
         
         foreach ($notificados as $n){
@@ -366,7 +368,9 @@ class FormularioRegistroObserver
                                             if($formulario->tipo=='mant_prev'){
                                                 $roles_form[]=12;
                                             }
-                                            $notificados = Supervisor::whereIn('roles_id',$roles_form)->get();
+                                            $lista_noti = Supervisor::whereIn('roles_id',$roles_form)->pluck('id');
+                                            $notificados=User::whereIn('id',$lista_noti)->get();
+
                                         // $notificados = User::where('id',$formularioRegistro->creado_por)->get();
                                         
                                             foreach ($notificados as $n){
