@@ -338,10 +338,10 @@ function semana_rango($fecha,$semana){
 
 function notifica($user,$notification)
 {   
-    /*if(env_local()){
+    if(env_local()){
         $user_local=\App\User::find(1);
         return $user_local->notify($notification);
-    }   */
+    }   
     return $user->notify($notification);
 
 }
