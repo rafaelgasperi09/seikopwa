@@ -787,7 +787,7 @@ class EquiposController extends BaseController
                 if(count($request->all())>=26 and \Sentinel::hasAccess('sp.parteB')){
                     $model->tecnico_asignado=current_user()->id;
                     $model->fecha_asignacion=\Carbon\Carbon::now();
-                    if($status!='C')
+                    if($status!='C' && $model->estatus<>'C')
                         $status='A';
                     $model->estatus = $status;
                     $model->save();
