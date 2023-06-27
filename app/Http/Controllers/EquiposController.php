@@ -773,7 +773,7 @@ class EquiposController extends BaseController
         $status='P';
         if($model->status=='C')
             $status='C';
-        DB::transaction(function() use($model,$request,$formulario,$equipo,$status){
+        //DB::transaction(function() use($model,$request,$formulario,$equipo,$status){
 
             $model->formulario_id = $formulario->id;
             $model->creado_por = Sentinel::getUser()->id;
@@ -815,7 +815,7 @@ class EquiposController extends BaseController
             }else{
                 Throw new \Exception('Hubo un problema y no se creo el registro!');
             }
-        });
+        //});
 
         $request->session()->flash('message.success','Registro creado con exito');
         return redirect(route('equipos.detail',$equipo_id));
