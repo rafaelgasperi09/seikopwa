@@ -176,10 +176,11 @@ class FormularioRegistroObserver
                 }
                 
                 if($campo->cambio_estatus && !empty($form_data->valor)) {
-                    
-                    $formularioRegistro->estatus = 'C';
-                    $formularioRegistro->save();
-                 
+                    if($formularioRegistro<>'C'){
+                        $formularioRegistro->estatus = 'C';
+                        $formularioRegistro->save();
+                    }
+                   
                     if(env('APP_ENV')!='local' or true){
                         //NOTIFICA SUPERVISORES GMP
                         foreach ($notificados as $n){

@@ -782,16 +782,14 @@ class EquiposController extends BaseController
             $model->estatus = $status;
             $model->equipo_status = 'O';
             $model->repuesto_status = 'L';
+            if(count($request->all())>=26 and \Sentinel::hasAccess('sp.parteB')){
+                $model->tecnico_asignado=current_user()->id;
+                $model->fecha_asignacion=\Carbon\Carbon::now();
+                $status='A';
+                $model->estatus = $status;
+            }
             if($model->save())
             {
-                if(count($request->all())>=26 and \Sentinel::hasAccess('sp.parteB')){
-                    $model->tecnico_asignado=current_user()->id;
-                    $model->fecha_asignacion=\Carbon\Carbon::now();
-                    if($status!='C' && $model->estatus<>'C')
-                        $status='A';
-                    $model->estatus = $status;
-                    $model->save();
-                }
                 
                 $users = User::Join('role_users','users.id','role_users.user_id')
                 ->Join('roles','role_users.role_id','roles.id')
