@@ -19,7 +19,9 @@
                         if(!Sentinel::getUser()->hasAccess($campo->permiso)){
                              $readonly='disabled';
                         }
-                        
+                        if(in_array($campo->nombre,['placa_marca','placa_modelo','placa_serie'])){
+                            $readonly='readonly';
+                        }
                         if(isset($datos)) {
                              $create=false;
                               $vd = $datos->data()->where('formulario_campo_id',$campo->id)->first();

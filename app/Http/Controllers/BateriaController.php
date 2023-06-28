@@ -109,7 +109,6 @@ class BateriaController extends Controller
     }
 
     public function ServicioTecnicoStore($id,Request $request){
-      
         $data = Componente::findOrFail($id);
         $formulario = Formulario::whereNombre('form_bat_serv_tec')->first();
         $model = new FormularioRegistro();

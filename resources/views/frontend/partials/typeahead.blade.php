@@ -92,6 +92,7 @@
     <small style="color: red;">{{ $small }}</small>
     @endif
 </div>
+
 <script>
 var fieldName = '{{ $field_name }}';
 $(document).ready(function(){
@@ -111,7 +112,20 @@ $(document).ready(function(){
     $('#typehead_'+fieldName).change(function() {
 
         var current = $(this).typeahead("getActive");
-        console.log(' curr :'+current);
+        $.ajax({
+                url: '{{ url("api/equipo") }}',
+                dataType: "json",
+                data: "numero_parte="+current.name,
+                type: 'get',
+                success: function(data) {
+                   console.log(data.data);
+                    $('#placa_marca').val(data.data.marca.display_name);
+                    $('#placa_modelo').val(data.data.modelo);
+                    $('#placa_serie').val(data.data.serie);
+                },error: function (error) {
+                    console.log(data);
+                },
+            });     
         if (current) {
             // Some item from your model is active!
             if (current.name == $(this).val()) {

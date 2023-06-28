@@ -58,3 +58,20 @@ Route::get('/formulario_registro_estatus', function (Request $request) {
         'total'=> $data->count(),
         'data' => $data]);
 });
+
+Route::get('/equipo', function (Request $request) {
+    $data=array();
+    $success=false;
+    if($request->has('id')){
+        $data =  \App\Equipo::find($request->id);
+        $success=true;
+    }
+    if($request->has('numero_parte')){
+        $data =  \App\Equipo::with('marca')->where('numero_parte',$request->numero_parte)->first();
+        $success=true;
+    }
+
+    return response()->json(['success' => $success,
+        "draw"=> 1,
+        'data' => $data]);
+});
