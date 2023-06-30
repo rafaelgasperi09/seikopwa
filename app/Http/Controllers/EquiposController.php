@@ -352,13 +352,15 @@ class EquiposController extends BaseController
          }else{
              $turno=1;
          }
-
-        $supervisores = User::whereHas('roles',function ($q){
-             $q->where('role_id',3);
-         })->where('crm_cliente_id',$data->cliente_id)
-         ->get()
-        ->pluck('FullName','id');
-
+         $supervisores =  User::whereHas('roles',function ($q){
+            $q->where('role_id',3);
+        })
+        ->whereRaw("(crm_clientes_id ='$data->cliente_id' or crm_clientes_id like '%,$data->cliente_id%' or crm_clientes_id like '%$data->cliente_id,%')")
+        ->get()->pluck('FullName','id');
+      
+      
+        
+        
         return view('frontend.equipos.create_daily_check')->with('data',$data)->with('formulario',$formulario)->with('turno',$turno)->with('supervisores',$supervisores);
     }
 
@@ -822,6 +824,7 @@ class EquiposController extends BaseController
     public function updateTecnicalSupport(Request $request)
     {
       //  ini_set('error_reporting', E_STRICT);
+     
         try {
 
             $this->validate($request, [

@@ -50,7 +50,7 @@ class FormularioRegistroObserver
         $roles_form=[];
         $equipo=Equipo::find($formularioRegistro->equipo_id);
         $roles_form[]=1;
-
+        $supervisor_id='';
         if($equipo and substr($equipo->numero_parte,0,2)=='GM'){
             $roles_form[]=5;
         }
@@ -85,6 +85,9 @@ class FormularioRegistroObserver
 
             if($campo->nombre =="prioridad" && $valor=="No usar este equipo"){
                 $nousar=true;
+            }
+            if($campo->nombre =="supervisor_id"){
+                $supervisor_id=$valor;
             }
    
             $files=array();
@@ -170,12 +173,11 @@ class FormularioRegistroObserver
                 throw new \Exception('Hubo un problema y no se guardar el campo :' . $campo->nombre);
             }else{
                 //$formularioCampo = FormularioCampo::find($form_data->formulario_campo_id);
-                $supervisor_id='';
-                if($campo->nombre=='supervisor_id'){
-                    $supervisor_id= $form_data->valor;
-                }
+               
+               
                 
                 if($campo->cambio_estatus && !empty($form_data->valor)) {
+                    
                     if($formularioRegistro<>'C'){
                         $formularioRegistro->estatus = 'C';
                         $formularioRegistro->save();
@@ -204,17 +206,22 @@ class FormularioRegistroObserver
                     //NOTIFICA SUPERVISORES CLIENTES
                   
 
-                    $notificadosCli = SupervisorCli::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")
-                                    ->when(!empty($supervisor_id),function($q) use($supervisor_id){
-                                        $q->where('id',$supervisor_id);
-                                    })    
-                                    ->get();
-                   
-                    foreach ($notificadosCli as $u){
-                            notifica($u,(new DailyCheckIsFinnish($formularioRegistro,$u,$notificadosCli))->delay($when));
-                            if(env_local()){
-                                break;
-                            }
+                    $notificadosCli = User::whereHas('roles',function ($q){
+                                            $q->where('role_id',3);
+                                        })
+                                        ->whereRaw("(crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%')")
+                                        ->when(!empty($supervisor_id),function($q) use($supervisor_id){
+                                            $q->where('id',$supervisor_id);
+                                        })    
+                                        ->get();
+                    
+                    if($campo->formulario->nombre=='form_montacarga_daily_check'){
+                        foreach ($notificadosCli as $u){
+                                notifica($u,(new DailyCheckIsFinnish($formularioRegistro,$u,$notificadosCli))->delay($when));
+                                if(env_local()){
+                                    break;
+                                }
+                        }
                     }
                  
                     
@@ -372,7 +379,7 @@ class FormularioRegistroObserver
                                             $lista_noti = Supervisor::whereIn('roles_id',$roles_form)->pluck('id');
                                             $notificados=User::whereIn('id',$lista_noti)->get();
 
-                                        // $notificados = User::where('id',$formularioRegistro->creado_por)->get();
+                                            // $notificados = User::where('id',$formularioRegistro->creado_por)->get();
                                         
                                             foreach ($notificados as $n){
                                                 $when = now()->addMinutes(1);
@@ -388,13 +395,28 @@ class FormularioRegistroObserver
                                                     break;
                                                 }
                                             }
-                                            
-                                            $notificadosCli = User::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")->get();
-                                         
-                                            foreach ($notificadosCli as $n){
-                                                    notifica($n,(new DailyCheckIsFinnish($formularioRegistro,$n,$notificadosCli))->delay($when));
-                                                    if(env_local()){
-                                                        break;
+
+                                            if($formularioCampo->formulario->nombre=='form_montacarga_daily_check'){
+                                                    $supervisor_id=$formularioRegistro->data()->where('formulario_campo_id',1069)->first();
+                                                    if($supervisor_id->valor){
+                                                        $supervisor_id=$supervisor_id->valor;
+                                                    }else{
+                                                        $supervisor_id='';
+                                                    }
+                                                
+                                                    $notificadosCli = User::whereHas('roles',function ($q){
+                                                                                $q->where('role_id',3);
+                                                                            })
+                                                                            ->whereRaw("(crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%')")
+                                                                            ->when(!empty($supervisor_id),function($q) use($supervisor_id){
+                                                                                $q->where('id',$supervisor_id);
+                                                                            })->get();
+                                                   
+                                                    foreach ($notificadosCli as $n){
+                                                            notifica($n,(new DailyCheckIsFinnish($formularioRegistro,$n,$notificadosCli))->delay($when));
+                                                            if(env_local()){
+                                                                break;
+                                                            }
                                                     }
                                             }
                                         }

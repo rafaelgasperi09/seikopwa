@@ -67,7 +67,7 @@ class TecnicalSupportTicketIsFinnish extends Notification
 
                 $mail->line('Tiempo Transcurrido :'.$fechaI->diffForHumans($fechFin));
             }
-
+            $mail->action('Ver',route('equipos.show_tecnical_support',$this->formularioRegistro->id));
 
 
 
