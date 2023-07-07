@@ -1,4 +1,5 @@
 @if(!isset($valor_th[0])) <?php $valor_th[0]=''?> @endif
+@if(!isset($requerido)) <?php $requerido=''?> @endif
 @php $clientes_id='';
     if(isset($data->crm_clientes_id)){
           $clientes_id=$data->crm_clientes_id;
@@ -19,8 +20,8 @@
             
             </div> 
         </label>
-        {{ Form::text('typeheadfield'.$field_name,$valor_th[1],array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_'.$field_name,'data-field_name'=>$field_name,'data-provide'=>'typeahead','data-items'=>10,'placeholder'=>$placeholder,"autocomplete"=>"off" )) }}
-        {{ Form::hidden($field_name,$valor_th[0],array('id'=>$field_name)) }}
+        {{ Form::text('typeheadfield'.$field_name,$valor_th[1],array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_'.$field_name,'data-field_name'=>$field_name,'data-provide'=>'typeahead','data-items'=>10,'placeholder'=>$placeholder,"autocomplete"=>"off",$requerido )) }}
+        {{ Form::hidden($field_name,$valor_th[0],array('id'=>$field_name,$requerido)) }}
         <i class="clear-input">
             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
         </i>
