@@ -50,7 +50,7 @@
                                 @elseif($campo->tipo == 'database')
                                     @php 
                                         $db_nombre=$campo->database_nombre; $db_id=$campo->database_nombre; 
-                                        $dat=array();
+                                        $dat=array();$where='';$label='';
                                         if(strpos($campo->database_nombre, ',')!== false){
                                             
                                             $campo_db=explode(',',$campo->database_nombre);
@@ -58,11 +58,11 @@
                                             $db_nombre=$campo_db[1];
                             
                                             if($campo->nombre=='supervisor_id'){
-                                                $where="crm_clientes_id ='$data->cliente_id' or crm_clientes_id like '%,$data->cliente_id%' or crm_clientes_id like '%$data->cliente_id,%'";
-                                                $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre,' el supervisor',$where);
+                                                $where="crm_clientes_id ='$data->cliente_id' or crm_clientes_id like '%,$data->cliente_id%' or crm_clientes_id like '%$data->cliente_id,%'";                                                
+                                                $label=' el supervisor';
                                             }
                                         }
-                                    $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre);
+                                    $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre,$label,$where);    
                                     @endphp
                                     @if(($campo->nombre=='supervisor_id' and $create) or $campo->nombre!='supervisor_id')
                                         @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>$dat))

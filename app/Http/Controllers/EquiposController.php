@@ -146,26 +146,36 @@ class EquiposController extends BaseController
         ->addColumn('actions', function($row) {
         $url='';
         $url2='';
+        $url_edit='';
         if($row->tipo=='daily_check'){
             $url=route('equipos.show_daily_check',$row->id);
             $url2=route('reporte.detalle',['form_montacarga_daily_check',$row->id]);   
+            $url_edit=route('equipos.edit_daily_check',$row->id);
         }
           
         if($row->tipo=='mant_prev'){
             $url=route('equipos.show_mant_prev',$row->id);  
             $url2=route('equipos.imprimir_mant_prev',$row->id);  
+            $url_edit=route('equipos.edit_mant_prev',$row->id);  
         }
         if($row->tipo=='serv_tec'){
             $url=route('equipos.show_tecnical_support',$row->id);
             $url2=route('reporte.detalle',['form_montacarga_servicio_tecnico',$row->id]); 
+            $url_edit=route('equipos.edit_tecnical_support',$row->id);  
         }
-          
-            return ' <a target="_blank" href="'.$url.'" target="_blank" class="btn btn-success btn-sm mr-1 ">
+            $ret='';
+            if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador')){
+                $ret.= ' <a target="_blank" href="'.$url_edit.'" target="_blank" class="btn btn-success btn-sm mr-1 ">
+                            <ion-icon name="pencil-outline" title="Editar"></ion-icon>Editar
+                        </a>';
+            }
+            $ret.= ' <a target="_blank" href="'.$url.'" target="_blank" class="btn btn-primary btn-sm mr-1 ">
                         <ion-icon name="eye-outline" title="Ver detalle"></ion-icon>Ver
                     </a>
-                    <a target="_blank" href="'.$url2.'" target="_blank" class="btn btn-primary btn-sm mr-1 ">
+                    <a target="_blank" href="'.$url2.'" target="_blank" class="btn btn-warning btn-sm mr-1 ">
                         <ion-icon name="file-tray-stacked-outline" title="Imprimir formulario"></ion-icon>Imprimir
                     </a>';
+            return $ret;
         })
         ->rawColumns(['status','numero_parte', 'actions'])
         ->toJson();
@@ -352,13 +362,15 @@ class EquiposController extends BaseController
          }else{
              $turno=1;
          }
-
-        $supervisores = User::whereHas('roles',function ($q){
-             $q->where('role_id',3);
-         })->where('crm_cliente_id',$data->cliente_id)
-         ->get()
-        ->pluck('FullName','id');
-
+         $supervisores =  User::whereHas('roles',function ($q){
+            $q->where('role_id',3);
+        })
+        ->whereRaw("(crm_clientes_id ='$data->cliente_id' or crm_clientes_id like '%,$data->cliente_id%' or crm_clientes_id like '%$data->cliente_id,%')")
+        ->get()->pluck('FullName','id');
+      
+      
+        
+        
         return view('frontend.equipos.create_daily_check')->with('data',$data)->with('formulario',$formulario)->with('turno',$turno)->with('supervisores',$supervisores);
     }
 
@@ -498,13 +510,16 @@ class EquiposController extends BaseController
     {
       
         try {
-          
-            $this->validate($request, [
+            $validate= [
                 'equipo_id'              => 'required',
                 'formulario_id'          => 'required',
                 'formulario_registro_id' => 'required',
                 'ok_supervisor'          => 'required',
-            ]);
+            ];
+            if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador')){
+                unset($validate['ok_supervisor']);
+            }
+            $this->validate($request,$validate);
 
             $formulario_registro_id = $request->formulario_registro_id;
             
@@ -657,14 +672,16 @@ class EquiposController extends BaseController
     {
      
         try {
-
-            $this->validate($request, [
+            $validate=  [
                 'equipo_id'              => 'required',
                 'formulario_id'          => 'required',
                 'formulario_registro_id' => 'required',
                 'trabajo_recibido_por'  => 'required',
-            ]);
-
+            ];
+            if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador')){
+                unset($validate['trabajo_recibido_por']);
+            }
+            $this->validate($request,$validate);
             $formulario_registro_id = $request->formulario_registro_id;
             $model = FormularioRegistro::findOrFail($formulario_registro_id);
             $formulario = Formulario::findOrFail($model->formulario_id);
@@ -827,6 +844,7 @@ class EquiposController extends BaseController
     public function updateTecnicalSupport(Request $request)
     {
       //  ini_set('error_reporting', E_STRICT);
+     
         try {
 
             $this->validate($request, [

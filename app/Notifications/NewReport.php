@@ -64,12 +64,14 @@ class NewReport extends Notification
                 $this->ruta=route('equipos.show_tecnical_support',$this->model->id);
                 break;
         }
+        $mas_info='';
         $subject='Nuevo '.$tipo;
         if(env('APP_ENV')=='local'){
             $subject.='('.$this->user->full_name.')';
         }
-        $mas_info='Notificados:'.PHP_EOL;
+        
         if($this->user->id==1){
+            $mas_info='Notificados:'.PHP_EOL;
             foreach($this->notificados as $n){
                 $mas_info.=$n->email.','.PHP_EOL;
             }
