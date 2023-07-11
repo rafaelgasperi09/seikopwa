@@ -54,9 +54,12 @@ class FormularioRegistro extends BaseModel
     public function firmas_completas(){
         $completas=false;
         $totales=$this->data()->where('tipo','firma')->get()->count();
-        $firmas=$this->data()->where('tipo','firma')->whereNotNull('valor')->get()->count();
+        $firmas=$this->data()->where('tipo','firma')
+                        ->whereRaw("(valor is null or valor='')")
+                        ->get()
+                        ->count();
         $completas=$firmas==$totales;
-        return $totales.'-'.$firmas;
+        return $completas;
     }
 
     public function createSolicitudMontacarga(){
