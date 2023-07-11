@@ -58,8 +58,8 @@ class FormularioRegistro extends BaseModel
                         ->whereRaw("(valor is null or valor='')")
                         ->get()
                         ->count();
-        $completas=$firmas==$totales;
-        return $completas;
+      
+        return $firmas;
     }
 
     public function createSolicitudMontacarga(){

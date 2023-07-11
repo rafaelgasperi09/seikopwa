@@ -99,7 +99,7 @@
     {{ Form::hidden('formulario_registro_id',$data->id,array('required')) }}
     @include('frontend.partials.form_filled',array('formulario'=>$formulario,'datos'=>$datos))
     <div class="modal-footer {{$data->firmas_completas()}}">
-        @if($data->firmas_completas())
+        @if($data->firmas_completas()>0)
         @include('frontend.partials.btnSubmit')
         @endif
     </div>
