@@ -100,6 +100,8 @@ class EquiposController extends BaseController
     public function reportes_datatable(Request $request){
         //dd($request->all());
         $clientes=explode(',',current_user()->crm_clientes_id);
+        $carbon = new \Carbon\Carbon();
+        $desde = $carbon->now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
         $data = DB::table('formulario_registro')
                 ->join('formularios','formulario_registro.formulario_id','formularios.id')
                 ->join('users','formulario_registro.creado_por','users.id')
@@ -107,6 +109,7 @@ class EquiposController extends BaseController
                 ->join('clientes_vw','formulario_registro.cliente_id','clientes_vw.id')
                 ->selectRaw('formulario_registro.*,users.first_name,users.last_name,formularios.tipo,clientes_vw.nombre,equipos_vw.numero_parte')
                 ->whereNull('formulario_registro.deleted_at')
+                ->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
                     $q->whereIn("cliente_id",$clientes);
                 })
