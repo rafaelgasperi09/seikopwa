@@ -136,9 +136,11 @@ class DashboardController extends Controller
                 }
             }
         }
+        if( current_user()->isOnGroup('supervisorc')){
+            //daily check pendientes de firma supervisor
+            $data['daily_check']=$this->getPendings('daily_check');
+        }
 
-        //daily check pendientes de firma supervisor
-        $data['daily_check']=$this->getPendings('daily_check');
         //mantenimientos preventivos pendientes de firma supervisor
         $data['mant_prev']=$this->getPendings('mant_prev');
         //servicio tecnico PENDIENTES

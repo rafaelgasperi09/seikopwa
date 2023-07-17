@@ -23,6 +23,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use App\TipoEquipo;
 use App\Equipo;
+use App\Cliente;
 use App\SubEquipo;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
@@ -83,13 +84,18 @@ class EquiposController extends BaseController
         ->when($filtro<>'',function($q) use($filtro){
             $q->whereRaw($filtro);
         })->paginate(10);
-        
- 
+        $clientes=current_user()->crm_clientes_id;
+        if(!empty($clientes)){
+            $clientes=Cliente::whereRaw("(id in($clientes))")->get()->pluck('nombre','id');
+        }else{
+            $clientes=Cliente::get()->pluck('nombre','id');
+        }
+        $clientes['']='Seleccione el cliente';
         $datos=array('sub'=>'todos',
             'tipo'=>'todos',
             'subName'=>'Lista',
             'tipoName'=>'Todos');
-        return view('frontend.equipos.lista')->with('equipos',$equipos)->with('datos',$datos)->with('dominio',$dominio);
+        return view('frontend.equipos.lista')->with('equipos',$equipos)->with('datos',$datos)->with('dominio',$dominio)->with('clientes',$clientes);
     }
 
     public function reportes_list(Request $request){

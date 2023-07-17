@@ -62,7 +62,7 @@
         </div>
         @endif
         <div class=" mb-2 col-md-6 col">
-            @if(current_user()->isSupervisor() or current_user()->isOnGroup('programador') or current_user()->isOnGroup('supervisorc'))
+            @if( current_user()->isOnGroup('supervisorc'))
                 @php
                 $totdc=0; $totmp=0;$totstp=0;
                 if(count($data['daily_check'])){  $totdc=count($data['daily_check']); }

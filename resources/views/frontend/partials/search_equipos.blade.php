@@ -2,13 +2,15 @@
 $gmpfilter=false;
 if(\Sentinel::hasAccess('equipos.dominio'))
     $gmpfilter=true;
+
+ $dominio=request()->dominio;   
 @endphp
 <!-- Search Component -->
 <div class="extraHeader">
     <div class='container-fluid'>
         <div class='row'>
             
-            <div class='@if($gmpfilter) col-md-8 @else col-md-12 @endif'>
+            <div class='@if($gmpfilter and $dominio!="gmp") col-md-6 @else col-md-9 @endif'>
                 <form class="search-form" action="">
                     <div class="form-group searchbox">
                         <input name="q" type="text" class="form-control" value="" placeholder="{{ $title }}" id="searchButton" autocomplete="off">
@@ -19,12 +21,15 @@ if(\Sentinel::hasAccess('equipos.dominio'))
                 </form>
             </div>
             @if($gmpfilter) 
-            <div class='col-md-4'>
-            {{ Form::select('dominio',[''=>'Todos','gmp'=>'GMP','cliente'=>'Cliente'],request('dominio'),array('class'=>'form-control','autocomplete'=>'off','id'=>'dominio')) }}
-                      
+            <div class='col-md-3'>
+            {{ Form::select('dominio',[''=>'Todos','gmp'=>'GMP','cliente'=>'Cliente'],request('dominio'),array('class'=>'form-control','autocomplete'=>'off','id'=>'dominio')) }} 
             </div>
             @endif
-            
+            @if($dominio!="gmp")
+            <div class='col-md-3'>
+            {{ Form::select('cliente_id',$clientes,request('cliente_id'),array('class'=>'form-control','autocomplete'=>'off','id'=>'cliente_id')) }} 
+            </div>
+            @endif
         </div>
     </div>
 </div>
@@ -69,7 +74,9 @@ if(\Sentinel::hasAccess('equipos.dominio'))
         if(this.value != 'todos') {
             window.location.href = "{{ url(route('equipos.lista')) }}?dominio="+this.value;
         }
-
-
+    });
+    $('#cliente_id').on('change',function(){
+        //redirect when dominio is diferent to todos
+            window.location.href = "{{ url(route('equipos.lista')) }}?dominio=cliente&cliente_id="+this.value;
     });
 </script>
