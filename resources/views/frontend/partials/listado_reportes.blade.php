@@ -28,7 +28,7 @@
        </td>
        @if($nombre == 'form_montacarga_servicio_tecnico')
        <td>
-            @if( $d->trabajado_por=='')
+            @if( $d->trabajado_por==''  and (current_user()->isOnGroup('supervisor-alquiler') or current_user()->isOnGroup('supervisor-repuestos') or current_user()->isOnGroup('programador')) )
                 @if($d->estatus=='PR')
                 <a href="#" class="badge badge-primary" 
                 data-toggle="modal" data-target="#assign_supervisor" data-id="{{$d->id}}" > 

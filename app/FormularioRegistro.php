@@ -20,7 +20,9 @@ class FormularioRegistro extends BaseModel
     }
     
     public function trabajado(){
-        return $this->belongsTo('App\User','trabajado_por');
+        return $this->belongsTo('App\User','trabajado_por')->withDefault([
+            'full_name'=>'N/A'
+        ]);
     }
 
     public function formulario(){

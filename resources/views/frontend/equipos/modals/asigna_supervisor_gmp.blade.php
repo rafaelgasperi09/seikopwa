@@ -14,9 +14,9 @@
             $supervisores=\App\User::whereRaw("id in(SELECT user_id FROM role_users WHERE role_id IN (5,11))")->get()->pluck('full_name','id');
             $supervisores['']='Seleccione';
             @endphp
-            {{ Form::select('supervisor_id',$supervisores,current_user()->id,array('class'=>'form-control date','id'=>'supervisor_id')) }}
+            {{ Form::select('supervisor_id',$supervisores,null,array('class'=>'form-control date','id'=>'supervisor_id',"required"=>"required")) }}
             <br/>
-            {{ Form::date('fecha',\Carbon\Carbon::now()->startOfWeek()->format('d-m-Y'),array('class'=>'form-control date')) }}
+            {{ Form::date('fecha',\Carbon\Carbon::now()->startOfWeek()->format('d-m-Y'),array('class'=>'form-control date','required')) }}
             </div>
             <div class="modal-footer">
                 <div class="btn-inline">
@@ -30,7 +30,7 @@
 </div>
 <script>
     $('#assign_supervisor').on('show.bs.modal', function (e) {
-        const parametros = window.location.search;
+        const parametros = '?show=rows&tab=3';
         var redirect=$('#redirect_to').val();
         $('#redirect_to').val(redirect+parametros);
         var repid=$(e.relatedTarget).attr('data-id');

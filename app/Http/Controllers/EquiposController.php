@@ -902,7 +902,6 @@ class EquiposController extends BaseController
         }
 
         return redirect($request->redirect_to);
-        dd($request->all());
     }
 
     public function assignTecnicalSupport(Request $request,$id){
