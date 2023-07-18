@@ -18,6 +18,10 @@ class FormularioRegistro extends BaseModel
     public function creador(){
         return $this->belongsTo('App\User','creado_por');
     }
+    
+    public function trabajado(){
+        return $this->belongsTo('App\User','trabajado_por');
+    }
 
     public function formulario(){
         return $this->belongsTo('App\Formulario','formulario_id');

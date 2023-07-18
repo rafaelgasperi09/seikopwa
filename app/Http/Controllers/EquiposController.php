@@ -884,6 +884,27 @@ class EquiposController extends BaseController
         }
     }
 
+    public function assignSupervisorTS(Request $request){
+        $this->validate($request, [
+            'sup_formulario_registro_id'  => 'required',
+            'redirect_to'  => 'required',
+            'supervisor_id'  => 'required',
+            'fecha'  => 'required',
+        ]);
+        $model = FormularioRegistro::findOrFail($request->sup_formulario_registro_id);
+        $model->trabajado_por = $request->supervisor_id;
+        $model->fecha_trabajo = $request->fecha;
+        if($model->save()){
+            $user=User::find($request->supervisor_id);
+            $request->session()->flash('message.success', 'Se a asignado el suervisor '.$user->getFullName().' de forma exitosa.');
+        }else{
+            $request->session()->flash('message.error', 'Hubo un error y no se pudo guardar');
+        }
+
+        return redirect($request->redirect_to);
+        dd($request->all());
+    }
+
     public function assignTecnicalSupport(Request $request,$id){
 
         $this->validate($request, [

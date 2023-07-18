@@ -8,6 +8,8 @@
             <th  width="80px">Fecha</th>
             <th scope="col" width="20px">Estado</th>
             @if($nombre == 'form_montacarga_servicio_tecnico')
+            <th scope="col" width="20px">Trabajado por/fecha</th>
+            <th scope="col" width="20px">Trabajado fecha</th>
             <th scope="col" width="20px">Equipo</th>
             <th scope="col" width="20px">Repuestos</th>
             @endif
@@ -26,6 +28,21 @@
        </td>
        @if($nombre == 'form_montacarga_servicio_tecnico')
        <td>
+            @if( $d->trabajado_por=='')
+                @if($d->estatus=='PR')
+                <a href="#" class="badge badge-primary" 
+                data-toggle="modal" data-target="#assign_supervisor" data-id="{{$d->id}}" > 
+                    <ion-icon name="build-outline" ></ion-icon><small>Asignar</small>
+                </a>
+                @endif
+            @else
+            {{$d->trabajado->full_name}} <br/> {{$d->fecha_trabajo}}
+            @endif
+       </td>
+       <td>
+        
+       </td>
+       <td>
         <a href="#" data-toggle="modal" data-target="#assign_status_modal"
         data-id="{{$d->id}}" data-tipo='equipo'> 
             {!!getStatusHtml($d->equipo_status,1)!!}
@@ -41,61 +58,61 @@
        <td>
            @if($nombre == 'mantenimiento_preventivo')
                @if(\Sentinel::getUser()->hasAccess('equipos.edit_mant_prev') && $d->estatus <> 'C')
-                   <a href="{{ route('equipos.edit_mant_prev',$d->id) }}" class="btn btn-success btn-sm mr-1 botones">
+                   <a href="{{ route('equipos.edit_mant_prev',$d->id) }}" class="badge badge-success botones">
                        <ion-icon name="create-outline" title="Editar"></ion-icon>Editar
                    </a>
                @endif
                @if($d->estatus  == 'C')
-                <a href="{{ route('equipos.imprimir_mant_prev',$d->id) }}" class="btn btn-primary btn-sm mr-1 botones" target="_blanks">
+                <a href="{{ route('equipos.imprimir_mant_prev',$d->id) }}" class="badge badge-primary btn-sm mr-1 botones" target="_blanks">
                     <ion-icon name="print-outline" title="Ver detalle"></ion-icon><small>Imprimir</small>
                 </a>
                @endif
-               <a href="{{ route('equipos.show_mant_prev',$d->id) }}" class="btn btn-success btn-sm mr-1 botones">
+               <a href="{{ route('equipos.show_mant_prev',$d->id) }}" class="badge badge-success btn-sm mr-1 botones">
                        <ion-icon name="eye-outline" title="Editar"></ion-icon>Ver
                 </a>
                @if(\Sentinel::getUser()->hasAccess('equipos.delete_mant_prev'))
-                    <a href="{{ route('equipos.delete_mant_prev',$d->id) }}" class="btn btn-danger btn-sm mr-1 botones">
+                    <a href="{{ route('equipos.delete_mant_prev',$d->id) }}" class="badge badge-danger btn-sm mr-1 botones">
                         <ion-icon name="trash-outline" title="Borrar"></ion-icon><small>Borrar</small>
                     </a>
                 @endif
            @elseif($nombre == 'form_montacarga_servicio_tecnico')
                @if(\Sentinel::getUser()->hasAccess('equipos.assign_tecnical_support') && $d->estatus == 'P' )
-                   <a class="btn btn-success btn-sm mr-1 botones" data-toggle="modal" data-target="#assign_tecnico_modal"
+                   <a class="badge badge-success btn-sm mr-1 botones" data-toggle="modal" data-target="#assign_tecnico_modal"
                       data-action="{{ route('equipos.assign_tecnical_support',$d->id) }}">
                        <ion-icon name="build-outline" ></ion-icon><small>Asignar Técnico</small>
                    </a>
                @endif
                @if(\Sentinel::getUser()->hasAccess('equipos.assign_tecnical_support') &&  $d->estatus=='A')
-                    <a class="btn btn-success btn-sm mr-1 " data-toggle="modal" data-target="#assign_tecnico_modal"
+                    <a class="badge badge-success btn-sm mr-1 " data-toggle="modal" data-target="#assign_tecnico_modal"
                         data-action="{{ route('equipos.assign_tecnical_support',$d->id) }}">
                         <small>Cambiar Técnico</small>
                     </a>
                 @endif
                @if(\Sentinel::getUser()->hasAccess('equipos.start_tecnical_support') && $d->estatus == 'A')
                    {{ Form::model($data, array('route' => array('equipos.start_tecnical_support', $d->id), 'method' => 'PUT' , 'role' => 'form','class'=>'form-horizontal', 'style'=>"display: inline-block;")) }}
-                       <button type="submit" class="btn btn-primary btn-sm mr-1 botones">
+                       <button type="submit" class="badge badge-primary btn-sm mr-1 botones">
                            <ion-icon name="play-outline" title="Editar"></ion-icon><small>Iniciar</small>
                        </button>
                    {{ Form::close() }}
                @endif
                @if(\Sentinel::getUser()->hasAccess('equipos.edit_tecnical_support') && $d->estatus == 'PR')
-                   <a href="{{ route('equipos.edit_tecnical_support',$d->id) }}" class="btn btn-secondary btn-sm mr-1 botones">
+                   <a href="{{ route('equipos.edit_tecnical_support',$d->id) }}" class="badge badge-secondary btn-sm mr-1 botones">
                        <ion-icon name="construct-outline" title="Editar"></ion-icon><small>Completar</small>
                    </a>
                @endif
                @if($d->estatus  == 'C')
-                <a href="{{url('equipos/reportes/form_montacarga_servicio_tecnico/'.$d->id)}}" target="_blank" class="btn btn-primary btn-sm mr-1 botones">
+                <a href="{{url('equipos/reportes/form_montacarga_servicio_tecnico/'.$d->id)}}" target="_blank" class="badge badge-primary btn-sm mr-1 botones">
                     <ion-icon name="print-outline" title="Ver detalle"></ion-icon><small>Imprimir</small>
                 </a>
                @endif
-               <a class="btn btn-info btn-sm mr-1 botones" data-toggle="modal" data-target="#status_history_modal" data-id="{{ $d->id }}" style="display: inline-block;">
+               <a class="badge badge-info btn-sm mr-1 botones" data-toggle="modal" data-target="#status_history_modal" data-id="{{ $d->id }}" style="display: inline-block;">
                    <ion-icon name="file-tray-stacked-outline"></ion-icon><small>Historial</small>
                </a>
-               <a href="{{ route('equipos.show_tecnical_support',$d->id) }}" class="btn btn-success btn-sm mr-1 botones">
+               <a href="{{ route('equipos.show_tecnical_support',$d->id) }}" class="badge badge-success btn-sm mr-1 botones">
                        <ion-icon name="eye-outline" title="Editar"></ion-icon>Ver
                 </a>
                @if(\Sentinel::getUser()->hasAccess('equipos.delete_tecnical_support'))
-                    <a href="{{ route('equipos.delete_tecnical_support',$d->id) }}" class="btn btn-danger btn-sm mr-1 botones">
+                    <a href="{{ route('equipos.delete_tecnical_support',$d->id) }}" class="badge badge-danger btn-sm mr-1 botones">
                         <ion-icon name="trash-outline" title="Borrar"></ion-icon><small>Borrar</small>
                     </a>
                 @endif

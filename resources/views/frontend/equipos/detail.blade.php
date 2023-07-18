@@ -156,7 +156,7 @@
                                     @endif
                                 </div>
                                 <div class="wide-block p-0">
-                                    <div class="table-responsive">
+                                    <div class="table-responsive" style="overflow-x:auto">
                                     @include('frontend.partials.listado_reportes',array('data'=>$form['st'],'nombre'=>'form_montacarga_servicio_tecnico'))
                                     </div>
 
@@ -172,6 +172,7 @@
                 @include('frontend.equipos.modals.modal_assign_status1')
             @endif
             @include('frontend.equipos.modal_status_history')
+            @include('frontend.equipos.modals.asigna_supervisor_gmp')
         </div>
     </div>
 </div>
