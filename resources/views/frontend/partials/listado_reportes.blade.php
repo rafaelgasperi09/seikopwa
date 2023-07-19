@@ -9,6 +9,7 @@
             <th scope="col" width="20px">Estado</th>
             @if($nombre == 'form_montacarga_servicio_tecnico')
             <th scope="col" width="20px">Trabajado por/fecha</th>
+            <th scope="col" width="20px">Cotización</th>
             <th scope="col" width="20px">Trabajado fecha</th>
             <th scope="col" width="20px">Equipo</th>
             <th scope="col" width="20px">Repuestos</th>
@@ -40,6 +41,14 @@
             @endif
        </td>
        <td>
+            @if($d->cotizacion<>'A')
+                <a href="#" class="btn btn-danger" 
+                data-toggle="modal" data-target="#assign_supervisor" data-id="{{$d->id}}" > 
+                <small>No aprobado</small>
+                </a>
+            @endif
+       </td>
+       <td>
         
        </td>
        <td>
@@ -68,7 +77,7 @@
                 </a>
                @endif
                <a href="{{ route('equipos.show_mant_prev',$d->id) }}" class="badge badge-success btn-sm mr-1 botones">
-                       <ion-icon name="eye-outline" title="Editar"></ion-icon>Ver
+                       <ion-icon name="eye-outline" title="Ver"></ion-icon><small>Ver</small>
                 </a>
                @if(\Sentinel::getUser()->hasAccess('equipos.delete_mant_prev'))
                     <a href="{{ route('equipos.delete_mant_prev',$d->id) }}" class="badge badge-danger btn-sm mr-1 botones">
@@ -109,7 +118,7 @@
                    <ion-icon name="file-tray-stacked-outline"></ion-icon><small>Historial</small>
                </a>
                <a href="{{ route('equipos.show_tecnical_support',$d->id) }}" class="badge badge-success btn-sm mr-1 botones">
-                       <ion-icon name="eye-outline" title="Editar"></ion-icon>Ver
+                       <ion-icon name="eye-outline" title="Editar"></ion-icon><small>Ver</small>
                 </a>
                @if(\Sentinel::getUser()->hasAccess('equipos.delete_tecnical_support'))
                     <a href="{{ route('equipos.delete_tecnical_support',$d->id) }}" class="badge badge-danger btn-sm mr-1 botones">

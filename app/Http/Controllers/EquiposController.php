@@ -72,12 +72,19 @@ class EquiposController extends BaseController
     public function lista(Request $request){
         $filtro='';
         $dominio=$request->dominio;
+        $cliente_id=$request->cliente_id;
         if(in_array($dominio,['cliente','gmp'])){
             if($dominio=='gmp'){
                 $filtro="SUBSTR(equipos.numero_parte,1,2)='GM'";
             }else{
                 $filtro="SUBSTR(equipos.numero_parte,1,2)<>'GM'";
             }
+        }
+        if($request->has('cliente_id') and !empty($request->cliente_id)){
+            if($filtro<>'')
+                $filtro.=" and cliente_id=$request->cliente_id";
+            else
+                $filtro.=" cliente_id=$request->cliente_id";
         }
         $equipos=Equipo::selectRaw('equipos.*')->FiltroCliente()
         ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
@@ -86,16 +93,20 @@ class EquiposController extends BaseController
         })->paginate(10);
         $clientes=current_user()->crm_clientes_id;
         if(!empty($clientes)){
-            $clientes=Cliente::whereRaw("(id in($clientes))")->get()->pluck('nombre','id');
+            $clientes=Cliente::whereRaw("(id in($clientes))")->orderBy('nombre')->get()->pluck('nombre','id');
         }else{
-            $clientes=Cliente::get()->pluck('nombre','id');
+            $clientes_reportes=DB::Select(DB::Raw("SELECT cliente_id FROM formulario_registro 
+            WHERE cliente_id IS NOT NULL AND deleted_at IS NULL
+            GROUP BY cliente_id"));
+            $clientes_reportes=collect($clientes_reportes)->pluck('cliente_id');
+            $clientes=Cliente::whereIn('id',$clientes_reportes)->orderBy('nombre')->get()->pluck('nombre','id');
         }
         $clientes['']='Seleccione el cliente';
         $datos=array('sub'=>'todos',
             'tipo'=>'todos',
             'subName'=>'Lista',
             'tipoName'=>'Todos');
-        return view('frontend.equipos.lista')->with('equipos',$equipos)->with('datos',$datos)->with('dominio',$dominio)->with('clientes',$clientes);
+        return view('frontend.equipos.lista')->with('equipos',$equipos)->with('datos',$datos)->with('dominio',$dominio)->with('clientes',$clientes)->with('cliente_id',$cliente_id);
     }
 
     public function reportes_list(Request $request){
@@ -222,6 +233,12 @@ class EquiposController extends BaseController
                 }else{
                     $filtro="SUBSTR(equipos.numero_parte,1,2)<>'GM'";
                 }
+            }
+            if($request->has('cliente_id') and !empty($request->cliente_id)){
+                if($filtro<>'')
+                    $filtro.=" and cliente_id=$request->cliente_id";
+                else
+                    $filtro.=" cliente_id=$request->cliente_id";
             }
             $equipos=Equipo::selectRaw('equipos.*')->FiltroCliente()
             ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')

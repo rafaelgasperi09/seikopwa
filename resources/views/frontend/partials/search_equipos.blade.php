@@ -4,6 +4,8 @@ if(\Sentinel::hasAccess('equipos.dominio'))
     $gmpfilter=true;
 
  $dominio=request()->dominio;   
+ $cliente_id=request()->cliente_id;   
+
 @endphp
 <!-- Search Component -->
 <div class="extraHeader">
@@ -41,7 +43,7 @@ if(\Sentinel::hasAccess('equipos.dominio'))
     search_button.onkeyup = () =>{
         tope=false;
         cargando.removeAttribute('hidden')
-        fetch('{{ $search_url }}?q='+search_button.value+'&dominio={{request('dominio')}}',{
+        fetch('{{ $search_url }}?q='+search_button.value+'&dominio={{request('dominio')}}&cliente_id={{request('cliente_id')}}',{
             method:'get'
         })
         .then(response => response.text())

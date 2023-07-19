@@ -6,9 +6,11 @@
 </div>
 @if(isset($page_url) and $page_url<>'')
     @php
-        $dom='';
+        $cliente=$dom='';
         if(isset($dominio))
             $dom=$dominio;
+        if(isset($cliente_id))
+            $cliente=$cliente_id;
     @endphp
 <script>
     let page =2
@@ -19,7 +21,7 @@
 
             if(!tope)
                 cargando.removeAttribute('hidden')
-            fetch('{{ $page_url }}?q='+search_button.value+'&page='+page+'&dominio={{$dom}}',{
+            fetch('{{ $page_url }}?q='+search_button.value+'&page='+page+'&dominio={{$dom}}&cliente_id={{$cliente}}',{
                 method:'get'
             })
             .then(response => response.text())
