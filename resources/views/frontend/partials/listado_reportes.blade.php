@@ -10,7 +10,7 @@
             @if($nombre == 'form_montacarga_servicio_tecnico')
             <th scope="col" width="20px">Trabajado por/fecha</th>
             <th scope="col" width="20px">Cotización</th>
-            <th scope="col" width="20px">Trabajado fecha</th>
+            <th scope="col" width="20px">Accidente</th>
             <th scope="col" width="20px">Equipo</th>
             <th scope="col" width="20px">Repuestos</th>
             @endif
@@ -41,15 +41,31 @@
             @endif
        </td>
        <td>
+            
+            @php $modal='';
+            if($d->estatus<>'C')
+                $modal='data-toggle="modal" data-target="#marcar_cotizado" ';
+            @endphp
+
             @if($d->cotizacion<>'A')
                 <a href="#" class="btn btn-danger" 
-                data-toggle="modal" data-target="#assign_supervisor" data-id="{{$d->id}}" > 
+                {!!$modal!!} data-id="{{$d->id}}" > 
                 <small>No aprobado</small>
+                </a>
+            @else
+                <a href="#" class="btn btn-success" 
+                {!!$modal!!} data-id="{{$d->id}}" > 
+                <small>Aprobado</small>
                 </a>
             @endif
        </td>
        <td>
-        
+        @if($d->accidente<>'S')
+            <a href="#" class="btn btn-success" 
+            data-toggle="modal" data-target="#assign_supervisor" data-id="{{$d->id}}" > 
+            <small>No</small>
+            </a>
+        @endif
        </td>
        <td>
         <a href="#" data-toggle="modal" data-target="#assign_status_modal"

@@ -110,6 +110,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
             Route::put('/{id}/assign', array('as' => 'equipos.assign_tecnical_support', 'uses' => 'EquiposController@assignTecnicalSupport'))->middleware('hasAccess');
             
             Route::post('/assign_supervisor', array('as' => 'equipos.assign_supervisor', 'uses' => 'EquiposController@assignSupervisorTS'));
+            
+            Route::post('/aprobar_cotizacion', array('as' => 'equipos.aprobar_cotizacion', 'uses' => 'EquiposController@aprobar_cotizacion'));
 
             Route::put('/{id}/start', array('as' => 'equipos.start_tecnical_support', 'uses' => 'EquiposController@startTecnicalSupport'))->middleware('hasAccess');
 

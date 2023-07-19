@@ -913,7 +913,27 @@ class EquiposController extends BaseController
         $model->fecha_trabajo = $request->fecha;
         if($model->save()){
             $user=User::find($request->supervisor_id);
-            $request->session()->flash('message.success', 'Se a asignado el suervisor '.$user->getFullName().' de forma exitosa.');
+            $request->session()->flash('message.success', 'Se a asignado el supervisor '.$user->getFullName().' de forma exitosa.');
+        }else{
+            $request->session()->flash('message.error', 'Hubo un error y no se pudo guardar');
+        }
+
+        return redirect($request->redirect_to);
+    }
+
+    public function aprobar_cotizacion(Request $request){
+        $this->validate($request, [
+            'cot_formulario_registro_id'  => 'required',
+            'redirect_to'  => 'required',
+            'aprobada'  => 'required',
+        ]);
+
+        $model = FormularioRegistro::findOrFail($request->cot_formulario_registro_id);
+        $model->cotizacion = $request->aprobada;
+        $model->fecha_trabajo = $request->fecha;
+        if($model->save()){
+
+            $request->session()->flash('message.success', 'Se ha marcado el reporte #'.$request->cot_formulario_registro_id.'  como cotizacion aprobada.');
         }else{
             $request->session()->flash('message.error', 'Hubo un error y no se pudo guardar');
         }
