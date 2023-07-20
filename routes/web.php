@@ -53,6 +53,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::get('/reportes_list', array('as' => 'equipos.reportes_list', 'uses' => 'EquiposController@reportes_list'));
         
         Route::get('/reportes_datatable', array('as' => 'equipos.reportes_datatable', 'uses' => 'EquiposController@reportes_datatable'));
+   
+        Route::get('/reportes_export', array('as' => 'equipos.reportes_export', 'uses' => 'EquiposController@reportes_export'));
 
         Route::get('/{sub}/tipo/{id}', array('as' => 'equipos.tipo', 'uses' => 'EquiposController@tipo'));
 
@@ -112,6 +114,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
             Route::post('/assign_supervisor', array('as' => 'equipos.assign_supervisor', 'uses' => 'EquiposController@assignSupervisorTS'));
             
             Route::post('/aprobar_cotizacion', array('as' => 'equipos.aprobar_cotizacion', 'uses' => 'EquiposController@aprobar_cotizacion'));
+  
+            Route::post('/marcar_accidente', array('as' => 'equipos.marcar_accidente', 'uses' => 'EquiposController@marcar_accidente'));
 
             Route::put('/{id}/start', array('as' => 'equipos.start_tecnical_support', 'uses' => 'EquiposController@startTecnicalSupport'))->middleware('hasAccess');
 

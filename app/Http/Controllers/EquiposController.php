@@ -114,7 +114,7 @@ class EquiposController extends BaseController
         return view('frontend.equipos.reportes')->with('filtro',$filtro);
     }
 
-    public function reportes_datatable(Request $request){
+    public function reportes_datatable(Request $request,$export_datos=false){
         //dd($request->all());
         $clientes=explode(',',current_user()->crm_clientes_id);
         $carbon = new \Carbon\Carbon();
@@ -124,7 +124,7 @@ class EquiposController extends BaseController
                 ->join('users','formulario_registro.creado_por','users.id')
                 ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
                 ->join('clientes_vw','formulario_registro.cliente_id','clientes_vw.id')
-                ->selectRaw('formulario_registro.*,users.first_name,users.last_name,formularios.tipo,clientes_vw.nombre,equipos_vw.numero_parte')
+                ->selectRaw("formulario_registro.*,users.first_name,users.last_name,formularios.tipo,clientes_vw.nombre,equipos_vw.numero_parte,concat(users.first_name,' ',users.last_name) as user_name")
                 ->whereNull('formulario_registro.deleted_at')
                 ->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
@@ -150,9 +150,11 @@ class EquiposController extends BaseController
                 })
                 ->when(!empty($request->created_by)  ,function ($q) use($request){
                     $q->where("formulario_registro.creado_por",$request->created_by);
-                })
-                ;
+                });
 
+    if($export_datos){
+        return $data->get();
+    }
     return DataTables::of($data)
         ->editColumn('creado_por', function($row) {
             return $row->first_name.' '.$row->last_name;
@@ -200,6 +202,57 @@ class EquiposController extends BaseController
         ->rawColumns(['status','numero_parte', 'actions'])
         ->toJson();
 
+    }
+
+    public function reportes_export(Request $request){
+        $file='comisiones.csv';
+        $datos=$this->reportes_datatable($request,true);
+      
+        $headers = array(
+            "Content-Encoding"        => "UTF-8",
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$file",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+            //cabecera
+        $columns=array('IDREPORTE','FECHA REGISTRO', 'TIPO','EQUIPO','REGISTRADO POR','CLIENTE','ESTATUS','SEMANA','DIA','TURNO');
+                        
+        $campos=array('id','created_at','tipo','numero_parte','user_name','nombre','estatus','semana','dia_semana','turno_chequeo_diario');
+        $i=0;
+        /*
+        foreach($datos as $value){
+            foreach($value as $k=>$v){
+                if($i++<=31)
+                    array_push($columns,$k);
+            }
+            break;
+        }
+        */
+        $callback = function() use($datos,$file,$columns,$campos) {
+
+            $file = fopen('php://output', 'w');
+            
+            fputcsv($file, $columns);
+          
+            foreach($datos as $value){
+                $rows=array();
+                foreach($campos as $c){
+                    $d= preg_replace("[\n|\r|\n\r]", " ", utf8_decode($value->$c));
+                    array_push($rows,$d);
+                }
+                /*
+                foreach($value as $k=>$v){
+                    $d= preg_replace("[\n|\r|\n\r]", " ", utf8_decode($v));
+                        array_push($rows,$d);
+                }*/
+                fputcsv($file, $rows);
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
+        exit();
     }
 
     public function tipo($sub,$id){
@@ -932,8 +985,35 @@ class EquiposController extends BaseController
         $model->cotizacion = $request->aprobada;
         $model->fecha_trabajo = $request->fecha;
         if($model->save()){
-
+            FormularioRegistroEstatus::create([
+                'formulario_registro_id'=>$model->id,
+                'user_id'=>current_user()->id,
+                'cotizacion'=>$request->aprobada,
+            ]);
             $request->session()->flash('message.success', 'Se ha marcado el reporte #'.$request->cot_formulario_registro_id.'  como cotizacion aprobada.');
+        }else{
+            $request->session()->flash('message.error', 'Hubo un error y no se pudo guardar');
+        }
+
+        return redirect($request->redirect_to);
+    }
+
+    public function marcar_accidente(Request $request){
+        $this->validate($request, [
+            'acc_formulario_registro_id'  => 'required',
+            'redirect_to'  => 'required',
+            'accidente'  => 'required',
+        ]);
+
+        $model = FormularioRegistro::findOrFail($request->acc_formulario_registro_id);
+        $model->accidente = $request->accidente;
+        if($model->save()){
+            FormularioRegistroEstatus::create([
+                'formulario_registro_id'=>$model->id,
+                'user_id'=>current_user()->id,
+                'accidente'=>$request->accidente,
+            ]);
+            $request->session()->flash('message.success', 'Se ha marcado el accidente en reporte #'.$request->cot_formulario_registro_id.'  como cotizacion aprobada.');
         }else{
             $request->session()->flash('message.error', 'Hubo un error y no se pudo guardar');
         }

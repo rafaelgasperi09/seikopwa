@@ -42,28 +42,27 @@
        </td>
        <td>
             
-            @php $modal='';
-            if($d->estatus<>'C')
-                $modal='data-toggle="modal" data-target="#marcar_cotizado" ';
+            @php $modal='';$cotizacion=['No aprobado','danger'];
+            $modal='data-toggle="modal" data-target="#marcar_cotizado" ';
+            if($d->cotizacion=='A')
+                $cotizacion=['Aprobado','success'];
             @endphp
-
-            @if($d->cotizacion<>'A')
-                <a href="#" class="btn btn-danger" 
+                <a href="#" class="btn btn-{{$cotizacion[1]}}" 
                 {!!$modal!!} data-id="{{$d->id}}" > 
-                <small>No aprobado</small>
+                <small>{{$cotizacion[0]}}</small>
                 </a>
-            @else
-                <a href="#" class="btn btn-success" 
-                {!!$modal!!} data-id="{{$d->id}}" > 
-                <small>Aprobado</small>
-                </a>
-            @endif
        </td>
        <td>
-        @if($d->accidente<>'S')
-            <a href="#" class="btn btn-success" 
-            data-toggle="modal" data-target="#assign_supervisor" data-id="{{$d->id}}" > 
-            <small>No</small>
+        @if(true)
+            @php $modal='';$accidente=['NO','success'];
+            $modal='data-toggle="modal" data-target="#marcar_accidente" ';
+            if($d->accidente=='S')
+                $accidente=['SI','danger'];
+                
+            @endphp
+            <a href="#" class="btn btn-{{$accidente[1]}}" 
+          {!!$modal!!} data-id="{{$d->id}}" > 
+            <small>{{$accidente[0]}}</small>
             </a>
         @endif
        </td>

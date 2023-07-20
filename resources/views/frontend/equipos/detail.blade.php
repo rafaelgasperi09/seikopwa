@@ -174,6 +174,7 @@
             @include('frontend.equipos.modal_status_history')
             @include('frontend.equipos.modals.asigna_supervisor_gmp')
             @include('frontend.equipos.modals.cotizado_modal')
+            @include('frontend.equipos.modals.accidente_modal')
         </div>
     </div>
 </div>

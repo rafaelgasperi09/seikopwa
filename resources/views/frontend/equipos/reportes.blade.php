@@ -7,7 +7,8 @@
         </h3>
     </div>
         <div class="col-md-2 text-right">
-        <a id="mostrarfiltro" type="submit" class="btn btn-primary btn-rounded btn-condensed btn-sm pull-right"  data-toggle="collapse" href="#filtro" role="button" aria-expanded="false" aria-controls="filtro"><span class="fa fa-search"></span> Filtro</a>
+        <a id="exporter" type="button" class="btn btn-success btn-rounded btn-condensed btn-sm pull-right"   href="{{route('equipos.reportes_export')}}" target="_blank" id="export_btn" ><span class="fa fa-excel"></span> Exportar</a>
+        <a id="mostrarfiltro" type="button" class="btn btn-primary btn-rounded btn-condensed btn-sm pull-right"  data-toggle="collapse" href="#filtro" role="button" aria-expanded="false" aria-controls="filtro"><span class="fa fa-search"></span> Filtro</a>
         </div>
     </div>
 <div class="row">
@@ -54,7 +55,6 @@
                 "language": {
                     processing: '<i style="position: fixed;left: 50%;top:50%;" class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
                 },
-                
                 "responsive": true,
                 "autoWidth": false,
                 "columnDefs": [
