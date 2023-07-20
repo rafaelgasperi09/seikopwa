@@ -342,10 +342,11 @@ function notifica($user,$notification)
         $user_local=\App\User::find(1);
         return $user_local->notify($notification);
     }   
+    if($user->id==48) //no enviar correo a este usuario Rofolfo fuentes
+        return true;
+    
     return $user->notify($notification);
-
 }
-
 function tipo_form($tipo=''){
     $tipos=array(   ''=>'Seleccione',
                     'carga_baterias'=>'Carga de baterias',
