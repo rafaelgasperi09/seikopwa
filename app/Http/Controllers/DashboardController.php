@@ -36,6 +36,7 @@ class DashboardController extends Controller
         ->join('formularios','formulario_registro.formulario_id','formularios.id')
          ->whereNotNull('equipo_id')
         ->where('formularios.tipo',$formType)
+        ->whereRaw("(formulario_registro.estatus='C' and TIMESTAMPDIFF(DAY,formulario_registro.created_at,'2023-07-20')<=45 or formulario_registro.estatus<>'C')")
         ->When(!empty($status),function($q)use($status){
             $q->where('formulario_registro.estatus',$status);
         })
@@ -136,7 +137,7 @@ class DashboardController extends Controller
                 }
             }
         }
-        if( current_user()->isOnGroup('supervisorc')){
+        if( current_user()->isOnGroup('supervisorc') or  current_user()->isOnGroup('programador') ){
             //daily check pendientes de firma supervisor
             $data['daily_check']=$this->getPendings('daily_check');
         }
@@ -185,6 +186,7 @@ class DashboardController extends Controller
 
 
         }
+        $tab['t1']=''; $tab['t2']='active show';
 
         return view('frontend.dashboard',compact('data'));
     }
