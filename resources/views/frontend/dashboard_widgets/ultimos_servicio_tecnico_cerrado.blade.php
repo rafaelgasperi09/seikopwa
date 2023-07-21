@@ -2,7 +2,7 @@
     <div class="card-header">
         <span >
             <ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon>
-            Últimos reportes de servicio técnico<br/>
+            Últimos reportes de servicio técnico cerrados<br/>
         </span>
     </div>
     <div class="card-body">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Componente;
 use App\Equipo;
+use App\Cliente;
 use App\Formulario;
 use App\FormularioRegistro;
 use App\SubEquipo;
@@ -175,10 +176,10 @@ class DashboardController extends Controller
          $data['serv_tec_10']=array();
 
          if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador') or current_user()->isSupervisor())
-            $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','','',false,'');
+            $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','C','',false,'');
 
         if(current_user()->isOnGroup('supervisorc'))
-            $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','','',true,'');
+            $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','C','',true,'');
 
         if(current_user()->isOnGroup('administrador') or  current_user()->isOnGroup('programador')){
             $dailyCheck =  $this->getPendings($filtro,'daily_check','', "date_format(formulario_registro.created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'",false,true);
@@ -204,21 +205,20 @@ class DashboardController extends Controller
 
     function grafica(Request $request){
 
-
-        $query="SELECT fr.cliente_id,c.`nombre`,COUNT(DISTINCT(fr.equipo_id)) AS reportados,
+        $query="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportados,
         SUM( CASE fr.equipo_status WHEN 'O' THEN 1 ELSE 0 END) AS operativos,
         SUM( CASE fr.equipo_status WHEN 'I' THEN 1 ELSE 0 END) AS inoperativos,
         SUM( CASE fr.repuesto_status WHEN 'E' THEN 1 ELSE 0 END) AS en_espera,
         SUM( CASE fr.repuesto_status WHEN 'L' THEN 1 ELSE 0 END) AS listo
         FROM formulario_registro fr
-        LEFT JOIN clientes_vw c ON  fr.`cliente_id`=c.`id`, equipos_vw e ,
+        LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e ,
         (SELECT equipo_id,cliente_id,MAX(id) AS id FROM formulario_registro
         WHERE  formulario_id=10 AND deleted_at IS NULL
         GROUP BY equipo_id,cliente_id)X  
-        WHERE   fr.`equipo_id`=e.id AND fr.id=X.id AND fr.`cliente_id`=X.cliente_id
-        AND fr.`deleted_at`IS NULL
-        AND e.`numero_parte` NOT LIKE 'GM%'
-        GROUP BY fr.cliente_id,c.`nombre`
+        WHERE   fr.equipo_id=e.id AND fr.id=X.id AND fr.cliente_id=X.cliente_id
+        AND fr.deleted_at IS NULL
+        AND e.numero_parte NOT LIKE 'GM%'
+        GROUP BY fr.cliente_id,c.nombre
         ";
         $res=DB::select(DB::Raw($query));
         $data=array();
@@ -233,18 +233,18 @@ class DashboardController extends Controller
             $data['chart2']['l'][]=$r->listo;
         }
 
-        $query2="SELECT fr.cliente_id,c.`nombre`,COUNT(DISTINCT(fr.equipo_id)) AS reportes,
+        $query2="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportes,
         SUM( CASE fr.estatus WHEN 'P' THEN 1 ELSE 0 END) AS pendientes,
         SUM( CASE fr.estatus WHEN 'A' THEN 1 ELSE 0 END) AS asignados,
         SUM( CASE fr.estatus WHEN 'PR' THEN 1 ELSE 0 END) AS proceso,
         SUM( CASE fr.estatus WHEN 'C' THEN 1 ELSE 0 END) AS cerrado
         FROM formulario_registro fr
-        LEFT JOIN clientes_vw c ON  fr.`cliente_id`=c.`id`, equipos_vw e 
-        WHERE   fr.`equipo_id`=e.id 
-        AND fr.`deleted_at`IS NULL
+        LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e 
+        WHERE   fr.equipo_id=e.id 
+        AND fr.deleted_at IS NULL
         AND fr.formulario_id=10 
-        AND e.`numero_parte` NOT LIKE 'GM%'
-        GROUP BY fr.cliente_id,c.`nombre`";
+        AND e.numero_parte NOT LIKE 'GM%'
+        GROUP BY fr.cliente_id,c.nombre";
         $res2=DB::select(DB::Raw($query2));
         foreach($res2 as $r){
             $data['chart3']['n'][]=$r->nombre;
@@ -255,44 +255,107 @@ class DashboardController extends Controller
             $data['chart3']['c'][]=$r->cerrado;
         }
 
-        $query3="SELECT fr.cliente_id,c.`nombre`,COUNT(*) AS reportes,
+
+        $query3="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportados,
+                SUM( CASE fr.cotizacion WHEN 'A' THEN 1 ELSE 0 END) AS aprobada,
+                SUM( CASE ifnull(fr.cotizacion,'N') when 'N' THEN 1 ELSE 0 END) AS no_apobada
+                FROM formulario_registro fr
+                LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e ,
+                (SELECT equipo_id,cliente_id,MAX(id) AS id FROM formulario_registro
+                WHERE  formulario_id=10 AND deleted_at IS NULL
+                GROUP BY equipo_id,cliente_id)X  
+                WHERE   fr.equipo_id=e.id AND fr.id=X.id AND fr.cliente_id=X.cliente_id
+                AND fr.deleted_at IS NULL
+                AND e.numero_parte NOT LIKE 'GM%'
+                GROUP BY fr.cliente_id,c.nombre";
+        $res3=DB::select(DB::Raw($query3));
+
+        foreach($res3 as $r){
+            $data['chart4']['n'][]=$r->nombre;
+            $data['chart4']['r'][]=$r->reportados;
+            $data['chart4']['a'][]=$r->aprobada;
+            $data['chart4']['x'][]=$r->no_apobada;
+        } 
+
+        $query4="SELECT fr.cliente_id,c.nombre,COUNT(*) AS reportes,
         SUM( CASE fr.estatus WHEN 'P' THEN 1 ELSE 0 END) AS pendientes,
         SUM( CASE fr.estatus WHEN 'C' THEN 1 ELSE 0 END) AS cerrado
         FROM formulario_registro fr
-        LEFT JOIN clientes_vw c ON  fr.`cliente_id`=c.`id`, equipos_vw e ,formularios f
-        WHERE   fr.`equipo_id`=e.id 
-        AND fr.`deleted_at`IS NULL
-        AND fr.`formulario_id`=f.`id`
+        LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e ,formularios f
+        WHERE   fr.equipo_id=e.id 
+        AND fr.deleted_at IS NULL
+        AND fr.formulario_id=f.id
         AND f.tipo='mant_prev'
-        AND e.`numero_parte` NOT LIKE 'GM%'
-        GROUP BY fr.cliente_id,c.`nombre`";
-        $res3=DB::select(DB::Raw($query3));
-        foreach($res3 as $r){
-            $data['chart4']['n'][]=$r->nombre;
-            $data['chart4']['r'][]=$r->reportes;
-            $data['chart4']['p'][]=$r->pendientes;
-            $data['chart4']['c'][]=$r->cerrado;
+        AND e.numero_parte NOT LIKE 'GM%'
+        GROUP BY fr.cliente_id,c.nombre";
+        $res4=DB::select(DB::Raw($query4));
+        foreach($res4 as $r){
+            $data['chart5']['n'][]=$r->nombre;
+            $data['chart5']['r'][]=$r->reportes;
+            $data['chart5']['p'][]=$r->pendientes;
+            $data['chart5']['c'][]=$r->cerrado;
         }
+
+        $query5="SELECT fr.cliente_id,c.nombre,COUNT(*) AS reportes,
+        SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propias,
+        SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquiladas
+        FROM formulario_registro fr
+        LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e 
+        WHERE   fr.equipo_id=e.id 
+        AND fr.deleted_at IS NULL
+        AND fr.formulario_id=10
+        GROUP BY fr.cliente_id,c.nombre";
+        $res5=DB::select(DB::Raw($query5));
+        foreach($res5 as $r){
+            $data['chart6']['n'][]=$r->nombre;
+            $data['chart6']['p'][]=$r->propias;
+            $data['chart6']['a'][]=$r->alquiladas;
+        }
+
+        
         $data['indice'][1]=['r','o','i','n'];
         $data['indice'][2]=['e','l','n'];
-        $data['indice'][3]=['r','p','a','pr','c','n'];
-        $data['indice'][4]=['r','p','c','n'];
+        $data['indice'][3]=['p','a','pr','c','n'];
+        $data['indice'][4]=['a','x','n'];
+        $data['indice'][5]=['r','p','c','n'];
+        $data['indice'][6]=['p','a','n'];
+
     
         $data['ejey'][1]='Equipos';
         $data['ejey'][2]='Equipos';
         $data['ejey'][3]='Reportes';
-        $data['ejey'][4]='Reportes';
+        $data['ejey'][4]='Reportes ST';
+        $data['ejey'][5]='Reportes';
+        $data['ejey'][6]='Reportes';
+
 
         $data['leyenda'][1]=['Reportados','Operativo','Inoperativo'];
         $data['leyenda'][2]=['En espera','Listos'];
-        $data['leyenda'][3]=['Reportes','Pendientes','Asignados','En Proceso','Cerrados'];
-        $data['leyenda'][4]=['Reportes','Pendientes','Cerrados'];
+        $data['leyenda'][3]=['Pendientes','Asignados','En Proceso','Cerrados'];
+        $data['leyenda'][4]=['Aprobadas','No Aprobadas'];
+        $data['leyenda'][5]=['Total','Pendientes','Cerrados'];
+        $data['leyenda'][6]=['Propias','Alquiladas'];
+
 
         $data['titulo'][1]='Estatus equipos';
         $data['titulo'][2]='Estatus repuestos';
         $data['titulo'][3]='Estatus servicio tecnico';
-        $data['titulo'][4]='Estatus MTT Preventivo';
+        $data['titulo'][4]='Cotizaciones';
+        $data['titulo'][5]='Estatus MTT Preventivo';
+        $data['titulo'][6]='Reportes de accidentes';
+
+        $clientes=current_user()->crm_clientes_id;
+        if(!empty($clientes)){
+            $clientes=Cliente::whereRaw("(id in($clientes))")->orderBy('nombre')->get()->pluck('nombre','id');
+        }else{
+            $clientes_reportes=DB::Select(DB::Raw("SELECT cliente_id FROM formulario_registro 
+            WHERE cliente_id IS NOT NULL AND deleted_at IS NULL
+            GROUP BY cliente_id"));
+            $clientes_reportes=collect($clientes_reportes)->pluck('cliente_id');
+            $clientes=Cliente::whereIn('id',$clientes_reportes)->orderBy('nombre')->get()->pluck('nombre','id');
+        }
+        $clientes['']='Seleccione el cliente';
         
-        return view('frontend.dashboard.gmp',compact('data'));
+        return view('frontend.dashboard.gmp',compact('data','clientes'));
     }
 }

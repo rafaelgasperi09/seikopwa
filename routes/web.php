@@ -42,6 +42,7 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
     Route::get('logout', array('as' => 'logout','uses' => 'LoginController@logout'));
     Route::get('/inicio', array('as' => 'inicio', 'uses' => 'DashboardController@index'));
     Route::get('/dashboard/gmp', array('as' => 'dashboard.gmp', 'uses' => 'DashboardController@grafica'));
+    Route::get('/dashboard/cliente', array('as' => 'dashboard.cliente', 'uses' => 'DashboardController@grafica'));
     Route::get('/calendar', array('as' => 'equipos.calendar', 'uses' => 'EquiposController@calendar'));
 
     Route::group(array('prefix' => 'equipos'), function() {
