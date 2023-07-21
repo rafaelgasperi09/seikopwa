@@ -1,6 +1,6 @@
 @extends('frontend.main-layout')
 @section('content')
-    @include('frontend.partials.title',array('title'=>'Dashboard','subtitle'=>'Bienvenido(a) a GMP APP'))
+    @include('frontend.partials.title',array('title'=>'GMP APP','subtitle'=>'Bienvenido(a) a GMP APP'))
     @php
         $totales_title='Total Equipos';
         $totales=0;
@@ -8,14 +8,14 @@
     <ul class="nav nav-tabs style1 iconed" role="tablist">
        
         <li class="nav-item">
-            <a class="nav-link @if($data['tipo']=='cliente') active @endif" href="{{route('dashboard')}}?tipo=cliente" >
+            <a class="nav-link @if($data['tipo']=='cliente') active @endif" href="{{route('inicio')}}?tipo=cliente" >
                     <ion-icon name="person-outline" class="text-primary" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
                     CLIENTE
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link @if($data['tipo']=='gmp') active @endif"  href="{{route('dashboard')}}?tipo=gmp" >
+            <a class="nav-link @if($data['tipo']=='gmp') active @endif"  href="{{route('inicio')}}?tipo=gmp" >
                     <ion-icon name="people-outline" class="text-info" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
                     GMP
             </a>

@@ -3,7 +3,7 @@
     @php
     $routeName = Route::currentRouteName();
     @endphp
-        @if($routeName=='dashboard')
+        @if($routeName=='inicio')
         <div class="left">
         <a href="#" class="headerButton" data-toggle="modal" data-target="#sidebarPanel" title="Menú">
             <ion-icon name="menu-outline"></ion-icon>

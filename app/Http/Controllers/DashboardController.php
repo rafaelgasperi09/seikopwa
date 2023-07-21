@@ -199,7 +199,7 @@ class DashboardController extends Controller
         }
         $tab['t1']=''; $tab['t2']='active show';
 
-        return view('frontend.dashboard',compact('data'));
+        return view('frontend.inicio',compact('data'));
     }
 
     function grafica(Request $request){

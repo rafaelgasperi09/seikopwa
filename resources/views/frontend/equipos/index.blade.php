@@ -1,7 +1,7 @@
 @extends('frontend.main-layout')
 @section('content')
 @if(isset($subEquipos))
-    @include('frontend.partials.title',array('subtitle'=>'Equipos > Tipos','title'=>'Equipos','route_back'=>route('dashboard')))
+    @include('frontend.partials.title',array('subtitle'=>'Equipos > Tipos','title'=>'Equipos','route_back'=>route('inicio')))
     <div class="">
             <ul class="nav nav-tabs style1" role="tablist">
             @php

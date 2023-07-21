@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
 
     if(\Sentinel::check()){
-        return redirect(route('dashboard'));
+        return redirect(route('inicio'));
     }
 
     return view('frontend.login');
@@ -40,7 +40,7 @@ Route::put('usuarios/{id}/password', array('as' => 'usuarios.update_password', '
 Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), function() {
 
     Route::get('logout', array('as' => 'logout','uses' => 'LoginController@logout'));
-    Route::get('/dashboard', array('as' => 'dashboard', 'uses' => 'DashboardController@index'));
+    Route::get('/inicio', array('as' => 'inicio', 'uses' => 'DashboardController@index'));
     Route::get('/dashboard/gmp', array('as' => 'dashboard.gmp', 'uses' => 'DashboardController@grafica'));
     Route::get('/calendar', array('as' => 'equipos.calendar', 'uses' => 'EquiposController@calendar'));
 

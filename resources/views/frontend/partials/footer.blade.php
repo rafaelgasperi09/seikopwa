@@ -21,7 +21,7 @@
         </div>
     </a>
     @endif
-    <a href="{{ route('dashboard') }}" class="item @if(Request::is('dashboard')) active @endif"  title="Inicio">
+    <a href="{{ route('inicio') }}" class="item @if(Request::is('inicio')) active @endif"  title="Inicio">
         <div class="col">
             <ion-icon name="home-outline" role="img" class="md hydrated" aria-label="home outline"></ion-icon>
         </div>

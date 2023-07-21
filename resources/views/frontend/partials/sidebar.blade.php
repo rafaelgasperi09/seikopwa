@@ -30,12 +30,12 @@
 
                 <ul class="listview flush transparent no-line image-listview mt-2">
                     <li>
-                        <a href="{{ route('dashboard') }}" class="item" title="Dashboard">
+                        <a href="{{ route('inicio') }}" class="item" title="Inicio">
                             <div class="icon-box bg-primary">
                                 <ion-icon name="home-outline"></ion-icon>
                             </div>
                             <div >
-                                Dashboard
+                                Inicio
                             </div>
                         </a>
                     </li>
