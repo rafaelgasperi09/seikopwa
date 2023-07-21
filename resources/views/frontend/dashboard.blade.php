@@ -8,14 +8,14 @@
     <ul class="nav nav-tabs style1 iconed" role="tablist">
        
         <li class="nav-item">
-            <a class="nav-link active show" data-toggle="tab" href="#cliente_tab" role="tab" aria-selected="true">
+            <a class="nav-link @if($data['tipo']=='cliente') active @endif" href="{{route('dashboard')}}?tipo=cliente" >
                     <ion-icon name="person-outline" class="text-primary" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
                     CLIENTE
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link   " data-toggle="tab" href="#mant_prev" role="tab" aria-selected="true">
+            <a class="nav-link @if($data['tipo']=='gmp') active @endif"  href="{{route('dashboard')}}?tipo=gmp" >
                     <ion-icon name="people-outline" class="text-info" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
                     GMP
             </a>

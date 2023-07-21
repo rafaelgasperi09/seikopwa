@@ -13,11 +13,11 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    private function getPendings($formType,$status='P',$filterExtra='',$equipos=true,$pluck=''){
-        $userFilter='';
+    private function getPendings($filtro,$formType,$status='P',$filterExtra='',$equipos=true,$pluck=''){
+        $userFilter='WHERE '.$filtro;
         
         if(current_user()->crm_clientes_id){
-              $userFilter='WHERE cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).')';
+              $userFilter='WHERE cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).') and '.$filtro;
         }
           
 
@@ -58,16 +58,26 @@ class DashboardController extends Controller
     }
 
 
-    public function index(){
+    public function index(Request $request){
 
+        /////////FILTRO CLIENTE GMP/////////////
+        $data['tipo']='gmp';
+        $filtro['gmp']="equipos.numero_parte like 'GM%'";
+        $filtro['cliente']="equipos.numero_parte not like 'GM%'";
+        if(current_user()->isCliente())
+            $data['tipo']='cliente';
+     
+        if($request->has('tipo') and !empty($request->tipo) and in_array($request->tipo,['gmp','cliente'])){
+            $data['tipo']=$request->tipo;
+        }
+        $filtro=$filtro[$data['tipo']];
         ///////////// EQUIPOS ///////////////////////
         /// FILTRO SOLO LAS ELECTRICAS POR LOS DE COMBUSTION NO TIENEN SUB TIPO
-        $equipos =  Equipo::FiltroCliente()->get();
-        //dd($equipos->pluck('numero_parte','id'));
+        $equipos =  Equipo::FiltroCliente()->whereRaw($filtro)->get();
+        
         ///////////// TOTAL EQUIPOS POR TIPO //////////////
         $tipoEquiposArray=array();
-        $tipoEquiposArrayAlquiler=array();
-
+        $tipoEquiposArrayAlquiler=array();     
         $tipoEquiposElectricas = Equipo::selectRaw("count(equipos.id) as total,
                                                     SUM(CASE WHEN SUBSTR(equipos.numero_parte,1,2)='GM' THEN 1 ELSE 0 END) AS GMtotal,
                                                     equipos.sub_equipos_id,equipos.tipo_equipos_id,
@@ -75,6 +85,7 @@ class DashboardController extends Controller
             ->FiltroCliente()
             ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
             ->where('equipos.sub_equipos_id','=',2)
+           
             ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id')
             ->get();
 
@@ -139,38 +150,38 @@ class DashboardController extends Controller
         }
         if( current_user()->isOnGroup('supervisorc') or  current_user()->isOnGroup('programador') ){
             //daily check pendientes de firma supervisor
-            $data['daily_check']=$this->getPendings('daily_check');
+            $data['daily_check']=$this->getPendings($filtro,'daily_check');
         }
 
         //mantenimientos preventivos pendientes de firma supervisor
-        $data['mant_prev']=$this->getPendings('mant_prev');
+        $data['mant_prev']=$this->getPendings($filtro,'mant_prev');
         //servicio tecnico PENDIENTES
-        $data['serv_tec_p']=$this->getPendings('serv_tec');
+        $data['serv_tec_p']=$this->getPendings($filtro,'serv_tec');
         //servicio tecnico PENDIENTES DE INICIAR
-        $data['serv_tec_pi_a']=$this->getPendings('serv_tec','A');
+        $data['serv_tec_pi_a']=$this->getPendings($filtro,'serv_tec','A');
         //servicio tecnico ABIERTAS
        if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
             $cond1='';
         else
             $cond1=' formulario_registro.tecnico_asignado='.current_user()->id;
-        $data['serv_tec_a']=$this->getPendings('serv_tec','A',$cond1);
+        $data['serv_tec_a']=$this->getPendings($filtro,'serv_tec','A',$cond1);
         //servicio tecnico EN PROCESO
         if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
             $cond2='';
         else
             $cond2=' formulario_registro.tecnico_asignado='.current_user()->id;
-        $data['serv_tec_pr']=$this->getPendings('serv_tec','PR',$cond2);
+        $data['serv_tec_pr']=$this->getPendings($filtro,'serv_tec','PR',$cond2);
          //servicio tecnico EN PROCESO
          $data['serv_tec_10']=array();
 
          if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador') or current_user()->isSupervisor())
-            $data['serv_tec_10']=$this->getPendings('serv_tec','','',false,'');
+            $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','','',false,'');
 
         if(current_user()->isOnGroup('supervisorc'))
-            $data['serv_tec_10']=$this->getPendings('serv_tec','','',true,'');
+            $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','','',true,'');
 
         if(current_user()->isOnGroup('administrador') or  current_user()->isOnGroup('programador')){
-            $dailyCheck =  $this->getPendings('daily_check','', "date_format(formulario_registro.created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'",false,true);
+            $dailyCheck =  $this->getPendings($filtro,'daily_check','', "date_format(formulario_registro.created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'",false,true);
 
             $dailyCheckString='';
             foreach($dailyCheck as $k=>$dc){

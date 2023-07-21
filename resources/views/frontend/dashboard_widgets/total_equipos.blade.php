@@ -12,23 +12,23 @@
         @endif
         @foreach($data['total_equipos'] as $sub_equipos)
             @foreach($sub_equipos['tipos'] as $tipo)
-            @php $totales+=$tipo['total'];  @endphp
-            <a href="{{ route('equipos.tipo',array($sub_equipos['name'],$tipo['tipo_id'])) }}"
-            class="chip chip-media ml-05 mb-05" style="width:100%">
-                @if(current_user()->isCliente())
-                    <i class="chip-icon bg-primary">
-                        {{ $tipo['total'] }}
-                    </i>
-                @else
-                    <i class="chip-center chip-icon bg-primary">
-                        {{ $tipo['total'] }}
-                    </i>
-                    <i class="chip-icon bg-warning" title="GMP">
-                        {{ $tipo['GMtotal'] }}
-                    </i>
-                @endif
-                <span class="chip-label">{{ $tipo['tipo'] }}</span>
-            </a>
+                @php $totales+=$tipo['total'];  @endphp
+                <a href="{{ route('equipos.tipo',array($sub_equipos['name'],$tipo['tipo_id'])) }}"
+                class="chip chip-media ml-05 mb-05" style="width:100%">
+                    @if(current_user()->isCliente())
+                        <i class="chip-icon bg-primary">
+                            {{ $tipo['total'] }}
+                        </i>
+                    @else
+                        <i class="chip-center chip-icon bg-primary">
+                            {{ $tipo['total'] }}
+                        </i>
+                        <i class="chip-icon bg-warning" title="GMP">
+                            {{ $tipo['GMtotal'] }}
+                        </i>
+                    @endif
+                    <span class="chip-label">{{ $tipo['tipo'] }}</span>
+                </a>
             @endforeach
         @endforeach
         <?PHP /****  LISTADO DE BATERIAS  ************/?>
