@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 
+
 class DashboardController extends Controller
 {
     private function getPendings($filtro,$formType,$status='P',$filterExtra='',$equipos=true,$pluck=''){
@@ -174,12 +175,13 @@ class DashboardController extends Controller
         $data['serv_tec_pr']=$this->getPendings($filtro,'serv_tec','PR',$cond2);
          //servicio tecnico EN PROCESO
          $data['serv_tec_10']=array();
-
+         $desde = \Carbon\Carbon::now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
+         $filtroExtra="(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')";
          if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador') or current_user()->isSupervisor())
-            $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','C','',false,'');
+            $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,false,'');
 
         if(current_user()->isOnGroup('supervisorc'))
-            $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','C','',true,'');
+            $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,true,'');
 
         if(current_user()->isOnGroup('administrador') or  current_user()->isOnGroup('programador')){
             $dailyCheck =  $this->getPendings($filtro,'daily_check','', "date_format(formulario_registro.created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'",false,true);
@@ -203,9 +205,57 @@ class DashboardController extends Controller
         return view('frontend.inicio',compact('data'));
     }
 
-    function grafica(Request $request){
+    function grafica(Request $request,$id){
 
-        $query="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportados,
+        //clientes
+        $clientes=current_user()->crm_clientes_id;
+        $clientes_lista=explode(',',$clientes);
+        foreach($clientes_lista as $k=>$c){
+            if(empty($c))
+                unset($clientes_lista[$k]);
+        }
+        $clientes=implode(',',$clientes_lista);
+        //filtro
+        $filtro='';$view='frontend.dashboard.gmp';
+        if(in_array($id,['gmp','cliente'])){
+            if($id=='cliente'){
+                $filtro.=" AND e.numero_parte NOT LIKE 'GM%'";
+                $view='frontend.dashboard.cliente';
+            }
+            else{
+                $filtro.=" AND e.numero_parte LIKE 'GM%'";
+            }
+        }
+           
+        if($request->has('cliente_id') and !empty($request->cliente_id))
+            $filtro.="and fr.cliente_id='$request->cliente_id'".PHP_EOL;
+
+        if($request->has('desde') and !empty($request->desde))
+            $filtro.="and fr.created_at>='$request->desde'".PHP_EOL;
+
+        if($request->has('hasta') and !empty($request->hasta))
+            $filtro.="and fr.created_at<='$request->hasta'".PHP_EOL;
+
+        if(!empty($clientes)){
+            $filtro.="and fr.cliente_id in ($clientes)".PHP_EOL;
+        }
+        $max=0;
+
+        $query0="SELECT 
+                'Total de equipos' AS nombre,
+                SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%' AND cliente_id IS NOT NULL) THEN 1 ELSE 0 END) AS propios,
+                SUM(CASE WHEN (e.numero_parte LIKE 'GM%' AND cliente_id IS NOT NULL) THEN 1 ELSE 0 END) AS alquilados
+                FROM montacarga.equipos e";
+        $res0=DB::connection('crm')->select(DB::Raw($query0));
+       
+        $data=array();
+        foreach($res0 as $r){
+            $data['chart0']['n'][]=$r->nombre;
+            $data['chart0']['p'][]=$r->propios;
+            $data['chart0']['a'][]=$r->alquilados;
+        }
+
+        $query1="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportados,
         SUM( CASE fr.equipo_status WHEN 'O' THEN 1 ELSE 0 END) AS operativos,
         SUM( CASE fr.equipo_status WHEN 'I' THEN 1 ELSE 0 END) AS inoperativos,
         SUM( CASE fr.repuesto_status WHEN 'E' THEN 1 ELSE 0 END) AS en_espera,
@@ -217,12 +267,11 @@ class DashboardController extends Controller
         GROUP BY equipo_id,cliente_id)X  
         WHERE   fr.equipo_id=e.id AND fr.id=X.id AND fr.cliente_id=X.cliente_id
         AND fr.deleted_at IS NULL
-        AND e.numero_parte NOT LIKE 'GM%'
+        $filtro
         GROUP BY fr.cliente_id,c.nombre
         ";
-        $res=DB::select(DB::Raw($query));
-        $data=array();
-        foreach($res as $r){
+        $res1=DB::select(DB::Raw($query1));
+        foreach($res1 as $r){
             $data['chart1']['n'][]=$r->nombre;
             $data['chart1']['r'][]=$r->reportados;
             $data['chart1']['o'][]=$r->operativos;
@@ -231,8 +280,11 @@ class DashboardController extends Controller
             $data['chart2']['n'][]=$r->nombre;
             $data['chart2']['e'][]=$r->en_espera;
             $data['chart2']['l'][]=$r->listo;
-        }
 
+            $max++;
+        }
+        $data['max']=$max;
+        $max=0;
         $query2="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportes,
         SUM( CASE fr.estatus WHEN 'P' THEN 1 ELSE 0 END) AS pendientes,
         SUM( CASE fr.estatus WHEN 'A' THEN 1 ELSE 0 END) AS asignados,
@@ -243,7 +295,7 @@ class DashboardController extends Controller
         WHERE   fr.equipo_id=e.id 
         AND fr.deleted_at IS NULL
         AND fr.formulario_id=10 
-        AND e.numero_parte NOT LIKE 'GM%'
+        $filtro
         GROUP BY fr.cliente_id,c.nombre";
         $res2=DB::select(DB::Raw($query2));
         foreach($res2 as $r){
@@ -253,9 +305,11 @@ class DashboardController extends Controller
             $data['chart3']['a'][]=$r->asignados;
             $data['chart3']['pr'][]=$r->proceso;
             $data['chart3']['c'][]=$r->cerrado;
+            $max++;
         }
 
-
+        $data['max']=max($max,$data['max']);
+        $max=0;
         $query3="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportados,
                 SUM( CASE fr.cotizacion WHEN 'A' THEN 1 ELSE 0 END) AS aprobada,
                 SUM( CASE ifnull(fr.cotizacion,'N') when 'N' THEN 1 ELSE 0 END) AS no_apobada
@@ -266,7 +320,7 @@ class DashboardController extends Controller
                 GROUP BY equipo_id,cliente_id)X  
                 WHERE   fr.equipo_id=e.id AND fr.id=X.id AND fr.cliente_id=X.cliente_id
                 AND fr.deleted_at IS NULL
-                AND e.numero_parte NOT LIKE 'GM%'
+                $filtro
                 GROUP BY fr.cliente_id,c.nombre";
         $res3=DB::select(DB::Raw($query3));
 
@@ -275,7 +329,10 @@ class DashboardController extends Controller
             $data['chart4']['r'][]=$r->reportados;
             $data['chart4']['a'][]=$r->aprobada;
             $data['chart4']['x'][]=$r->no_apobada;
+            $max++;
         } 
+        $data['max']=max($max,$data['max']);
+        $max=0;
 
         $query4="SELECT fr.cliente_id,c.nombre,COUNT(*) AS reportes,
         SUM( CASE fr.estatus WHEN 'P' THEN 1 ELSE 0 END) AS pendientes,
@@ -286,7 +343,7 @@ class DashboardController extends Controller
         AND fr.deleted_at IS NULL
         AND fr.formulario_id=f.id
         AND f.tipo='mant_prev'
-        AND e.numero_parte NOT LIKE 'GM%'
+        $filtro
         GROUP BY fr.cliente_id,c.nombre";
         $res4=DB::select(DB::Raw($query4));
         foreach($res4 as $r){
@@ -294,7 +351,11 @@ class DashboardController extends Controller
             $data['chart5']['r'][]=$r->reportes;
             $data['chart5']['p'][]=$r->pendientes;
             $data['chart5']['c'][]=$r->cerrado;
+            $max++;    
         }
+
+        $data['max']=max($max,$data['max']);
+        $max=0;
 
         $query5="SELECT fr.cliente_id,c.nombre,COUNT(*) AS reportes,
         SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propias,
@@ -304,15 +365,21 @@ class DashboardController extends Controller
         WHERE   fr.equipo_id=e.id 
         AND fr.deleted_at IS NULL
         AND fr.formulario_id=10
+        $filtro
         GROUP BY fr.cliente_id,c.nombre";
         $res5=DB::select(DB::Raw($query5));
         foreach($res5 as $r){
             $data['chart6']['n'][]=$r->nombre;
             $data['chart6']['p'][]=$r->propias;
             $data['chart6']['a'][]=$r->alquiladas;
+            $max++;    
         }
 
+        $data['max']=max($max,$data['max']);
+        $max=0;
         
+        
+        $data['indice'][0]=['p','a','n'];
         $data['indice'][1]=['r','o','i','n'];
         $data['indice'][2]=['e','l','n'];
         $data['indice'][3]=['p','a','pr','c','n'];
@@ -321,6 +388,7 @@ class DashboardController extends Controller
         $data['indice'][6]=['p','a','n'];
 
     
+        $data['ejey'][0]='Equipos';
         $data['ejey'][1]='Equipos';
         $data['ejey'][2]='Equipos';
         $data['ejey'][3]='Reportes';
@@ -328,7 +396,7 @@ class DashboardController extends Controller
         $data['ejey'][5]='Reportes';
         $data['ejey'][6]='Reportes';
 
-
+        $data['leyenda'][0]=['Propios','Alquilados'];
         $data['leyenda'][1]=['Reportados','Operativo','Inoperativo'];
         $data['leyenda'][2]=['En espera','Listos'];
         $data['leyenda'][3]=['Pendientes','Asignados','En Proceso','Cerrados'];
@@ -336,7 +404,7 @@ class DashboardController extends Controller
         $data['leyenda'][5]=['Total','Pendientes','Cerrados'];
         $data['leyenda'][6]=['Propias','Alquiladas'];
 
-
+        $data['titulo'][0]='Total equipos';
         $data['titulo'][1]='Estatus equipos';
         $data['titulo'][2]='Estatus repuestos';
         $data['titulo'][3]='Estatus servicio tecnico';
@@ -344,7 +412,6 @@ class DashboardController extends Controller
         $data['titulo'][5]='Estatus MTT Preventivo';
         $data['titulo'][6]='Reportes de accidentes';
 
-        $clientes=current_user()->crm_clientes_id;
         if(!empty($clientes)){
             $clientes=Cliente::whereRaw("(id in($clientes))")->orderBy('nombre')->get()->pluck('nombre','id');
         }else{
@@ -356,6 +423,6 @@ class DashboardController extends Controller
         }
         $clientes['']='Seleccione el cliente';
         
-        return view('frontend.dashboard.gmp',compact('data','clientes'));
+        return view($view,compact('data','clientes','id'));
     }
 }

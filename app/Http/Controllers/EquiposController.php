@@ -32,6 +32,8 @@ use Illuminate\Support\Facades\Storage;
 use PDF;
 use Response;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ReportesExport;
 
 class EquiposController extends BaseController
 {
@@ -126,7 +128,7 @@ class EquiposController extends BaseController
                 ->join('clientes_vw','formulario_registro.cliente_id','clientes_vw.id')
                 ->selectRaw("formulario_registro.*,users.first_name,users.last_name,formularios.tipo,clientes_vw.nombre,equipos_vw.numero_parte,concat(users.first_name,' ',users.last_name) as user_name")
                 ->whereNull('formulario_registro.deleted_at')
-                ->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
+                //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
                     $q->whereIn("cliente_id",$clientes);
                 })
@@ -221,6 +223,7 @@ class EquiposController extends BaseController
                         
         $campos=array('id','created_at','tipo','numero_parte','user_name','nombre','estatus','semana','dia_semana','turno_chequeo_diario');
         $i=0;
+        return Excel::download(new ReportesExport($datos), 'Equipo.xlsx');
         /*
         foreach($datos as $value){
             foreach($value as $k=>$v){

@@ -1,16 +1,12 @@
 @extends('frontend.main-layout')
 @section('content')
-<div class="row">
-    <div class="col-md-10 " style="padding-left:30px">
-        <h3 class="title ">
-                Equipos &gt; Listado de reportes
-        </h3>
-    </div>
-        <div class="col-md-2 text-right">
-        <a id="exporter" type="button" class="btn btn-success btn-rounded btn-condensed btn-sm pull-right"   href="{{route('equipos.reportes_export')}}" target="_blank" id="export_btn" ><span class="fa fa-excel"></span> Exportar</a>
-        <a id="mostrarfiltro" type="button" class="btn btn-primary btn-rounded btn-condensed btn-sm pull-right"  data-toggle="collapse" href="#filtro" role="button" aria-expanded="false" aria-controls="filtro"><span class="fa fa-search"></span> Filtro</a>
-        </div>
-    </div>
+@include('frontend.partials.title',array('title'=>'Equipos','subtitle'=>'Equipos >  Historial de reportes','route_back'=>route('equipos.index')))
+<script>
+    $('.header-large-title>.title').append(' <div style="position:relative;float:right">\
+                                                <a id="exporter" type="button" class="btn btn-success btn-rounded btn-condensed btn-sm pull-right"   href="{{route('equipos.reportes_export')}}" target="_blank" id="export_btn" ><span class="fa fa-excel"></span> Exportar</a>\
+                                                <a id="mostrarfiltro" type="button" class="btn btn-primary btn-rounded btn-condensed btn-sm pull-right"  data-toggle="collapse" href="#filtro" role="button" aria-expanded="false" aria-controls="filtro"><span class="fa fa-search"></span> Filtro</a>\
+                                            </div>');       
+</script>
 <div class="row">
     <div class="col-md-12 text-right">
     @include('frontend.equipos.filtro')

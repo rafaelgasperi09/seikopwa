@@ -22,6 +22,10 @@ Route::get('/', function () {
     return view('frontend.login');
 });
 
+Route::get('/dashboard', function () {
+        return redirect(route('inicio'));  
+});
+
 /*************** USERS LOGIN PASSWORD ROUTES **************************************/
 Route::get('/login', function () { return view('frontend.login');});
 Route::post('login', array('as' => 'login','uses' => 'LoginController@login'));
@@ -41,8 +45,7 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
     Route::get('logout', array('as' => 'logout','uses' => 'LoginController@logout'));
     Route::get('/inicio', array('as' => 'inicio', 'uses' => 'DashboardController@index'));
-    Route::get('/dashboard/gmp', array('as' => 'dashboard.gmp', 'uses' => 'DashboardController@grafica'));
-    Route::get('/dashboard/cliente', array('as' => 'dashboard.cliente', 'uses' => 'DashboardController@grafica'));
+    Route::get('/dashboard/{id}', array('as' => 'dashboard.gmp', 'uses' => 'DashboardController@grafica'));
     Route::get('/calendar', array('as' => 'equipos.calendar', 'uses' => 'EquiposController@calendar'));
 
     Route::group(array('prefix' => 'equipos'), function() {

@@ -5,12 +5,12 @@
         $totales_title='Total Equipos';
         $totales=0;
         $totdc=0; $totmp=0;$totstp=0;
-        if(count($data['daily_check'])){  $totdc=count($data['daily_check']); }
-        if(count($data['mant_prev'])){ $totmp=count($data['mant_prev']);  }
-        if(count($data['serv_tec_p'])){ $totstp=count($data['serv_tec_p']);}
+        if(isset($data['daily_check']) and count($data['daily_check'])){  $totdc=count($data['daily_check']); }
+        if(isset($data['mant_prev']) and count($data['mant_prev'])){ $totmp=count($data['mant_prev']);  }
+        if(isset($data['serv_tec_p']) and count($data['serv_tec_p'])){ $totstp=count($data['serv_tec_p']);}
         $totsta=0;$totstpr=0;
-        if(count($data['serv_tec_a'])){ $totsta=count($data['serv_tec_a']);  }
-        if(count($data['serv_tec_pr'])){ $totstpr=count($data['serv_tec_pr']);  }
+        if(isset($data['serv_tec_a']) and count($data['serv_tec_a'])){ $totsta=count($data['serv_tec_a']);  }
+        if(isset($data['serv_tec_pr']) and count($data['serv_tec_pr'])){ $totstpr=count($data['serv_tec_pr']);  }
     @endphp
     <ul class="nav nav-tabs style1 iconed" role="tablist">
        

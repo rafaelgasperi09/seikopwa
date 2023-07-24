@@ -54,8 +54,7 @@
         },title: {
           text: '{{$title}}',
           floating: true,
-          offsetY: 20,
-          align: 'center',
+          offsetY: 5,
           style: {
             fontSize: '16px',
             fontWeight:'bold',

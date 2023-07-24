@@ -49,7 +49,7 @@ class LoginController extends Controller
 
             if ($auth)
             {
-                return redirect(route('dashboard'));
+                return redirect(route('inicio'));
             }
             else
             {

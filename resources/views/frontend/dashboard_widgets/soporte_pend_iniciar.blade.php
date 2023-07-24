@@ -1,7 +1,7 @@
 <div class="card text-white bg-light">
     <div class="card-header">
         <span ><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
-        <span class="card-title" id="tot_equipos">{{$totsta}} </span>Pendientes de iniciar</span>
+        <span class="card-title" id="tot_equipos">{{$totsta}} </span title="Se muestra la lista al tecnico asignado">Pendientes de iniciar</span>
     </div>
     <div class="card-body">
     @if(count($data['serv_tec_a']))
