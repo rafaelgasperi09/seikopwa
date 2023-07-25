@@ -3,8 +3,8 @@
     <thead>
         <tr>
             <th scope="col" width="10px">#</th>
-            <th scope="col">Creado por</th>
-            <th scope="col">Cliente</th>
+            <th scope="col" width="120px">Creado por</th>
+            <th scope="col" width="120px">Cliente</th>
             <th  width="80px">Fecha</th>
             <th scope="col" width="20px">Estado</th>
             @if($nombre == 'form_montacarga_servicio_tecnico')

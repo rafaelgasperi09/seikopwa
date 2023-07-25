@@ -1,12 +1,14 @@
+
 <script>
-          var colors = [
+var colors = [
             '#66A2DB',
             '#F57F32',
             '#A8A8A8',
             '#FFC736',
             '#FF4560',
-            ]
-        var options{{$id}} = {
+            ];
+           
+var options{{$id}} = { 
           series: [
             @foreach($titulos as $k=>$t)
             {
@@ -74,10 +76,11 @@
               speed: 350
           }
         }
-        };
+      };
 
         var chart = new ApexCharts(document.querySelector("#{{$id}}"), options{{$id}});
         chart.render();
       
       
     </script>
+    

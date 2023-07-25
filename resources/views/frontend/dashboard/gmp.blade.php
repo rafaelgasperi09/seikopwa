@@ -55,13 +55,15 @@ if($data['max']>10)
             </div>
             @php 
             $i=0;
-            $graficos=[1,2,3,5,7];
+            $graficos=[1,2,3,5];
             @endphp
             @include('frontend.dashboard.grafico_circular',['id'=>'chart'.$i,'data'=>$data['chart'.$i],'indice'=>$data['indice'][$i],'titulos'=>$data['leyenda'][$i],'title'=>$data['titulo'][$i],'ejey'=> $data['ejey'][$i]])
             @foreach( $graficos as $i)
+                {{PHP_EOL}}
                 <div class=" mb-2 col-md-{{$col}} col chart"  >
                     <div id="chart{{$i}}"></div>
                 </div>
+                {{PHP_EOL}}
                 @if(!isset($data['chart'.$i]))
                     @foreach($data['indice'][$i] as $k)  
                             @php $data['chart'.$i][$k][0]=0; @endphp
@@ -69,6 +71,13 @@ if($data['max']>10)
                 @endif
                 @include('frontend.dashboard.grafico_columna',['id'=>'chart'.$i,'data'=>$data['chart'.$i],'indice'=>$data['indice'][$i],'titulos'=>$data['leyenda'][$i],'title'=>$data['titulo'][$i],'ejey'=> $data['ejey'][$i]])
             @endforeach
+            @php $i=7; @endphp
+            {{PHP_EOL}}
+            <div class=" mb-2 col-md-{{$col}} col chart"  >
+                <div id="chart{{$i}}"></div>
+            </div>
+            {{PHP_EOL}}
+            @include('frontend.dashboard.grafico_columna2',['id'=>'chart'.$i,'data'=>$data['chart'.$i],'indice'=>$data['indice'][$i],'titulos'=>$data['leyenda'][$i],'title'=>$data['titulo'][$i],'ejey'=> $data['ejey'][$i]])
 
         </div>
         <script>
