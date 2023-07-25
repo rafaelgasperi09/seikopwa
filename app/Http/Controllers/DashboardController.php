@@ -241,6 +241,7 @@ class DashboardController extends Controller
         }
         $max=0;
 
+        ///////////////////////////////QUERY0//////////////////////////////////////////
         $query0="SELECT 
                 'Total de equipos' AS nombre,
                 SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%' AND cliente_id IS NOT NULL) THEN 1 ELSE 0 END) AS propios,
@@ -254,7 +255,7 @@ class DashboardController extends Controller
             $data['chart0']['p'][]=$r->propios;
             $data['chart0']['a'][]=$r->alquilados;
         }
-
+    ///////////////////////////////QUERY1//////////////////////////////////////////
         $query1="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportados,
         SUM( CASE fr.equipo_status WHEN 'O' THEN 1 ELSE 0 END) AS operativos,
         SUM( CASE fr.equipo_status WHEN 'I' THEN 1 ELSE 0 END) AS inoperativos,
@@ -285,6 +286,7 @@ class DashboardController extends Controller
         }
         $data['max']=$max;
         $max=0;
+         ///////////////////////////////QUERY2//////////////////////////////////////////
         $query2="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportes,
         SUM( CASE fr.estatus WHEN 'P' THEN 1 ELSE 0 END) AS pendientes,
         SUM( CASE fr.estatus WHEN 'A' THEN 1 ELSE 0 END) AS asignados,
@@ -310,6 +312,7 @@ class DashboardController extends Controller
 
         $data['max']=max($max,$data['max']);
         $max=0;
+         ///////////////////////////////QUERY3//////////////////////////////////////////
         $query3="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportados,
                 SUM( CASE fr.cotizacion WHEN 'A' THEN 1 ELSE 0 END) AS aprobada,
                 SUM( CASE ifnull(fr.cotizacion,'N') when 'N' THEN 1 ELSE 0 END) AS no_apobada
@@ -333,7 +336,7 @@ class DashboardController extends Controller
         } 
         $data['max']=max($max,$data['max']);
         $max=0;
-
+        ///////////////////////////////QUERY4//////////////////////////////////////////
         $query4="SELECT fr.cliente_id,c.nombre,COUNT(*) AS reportes,
         SUM( CASE fr.estatus WHEN 'P' THEN 1 ELSE 0 END) AS pendientes,
         SUM( CASE fr.estatus WHEN 'C' THEN 1 ELSE 0 END) AS cerrado
@@ -356,7 +359,7 @@ class DashboardController extends Controller
 
         $data['max']=max($max,$data['max']);
         $max=0;
-
+        ///////////////////////////////QUERY5//////////////////////////////////////////
         $query5="SELECT fr.cliente_id,c.nombre,COUNT(*) AS reportes,
         SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propias,
         SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquiladas
@@ -377,7 +380,26 @@ class DashboardController extends Controller
 
         $data['max']=max($max,$data['max']);
         $max=0;
-        
+        ///////////////////////////////QUERY6//////////////////////////////////////////
+        $query6="SELECT CONCAT(u.first_name,' ',u.last_name) as nombre,count(*) as total 
+        from formulario_registro fr , equipos_vw e ,users u,role_users ru
+        WHERE   fr.equipo_id = e.id 
+        and  fr.trabajado_por = u.id
+        and u.id = ru.user_id 
+        and trabajado_por is not null
+        and fr.deleted_at is null
+        and ru.role_id =5  
+        $filtro
+        group by u.first_name,u.last_name";
+        $res6=DB::select(DB::Raw($query6));
+        foreach($res6 as $r){
+            $data['chart7']['n'][]=$r->nombre;
+            $data['chart7']['t'][]=$r->total;
+            $max++;    
+        }
+dd($res6);
+        $data['max']=max($max,$data['max']);
+        $max=0;
         
         $data['indice'][0]=['p','a','n'];
         $data['indice'][1]=['r','o','i','n'];
@@ -386,6 +408,7 @@ class DashboardController extends Controller
         $data['indice'][4]=['a','x','n'];
         $data['indice'][5]=['r','p','c','n'];
         $data['indice'][6]=['p','a','n'];
+        $data['indice'][7]=['t','n'];
 
     
         $data['ejey'][0]='Equipos';
@@ -395,6 +418,7 @@ class DashboardController extends Controller
         $data['ejey'][4]='Reportes ST';
         $data['ejey'][5]='Reportes';
         $data['ejey'][6]='Reportes';
+        $data['ejey'][7]='Reportes';
 
         $data['leyenda'][0]=['Propios','Alquilados'];
         $data['leyenda'][1]=['Reportados','Operativo','Inoperativo'];
@@ -403,6 +427,7 @@ class DashboardController extends Controller
         $data['leyenda'][4]=['Aprobadas','No Aprobadas'];
         $data['leyenda'][5]=['Total','Pendientes','Cerrados'];
         $data['leyenda'][6]=['Propias','Alquiladas'];
+        $data['leyenda'][7]=['Reportes'];
 
         $data['titulo'][0]='Total equipos';
         $data['titulo'][1]='Estatus equipos';
@@ -411,6 +436,7 @@ class DashboardController extends Controller
         $data['titulo'][4]='Cotizaciones';
         $data['titulo'][5]='Estatus MTT Preventivo';
         $data['titulo'][6]='Reportes de accidentes';
+        $data['titulo'][7]='Informes trabajados – Equipos';
 
         if(!empty($clientes)){
             $clientes=Cliente::whereRaw("(id in($clientes))")->orderBy('nombre')->get()->pluck('nombre','id');

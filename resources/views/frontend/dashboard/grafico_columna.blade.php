@@ -3,8 +3,8 @@
             '#66A2DB',
             '#F57F32',
             '#A8A8A8',
+            '#FFC736',
             '#FF4560',
-            '#FFC736'
             ]
         var options{{$id}} = {
           series: [
