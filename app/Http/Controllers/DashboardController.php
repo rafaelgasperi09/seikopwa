@@ -387,7 +387,6 @@ class DashboardController extends Controller
         AND trabajado_por IS NOT NULL 
         AND fr.deleted_at IS NULL 
         AND ru.role_id =5 
-        AND e.numero_parte LIKE 'GM%'
         $filtro
         GROUP BY CONCAT(u.first_name,' ',u.last_name) ";
         $res6=DB::select(DB::Raw($query6));
@@ -396,7 +395,7 @@ class DashboardController extends Controller
             $data['chart7']['t'][]=$r->total;
             $max++;    
         }
-dd($res6);
+
         $data['max']=max($max,$data['max']);
         $max=0;
         
