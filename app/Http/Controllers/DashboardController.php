@@ -381,16 +381,15 @@ class DashboardController extends Controller
         $data['max']=max($max,$data['max']);
         $max=0;
         ///////////////////////////////QUERY6//////////////////////////////////////////
-        $query6="SELECT CONCAT(u.first_name,' ',u.last_name) as nombre,count(*) as total 
-        from formulario_registro fr , equipos_vw e ,users u,role_users ru
-        WHERE   fr.equipo_id = e.id 
-        and  fr.trabajado_por = u.id
-        and u.id = ru.user_id 
-        and trabajado_por is not null
-        and fr.deleted_at is null
-        and ru.role_id =5  
+        $query6="SELECT CONCAT(u.first_name,' ',u.last_name) AS nombre,COUNT(*) AS total FROM formulario_registro fr , equipos_vw e ,users u,role_users ru
+        WHERE fr.equipo_id = e.id AND fr.trabajado_por = u.id 
+        AND u.id = ru.user_id 
+        AND trabajado_por IS NOT NULL 
+        AND fr.deleted_at IS NULL 
+        AND ru.role_id =5 
+        AND e.numero_parte LIKE 'GM%'
         $filtro
-        group by u.first_name,u.last_name";
+        GROUP BY CONCAT(u.first_name,' ',u.last_name) ";
         $res6=DB::select(DB::Raw($query6));
         foreach($res6 as $r){
             $data['chart7']['n'][]=$r->nombre;
