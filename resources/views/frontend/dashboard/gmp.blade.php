@@ -24,9 +24,12 @@ if($data['max']>10)
                         <div class="section full">
                             <div class="wide-block ">
                                 <div class="row">
+                                    
                                     <div class='col-md-3'>
+                                    {{--
                                     Tipo
                                     {{ Form::select('tipo',['gmp'=>'GMP','cliente'=>'CLIENTE'],request('tipo'),array('class'=>'form-control','autocomplete'=>'off','id'=>'tipo')) }} 
+                                    --}}
                                     </div>
                                     <div class='col-md-4' id="clientediv" @if(request()->tipo=='gmp') style="display:block" @endif>
                                     Cliente
