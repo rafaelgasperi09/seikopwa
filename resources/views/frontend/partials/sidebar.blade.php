@@ -39,6 +39,26 @@
                             </div>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('dashboard.gmp',['id'=>'gmp']) }}" class="item" title="Dashboard">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="analytics-outline"></ion-icon>
+                            </div>
+                            <div >
+                                Dashboard GMP
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dashboard.gmp',['id'=>'cliente']) }}" class="item" title="Dashboard">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="analytics-outline"></ion-icon>
+                            </div>
+                            <div >
+                                Dashboard Cliente
+                            </div>
+                        </a>
+                    </li>
                     @if(\Sentinel::hasAccess('equipos.index'))
                     <li>
                         <a href="{{ route('equipos.index') }}" class="item" title="Equipos">

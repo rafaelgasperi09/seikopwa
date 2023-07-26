@@ -207,7 +207,8 @@ class EquiposController extends BaseController
     }
 
     public function reportes_export(Request $request){
-        $file='comisiones.csv';
+        $file='reportes.csv';
+       
         $datos=$this->reportes_datatable($request,true);
       
         $headers = array(

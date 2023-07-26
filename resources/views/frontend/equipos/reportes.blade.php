@@ -3,8 +3,8 @@
 @include('frontend.partials.title',array('title'=>'Equipos','subtitle'=>'Equipos >  Historial de reportes','route_back'=>route('equipos.index')))
 <script>
     $('.header-large-title>.title').append(' <div style="position:relative;float:right">\
-                                                <a id="exporter" type="button" class="btn btn-success btn-rounded btn-condensed btn-sm pull-right"   href="{{route('equipos.reportes_export')}}" target="_blank" id="export_btn" ><span class="fa fa-excel"></span> Exportar</a>\
-                                                <a id="mostrarfiltro" type="button" class="btn btn-primary btn-rounded btn-condensed btn-sm pull-right"  data-toggle="collapse" href="#filtro" role="button" aria-expanded="false" aria-controls="filtro"><span class="fa fa-search"></span> Filtro</a>\
+                                                <a id="exporter" type="button" class="btn btn-success btn-rounded btn-condensed btn-sm pull-right"   href="{{route('equipos.reportes_export')}}" target="_blank" id="export_btn" > <ion-icon name="download-outline"></ion-icon> Exportar</a>\
+                                                <a id="mostrarfiltro" type="button" class="btn btn-primary btn-rounded btn-condensed btn-sm pull-right"  data-toggle="collapse" href="#filtro" role="button" aria-expanded="false" aria-controls="filtro"> <ion-icon name="funnel-outline"></ion-icon> Filtro</a>\
                                             </div>');       
 </script>
 <div class="row">
@@ -46,6 +46,8 @@
     }
   
     var parameters=new URLSearchParams(obj).toString();
+    $('#exporter').attr('href',"{{route('equipos.reportes_export')}}?"+parameters);
+    console.log(parameters);
     console.log(parameters);
   $('.datatable').DataTable( {
                 "language": {

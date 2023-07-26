@@ -400,6 +400,26 @@ class DashboardController extends Controller
 
         $data['max']=max($max,$data['max']);
         $max=0;
+        ///////////////////////////////QUERY7//////////////////////////////////////////
+        $query7="SELECT CONCAT(u.first_name,' ',u.last_name) AS nombre,COUNT(*) AS total 
+        FROM formulario_registro fr , equipos_vw e ,users u,role_users ru
+        WHERE fr.equipo_id = e.id AND fr.trabajado_por = u.id 
+        AND u.id = ru.user_id 
+        AND trabajado_por IS NOT NULL 
+        AND fr.deleted_at IS NULL 
+        AND ru.role_id =11 
+        $filtro
+        GROUP BY CONCAT(u.first_name,' ',u.last_name)";
+ 
+        $res7=DB::select(DB::Raw($query7));
+        foreach($res7 as $r){
+            $data['chart8']['n'][]=$r->nombre;
+            $data['chart8']['t'][]=$r->total;
+            $max++;    
+        }
+
+        $data['max']=max($max,$data['max']);
+        $max=0;
         
         $data['indice'][0]=['p','a','n'];
         $data['indice'][1]=['r','o','i','n'];
@@ -409,6 +429,7 @@ class DashboardController extends Controller
         $data['indice'][5]=['r','p','c','n'];
         $data['indice'][6]=['p','a','n'];
         $data['indice'][7]=['t','n'];
+        $data['indice'][8]=['t','n'];
 
     
         $data['ejey'][0]='Equipos';
@@ -419,6 +440,7 @@ class DashboardController extends Controller
         $data['ejey'][5]='Reportes';
         $data['ejey'][6]='Reportes';
         $data['ejey'][7]='Reportes';
+        $data['ejey'][8]='Reportes';
 
         $data['leyenda'][0]=['Propios','Alquilados'];
         $data['leyenda'][1]=['Reportados','Operativo','Inoperativo'];
@@ -428,6 +450,7 @@ class DashboardController extends Controller
         $data['leyenda'][5]=['Total','Pendientes','Cerrados'];
         $data['leyenda'][6]=['Propias','Alquiladas'];
         $data['leyenda'][7]=['Reportes'];
+        $data['leyenda'][8]=['Reportes'];
 
         $data['titulo'][0]='Total equipos';
         $data['titulo'][1]='Estatus equipos';
@@ -437,7 +460,8 @@ class DashboardController extends Controller
         $data['titulo'][5]='Estatus MTT Preventivo';
         $data['titulo'][6]='Reportes de accidentes';
         $data['titulo'][7]='Informes trabajados – Equipos';
-        //dd($data['chart7']);
+        $data['titulo'][8]='Informes trabajados – Repuestos';
+       
         if(!empty($clientes)){
             $clientes=Cliente::whereRaw("(id in($clientes))")->orderBy('nombre')->get()->pluck('nombre','id');
         }else{
