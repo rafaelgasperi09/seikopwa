@@ -844,7 +844,7 @@ class EquiposController extends BaseController
     public function updateTecnicalSupport(Request $request)
     {
         ini_set('error_reporting', E_STRICT);
-     
+        
         //try {
 
             $this->validate($request, [
@@ -860,7 +860,10 @@ class EquiposController extends BaseController
                                     ->whereFormularioRegistroId($model->id)
                                     ->where('cambio_estatus',1)
                                     ->select('valor')
-                                    ->first()->toArray() ;
+                                    ->first();
+            if($datos){
+                $datos=$datos->toArray();
+            }                        
             if(isset($datos['valor']) and !empty($datos['valor'])){
                 $model->estatus='C';
             }
