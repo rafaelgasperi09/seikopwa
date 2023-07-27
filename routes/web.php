@@ -166,7 +166,12 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::get('/{id}/servicio_tecnico_edit', array('as' => 'baterias.serv_tec_edit', 'uses' => 'BateriaController@ServicioTecnicoEdit'));
 
         Route::get('/{id}/download_st', array('as' => 'baterias.download_st', 'uses' => 'BateriaController@download_st'));
-
+ 
+        Route::get('/{id}/register_hidratacion', array('as' => 'baterias.register_hidratacion', 'uses' => 'BateriaController@registrarHidratacion'));
+    
+        Route::post('/store_hidratacion', array('as' => 'baterias.store_hidratacion', 'uses' => 'BateriaController@guardarHidratacion'));
+    
+       
     });
 
     Route::group(array('prefix' => 'exportar'), function() {
@@ -221,6 +226,21 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::get('/search', array('as' => 'role.search','uses' => 'RolController@search'));
     });
 
+    Route::group(array('prefix' => 'formularios'), function() {
+            /* LISTA DE FORMULARIOS */
+            Route::get('/', array('as' => 'formularios.index','uses' => 'FormulariosController@index'))->middleware('hasAccess');
+            /* CREACION FORMULARIOS */
+            Route::get('/create', array('as' => 'formularios.create','uses' => 'FormulariosController@create'))->middleware('hasAccess');
+            /* EDIT FORMULARIOS */
+            Route::get('/edit/{id}', array('as' => 'formularios.edit','uses' => 'FormulariosController@edit'))->middleware('hasAccess');
+            /* STORE FORMULARIOS */
+            Route::post('/store', array('as' => 'formularios.store','uses' => 'FormulariosController@store'))->middleware('hasAccess');
+            /* show FORMULARIOS */
+            Route::get('/show', array('as' => 'formularios.show','uses' => 'FormulariosController@show'))->middleware('hasAccess');
+            /* update FORMULARIOS */
+            Route::post('/update', array('as' => 'formularios.update','uses' => 'FormulariosController@update'))->middleware('hasAccess');
+
+    });
 
     Route::get("/firma", function(){
         return View::make("frontend.partials.firma1");

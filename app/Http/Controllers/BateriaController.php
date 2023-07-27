@@ -62,6 +62,76 @@ class BateriaController extends Controller
         return view('frontend.baterias.register_in_and_out',compact('data','formulario'));
     }
 
+    public function guardarEntredaSalida(Request $request){
+
+        $this->validate($request, [
+            'componente_id'  => 'required',
+            'formulario_id'  => 'required',
+            'accion'         => 'required',
+            'fecha'          => 'required|date',
+            'hora_entrada'   => 'required',
+        ]);
+        $componente_id = $request->componente_id;
+        $formulario_id = $request->formulario_id;
+        $formulario = Formulario::find($formulario_id);
+        $model = new FormularioRegistro();
+
+        DB::transaction(function() use($model,$request,$formulario){
+
+            $model->formulario_id = $formulario->id;
+            $model->creado_por = Sentinel::getUser()->id;
+            $model->componente_id = $request->componente_id;
+            $model->estatus = 'C';
+
+            if(!$model->save())
+            {
+                Throw new \Exception('Hubo un problema y no se creo el registro!');
+            }
+        });
+
+        $request->session()->flash('message.success','Registro creado con éxito');
+        return redirect(route('baterias.detail',$componente_id));
+    }
+
+    public function registrarHidratacion($id){
+
+        $data = Componente::findOrFail($id);
+        $formulario = Formulario::whereNombre('form_hidratacion_baterias')->first();
+
+        return view('frontend.baterias.create_hidratacion',compact('data','formulario'));
+    }
+
+    
+    public function guardarHidratacion(Request $request){
+
+        $this->validate($request, [
+            'componente_id'  => 'required',
+            'formulario_id'  => 'required',
+            'fecha'          => 'required|date',
+            'hora_entrada'   => 'required',
+        ]);
+        $componente_id = $request->componente_id;
+        $formulario_id = $request->formulario_id;
+        $formulario = Formulario::find($formulario_id);
+        $model = new FormularioRegistro();
+
+        DB::transaction(function() use($model,$request,$formulario){
+
+            $model->formulario_id = $formulario->id;
+            $model->creado_por = Sentinel::getUser()->id;
+            $model->componente_id = $request->componente_id;
+            $model->estatus = 'C';
+
+            if(!$model->save())
+            {
+                Throw new \Exception('Hubo un problema y no se creo el registro!');
+            }
+        });
+
+        $request->session()->flash('message.success','Registro creado con éxito');
+        return redirect(route('baterias.detail',$componente_id));
+    }
+
     public function ServicioTecnico($id){
         $data = Componente::findOrFail($id);
         $formulario = Formulario::whereNombre('form_bat_serv_tec')->first();
@@ -145,38 +215,6 @@ class BateriaController extends Controller
         return redirect(route('baterias.detail',$model->componente_id))->withInput($request->all());
         }    
       
-    }
-
-
-    public function guardarEntredaSalida(Request $request){
-
-        $this->validate($request, [
-            'componente_id'  => 'required',
-            'formulario_id'  => 'required',
-            'accion'         => 'required',
-            'fecha'          => 'required|date',
-            'hora_entrada'   => 'required',
-        ]);
-        $componente_id = $request->componente_id;
-        $formulario_id = $request->formulario_id;
-        $formulario = Formulario::find($formulario_id);
-        $model = new FormularioRegistro();
-
-        DB::transaction(function() use($model,$request,$formulario){
-
-            $model->formulario_id = $formulario->id;
-            $model->creado_por = Sentinel::getUser()->id;
-            $model->componente_id = $request->componente_id;
-            $model->estatus = 'C';
-
-            if(!$model->save())
-            {
-                Throw new \Exception('Hubo un problema y no se creo el registro!');
-            }
-        });
-
-        $request->session()->flash('message.success','Registro creado con éxito');
-        return redirect(route('baterias.detail',$componente_id));
     }
 
     public function datatable($id){
