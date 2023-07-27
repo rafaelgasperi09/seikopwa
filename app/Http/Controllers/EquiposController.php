@@ -843,9 +843,9 @@ class EquiposController extends BaseController
 
     public function updateTecnicalSupport(Request $request)
     {
-      //  ini_set('error_reporting', E_STRICT);
+        ini_set('error_reporting', E_STRICT);
      
-        try {
+        //try {
 
             $this->validate($request, [
                 'equipo_id'              => 'required',
@@ -869,10 +869,10 @@ class EquiposController extends BaseController
             $request->session()->flash('message.success', 'Registro guardado con éxito');
             return redirect(route('equipos.detail', $model->equipo_id));
 
-        } catch (\Exception $e) {
+        /*} catch (\Exception $e) {
             $request->session()->flash('message.error', $e->getMessage());
             return redirect(route('equipos.edit_tecnical_support',$request->formulario_registro_id))->withInput($request->all());
-        }
+        }*/
     }
 
     public function assignTecnicalSupport(Request $request,$id){
