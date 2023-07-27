@@ -65,7 +65,7 @@
             </li>
             @endif
             <li class="nav-item">
-                <a class="nav-link {{$tab[0]}}" id="tab3" data-toggle="tab" href="#historial_hidratacion" role="tab" aria-selected="true">
+                <a class="nav-link {{$tab[2]}}" id="tab3" data-toggle="tab" href="#historial_hidratacion" role="tab" aria-selected="true">
                         <ion-icon name="list-outline" class="text-primary" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
                         Historial Hidratacion
                 </a>
@@ -140,9 +140,9 @@
                         </thead>
                     </table>
                 </div>
-            @endif
-
-            <div class="tab-pane  {{$tab[0]}} tab3" id="historial_hidratacion" role="tabpanel">
+            @endif           
+            </div>
+            <div class="tab-pane  {{$tab[2]}} tab3" id="historial_hidratacion" role="tabpanel">
                 <div class="section-title">
                     <div class="right">
                         <a href="{{ route('baterias.download',$data->id) }}" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar PDF</a>
@@ -153,7 +153,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table dataTables table-bordered table-striped table-actions">
+                    <table class="table dataTable table-bordered table-striped table-actions">
                         <thead>
                         <tr>
                             <th>Fecha</th>
@@ -170,8 +170,6 @@
                 </div>
             </div>
 
-            
-            </div>
         </div>
     </div>
 </div>

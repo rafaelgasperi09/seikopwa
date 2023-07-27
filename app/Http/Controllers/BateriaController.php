@@ -39,10 +39,12 @@ class BateriaController extends Controller
 
 
     public function detail($id,Request $request){
-        $tab=array('active','');
+        $tab=array('active','','');
         if(!empty($request->get('tab'))){
             if($request->tab==2)
-               $tab=array('','active');
+               $tab=array('','active','');
+            if($request->tab==3)
+               $tab=array('','','active');
         }
         $data = Componente::findOrFail($id);
         $campos=FormularioCampo::where('formulario_id',12)->get()->pluck('etiqueta','nombre');
