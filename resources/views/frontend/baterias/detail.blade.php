@@ -145,19 +145,20 @@
             <div class="tab-pane  {{$tab[2]}} tab3" id="historial_hidratacion" role="tabpanel">
                 <div class="section-title">
                     <div class="right">
-                        <a href="{{ route('baterias.download',$data->id) }}" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar PDF</a>
-                        <a href="{{ route('baterias.download',$data->id) }}?format=excel" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar Excel</a>
+                        <a href="{{ route('baterias.download_hidratacion',$data->id) }}" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar PDF</a>
+                        <a href="{{ route('baterias.download_hidratacion',$data->id) }}?format=excel" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar Excel</a>
                         @if(Sentinel::getUser()->hasAccess('baterias.register_hidratacion'))
                         <a href="{{ route('baterias.register_hidratacion',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                         @endif
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table dataTable table-bordered table-striped table-actions">
+                    <table class="table datatable_hidratacion table-bordered table-striped table-actions">
                         <thead>
                         <tr>
                             <th>Fecha</th>
                             <th>Hora</th>
+                            <th>Nivel de agua</th>
                             <th>Equipo</th>
                             <th>Horometro</th>
                             <th>%Carga</th>
@@ -233,6 +234,32 @@
             ]
         } );
     } );
+
+    $('.datatable_hidratacion').DataTable( {
+            "language": {
+                processing: '<div id="cargando"  align="center"><img src="{{ url("/assets/img/Spinner-3.gif") }}"></div>'
+            },
+            "columnDefs": [
+                { "visible": false, "targets": [2] },
+            ],
+            "responsive": true,
+            "order": [[ 2, "desc" ]],
+            "processing": true,
+            "serverSide": true,
+            "autoWidth": false,
+            "ajax": "{{ route('baterias.datatable_hidratacion',array('id'=>$data->id)) }}",
+            "columns":[
+                {data:'fecha'},
+                {data:'hora_entrada'},
+                {data:'nivel_agua'},
+                {data:'equipo_nro'},
+                {data:'horometro'},
+                {data:'pct_carga'},
+                {data:'galones'},
+                {data:'tecnico_id'},
+                {data:'comentarios'},
+            ]
+        } );
    
 </script>
 @stop

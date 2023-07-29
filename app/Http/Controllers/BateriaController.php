@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BateriasExport;
+use App\Exports\HidratacionExport;
 
 class BateriaController extends Controller
 {
@@ -268,6 +269,15 @@ class BateriaController extends Controller
         ->make(true);
     }
 
+    public function datatable_hidratacion($id){
+
+        $data = DB::table('form_hidratacion_bateria_view')
+            ->where('componente_id',$id)
+            ->get();
+
+        return DataTables::of($data)->make(true);
+    }
+
     public function download($id){
         $format='PDF';
         if(request()->get('format')=='excel' ){
@@ -308,6 +318,27 @@ class BateriaController extends Controller
             return $pdf->stream('bateria_servicio_tecnico.pdf');
         }else{
             return Excel::download(new BateriasExport($id), 'Equipo.xlsx');
+        }
+
+    }
+
+    public function download_hidratacion($id){
+        $format='PDF';
+        if(request()->get('format')=='excel' ){
+            $format=request()->get('format');
+        }
+        $bateria = Componente::findOrFail($id);
+        $data = DB::table('form_hidratacion_bateria_view')
+            ->where('componente_id',$id)
+            ->orderBy('fecha','DESC')
+            ->get()->take(100);
+       //return view('frontend.baterias.hidratacion_excel',compact('bateria','data'));
+        if($format=='PDF'){
+            $pdf = PDF::loadView('frontend.baterias.pdf3',compact('bateria','data'));
+            $pdf->setPaper('a4', 'landscape');
+            return $pdf->stream('historial_cargas.pdf');
+        }else{
+            return Excel::download(new HidratacionExport($id), 'hidratacion.xlsx');
         }
 
     }

@@ -44,22 +44,21 @@
                                     {{ Form::select($campo->nombre,getCombo($campo->tipo_combo,'Seleccione '.$campo->etiqueta),$value,array('class'=>'form-control',$requerido,$readonly)) }}
                                 @elseif($campo->tipo == 'database')
                                     @php 
-                                        $db_nombre=$campo->database_nombre; $db_id=$campo->database_nombre; 
-                                        if(strpos($campo->database_nombre, ',')!== false){
-                                            $campo_db=explode(',',$campo->database_nombre);
-                                            $db_id=$campo_db[0]; 
-                                            $db_nombre=$campo_db[1];
-                                            
-                                            $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre);
-                                            if($campo->nombre=='supervisor_id'){
-                                             
-                                                $where="crm_clientes_id ='$data->cliente_id' or crm_clientes_id like '%,$data->cliente_id%' or crm_clientes_id like '%$data->cliente_id,%'";
-                                                $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre,' el supervisor',$where);
-                                                
-                                            }
-                                            
-                                            
-                                        }
+                                    
+                                    $db_nombre=$campo->database_nombre; $db_id=$campo->database_nombre; 
+                                    if(strpos($campo->database_nombre, ',')!== false){
+                                        $campo_db=explode(',',$campo->database_nombre);
+                                        $db_id=$campo_db[0]; 
+                                        $db_nombre=$campo_db[1];                                            
+                                    }
+                                    $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre);
+                                      
+                                    if($campo->nombre=='supervisor_id'){
+                                    
+                                        $where="crm_clientes_id ='$data->cliente_id' or crm_clientes_id like '%,$data->cliente_id%' or crm_clientes_id like '%$data->cliente_id,%'";
+                                        $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre,' el supervisor',$where);
+                                        
+                                    }
                                     @endphp
                                     @if($campo->nombre=='supervisor_id' and isset($dat[$value]))
                                     {{ Form::text($campo->nombre,$dat[$value],array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}

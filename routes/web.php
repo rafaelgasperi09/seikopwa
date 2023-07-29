@@ -169,7 +169,11 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
  
         Route::get('/{id}/register_hidratacion', array('as' => 'baterias.register_hidratacion', 'uses' => 'BateriaController@registrarHidratacion'));
     
+        Route::get('/datatable_hidratacion/{id}', array('as' => 'baterias.datatable_hidratacion', 'uses' => 'BateriaController@datatable_hidratacion'));
+    
         Route::post('/store_hidratacion', array('as' => 'baterias.store_hidratacion', 'uses' => 'BateriaController@guardarHidratacion'));
+        
+        Route::get('/download_hidratacion/{id}', array('as' => 'baterias.download_hidratacion', 'uses' => 'BateriaController@download_hidratacion'));
     
        
     });

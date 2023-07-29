@@ -54,6 +54,7 @@ $permisos["permissions"] = array(
     "baterias.serv_tec"=>"Ver servicio tecnico",
     "baterias.serv_tec_store"=>"Registrar servicio tecnico",
     "baterias.serv_tec_update"=>"Firmar servicio tecnico",
+    "baterias.register_hidratacion"=>"Registrar hidratacion",
   ),
   "Flujos Formulario"=>array(
     "parteA"=>"Primera Parte del proceso (creación)",
