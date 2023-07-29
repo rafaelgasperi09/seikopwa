@@ -345,10 +345,8 @@ function notifica($user,$notification)
     if($user->id==48) //no enviar correo a este usuario Rofolfo fuentes
         return true;
     
-
     return $user->notify($notification);
 }
-
 function tipo_form($tipo=''){
     $tipos=array(   ''=>'Seleccione',
                     'carga_baterias'=>'Carga de baterias',
