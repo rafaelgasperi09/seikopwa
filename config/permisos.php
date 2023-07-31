@@ -42,6 +42,9 @@ $permisos["permissions"] = array(
     "equipos.calendar"=>"Ver Calendario (Servicio Técnico)",
     "equipos.dominio"=>"Ver filtro de dominio",
     "equipos.historial"=>"Ver historial de reportes",
+    "equipos.see_control_entrega"=>"Ver Control de Entregas",
+    "equipos.create_control_entrega"=>"Crear Control de Entregas",
+    "equipos.edit_control_entrega"=>"Editar Control de Entregas",
    
   ),
   "Taller"=>array(
@@ -54,7 +57,9 @@ $permisos["permissions"] = array(
     "baterias.serv_tec"=>"Ver servicio tecnico",
     "baterias.serv_tec_store"=>"Registrar servicio tecnico",
     "baterias.serv_tec_update"=>"Firmar servicio tecnico",
-    "baterias.register_hidratacion"=>"Registrar hidratacion",
+    "baterias.hidratacion"=>"Ver hidratacion",
+    "baterias.register_hidratacion"=>"Crear hidratacion",
+    "baterias.store_hidratacion"=>"Guardar hidratacion",
   ),
   "Flujos Formulario"=>array(
     "parteA"=>"Primera Parte del proceso (creación)",

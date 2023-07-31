@@ -108,6 +108,34 @@
                     </div>
                 </li>
             @endif
+            @if(\Sentinel::hasAnyAccess(['equipos.see_control_entrega']))
+                <li>
+                    <div class="item">
+                        <div class="icon-box bg-success">
+                            <ion-icon name="document-text-outline" role="img" class="md hydrated" aria-label="alert-circle-outline"></ion-icon>
+                        </div>
+                        <div class="in">
+                            <div>Control de entrega de montacargas para alquiler</div>
+                            <div class="iconsshortchuts">
+                                @if(\Sentinel::hasAccess('equipos.create_control_entrega'))
+                                <a href="{{ route('equipos.create_control_entrega',$e->id) }}" title="Crear">
+                                    <span class="iconedbox bg-primary">
+                                    <ion-icon name="create-outline"></ion-icon>
+                                    </span>
+                                </a>
+                                @endif
+                                @if(\Sentinel::hasAnyAccess(['equipos.see_control_entrega']))
+                                <a href="{{route('equipos.detail',['id'=>$e->id])}}?show=rows&tab=3"  title="Ver">
+                                    <span class="iconedbox bg-success">
+                                    <ion-icon name="eye-outline"></ion-icon>
+                                    </span>
+                                </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            @endif
         </ul>
         <!-- * sub menu -->
     </li>

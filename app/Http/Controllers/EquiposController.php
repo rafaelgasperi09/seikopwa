@@ -1186,4 +1186,8 @@ class EquiposController extends BaseController
       
       
     }
+
+    function createControlEntrega($id){
+        return view('frontend.equipos.create_control_alquiler');
+    }
 }

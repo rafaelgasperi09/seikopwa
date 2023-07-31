@@ -77,6 +77,32 @@
             </div>
         </li>
         @endif
+        @if(\Sentinel::hasAccess('baterias.hidratacion'))
+        <li>
+            <div class="item">
+                <div class="icon-box bg-info">
+                    <ion-icon name="water-outline" role="img" class="md hydrated" aria-label="Informe de servicio técnico"></ion-icon>
+                </div>
+                <div class="in">
+                    <div>Registro de hidratacion</div>
+                    <div class="iconsshortchuts">
+                        @if(\Sentinel::hasAccess('baterias.store_hidratacion'))
+                        <a href="{{ route('baterias.register_hidratacion',$dato->id) }}"  title="Crear">
+                            <span class="iconedbox bg-primary">
+                            <ion-icon name="create-outline"></ion-icon>
+                            </span>
+                        </a>
+                        @endif
+                        <a href="{{ route('baterias.detail',$dato->id) }}?tab=3#detalle"   title="Ver">
+                            <span class="iconedbox bg-success">
+                            <ion-icon name="eye-outline"></ion-icon>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </li>
+        @endif
     </ul>
     <!-- * sub menu -->
 </li>

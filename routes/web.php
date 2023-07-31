@@ -103,6 +103,24 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         });
 
+        Route::group(array('prefix' => 'control_entrega'), function() {
+
+            Route::get('/create/{id}', array('as' => 'equipos.create_control_entrega', 'uses' => 'EquiposController@createControlEntrega'))->middleware('hasAccess');
+              
+            Route::get('{id}/show', array('as' => 'equipos.show_control_entrega', 'uses' => 'EquiposController@showControlEntrega'));
+            
+            Route::post('/store', array('as' => 'equipos.store_control_entrega', 'uses' => 'EquiposController@storeControlEntrega'));
+
+            Route::get('/{id}/edit', array('as' => 'equipos.edit_control_entrega', 'uses' => 'EquiposController@editControlEntrega'))->middleware('hasAccess');
+
+            Route::put('/{id}/update', array('as' => 'equipos.update_control_entrega', 'uses' => 'EquiposController@updateControlEntrega'));
+
+            Route::get('/{id}/imprimir', array('as' => 'equipos.imprimir_control_entrega', 'uses' => 'EquiposController@imprimirControlEntrega'));
+
+            Route::get('/{id}/delete', array('as' => 'equipos.delete_control_entrega', 'uses' => 'EquiposController@deleteControlEntrega'));
+
+        });
+
         Route::group(array('prefix' => 'tecnical_support'), function() {
 
             Route::get('/create/{id}', array('as' => 'equipos.create_tecnical_support', 'uses' => 'EquiposController@createTecnicalSupport'))->middleware('hasAccess');
@@ -167,11 +185,11 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         Route::get('/{id}/download_st', array('as' => 'baterias.download_st', 'uses' => 'BateriaController@download_st'));
  
-        Route::get('/{id}/register_hidratacion', array('as' => 'baterias.register_hidratacion', 'uses' => 'BateriaController@registrarHidratacion'));
+        Route::get('/{id}/register_hidratacion', array('as' => 'baterias.register_hidratacion', 'uses' => 'BateriaController@registrarHidratacion'))->middleware('hasAccess');
     
         Route::get('/datatable_hidratacion/{id}', array('as' => 'baterias.datatable_hidratacion', 'uses' => 'BateriaController@datatable_hidratacion'));
     
-        Route::post('/store_hidratacion', array('as' => 'baterias.store_hidratacion', 'uses' => 'BateriaController@guardarHidratacion'));
+        Route::post('/store_hidratacion', array('as' => 'baterias.store_hidratacion', 'uses' => 'BateriaController@guardarHidratacion'))->middleware('hasAccess');;
         
         Route::get('/download_hidratacion/{id}', array('as' => 'baterias.download_hidratacion', 'uses' => 'BateriaController@download_hidratacion'));
     
