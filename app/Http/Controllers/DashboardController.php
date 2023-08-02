@@ -210,13 +210,7 @@ class DashboardController extends Controller
         //clientes 
         $clientes=current_user()->crm_clientes_id;
         $clientes=clientes_string($clientes);
-        $cond='';
-        if(current_user()->isCliente()){
-            if($id<>'cliente'){
-                return redirect(route('dashboard.gmp','cliente'));
-            }  
-            $cond='and e.cliente_id in ('. $clientes.')';
-        }
+
         //filtro
         $filtro='';$view='frontend.dashboard.gmp';
         if(in_array($id,['gmp','cliente'])){
@@ -244,14 +238,26 @@ class DashboardController extends Controller
         $max=0;
 
         ///////////////////////////////QUERY0//////////////////////////////////////////
-        $query0="SELECT 
-                'Total de equipos' AS nombre,
-                SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propios,
-                SUM(CASE WHEN (e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquilados
-                FROM montacarga.equipos e
-                where e.deleted_at is null $cond";
-        $res0=DB::connection('crm')->select(DB::Raw($query0));
+        $cond='';
+        if(current_user()->isCliente()){
+            if($id<>'cliente'){
+                return redirect(route('dashboard.gmp','cliente'));
+            }  
+            $query0="SELECT 
+            'Total de equipos' AS nombre,
+            SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propios,
+            SUM(CASE WHEN (e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquilados
+            FROM montacarga.equipos e
+            where e.deleted_at is null and e.cliente_id in ($clientes)";
+        }else{
+            $query0="SELECT 'Total de equipos' AS nombre,SUM(CASE WHEN cliente_id IS NOT NULL THEN 1 ELSE 0 END ) AS bodega,
+            SUM(CASE WHEN cliente_id IS NOT NULL THEN 1 ELSE 0 END) AS alquilados
+            FROM equipos e
+            WHERE e.`numero_parte` LIKE 'GM%'";
+        }
        
+        $res0=DB::connection('crm')->select(DB::Raw($query0));
+
         $data=array();
         foreach($res0 as $r){
             $data['chart0']['n'][]=$r->nombre;
@@ -437,9 +443,9 @@ class DashboardController extends Controller
             AND fr.deleted_at IS NULL
             $filtro
            GROUP BY c.nombre";
-
+        
         $res8=DB::select(DB::Raw($query8));
-        foreach($res7 as $r){
+        foreach($res8 as $r){
             $data['chart9']['n'][]=$r->nombre;
             $data['chart9']['p'][]=$r->pendientes;
             $data['chart9']['a'][]=$r->turno1;
