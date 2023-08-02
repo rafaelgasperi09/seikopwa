@@ -39,6 +39,7 @@
                             </div>
                         </a>
                     </li>
+                    @if(!current_user()->isCliente())
                     <li>
                         <a href="{{ route('dashboard.gmp',['id'=>'gmp']) }}" class="item" title="Dashboard">
                             <div class="icon-box bg-primary">
@@ -49,6 +50,7 @@
                             </div>
                         </a>
                     </li>
+                    @else
                     <li>
                         <a href="{{ route('dashboard.gmp',['id'=>'cliente']) }}" class="item" title="Dashboard">
                             <div class="icon-box bg-primary">
@@ -59,6 +61,7 @@
                             </div>
                         </a>
                     </li>
+                    @endif
                     @if(\Sentinel::hasAccess('equipos.index'))
                     <li>
                         <a href="{{ route('equipos.index') }}" class="item" title="Equipos">

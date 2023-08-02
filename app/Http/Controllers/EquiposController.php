@@ -94,6 +94,7 @@ class EquiposController extends BaseController
             $q->whereRaw($filtro);
         })->paginate(10);
         $clientes=current_user()->crm_clientes_id;
+        $clientes=clientes_string($clientes);
         if(!empty($clientes)){
             $clientes=Cliente::whereRaw("(id in($clientes))")->orderBy('nombre')->get()->pluck('nombre','id');
         }else{

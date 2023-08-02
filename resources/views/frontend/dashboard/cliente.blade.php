@@ -42,7 +42,14 @@
                     {{ Form::close() }}
                 </div>
             </div>
-        @for($i=1;$i<=6;$i++)
+        @php 
+        
+        $graficos=[0,1,2,3,4,5,6,9];
+        $f=['frontend.dashboard.grafico_circular','frontend.dashboard.grafico_columna','frontend.dashboard.grafico_columna2'];
+        $files=array($f[0],$f[1],$f[1],$f[1],$f[1],$f[1],$f[1],$f[1])
+        
+        @endphp
+        @foreach( $graficos as $j=>$i)         
             <div class=" mb-2 col-md-4 col chart"  >
                 <div id="chart{{$i}}"></div>
             </div>
@@ -52,8 +59,8 @@
                @endforeach
             @endif
            
-            @include('frontend.dashboard.grafico_columna',['id'=>'chart'.$i,'data'=>$data['chart'.$i],'indice'=>$data['indice'][$i],'titulos'=>$data['leyenda'][$i],'title'=>$data['titulo'][$i],'ejey'=> $data['ejey'][$i]])
-        @endfor
+            @include($files[$j],['id'=>'chart'.$i,'data'=>$data['chart'.$i],'indice'=>$data['indice'][$i],'titulos'=>$data['leyenda'][$i],'title'=>$data['titulo'][$i],'ejey'=> $data['ejey'][$i]])
+        @endforeach
 
         </div>
         <script>

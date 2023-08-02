@@ -371,3 +371,14 @@ function env_local(){
     }
     return false;
 }
+
+function clientes_string($clientes){
+    $clientes_lista=explode(',',$clientes);
+        foreach($clientes_lista as $k=>$c){
+            if(empty($c))
+                unset($clientes_lista[$k]);
+        }
+        $clientes=implode(',',$clientes_lista);
+    
+    return $clientes;
+}

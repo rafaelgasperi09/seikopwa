@@ -207,14 +207,16 @@ class DashboardController extends Controller
 
     function grafica(Request $request,$id){
 
-        //clientes
+        //clientes 
         $clientes=current_user()->crm_clientes_id;
-        $clientes_lista=explode(',',$clientes);
-        foreach($clientes_lista as $k=>$c){
-            if(empty($c))
-                unset($clientes_lista[$k]);
+        $clientes=clientes_string($clientes);
+        $cond='';
+        if(current_user()->isCliente()){
+            if($id<>'cliente'){
+                return redirect(route('dashboard.gmp','cliente'));
+            }  
+            $cond='and e.cliente_id in ('. $clientes.')';
         }
-        $clientes=implode(',',$clientes_lista);
         //filtro
         $filtro='';$view='frontend.dashboard.gmp';
         if(in_array($id,['gmp','cliente'])){
@@ -244,9 +246,10 @@ class DashboardController extends Controller
         ///////////////////////////////QUERY0//////////////////////////////////////////
         $query0="SELECT 
                 'Total de equipos' AS nombre,
-                SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%' AND cliente_id IS NOT NULL) THEN 1 ELSE 0 END) AS propios,
-                SUM(CASE WHEN (e.numero_parte LIKE 'GM%' AND cliente_id IS NOT NULL) THEN 1 ELSE 0 END) AS alquilados
-                FROM montacarga.equipos e";
+                SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propios,
+                SUM(CASE WHEN (e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquilados
+                FROM montacarga.equipos e
+                where e.deleted_at is null $cond";
         $res0=DB::connection('crm')->select(DB::Raw($query0));
        
         $data=array();
@@ -420,6 +423,33 @@ class DashboardController extends Controller
 
         $data['max']=max($max,$data['max']);
         $max=0;
+        ///////////////////////////////QUERY7//////////////////////////////////////////
+        $filtro2=str_replace('e.','e3.',$filtro);
+        $filtro2=str_replace('fr.','fr2.',$filtro2);
+        $query8="SELECT c.nombre, 
+           SUM( CASE WHEN fr.estatus='P' THEN 1 ELSE 0 END) AS pendientes,
+           SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 1 ELSE 0 END) AS turno1,
+           SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 2 ELSE 0 END) AS turno2,
+           SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 3 ELSE 0 END) AS turno3
+           FROM equipos_vw e LEFT JOIN formulario_registro fr ON fr.equipo_id=e.id
+           LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id
+           WHERE fr.formulario_id=2
+            AND fr.deleted_at IS NULL
+            $filtro
+           GROUP BY c.nombre";
+
+        $res8=DB::select(DB::Raw($query8));
+        foreach($res7 as $r){
+            $data['chart9']['n'][]=$r->nombre;
+            $data['chart9']['p'][]=$r->pendientes;
+            $data['chart9']['a'][]=$r->turno1;
+            $data['chart9']['b'][]=$r->turno2;
+            $data['chart9']['c'][]=$r->turno3;
+            $max++;    
+        }
+  
+        $data['max']=max($max,$data['max']);
+        $max=0;
         
         $data['indice'][0]=['p','a','n'];
         $data['indice'][1]=['r','o','i','n'];
@@ -430,6 +460,7 @@ class DashboardController extends Controller
         $data['indice'][6]=['p','a','n'];
         $data['indice'][7]=['t','n'];
         $data['indice'][8]=['t','n'];
+        $data['indice'][9]=['p','a','b','c','n'];
 
     
         $data['ejey'][0]='Equipos';
@@ -441,8 +472,9 @@ class DashboardController extends Controller
         $data['ejey'][6]='Reportes';
         $data['ejey'][7]='Reportes';
         $data['ejey'][8]='Reportes';
+        $data['ejey'][9]='Reportes';
 
-        $data['leyenda'][0]=['Propios','Alquilados'];
+        $data['leyenda'][0]=['Alquilados','Propios'];
         $data['leyenda'][1]=['Reportados','Operativo','Inoperativo'];
         $data['leyenda'][2]=['En espera','Listos'];
         $data['leyenda'][3]=['Pendientes','Asignados','En Proceso','Cerrados'];
@@ -451,6 +483,7 @@ class DashboardController extends Controller
         $data['leyenda'][6]=['Propias','Alquiladas'];
         $data['leyenda'][7]=['Reportes'];
         $data['leyenda'][8]=['Reportes'];
+        $data['leyenda'][9]=['Pendientes','1er Turno','2do Turno','3er Turno'];
 
         $data['titulo'][0]='Total equipos';
         $data['titulo'][1]='Estatus equipos';
@@ -461,6 +494,7 @@ class DashboardController extends Controller
         $data['titulo'][6]='Reportes de accidentes';
         $data['titulo'][7]='Informes trabajados – Equipos';
         $data['titulo'][8]='Informes trabajados – Repuestos';
+        $data['titulo'][9]='Resumen de Daily Check';
        
         if(!empty($clientes)){
             $clientes=Cliente::whereRaw("(id in($clientes))")->orderBy('nombre')->get()->pluck('nombre','id');
