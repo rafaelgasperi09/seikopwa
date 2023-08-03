@@ -8551,6 +8551,9 @@ ion-icon {
   transform: rotate(-60deg);
   width: 12px !important;
 }
+#imgmc{
+  cursor: url('../../images/checkmark.png'), crosshair;
+}
 @media screen and (max-width: 768px){
   .signModal .modal-dialog{
     width: 98%;
