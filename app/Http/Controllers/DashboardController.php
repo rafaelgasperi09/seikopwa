@@ -212,7 +212,7 @@ class DashboardController extends Controller
         $clientes=clientes_string($clientes);
 
         //filtro
-        $filtro='';$view='frontend.dashboard.gmp';
+        $filtro='';$filtro0='';$view='frontend.dashboard.gmp';
         if(in_array($id,['gmp','cliente'])){
             if($id=='cliente'){
                 $filtro.=" AND e.numero_parte NOT LIKE 'GM%'";
@@ -223,8 +223,11 @@ class DashboardController extends Controller
             }
         }
            
-        if($request->has('cliente_id') and !empty($request->cliente_id))
+        if($request->has('cliente_id') and !empty($request->cliente_id)){
+            $filtro0="and e.cliente_id =$request->cliente_id".PHP_EOL;
             $filtro.="and fr.cliente_id='$request->cliente_id'".PHP_EOL;
+        }
+            
 
         if($request->has('desde') and !empty($request->desde))
             $filtro.="and fr.created_at>='$request->desde'".PHP_EOL;
@@ -250,10 +253,13 @@ class DashboardController extends Controller
             FROM montacarga.equipos e
             where e.deleted_at is null and e.cliente_id in ($clientes)";
         }else{
-            $query0="SELECT 'Total de equipos' AS nombre,SUM(CASE WHEN cliente_id IS NOT NULL THEN 1 ELSE 0 END ) AS bodega,
-            SUM(CASE WHEN cliente_id IS NOT NULL THEN 1 ELSE 0 END) AS alquilados
-            FROM equipos e
-            WHERE e.`numero_parte` LIKE 'GM%'";
+            $query0="SELECT 
+            'Total de equipos' AS nombre,
+            SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propios,
+            SUM(CASE WHEN (e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquilados
+            FROM montacarga.equipos e
+            where e.deleted_at is null  $filtro0
+             ";
         }
        
         $res0=DB::connection('crm')->select(DB::Raw($query0));

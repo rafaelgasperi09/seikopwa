@@ -1,3 +1,8 @@
+@php
+    $asignar_sup=current_user()->isOnGroup('supervisor-alquiler') || current_user()->isOnGroup('supervisor-repuestos') || current_user()->isOnGroup('programador');
+    $equipo_repuesto=current_user()->isOnGroup('tecnico') || current_user()->isOnGroup('supervisor-servicio-tecnico') || current_user()->isOnGroup('programador') || current_user()->isOnGroup('administrador');
+    $accidente_cotizacion=current_user()->isOnGroup('tecnico') || current_user()->isSupervisor() || current_user()->isOnGroup('programador') || current_user()->isOnGroup('administrador');
+@endphp
 <div class="section mt-2" style="overflow-x:auto">
 <table class="table table-striped datatable responsive" width="100%">
     <thead>
@@ -29,7 +34,7 @@
        </td>
        @if($nombre == 'form_montacarga_servicio_tecnico')
        <td>
-            @if( $d->trabajado_por==''  and (current_user()->isOnGroup('supervisor-alquiler') or current_user()->isOnGroup('supervisor-repuestos') or current_user()->isOnGroup('programador')) )
+            @if($d->trabajado_por==''  and $asignar_sup)
                 @if($d->estatus=='PR')
                 <a href="#" class="badge badge-primary" 
                 data-toggle="modal" data-target="#assign_supervisor" data-id="{{$d->id}}" > 
@@ -43,7 +48,9 @@
        <td>
             
             @php $modal='';$cotizacion=['No aprobado','danger'];
-            $modal='data-toggle="modal" data-target="#marcar_cotizado" ';
+            if($accidente_cotizacion){
+                $modal='data-toggle="modal" data-target="#marcar_cotizado" ';
+            }
             if($d->cotizacion=='A')
                 $cotizacion=['Aprobado','success'];
             @endphp
@@ -55,7 +62,9 @@
        <td>
         @if(true)
             @php $modal='';$accidente=['NO','success'];
-            $modal='data-toggle="modal" data-target="#marcar_accidente" ';
+            if($accidente_cotizacion){
+                $modal='data-toggle="modal" data-target="#marcar_accidente" ';
+            }
             if($d->accidente=='S')
                 $accidente=['SI','danger'];
                 
@@ -67,13 +76,13 @@
         @endif
        </td>
        <td>
-        <a href="#" data-toggle="modal" data-target="#assign_status_modal"
+        <a href="#" @if($equipo_repuesto) data-toggle="modal" data-target="#assign_status_modal" @endif
         data-id="{{$d->id}}" data-tipo='equipo'> 
             {!!getStatusHtml($d->equipo_status,1)!!}
         </a>
        </td>
        <td>
-        <a href="#" data-toggle="modal" data-target="#assign_status_modal"
+        <a href="#" @if($equipo_repuesto)  data-toggle="modal" data-target="#assign_status_modal" @endif
         data-id="{{$d->id}}" data-tipo='repuesto'> 
             {!!getStatusHtml($d->repuesto_status,2)!!}
         </a>

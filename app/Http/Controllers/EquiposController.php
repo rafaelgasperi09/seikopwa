@@ -120,6 +120,7 @@ class EquiposController extends BaseController
     public function reportes_datatable(Request $request,$export_datos=false){
         //dd($request->all());
         $clientes=explode(',',current_user()->crm_clientes_id);
+        $editar=current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador');
         $carbon = new \Carbon\Carbon();
         $desde = $carbon->now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
         $data = DB::table('formulario_registro')
@@ -168,7 +169,7 @@ class EquiposController extends BaseController
         ->addColumn('tipo', function($row) {
             return tipo_form($row->tipo);
         })
-        ->addColumn('actions', function($row) {
+        ->addColumn('actions', function($row) use($editar) {
         $url='';
         $url2='';
         $url_edit='';
@@ -189,7 +190,7 @@ class EquiposController extends BaseController
             $url_edit=route('equipos.edit_tecnical_support',$row->id);  
         }
             $ret='';
-            if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador')){
+            if($editar){
                 $ret.= ' <a target="_blank" href="'.$url_edit.'" target="_blank" class="btn btn-success btn-sm mr-1 ">
                             <ion-icon name="pencil-outline" title="Editar"></ion-icon>Editar
                         </a>';

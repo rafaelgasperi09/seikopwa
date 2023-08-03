@@ -46,7 +46,7 @@
     }
   
     var parameters=new URLSearchParams(obj).toString();
-    $('#exporter').attr('href',"{{secure_url('equipos/reportes_export')}}?"+parameters);
+    $('#exporter').attr('href',"{{url('equipos/reportes_export')}}?"+parameters);
     console.log(parameters);
     console.log(parameters);
   $('.datatable').DataTable( {
@@ -61,7 +61,7 @@
                 "order": [[ 0, "desc" ]],
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ secure_url('equipos/reportes_datatable') }}?"+parameters,
+                "ajax": "{{ url('equipos/reportes_datatable') }}?"+parameters,
                 "columns":[
                     {data:'id'},
                     {data:'created_at'},

@@ -14,7 +14,7 @@ $col=4;
 if($data['max']>3)
     $col=6;
 if($data['max']>10)
-    $col=12;
+    $col=6;
 
 @endphp
         <div class="row chart_content">
