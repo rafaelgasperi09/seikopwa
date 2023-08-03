@@ -248,15 +248,15 @@ class DashboardController extends Controller
             }  
             $query0="SELECT 
             'Total de equipos' AS nombre,
-            SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propios,
-            SUM(CASE WHEN (e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquilados
+            IFNULL(SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END),0) AS propios,
+            IFNULL(SUM(CASE WHEN (e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END),0) AS alquilados
             FROM equipos e
             where e.deleted_at is null and e.cliente_id in ($clientes)";
         }else{
             $query0="SELECT 
             'Total de equipos' AS nombre,
-            SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propios,
-            SUM(CASE WHEN (e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquilados
+            IFNULL(SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END),0) AS propios,
+            IFNULL(SUM(CASE WHEN (e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END),0) AS alquilados
             FROM equipos e
             where e.deleted_at is null  $filtro0
              ";
