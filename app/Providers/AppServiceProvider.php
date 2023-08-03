@@ -31,5 +31,9 @@ class AppServiceProvider extends ServiceProvider
         FormularioData::observe(FormularioDataObserver::class);
         FormularioRegistro::observe(FormularioRegistroObserver::class);
 
+        if($this->app->environment('production')) {
+            \URL::forceScheme('https');
+        }
+
     }
 }
