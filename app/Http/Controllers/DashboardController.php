@@ -250,14 +250,14 @@ class DashboardController extends Controller
             'Total de equipos' AS nombre,
             SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propios,
             SUM(CASE WHEN (e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquilados
-            FROM montacarga.equipos e
+            FROM equipos e
             where e.deleted_at is null and e.cliente_id in ($clientes)";
         }else{
             $query0="SELECT 
             'Total de equipos' AS nombre,
             SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propios,
             SUM(CASE WHEN (e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquilados
-            FROM montacarga.equipos e
+            FROM equipos e
             where e.deleted_at is null  $filtro0
              ";
         }
