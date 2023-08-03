@@ -1190,6 +1190,15 @@ class EquiposController extends BaseController
     }
 
     function createControlEntrega($id){
-        return view('frontend.equipos.create_control_alquiler');
+
+     
+        $data = Equipo::findOrFail($id);
+        $formulario = Formulario::whereTipo('control_alquiler')->first();
+
+
+        return view('frontend.equipos.create_control_alquiler') 
+        ->with('formulario',$formulario)
+        ->with('data',$data);
+      
     }
 }
