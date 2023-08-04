@@ -1,13 +1,6 @@
 
 <script>
-var colors = [
-            '#66A2DB',
-            '#F57F32',
-            '#A8A8A8',
-            '#FFC736',
-            '#FF4560',
-            ];
-           
+
 var options{{$id}} = { 
           series: [
             @foreach($titulos as $k=>$t)
@@ -21,7 +14,7 @@ var options{{$id}} = {
           type: 'bar',
           height: 300
         },
-        colors: colors,
+        /*colors: colors,*/
         plotOptions: {
           bar: {
             horizontal: false,

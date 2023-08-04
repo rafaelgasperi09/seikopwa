@@ -17,7 +17,7 @@
             }
           }
         },
-        colors: colors,
+        /*colors: colors,*/
         plotOptions: {
           bar: {
             columnWidth: '45%',

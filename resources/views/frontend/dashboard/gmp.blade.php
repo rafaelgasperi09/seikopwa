@@ -12,7 +12,7 @@
 @php
 $col=4;
 if($data['max']>3)
-    $col=6;
+    $col=4;
 if($data['max']>10)
     $col=6;
 
@@ -53,16 +53,43 @@ if($data['max']>10)
                     {{ Form::close() }}
                 </div>
             </div>
+            <script>
+                
+       
+            var colors = [
+                '#66A2DB',
+                '#F57F32',
+                '#A8A8A8',
+                '#FFC736',
+                '#FF4560',
+                ];
+            var colors = [
+                '#2f6690',
+                '#1a936f',
+                '#e71d36',
+                '#ff9f1c',
+                '#00afb9',
+                '#008000',
+                '#a4161a',
+                '#7209b7',
+                '#e09f3e',
+                '#f7a9a8',
+                        ];
+                var colors=['#fff']
+            </script>
             @php 
             
             $graficos=[0,1,2,3,5,6,7,8];
             $f=['frontend.dashboard.grafico_circular','frontend.dashboard.grafico_columna','frontend.dashboard.grafico_columna2'];
-            $files=array($f[0],$f[1],$f[1],$f[1],$f[1],$f[2],$f[2],$f[2])
-            
+            $files=array($f[0],$f[1],$f[1],$f[1],$f[1],$f[2],$f[2],$f[2]);
+            $haydata=0;
             @endphp
            
-            @foreach( $graficos as $j=>$i)                
-                @if(!isset($data['chart'.$i]))
+            @foreach( $graficos as $j=>$i)   
+                @php  $haydata=0; @endphp             
+                @if(isset($data['chart'.$i]))
+
+                @else
                     @foreach($data['indice'][$i] as $k)  
                             @php $data['chart'.$i][$k][0]=0; @endphp
                     @endforeach
@@ -70,6 +97,8 @@ if($data['max']>10)
                 <div class=" mb-2 col-md-{{$col}} col chart"  >
                     <div id="chart{{$i}}"></div>
                 </div>
+                
+
                 @include($files[$j],['id'=>'chart'.$i,'data'=>$data['chart'.$i],'indice'=>$data['indice'][$i],'titulos'=>$data['leyenda'][$i],'title'=>$data['titulo'][$i],'ejey'=> $data['ejey'][$i]])
             @endforeach
            

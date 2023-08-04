@@ -1,12 +1,6 @@
 
 <script>
-        var colors = [
-            '#66A2DB',
-            '#F57F32',
-            '#A8A8A8',
-            '#FF4560',
-            '#FFC736'
-            ]
+
 var options = {
           series: [{{$data['a'][0]}},{{$data['p'][0]}}],
           chart: {
@@ -14,7 +8,7 @@ var options = {
           height: 320,
           type: 'pie',
         },
-        colors: colors,
+        /*colors: colors,*/
         labels: ['{!!implode("','",$titulos)!!}'],
         dataLabels: {
           formatter(val, opts) {
