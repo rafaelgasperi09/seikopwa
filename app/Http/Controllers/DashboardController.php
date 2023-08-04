@@ -507,7 +507,7 @@ class DashboardController extends Controller
         $data['titulo'][7]='Informes trabajados – Equipos';
         $data['titulo'][8]='Informes trabajados – Repuestos';
         $data['titulo'][9]='Resumen de Daily Check';
-       
+      
         if(!empty($clientes)){
             $clientes=Cliente::whereRaw("(id in($clientes))")->orderBy('nombre')->get()->pluck('nombre','id');
         }else{
