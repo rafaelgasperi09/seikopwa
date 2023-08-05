@@ -51,6 +51,7 @@
         @endphp
         @foreach( $graficos as $j=>$i)         
             <div class=" mb-2 col-md-4 col chart"  >
+                <div class="grafictitle">{{$data['titulo'][$i]}}</div>
                 <div id="chart{{$i}}"></div>
             </div>
             @if(!isset($data['chart'.$i]))
@@ -59,7 +60,7 @@
                @endforeach
             @endif
            
-            @include($files[$j],['id'=>'chart'.$i,'data'=>$data['chart'.$i],'indice'=>$data['indice'][$i],'titulos'=>$data['leyenda'][$i],'title'=>$data['titulo'][$i],'ejey'=> $data['ejey'][$i]])
+            @include($files[$j],['id'=>'chart'.$i,'data'=>$data['chart'.$i],'indice'=>$data['indice'][$i],'titulos'=>$data['leyenda'][$i],'title'=>'','ejey'=> $data['ejey'][$i]])
         @endforeach
 
         </div>

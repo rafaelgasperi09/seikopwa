@@ -8554,6 +8554,12 @@ ion-icon {
 #imgmc{
   cursor: url('../../images/checkmark.png'), crosshair;
 }
+.grafictitle{
+  background: rgb(227,172,19);
+  background: linear-gradient(87deg, rgba(227,172,19,1) 35%, rgba(5,100,253,1) 100%);
+  color:#FFF;
+  padding:5px;
+}
 @media screen and (max-width: 768px){
   .signModal .modal-dialog{
     width: 98%;

@@ -14,7 +14,7 @@ var options{{$id}} = {
           type: 'bar',
           height: 300
         },
-        /*colors: colors,*/
+        colors: colors,
         plotOptions: {
           bar: {
             horizontal: false,

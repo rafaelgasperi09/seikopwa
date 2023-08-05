@@ -47,10 +47,12 @@
        </td>
        <td>
             
-            @php $modal='';$cotizacion=['No aprobado','danger'];
+            @php $modal='';$cotizacion=['No aplica','light'];
             if($accidente_cotizacion){
                 $modal='data-toggle="modal" data-target="#marcar_cotizado" ';
             }
+            if($d->cotizacion=='N')
+                $cotizacion=['No aprobado','danger'];
             if($d->cotizacion=='A')
                 $cotizacion=['Aprobado','success'];
             @endphp

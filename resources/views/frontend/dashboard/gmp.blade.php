@@ -9,14 +9,7 @@
    $('.header-large-title').append('<a class="btn btn-danger btn-rounded btn-condensed btn-sm pull-right" href="?" ><ion-icon name="trash-bin-outline"></ion-icon>Limpiar</a>');
    @endif 
 </script>
-@php
-$col=4;
-if($data['max']>3)
-    $col=4;
-if($data['max']>10)
-    $col=6;
 
-@endphp
         <div class="row chart_content">
             <div class=" mb-2 col-md-12 col"   >
                 <div class=" multi-collapse  in  @if(count(request()->all())==0)  collapse in @endif " style="padding:10px" id="filtro">
@@ -53,30 +46,7 @@ if($data['max']>10)
                     {{ Form::close() }}
                 </div>
             </div>
-            <script>
-                
-       
-            var colors = [
-                '#66A2DB',
-                '#F57F32',
-                '#A8A8A8',
-                '#FFC736',
-                '#FF4560',
-                ];
-            var colors = [
-                '#2f6690',
-                '#1a936f',
-                '#e71d36',
-                '#ff9f1c',
-                '#00afb9',
-                '#008000',
-                '#a4161a',
-                '#7209b7',
-                '#e09f3e',
-                '#f7a9a8',
-                        ];
-                var colors=['#fff']
-            </script>
+            
             @php 
             
             $graficos=[0,1,2,3,5,6,7,8];
@@ -95,11 +65,12 @@ if($data['max']>10)
                     @endforeach
                 @endif
                 <div class=" mb-2 col-md-{{$col}} col chart"  >
+                    <div class="grafictitle">{{$data['titulo'][$i]}}</div>
                     <div id="chart{{$i}}"></div>
                 </div>
                 
 
-                @include($files[$j],['id'=>'chart'.$i,'data'=>$data['chart'.$i],'indice'=>$data['indice'][$i],'titulos'=>$data['leyenda'][$i],'title'=>$data['titulo'][$i],'ejey'=> $data['ejey'][$i]])
+                @include($files[$j],['id'=>'chart'.$i,'data'=>$data['chart'.$i],'indice'=>$data['indice'][$i],'titulos'=>$data['leyenda'][$i],'title'=>'','ejey'=> $data['ejey'][$i]])
             @endforeach
            
         </div>

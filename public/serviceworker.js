@@ -1,6 +1,6 @@
 var staticCacheName = "pwa-v" + new Date().getTime();
 var filesToCache = [
-    '/assets/css/style.css',
+    '/assets/css/style.css?t=123',
     '/assets/js/lib/jquery-3.4.1.min.js',
     '/assets/js/toast.js',
     '/assets/js/lib/popper.min.js',

@@ -8,7 +8,7 @@ var options = {
           height: 320,
           type: 'pie',
         },
-        /*colors: colors,*/
+        colors: colors,
         labels: ['{!!implode("','",$titulos)!!}'],
         dataLabels: {
           formatter(val, opts) {
@@ -31,7 +31,7 @@ var options = {
           }
         }],
         title: {
-          text: '{{$data['n'][0]}}',
+          text: '',
           floating: true,
           offsetY: 5,
           style: {
