@@ -19,8 +19,10 @@
             <tr>
                 <th>#</th>
                 <th>Fecha registro</th>
+                <th>Hora</th>
                 <th>Tipo</th>
                 <th>Equipo</th>
+                <th>Prioridad</th>
                 <th>Registrado por</th>
                 <th>Apellido</th>
                 <th>Cliente</th>
@@ -56,7 +58,7 @@
                 "responsive": true,
                 "autoWidth": false,
                 "columnDefs": [
-                    { "visible": false, "targets": [5] },
+                    { "visible": false, "targets": [7] },
                 ],
                 "order": [[ 0, "desc" ]],
                 "processing": true,
@@ -64,9 +66,11 @@
                 "ajax": "{{ url('equipos/reportes_datatable') }}?"+parameters,
                 "columns":[
                     {data:'id'},
-                    {data:'created_at'},
+                    {data:'fecha'},
+                    {data:'hora'},
                     {data:'tipo',name:'formularios.tipo'},
                     {data:'numero_parte',name:'equipos_vw.numero_parte'},
+                    {data:'prioridad'},
                     {data:'creado_por',name:'users.first_name'},
                     {data:'last_name',name:'users.last_name'},
                     {data:'nombre',name:'clientes_vw.nombre'},

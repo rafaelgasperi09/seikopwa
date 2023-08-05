@@ -128,7 +128,10 @@ class EquiposController extends BaseController
                 ->join('users','formulario_registro.creado_por','users.id')
                 ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
                 ->join('clientes_vw','formulario_registro.cliente_id','clientes_vw.id')
-                ->selectRaw("formulario_registro.*,users.first_name,users.last_name,formularios.tipo,clientes_vw.nombre,equipos_vw.numero_parte,concat(users.first_name,' ',users.last_name) as user_name")
+                ->selectRaw("formulario_registro.*,DATE_FORMAT(formulario_registro.created_at, '%Y-%m-%d') as fecha,DATE_FORMAT(formulario_registro.created_at, '%h:%i %p') as hora,users.first_name,users.last_name,formularios.tipo,
+                            clientes_vw.nombre,equipos_vw.numero_parte,
+                            concat(users.first_name,' ',users.last_name) as user_name,
+                            (SELECT valor FROM formulario_data WHERE formulario_campo_id IN (968,969) and formulario_registro_id=formulario_registro.id) as prioridad")
                 ->whereNull('formulario_registro.deleted_at')
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
@@ -155,13 +158,16 @@ class EquiposController extends BaseController
                 ->when(!empty($request->created_by)  ,function ($q) use($request){
                     $q->where("formulario_registro.creado_por",$request->created_by);
                 });
-
+              
     if($export_datos){
         return $data->get();
     }
     return DataTables::of($data)
         ->editColumn('creado_por', function($row) {
             return $row->first_name.' '.$row->last_name;
+        })
+        ->editColumn('created_at', function($row) {
+            return \Carbon\Carbon::parse($row->created_at)->format('Y-m-d');
         })
         ->editColumn('numero_parte', function($row) {
             return "<a target='_blank' href='".route('equipos.detail',$row->equipo_id)."'>$row->numero_parte</a>";
@@ -191,15 +197,15 @@ class EquiposController extends BaseController
         }
             $ret='';
             if($editar){
-                $ret.= ' <a target="_blank" href="'.$url_edit.'" target="_blank" class="btn btn-success btn-sm mr-1 ">
-                            <ion-icon name="pencil-outline" title="Editar"></ion-icon>Editar
+                $ret.= ' <a target="_blank" href="'.$url_edit.'" target="_blank" class="btn btn-success btn-sm mr-1" title="Editar">
+                            <ion-icon name="pencil-outline" ></ion-icon>
                         </a>';
             }
-            $ret.= ' <a target="_blank" href="'.$url.'" target="_blank" class="btn btn-primary btn-sm mr-1 ">
-                        <ion-icon name="eye-outline" title="Ver detalle"></ion-icon>Ver
+            $ret.= ' <a target="_blank" href="'.$url.'" target="_blank" class="btn btn-primary btn-sm mr-1 " title="Ver detalle">
+                        <ion-icon name="eye-outline" ></ion-icon>
                     </a>
-                    <a target="_blank" href="'.$url2.'" target="_blank" class="btn btn-warning btn-sm mr-1 ">
-                        <ion-icon name="file-tray-stacked-outline" title="Imprimir formulario"></ion-icon>Imprimir
+                    <a target="_blank" href="'.$url2.'" target="_blank" class="btn btn-warning btn-sm mr-1 "  title="Imprimir formulario">
+                        <ion-icon name="file-tray-stacked-outline"></ion-icon>
                     </a>';
             return $ret;
         })
@@ -222,9 +228,9 @@ class EquiposController extends BaseController
             "Expires"             => "0"
         );
             //cabecera
-        $columns=array('IDREPORTE','FECHA REGISTRO', 'TIPO','EQUIPO','REGISTRADO POR','CLIENTE','ESTATUS','SEMANA','DIA','TURNO');
+        $columns=array('IDREPORTE','FECHA REGISTRO','HORA', 'TIPO','EQUIPO','PRIORIDAD','REGISTRADO POR','CLIENTE','ESTATUS','SEMANA','DIA','TURNO');
                         
-        $campos=array('id','created_at','tipo','numero_parte','user_name','nombre','estatus','semana','dia_semana','turno_chequeo_diario');
+        $campos=array('id','fecha','hora','tipo','numero_parte','prioridad','user_name','nombre','estatus','semana','dia_semana','turno_chequeo_diario');
         $i=0;
         return Excel::download(new ReportesExport($datos), 'Equipo.xlsx');
         /*
