@@ -81,7 +81,7 @@ if($data['max']>10)
             
             $graficos=[0,1,2,3,5,6,7,8];
             $f=['frontend.dashboard.grafico_circular','frontend.dashboard.grafico_columna','frontend.dashboard.grafico_columna2'];
-            $files=array($f[0],$f[1],$f[1],$f[1],$f[1],$f[2],$f[2],$f[2]);
+            $files=array($f[0],$f[1],$f[1],$f[1],$f[1],$f[1],$f[2],$f[2]);
             $haydata=0;
             @endphp
            
