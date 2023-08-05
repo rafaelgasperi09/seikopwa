@@ -9,14 +9,7 @@
         padding:5px !important;
         }
     </style>
-    @php
-    $col=4;
-    if($data['max']>3)
-        $col=4;
-    if($data['max']>10)
-        $col=6;
-
-    @endphp
+ 
     <script>
     var colors = [
         '#66A2DB',

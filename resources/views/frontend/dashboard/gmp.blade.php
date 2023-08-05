@@ -53,8 +53,15 @@
             $f=['frontend.dashboard.grafico_circular','frontend.dashboard.grafico_columna','frontend.dashboard.grafico_columna2'];
             $files=array($f[0],$f[1],$f[1],$f[1],$f[1],$f[1],$f[2],$f[2]);
             $haydata=0;
+
+            $col=4;
+            if($data['max']>3)
+                $col=4;
+            if($data['max']>10)
+                $col=6;
+
             @endphp
-           
+                
             @foreach( $graficos as $j=>$i)   
                 @php  $haydata=0; @endphp             
                 @if(isset($data['chart'.$i]))
