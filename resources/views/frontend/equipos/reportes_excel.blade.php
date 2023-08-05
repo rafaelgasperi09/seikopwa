@@ -1,6 +1,6 @@
 @php
-  $columns=array('IDREPORTE','FECHA REGISTRO', 'TIPO','EQUIPO','REGISTRADO POR','CLIENTE','ESTATUS','SEMANA','DIA','TURNO');    
-  $campos=array('id','created_at','tipo','numero_parte','user_name','nombre','estatus','semana','dia_semana','turno_chequeo_diario');
+$columns=array('IDREPORTE','FECHA REGISTRO','HORA', 'TIPO','EQUIPO','PRIORIDAD','REGISTRADO POR','CLIENTE','ESTATUS','SEMANA','DIA','TURNO');                      
+$campos=array('id','fecha','hora','tipo','numero_parte','prioridad','user_name','nombre','estatus','semana','dia_semana','turno_chequeo_diario');
 @endphp
 <table>
 <thead>

@@ -254,11 +254,6 @@ class EquiposController extends BaseController
                     $d= preg_replace("[\n|\r|\n\r]", " ", utf8_decode($value->$c));
                     array_push($rows,$d);
                 }
-                /*
-                foreach($value as $k=>$v){
-                    $d= preg_replace("[\n|\r|\n\r]", " ", utf8_decode($v));
-                        array_push($rows,$d);
-                }*/
                 fputcsv($file, $rows);
             }
             fclose($file);
