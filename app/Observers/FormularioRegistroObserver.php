@@ -102,7 +102,13 @@ class FormularioRegistroObserver
                 Storage::put('public/firmas/'.$filename,$data);
                 $valor =  $filename;
             }
+            if($campo->tipo=='montacarga_check' && $request->get($campo->nombre)){
 
+                $filename = $user_id.'_'.$campo->nombre.'_'.time().'.png';
+                $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
+                Storage::put('public/mccheck/'.$filename,$data);
+                $valor =  $filename;
+            }
             if(in_array($campo->tipo,['camera','file'])){
                 $file = $request->file($campo->nombre);
                 
@@ -276,6 +282,13 @@ class FormularioRegistroObserver
                                     $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
                                     $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
                                     Storage::put('public/firmas/'.$filename,$data);
+                                    $valor =  $filename;
+                                }
+                                if($campo->tipo=='montacarga_check' && $request->get($campo->nombre)){
+
+                                    $filename = $user_id.'_'.$campo->nombre.'_'.time().'.png';
+                                    $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',  $valor ));
+                                    Storage::put('public/mccheck/'.$filename,$data);
                                     $valor =  $filename;
                                 }
                                 if(in_array($campo->tipo,['camera','file'])){

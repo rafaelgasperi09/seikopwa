@@ -207,12 +207,16 @@
 
                                 @elseif($campo->tipo == 'montacarga_check')
                                     @if($value=="")
-                                        include('frontend.partials.imagen_check')
+                                        @if(request()->route()->getName()=='equipos.edit_control_entrega')
+                                        @include('frontend.partials.imagen_check',array('campo_nombre'=>$campo->nombre,'imagen_check'=>url('images/montacargas/800/'.$data->equipo()->tipo->image)))
+                                        @else
+                                        @include('frontend.partials.imagen_check',array('campo_nombre'=>$campo->nombre,'imagen_check'=>url('images/montacargas/800/'.$data->tipo->image)))
+                                        @endif
+                                      
                                     @else
-                                    <p><i>{{$vd->creador->full_name}}</i></p>
-                                    <img id="img_operador" width="100%" style="max-width:550px" data-toggle="modal"  data-field="operador" src="/storage/firmas/{{$value}}" class="imgSignRequest">
+                                        @include('frontend.partials.imagen_check',array('campo_nombre'=>$campo->nombre,'imagen_check'=>url('storage/mccheck/'.$value)))
                                     @endif
-
+                                
                                 @endif
                                 @if($showclear)
                                 <i class="clear-input">

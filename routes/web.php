@@ -111,13 +111,13 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
             
             Route::post('/store', array('as' => 'equipos.store_control_entrega', 'uses' => 'EquiposController@storeControlEntrega'));
 
-            Route::get('/{id}/edit', array('as' => 'equipos.edit_control_entrega', 'uses' => 'EquiposController@editControlEntrega'))->middleware('hasAccess');
+            Route::get('/{id}/edit', array('as' => 'equipos.edit_control_entrega', 'uses' => 'EquiposController@editControlEntrega'));
 
             Route::put('/{id}/update', array('as' => 'equipos.update_control_entrega', 'uses' => 'EquiposController@updateControlEntrega'));
 
             Route::get('/{id}/imprimir', array('as' => 'equipos.imprimir_control_entrega', 'uses' => 'EquiposController@imprimirControlEntrega'));
 
-            Route::get('/{id}/delete', array('as' => 'equipos.delete_control_entrega', 'uses' => 'EquiposController@deleteControlEntrega'));
+            Route::get('/{id}/delete', array('as' => 'equipos.delete_control_entrega', 'uses' => 'EquiposController@deleteRegistroForm'));
 
         });
 

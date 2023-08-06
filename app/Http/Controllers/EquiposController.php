@@ -372,6 +372,9 @@ class EquiposController extends BaseController
         $form['mp']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->where('equipo_id',$id)->where('formularios.tipo','mant_prev')->get();
 
+        $form['ca']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
+                                        ->where('equipo_id',$id)->where('formularios.tipo','control_alquiler')->get();
+
 
         //dd($data->tipo->name);
         $mostrar=array('det'=>'show','reg'=>'');
@@ -380,8 +383,8 @@ class EquiposController extends BaseController
             $mostrar['reg']='show';
         }
 
-        $tab=array('t1'=>'active','t2'=>'','t3'=>'');
-        $tab_content=array('t1'=>'active show','t2'=>'','t3'=>'');
+        $tab=array('t1'=>'active','t2'=>'','t3'=>'','t4'=>'');
+        $tab_content=array('t1'=>'active show','t2'=>'','t3'=>'','t4'=>'');
         if(!\Sentinel::hasAnyAccess(['equipos.see_daily_check','equipos.edit_daily_check'])){
             $tab['t1']=''; $tab['t2']='active';
             $tab_content['t1']=''; $tab['t2']='active show';
@@ -400,6 +403,10 @@ class EquiposController extends BaseController
         if($request->get('tab')== 3){
             $tab=array('t1'=>'','t2'=>'','t3'=>'active');
             $tab_content=array('t1'=>'','t2'=>'','t3'=>'active show');
+        }
+        if($request->get('tab')== 3){
+            $tab=array('t1'=>'','t2'=>'','t3'=>'','t4'=>'active');
+            $tab_content=array('t1'=>'','t2'=>'','t3'=>'','t4'=>'active show');
         }
 
         if($data->sub_equipos_id==1){
@@ -846,7 +853,6 @@ class EquiposController extends BaseController
 
         $campos = $formulario->campos()->whereIn('nombre',['hora_entrada','hora_salida','tecnico_asignado'])->pluck('id');
         $otrosDatos = $data->data()->whereIn('formulario_campo_id',$campos)->orderBy('formulario_campo_id','ASC')->pluck('valor');
-
         $formularioData =$data->data()->get()->pluck('valor','formulario_campo_id');
 
         $datos=array();
@@ -1114,6 +1120,17 @@ class EquiposController extends BaseController
             'Content-Disposition' => 'inline; prevew.pdf',
         ]);
        }
+       if($reporte=='form_control_entrega_alquiler'){
+        $datos['det']=getFormData($datos['cab']->formulario->nombre,0,0,$id);
+        
+        $orientation = 'portrait';
+        $customPaper = array(0,0,950,1230);
+       // dd($datos['cab']);
+        $pdf = PDF::loadView('frontend.equipos.reportes.form_control_alquiler',compact('datos'))
+                ->setPaper($customPaper, $orientation); 
+        return $pdf->stream('pdfview.pdf');
+        return view('frontend.equipos.reportes.form_control_alquiler')->with('datos',$datos);
+   }
     }
 
     public function calendar(){
@@ -1189,7 +1206,7 @@ class EquiposController extends BaseController
       
       
     }
-
+    /****************CONTROL DE ENTREGAS*********************/
     function createControlEntrega($id){
 
      
@@ -1201,5 +1218,121 @@ class EquiposController extends BaseController
         ->with('formulario',$formulario)
         ->with('data',$data);
       
+    }
+
+    public function storeControlEntrega(Request $request){
+      
+        $this->validate($request, [
+            'equipo_id'  => 'required'
+        ]);
+
+        $equipo_id = $request->equipo_id;
+        $formulario_id = $request->formulario_id;
+        $tipo_equipos_id = $request->tipo_equipos_id;
+        $formulario = Formulario::find($formulario_id);
+        $model = new FormularioRegistro();
+        $equipo = Equipo::findOrFail($equipo_id);
+        $status='P';
+        if($model->status=='C')
+            $status='C';
+        //DB::transaction(function() use($model,$request,$formulario,$equipo,$status){
+
+            $model->formulario_id = $formulario->id;
+            $model->creado_por = Sentinel::getUser()->id;
+            $model->equipo_id = $request->equipo_id;
+            $model->cliente_id = $request->cliente_id;
+            $model->estatus = $status;
+            $model->equipo_status = 'O';
+            $model->repuesto_status = 'L';
+            
+            if($model->save())
+            {
+                
+              // mandar correo si hace falta
+                    
+            }else{
+                Throw new \Exception('Hubo un problema y no se creo el registro!');
+            }
+        //});
+
+        $request->session()->flash('message.success','Registro creado con exito');
+        return redirect(route('equipos.detail',$equipo_id));
+    }
+
+    public function showControlEntrega($id){
+
+        $data = FormularioRegistro::findOrFail($id);
+        $equipo = Equipo::findOrFail($data->equipo_id);
+        $formulario = Formulario::whereNombre('form_control_entrega_alquiler')->first();
+
+        $campos = $formulario->campos()->whereIn('nombre',['hora_entrada','hora_salida','tecnico_asignado'])->pluck('id');
+        $otrosDatos = $data->data()->whereIn('formulario_campo_id',$campos)->orderBy('formulario_campo_id','ASC')->pluck('valor');
+
+        $formularioData =$data->data()->get()->pluck('valor','formulario_campo_id');
+
+        $datos=array();
+
+        foreach($formulario->campos as $c){
+            if(isset($formularioData[$c->id])){
+                $datos[$c->nombre]=$formularioData[$c->id];
+            }
+        }     
+        return view('frontend.equipos.show_control_alquiler')
+            ->with('equipo',$equipo)
+            ->with('formulario',$formulario)
+            ->with('otrosCampos',$otrosDatos)
+            ->with('data',$data)
+            ->with('datos',$datos);
+             
+    }
+    
+    public function updateControlEntrega(Request $request)
+    {
+        ini_set('error_reporting', E_STRICT);
+        
+
+        
+            $this->validate($request, [
+                'equipo_id'              => 'required',
+                'formulario_id'          => 'required',
+                'formulario_registro_id' => 'required',
+               // 'trabajo_recibido_por'  => 'required',
+            ]);
+
+            $formulario_registro_id = $request->formulario_registro_id;
+            $model = FormularioRegistro::findOrFail($formulario_registro_id);
+            $datos=FormularioData::Join('formulario_campos','formulario_data.formulario_campo_id','formulario_campos.id')
+                                    ->whereFormularioRegistroId($model->id)
+                                    ->where('cambio_estatus',1)
+                                    ->select('valor')
+                                    ->first();
+            if($datos){
+                $datos=$datos->toArray();
+            }                        
+            if(isset($datos['valor']) and !empty($datos['valor'])){
+                $model->estatus='C';
+            }
+            $model->updated_at =Carbon::now();
+            $model->save();
+            $request->session()->flash('message.success', 'Registro guardado con éxito');
+            return redirect(route('equipos.detail', $model->equipo_id));
+
+      
+    }
+
+    public function editControlEntrega($id){
+
+        $data = FormularioRegistro::findOrFail($id);
+        $equipo = Equipo::findOrFail($data->equipo_id);
+        $formulario = Formulario::whereNombre('form_control_entrega_alquiler')->first();
+
+        $campos = $formulario->campos()->whereIn('nombre',['hora_entrada','hora_salida','tecnico_asignado'])->pluck('id');
+        $otrosDatos = $data->data()->whereIn('formulario_campo_id',$campos)->orderBy('formulario_campo_id','ASC')->pluck('valor');
+      
+        return view('frontend.equipos.edit_control_alquiler')
+            ->with('equipo',$equipo)
+            ->with('formulario',$formulario)
+            ->with('otrosCampos',$otrosDatos)
+            ->with('data',$data);
     }
 }

@@ -51,7 +51,9 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Persona encargada</label>
+                            @if(isset($otrosCampos[2]))
                             {{ Form::text('nombre',$otrosCampos[2],array('class'=>'form-control')) }}
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -75,7 +77,9 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Hora Entrada</label>
+                            @if(isset($otrosCampos[0]))
                             {{ Form::text('hora_entrada',$otrosCampos[0],array('class'=>'form-control','disabled')) }}
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -83,7 +87,9 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Hora Salida</label>
+                            @if(isset($otrosCampos[1]))
                             {{ Form::text('numero_parte',$otrosCampos[1],array('class'=>'form-control','readonly')) }}
+                            @endif
                         </div>
                     </div>
                 </div>

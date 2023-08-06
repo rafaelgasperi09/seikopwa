@@ -3,8 +3,8 @@
     @include('frontend.partials.title',array('title'=>'Control de entregas montacarga par alquiler','subtitle'=>$data->id_componente))
     <div class="section full mt-2 mb-2">
         <!-------------------------------------------->
-        {{Form::open(array("method" => "POST","action" => "EquiposController@storeControlEntrega","role" => "form",'class'=>'form-horizontal','files'=>true,'id'=>'form'))}}
-         
+
+    {{ Form::model($formulario, array('route' => array('equipos.update_control_entrega', $data->id), 'method' => 'PUT' , 'role' => 'form','class'=>'form-horizontal','files'=>true)) }}
             <div class="section full mt-2 mb-2">
                 <div class="section-title">Datos generales</div>
                 <div class="wide-block pb-3 pt-2">
@@ -14,7 +14,7 @@
                             <div class="form-group basic">
                                 <div class="input-wrapper">
                                     <label class="label" for="name1">Fecha de entrega</label>
-                                    {{ Form::text('fecha_entrega',now(),array('class'=>'form-control','readonly')) }}
+                                    {{ Form::text('fecha_entrega',$data->created_at,array('class'=>'form-control','readonly')) }}
                                 </div>
                             </div>
                         </div>
@@ -22,7 +22,7 @@
                             <div class="form-group basic">
                                 <div class="input-wrapper">
                                     <label class="label" for="name1">Cliente</label>
-                                    {{ Form::text('cliente',$data->cliente->nombre,array('class'=>'form-control','readonly')) }}
+                                    {{ Form::text('cliente',$data->cliente()->nombre,array('class'=>'form-control','readonly')) }}
                                 </div>
                             </div>
                         </div>
@@ -30,7 +30,7 @@
                             <div class="form-group basic">
                                 <div class="input-wrapper">
                                     <label class="label" for="name1">Dirección</label>
-                                    {{ Form::text('direccion',$data->cliente->direccion,array('class'=>'form-control','readonly')) }}
+                                    {{ Form::text('direccion',$data->cliente()->direccion,array('class'=>'form-control','readonly')) }}
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                             <div class="form-group basic">
                                 <div class="input-wrapper">
                                     <label class="label" for="name1">Tipo equipo</label>
-                                    {{ Form::text('direccion',$data->subTipo->display_name,array('class'=>'form-control','readonly')) }}
+                                    {{ Form::text('direccion',$data->equipo()->subTipo->display_name,array('class'=>'form-control','readonly')) }}
                                 </div>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                             <div class="form-group basic">
                                 <div class="input-wrapper">
                                     <label class="label" for="name1">Marca</label>
-                                    {{ Form::text('direccion',$data->marca->display_name,array('class'=>'form-control','readonly')) }}
+                                    {{ Form::text('direccion',$data->equipo()->marca->display_name,array('class'=>'form-control','readonly')) }}
                                 </div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                             <div class="form-group basic">
                                 <div class="input-wrapper">
                                     <label class="label" for="name1">Serie</label>
-                                    {{ Form::text('serie',$data->serie,array('class'=>'form-control','readonly')) }}
+                                    {{ Form::text('serie',$data->equipo()->serie,array('class'=>'form-control','readonly')) }}
                                 </div>
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                             <div class="form-group basic">
                                 <div class="input-wrapper">
                                     <label class="label" for="name1">Altura</label>
-                                    {{ Form::text('altura',$data->altura_mastil,array('class'=>'form-control','readonly')) }}
+                                    {{ Form::text('altura',$data->equipo()->altura_mastil,array('class'=>'form-control','readonly')) }}
                                 </div>
                             </div>
                         </div>
@@ -72,8 +72,9 @@
                             <div class="form-group basic">
                                 <div class="input-wrapper">
                                     <label class="label" for="name1"># Equipo</label>
-                                    {{ Form::text('numero_parte',$data->numero_parte,array('class'=>'form-control','readonly')) }}
-                                    {{ Form::hidden('equipo_id',$data->id,array('class'=>'form-control','readonly')) }}
+                                    {{ Form::text('numero_parte',$data->equipo()->numero_parte,array('class'=>'form-control','readonly')) }}
+                                    {{ Form::hidden('equipo_id',$data->equipo_id,array('class'=>'form-control','readonly')) }}
+                                    {{ Form::hidden('formulario_registro_id',$data->id,array('class'=>'form-control','readonly')) }}
                                     {{ Form::hidden('cliente_id',$data->cliente_id,array('class'=>'form-control','readonly')) }}
                                 </div>
                             </div>
@@ -82,7 +83,7 @@
                             <div class="form-group basic">
                                 <div class="input-wrapper">
                                     <label class="label" for="name1">Modelo</label>
-                                    {{ Form::text('modelo',$data->modelo,array('class'=>'form-control','readonly')) }}
+                                    {{ Form::text('modelo',$data->equipo()->modelo,array('class'=>'form-control','readonly')) }}
                                 </div>
                             </div>
                         </div>
@@ -90,7 +91,7 @@
                             <div class="form-group basic">
                                 <div class="input-wrapper">
                                     <label class="label" for="name1">Capacidad carga</label>
-                                    {{ Form::text('capacidad_de_carga',$data->capacidad_de_carga,array('class'=>'form-control','readonly')) }}
+                                    {{ Form::text('capacidad_de_carga',$data->equipo()->capacidad_de_carga,array('class'=>'form-control','readonly')) }}
                                 </div>
                             </div>
                         </div>
@@ -101,9 +102,9 @@
             <!-------------------------------------------->
 
             
-            {{ Form::hidden('componente_id',$data->id) }}
+
             {{ Form::hidden('formulario_id',$formulario->id) }}
-            @include('frontend.partials.form',array('formulario'=>$formulario))
+            @include('frontend.partials.form',array('formulario'=>$formulario,'datos'=>$data))
                               
             <div class="modal-footer">
                 @include('frontend.partials.btnSubmit')
@@ -114,14 +115,6 @@
 
 
 <script>
-    $('#fecha').val('{{date('Y-m-d')}}');
-    $('#fecha').attr('readonly','readonly');
-    $('#hora_entrada').val('{{date('H:i')}}');
-    $('#hora_entrada').attr('readonly','readonly');
-    @if(current_user()->isOnGroup('tecnico'))
-    $('#typehead_tecnico_id').val('{{current_user()->full_name}}');
-    $('#tecnico_id').val('{{current_user()->id}}');   
-    @endif
 
 </script>
 @stop

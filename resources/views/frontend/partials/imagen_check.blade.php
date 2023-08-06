@@ -1,5 +1,5 @@
 <div class="section full mt-2 mb-2" id="">
-                {{ Form::hidden('check_image','',['id'=>'check_image']) }}
+                {{ Form::hidden($campo_nombre,'',['id'=>'check_image']) }}
                 <div class="section-title"></div>
                 <div class="wide-block pb-1 pt-2">
                     <div class="row">
@@ -7,11 +7,11 @@
                         <div class="form-group boxed col-12">
                             <div class="input-wrapper text-center mx-auto">
                                 <label class="label" for="comentarios">Marque con un gancho</label> 
-                                <canvas height="800px" width="800px" id="imgmc"></canvas>
+                                <canvas height="500px" width="500px" id="imgmc"></canvas>
                             </div>
                         </div>
                         
-                        <div class="form-group boxed col col-1 mx-auto">
+                        <div class="form-group boxed col col-2 mx-auto">
                             <button name="clear" id="clearButton2" type="button" class=" btn btn-icon btn-outline-warning clearButton2 signButtons">
                                 <ion-icon name="trash-outline" size="large"></ion-icon><br/>
                                 Limpiar
@@ -25,13 +25,14 @@
                 <script>
                     var canvasEquipo = document.getElementById("imgmc");
                     var ctx3 = canvasEquipo.getContext("2d");
+                    
                     function cargaImagen(){
                         var img = new Image();
-                        img.src = "{{url('images/montacargas/800/'.$data->tipo->image)}}";
+                        img.src = "{{$imagen_check}}";
 
                         // Importante el onload
                         img.onload = function(){
-                            ctx3.drawImage(img, 0, 0);
+                            ctx3.drawImage(img, 0, 0,500,500);
                         }
                     }
 

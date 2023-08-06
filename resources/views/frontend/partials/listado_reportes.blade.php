@@ -151,6 +151,25 @@
                         <ion-icon name="trash-outline" title="Borrar"></ion-icon><small>Borrar</small>
                     </a>
                 @endif
+            @elseif($nombre == 'form_control_entrega_alquiler')
+                @if(!current_user()->isCliente() && $d->estatus == 'P')
+                   <a href="{{ route('equipos.edit_control_entrega',$d->id) }}" class="badge badge-secondary btn-sm mr-1 botones">
+                       <ion-icon name="construct-outline" title="Editar"></ion-icon><small>Editar</small>
+                   </a>
+               @endif
+                <a href="{{ route('equipos.show_control_entrega',$d->id) }}" class="badge badge-success btn-sm mr-1 botones">
+                        <ion-icon name="eye-outline" title="Editar"></ion-icon><small>Ver</small>
+                </a>
+                @if(\Sentinel::getUser()->hasAccess('equipos.delete_tecnical_support'))
+                    <a href="{{ route('equipos.delete_control_entrega',$d->id) }}" class="badge badge-danger btn-sm mr-1 botones">
+                        <ion-icon name="trash-outline" title="Borrar"></ion-icon><small>Borrar</small>
+                    </a>
+                @endif
+                @if($d->estatus  == 'C')
+                <a href="{{url('equipos/reportes/form_control_entrega_alquiler/'.$d->id)}}" target="_blank" class="badge badge-primary btn-sm mr-1 botones">
+                    <ion-icon name="print-outline" title="Ver detalle"></ion-icon><small>Imprimir</small>
+                </a>
+               @endif
            @endif
         </td>
 
