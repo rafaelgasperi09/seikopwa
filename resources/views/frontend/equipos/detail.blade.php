@@ -100,7 +100,7 @@
                                 </a>
                             </li>
                             @endif
-                            @if(!current_user()->isCliente())
+                            @if( \Sentinel::hasAccess(['equipos.create_control_entrega']))
                             <li class="nav-item">
                                 <a class="nav-link {{$tab['t4']}} " data-toggle="tab" href="#entrega" role="tab" aria-selected="true">
                                         <ion-icon name="document-text-outline" class="text-success" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
@@ -176,7 +176,7 @@
                         <div class="tab-pane   {{$tab_content['t4']}}" id="entrega" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Control de entrega de montacargas para alquiler
-                                    @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
+                                    @if(\Sentinel::hasAccess('equipos.create_control_entrega'))
                                     <div class="right">
                                         <a href="{{ route('equipos.create_control_entrega',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                                     </div>

@@ -38,13 +38,15 @@ $permisos["permissions"] = array(
     "equipos.start_tecnical_support"=>"Iniciar Servicio de Soporte Técnico",
     "equipos.edit_tecnical_support"=>"Terminar Servicio Soporte Técnico",
     "equipos.delete_tecnical_support"=>"Borrar Servicio Soporte Técnico",
+    "equipos.create_control_entrega"=>"Crear Control de entregas Alquiler",
+    "equipos.edit_control_entrega"=>"Editar Control de entregas Alquiler",
+    "equipos.show_control_entrega"=>"Ver Control de entregas Alquiler",
+    "equipos.delete_control_entrega"=>"Eliminar Control de entregas Alquiler",
     "equipos.detail"=>"Ver Detalle Equipo",
     "equipos.calendar"=>"Ver Calendario (Servicio Técnico)",
     "equipos.dominio"=>"Ver filtro de dominio",
     "equipos.historial"=>"Ver historial de reportes",
     "equipos.see_control_entrega"=>"Ver Control de Entregas",
-    "equipos.create_control_entrega"=>"Crear Control de Entregas",
-    "equipos.edit_control_entrega"=>"Editar Control de Entregas",
    
   ),
   "Taller"=>array(

@@ -404,7 +404,7 @@ class EquiposController extends BaseController
             $tab=array('t1'=>'','t2'=>'','t3'=>'active');
             $tab_content=array('t1'=>'','t2'=>'','t3'=>'active show');
         }
-        if($request->get('tab')== 3){
+        if($request->get('tab')== 4){
             $tab=array('t1'=>'','t2'=>'','t3'=>'','t4'=>'active');
             $tab_content=array('t1'=>'','t2'=>'','t3'=>'','t4'=>'active show');
         }

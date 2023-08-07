@@ -107,17 +107,17 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
             Route::get('/create/{id}', array('as' => 'equipos.create_control_entrega', 'uses' => 'EquiposController@createControlEntrega'))->middleware('hasAccess');
               
-            Route::get('{id}/show', array('as' => 'equipos.show_control_entrega', 'uses' => 'EquiposController@showControlEntrega'));
+            Route::get('{id}/show', array('as' => 'equipos.show_control_entrega', 'uses' => 'EquiposController@showControlEntrega'))->middleware('hasAccess');
             
             Route::post('/store', array('as' => 'equipos.store_control_entrega', 'uses' => 'EquiposController@storeControlEntrega'));
 
-            Route::get('/{id}/edit', array('as' => 'equipos.edit_control_entrega', 'uses' => 'EquiposController@editControlEntrega'));
+            Route::get('/{id}/edit', array('as' => 'equipos.edit_control_entrega', 'uses' => 'EquiposController@editControlEntrega'))->middleware('hasAccess');
 
             Route::put('/{id}/update', array('as' => 'equipos.update_control_entrega', 'uses' => 'EquiposController@updateControlEntrega'));
 
             Route::get('/{id}/imprimir', array('as' => 'equipos.imprimir_control_entrega', 'uses' => 'EquiposController@imprimirControlEntrega'));
 
-            Route::get('/{id}/delete', array('as' => 'equipos.delete_control_entrega', 'uses' => 'EquiposController@deleteRegistroForm'));
+            Route::get('/{id}/delete', array('as' => 'equipos.delete_control_entrega', 'uses' => 'EquiposController@deleteRegistroForm'))->middleware('hasAccess');
 
         });
 
