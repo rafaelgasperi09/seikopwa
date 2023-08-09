@@ -1,15 +1,15 @@
 <div class="card text-white bg-light">
     <div class="card-header">
-        <span><ion-icon  class="text-secondary" size="large" name="build-outline"></ion-icon>Mantenimiento preventivo<br/>
-        <span class="card-title" id="tot_equipos">{{$totmp}} </span>Pendientes de firma</span>
+        <span><ion-icon  class="text-secondary" size="large" name="{{$listado['icono']}}-outline"></ion-icon>{{$listado['title']}}<br/>
+        <span class="card-title" id="tot_equipos">{{$listado['total']}} </span>{{$listado['subtitle']}}</span>
     </div>
     <div class="card-body text-right">
-    @if(count($data['mant_prev']))
-        @foreach($data['g_mant_prev'] as $k=>$gmp )
-            <div class="chip chip-warning chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
+    @if(count($listado['data']['mant_prev']))
+        @foreach($listado['data']['g_mant_prev'] as $k=>$gmp )
+            <div class="chip chip-{{$listado['color']}} chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
                 <span class="chip-label">{{$gmp->cliente()->nombre}} </span>
-                <i class="chip-icon abrir"  id="gmp{{$gmp->cliente_id}}" >
-                <span class=" pull-right flechagmp flechagmp{{$gmp->cliente_id}}"title="Ver mas">
+                <i class="chip-icon abrir"  id="{{$listado['var']}}{{$gmp->cliente_id}}" >
+                <span class=" pull-right flecha{{$listado['var']}} flecha{{$listado['var']}}{{$gmp->cliente_id}}"title="Ver mas">
                     @if($k==0)
                     <ion-icon name="chevron-down-outline"></ion-icon></span>
                     @else
@@ -17,12 +17,12 @@
                     @endif
                 </i>
             </div>
-            @foreach($data['mant_prev']->where('cliente_id',$gmp->cliente_id) as $mp)
+            @foreach($listado['data']['mant_prev']->where('cliente_id',$gmp->cliente_id) as $mp)
             <a href="@if(Sentinel::getUser()->hasAccess('equipos.edit_mant_prev'))
                 {{ route('equipos.edit_mant_prev',array('id'=>$mp->id)) }}
             @else
                 {{ route('equipos.detail',array('id'=>$mp->equipo_id)) }}?show=rows&tab=2
-            @endif"  class="chip chip-warning chip-media ml-05 mb-05 gmplist gmp{{$gmp->cliente_id}}" style="width:98%; @if($k!=0)  display:none; @endif">
+            @endif"  class="chip chip-{{$listado['color']}} chip-media ml-05 mb-05 {{$listado['var']}}list {{$listado['var']}}{{$gmp->cliente_id}}" style="width:98%; @if($k!=0)  display:none; @endif">
                 <i class="chip-icon">
                     Ir
                 </i>
@@ -42,13 +42,13 @@
         console.log(id);
         var clase='.'+id;
         var flecha='.flecha'+id;
-        $('.gmplist').each(function(){
-            $(this).fadeOut();
+        $('.{{$listado['var']}}list').each(function(){
+            $(this).hide();
         });
         $(clase).each(function(){
-            $(this).fadeIn();
+            $(this).show();
         });
-        $('.flechagmp').each(function(){
+        $('.flecha{{$listado['var']}}').each(function(){
             $(this).html(' <ion-icon name="chevron-up-outline"></ion-icon></span>');
         });
         $(flecha).html(' <ion-icon name="chevron-down-outline"></ion-icon></span>');
