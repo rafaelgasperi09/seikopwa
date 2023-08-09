@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    private function getPendings($filtro,$formType,$status='P',$filterExtra='',$equipos=true,$pluck=''){
+    private function getPendings($filtro,$formType,$status='P',$filterExtra='',$equipos=true,$pluck='',$group_cliente=false){
         $userFilter='WHERE '.$filtro;
         
         if(current_user()->crm_clientes_id){
@@ -33,7 +33,7 @@ class DashboardController extends Controller
        if(empty($lista))
         $lista='0';
 
-        $equipos=DB::connection('crm')->select(DB::raw('SELECT * FROM montacarga.equipos WHERE cliente_id in ('.$lista.')'));
+       // $equipos=DB::connection('crm')->select(DB::raw('SELECT * FROM montacarga.equipos WHERE cliente_id in ('.$lista.')'));
        $r=FormularioRegistro::selectRaw('formulario_registro.*')
         ->join('formularios','formulario_registro.formulario_id','formularios.id')
          ->whereNotNull('equipo_id')
@@ -48,8 +48,17 @@ class DashboardController extends Controller
         ->When(!empty($filterExtra),function($q)use($filterExtra){
             $q->whereRaw($filterExtra);
         });
+               
+        if($group_cliente)
+        {
+            $clientes= clone $r;
+            $clientes=$clientes->groupBy('cliente_id')->select('cliente_id')->get();
+            return $clientes;
+        }
+
+
         if(empty($pluck)){
-            return  $r->orderBy('created_at','desc')->get();
+            return  $r->orderBy('cliente_id','asc')->orderBy('created_at','desc')->get();
 
         }else{
             return $r->pluck('equipo_id');
@@ -153,38 +162,51 @@ class DashboardController extends Controller
         if( current_user()->isOnGroup('supervisorc') or  current_user()->isOnGroup('programador') ){
             //daily check pendientes de firma supervisor
             $data['daily_check']=$this->getPendings($filtro,'daily_check');
+            $data['g_daily_check']=$this->getPendings($filtro,'daily_check','P','',true,'',true);
         }
 
         //mantenimientos preventivos pendientes de firma supervisor
         $data['mant_prev']=$this->getPendings($filtro,'mant_prev');
+        $data['g_mant_prev']=$this->getPendings($filtro,'mant_prev','P','',true,'',true);
         //servicio tecnico PENDIENTES
         $data['serv_tec_p']=$this->getPendings($filtro,'serv_tec');
+        $data['g_serv_tec_p']=$this->getPendings($filtro,'serv_tec','P','',true,'',true);
         //servicio tecnico PENDIENTES DE INICIAR
         $data['serv_tec_pi_a']=$this->getPendings($filtro,'serv_tec','A');
+        $data['g_serv_tec_pi_a']=$this->getPendings($filtro,'serv_tec','A','',true,'',true);
         //servicio tecnico ABIERTAS
        if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
             $cond1='';
         else
             $cond1=' formulario_registro.tecnico_asignado='.current_user()->id;
         $data['serv_tec_a']=$this->getPendings($filtro,'serv_tec','A',$cond1);
+        $data['g_serv_tec_a']=$this->getPendings($filtro,'serv_tec','A',$cond1,true,'',true);
         //servicio tecnico EN PROCESO
         if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
             $cond2='';
         else
             $cond2=' formulario_registro.tecnico_asignado='.current_user()->id;
         $data['serv_tec_pr']=$this->getPendings($filtro,'serv_tec','PR',$cond2);
+        $data['g_serv_tec_pr']=$this->getPendings($filtro,'serv_tec','PR',$cond2,true,'',true);
          //servicio tecnico EN PROCESO
          $data['serv_tec_10']=array();
          $desde = \Carbon\Carbon::now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
          $filtroExtra="(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')";
-         if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador') or current_user()->isSupervisor())
+         if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador') or current_user()->isSupervisor()){
             $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,false,'');
+            $data['g_serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,false,'',true);
+         }
+          
 
-        if(current_user()->isOnGroup('supervisorc'))
-            $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,true,'');
+        if(current_user()->isOnGroup('supervisorc')){
+             $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,true,'');
+             $data['g_serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,true,'',true);
+        }
+           
 
         if(current_user()->isOnGroup('administrador') or  current_user()->isOnGroup('programador')){
             $dailyCheck =  $this->getPendings($filtro,'daily_check','', "date_format(formulario_registro.created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'",false,true);
+            $data['g_global_sin_daily_check_hoy'] =  $this->getPendings($filtro,'daily_check','', "date_format(formulario_registro.created_at,'%Y-%m-%d') ='".Carbon::now()->format('Y-m-d')."'",false,true);
 
             $dailyCheckString='';
             foreach($dailyCheck as $k=>$dc){

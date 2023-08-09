@@ -26,9 +26,9 @@
                 <th>Registrado por</th>
                 <th>Apellido</th>
                 <th>Cliente</th>
+                <th>Supervisor Cliente</th>
+                <th>Horometro</th>
                 <th>Estatus</th>
-                <th>Semana</th>
-                <th>Dia</th>
                 <th>Turno</th>
                 <th>Actions</th>
             </tr>
@@ -74,9 +74,9 @@
                     {data:'creado_por',name:'users.first_name'},
                     {data:'last_name',name:'users.last_name'},
                     {data:'nombre',name:'clientes_vw.nombre'},
+                    {data:'cliente'},
+                    {data:'horometro'},
                     {data:'estatus'},
-                    {data:'semana'},
-                    {data:'dia_semana'},
                     {data:'turno_chequeo_diario'},
                     {data:'actions'},
                 ],

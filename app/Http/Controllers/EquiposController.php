@@ -128,10 +128,18 @@ class EquiposController extends BaseController
                 ->join('users','formulario_registro.creado_por','users.id')
                 ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
                 ->join('clientes_vw','formulario_registro.cliente_id','clientes_vw.id')
+                ->leftjoin(  DB::raw("(select formulario_registro_id as id,
+                                        max(case when fd.formulario_campo_id in (40,165,282,378,483,587,718,850) then concat(u.first_name,' ',u.last_name) else '' end) as cliente,
+                                        max(case when fd.formulario_campo_id in (968,969) then valor else '' end) as prioridad,
+                                        max(case when fc.nombre ='horometro' and fc.tipo ='number' then valor else '' end) as horometro
+                                        from formulario_data fd,formulario_campos fc ,users u 
+                                        where fd.formulario_campo_id =fc.id 
+                                        and fd.user_id =u.id  
+                                        group by formulario_registro_id)  extra "), 'formulario_registro.id', '=', 'extra.id')
                 ->selectRaw("formulario_registro.*,DATE_FORMAT(formulario_registro.created_at, '%Y-%m-%d') as fecha,DATE_FORMAT(formulario_registro.created_at, '%h:%i %p') as hora,users.first_name,users.last_name,formularios.tipo,
                             clientes_vw.nombre,equipos_vw.numero_parte,
                             concat(users.first_name,' ',users.last_name) as user_name,
-                            (SELECT valor FROM formulario_data WHERE formulario_campo_id IN (968,969) and formulario_registro_id=formulario_registro.id) as prioridad")
+                            extra.cliente,extra.prioridad,extra.horometro")
                 ->whereNull('formulario_registro.deleted_at')
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
