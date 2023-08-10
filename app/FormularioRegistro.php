@@ -159,7 +159,9 @@ class FormularioRegistro extends BaseModel
         //$formularioRegistro = FormularioRegistro::find($this->id);
         $equipo = Equipo::find($this->equipo_id);
         $formulario = Formulario::find($this->formulario_id);
-        $consecutivo = $solicitud->consecutivo_exportable;
+        $consecutivo = '';
+        if($solicitud)
+            $consecutivo = $solicitud->consecutivo_exportable;
         $horometro = $solicitud->horometro;
         $observacion = $solicitud->descripcion;
         $width = 297;
