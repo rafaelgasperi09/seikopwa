@@ -66,21 +66,21 @@
                 "ajax": "{{ url('equipos/reportes_datatable') }}?"+parameters,
                 "columns":[
                     {data:'id'},
-                    {data:'fecha'},
-                    {data:'hora'},
+                    {data:'fecha',name:'formulario_registro.created_at'},
+                    {data:'hora',name:'formulario_registro.created_at'},
                     {data:'tipo',name:'formularios.tipo'},
                     {data:'numero_parte',name:'equipos_vw.numero_parte'},
-                    {data:'prioridad'},
+                    {data:'prioridad',name:'extra.prioridad'},
                     {data:'creado_por',name:'users.first_name'},
                     {data:'last_name',name:'users.last_name'},
                     {data:'nombre',name:'clientes_vw.nombre'},
-                    {data:'cliente'},
-                    {data:'horometro'},
+                    {data:'cliente',name:'extra.horometro'},
+                    {data:'horometro',name:'extra.horometro'},
                     {data:'estatus'},
                     {data:'turno_chequeo_diario'},
                     {data:'actions'},
                 ],
-                
+          
             });
 
 </script>

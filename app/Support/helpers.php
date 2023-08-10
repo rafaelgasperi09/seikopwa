@@ -382,3 +382,25 @@ function clientes_string($clientes){
     
     return $clientes;
 }
+
+function to_table($data){
+    $tabla='<table class="table ">'.PHP_EOL;
+    foreach($data as $r){
+        $tabla.='<tr>'.PHP_EOL;
+        foreach($r as $k=>$v){
+            $tabla.='<th>'.strtoupper($k).'</th>'.PHP_EOL;
+        }
+        $tabla.='</tr>'.PHP_EOL;
+        break;
+    }
+    foreach($data as $r){
+        $tabla.='<tr>'.PHP_EOL;
+        foreach($r as $k=>$v){
+            $tabla.='<td>'.strtoupper($v).'</td>'.PHP_EOL;
+        }
+        $tabla.='</tr>'.PHP_EOL;
+    }
+    $tabla.='</table>';
+
+    return $tabla;
+}

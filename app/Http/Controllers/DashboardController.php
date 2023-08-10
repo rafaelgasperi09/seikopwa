@@ -270,10 +270,30 @@ class DashboardController extends Controller
 
         ///////////////////////////////QUERY0//////////////////////////////////////////
         $cond='';
+
+        if($request->has('grafica') and $request->grafica=='chart0'){
+            if(current_user()->isCliente()){
+                $cond="and e.cliente_id in ($clientes)";
+            }else{
+                $cond= $filtro0;
+            }
+            $query0="select * from (SELECT e.numero_parte,
+            (CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 'propio' ELSE 'alquilado' END) AS tipo
+                        FROM equipos e
+                        WHERE e.deleted_at IS NULL $cond
+                        ORDER BY e.numero_parte)X order by X.tipo desc,X.numero_parte";
+                
+            $res0=DB::connection('crm')->select(DB::Raw($query0));
+            $tabla=to_table($res0);
+            return $tabla;
+        }
+        
+
         if(current_user()->isCliente()){
             if($id<>'cliente'){
                 return redirect(route('dashboard.gmp','cliente'));
             }  
+
             $query0="SELECT 
             'Total de equipos' AS nombre,
             IFNULL(SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END),0) AS propios,
@@ -301,6 +321,29 @@ class DashboardController extends Controller
         }
 
     ///////////////////////////////QUERY1//////////////////////////////////////////
+        if($request->has('grafica') and in_array($request->grafica,['chart1','chart2'])){
+   
+            $query1="SELECT e.numero_parte,
+                    SUM( CASE fr.equipo_status WHEN 'O' THEN 1 ELSE 0 END) AS operativos,
+                    SUM( CASE fr.equipo_status WHEN 'I' THEN 1 ELSE 0 END) AS inoperativos,
+                    SUM( CASE fr.repuesto_status WHEN 'E' THEN 1 ELSE 0 END) AS en_espera,
+                    SUM( CASE fr.repuesto_status WHEN 'L' THEN 1 ELSE 0 END) AS listo
+                    FROM formulario_registro fr
+                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e ,
+                    (SELECT equipo_id,cliente_id,MAX(id) AS id FROM formulario_registro
+                    WHERE  formulario_id=10 AND deleted_at IS NULL
+                    GROUP BY equipo_id,cliente_id)X  
+                    WHERE   fr.equipo_id=e.id AND fr.id=X.id AND fr.cliente_id=X.cliente_id
+                    AND fr.deleted_at IS NULL
+                    $filtro
+                    GROUP BY e.numero_parte";
+                        
+            $res1=DB::select(DB::Raw($query1));
+
+            $tabla=to_table($res1);
+
+            return $tabla;
+        }
         $query1="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportados,
         SUM( CASE fr.equipo_status WHEN 'O' THEN 1 ELSE 0 END) AS operativos,
         SUM( CASE fr.equipo_status WHEN 'I' THEN 1 ELSE 0 END) AS inoperativos,
@@ -335,6 +378,27 @@ class DashboardController extends Controller
         $data['max']=$max;
         $max=0;
          ///////////////////////////////QUERY2//////////////////////////////////////////
+         if($request->has('grafica') and $request->grafica=='chart3'){
+   
+            $query2="SELECT e.numero_parte,COUNT(DISTINCT(fr.equipo_id)) AS reportes,
+                    SUM( CASE fr.estatus WHEN 'P' THEN 1 ELSE 0 END) AS pendientes,
+                    SUM( CASE fr.estatus WHEN 'A' THEN 1 ELSE 0 END) AS asignados,
+                    SUM( CASE fr.estatus WHEN 'PR' THEN 1 ELSE 0 END) AS proceso,
+                    SUM( CASE fr.estatus WHEN 'C' THEN 1 ELSE 0 END) AS cerrado
+                    FROM formulario_registro fr
+                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e 
+                    WHERE   fr.equipo_id=e.id 
+                    AND fr.deleted_at IS NULL
+                    AND fr.formulario_id=10 
+                    $filtro
+                    GROUP BY e.numero_parte";
+                        
+            $res2=DB::select(DB::Raw($query2));
+
+            $tabla=to_table($res2);
+
+            return $tabla;
+        }
         $query2="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportes,
         SUM( CASE fr.estatus WHEN 'P' THEN 1 ELSE 0 END) AS pendientes,
         SUM( CASE fr.estatus WHEN 'A' THEN 1 ELSE 0 END) AS asignados,
@@ -361,6 +425,27 @@ class DashboardController extends Controller
         $data['max']=max($max,$data['max']);
         $max=0;
          ///////////////////////////////QUERY3//////////////////////////////////////////
+         if($request->has('grafica') and $request->grafica=='chart4'){
+   
+            $query3="SELECT e.numero_parte,COUNT(DISTINCT(fr.equipo_id)) AS reportados,
+                    SUM( CASE fr.cotizacion WHEN 'A' THEN 1 ELSE 0 END) AS aprobada,
+                    SUM( CASE IFNULL(fr.cotizacion,'N') WHEN 'N' THEN 1 ELSE 0 END) AS no_apobada
+                    FROM formulario_registro fr
+                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e ,
+                    (SELECT equipo_id,cliente_id,MAX(id) AS id FROM formulario_registro
+                    WHERE  formulario_id=10 AND deleted_at IS NULL
+                    GROUP BY equipo_id,cliente_id)X  
+                    WHERE   fr.equipo_id=e.id AND fr.id=X.id AND fr.cliente_id=X.cliente_id
+                    AND fr.deleted_at IS NULL
+                    $filtro
+                    GROUP BY e.numero_parte";
+                        
+            $res3=DB::select(DB::Raw($query3));
+
+            $tabla=to_table($res3);
+
+            return $tabla;
+        }
         $query3="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportados,
                 SUM( CASE fr.cotizacion WHEN 'A' THEN 1 ELSE 0 END) AS aprobada,
                 SUM( CASE ifnull(fr.cotizacion,'N') when 'N' THEN 1 ELSE 0 END) AS no_apobada
@@ -385,6 +470,26 @@ class DashboardController extends Controller
         $data['max']=max($max,$data['max']);
         $max=0;
         ///////////////////////////////QUERY4//////////////////////////////////////////
+        if($request->has('grafica') and $request->grafica=='chart5'){
+   
+            $query4="SELECT e.numero_parte,COUNT(*) AS reportes,
+                    SUM( CASE fr.estatus WHEN 'P' THEN 1 ELSE 0 END) AS pendientes,
+                    SUM( CASE fr.estatus WHEN 'C' THEN 1 ELSE 0 END) AS cerrado
+                    FROM formulario_registro fr
+                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e ,formularios f
+                    WHERE   fr.equipo_id=e.id 
+                    AND fr.deleted_at IS NULL
+                    AND fr.formulario_id=f.id
+                    AND f.tipo='mant_prev'
+                    $filtro
+                    GROUP BY e.numero_parte";
+                        
+            $res4=DB::select(DB::Raw($query4));
+
+            $tabla=to_table($res4);
+
+            return $tabla;
+        }
         $query4="SELECT fr.cliente_id,c.nombre,COUNT(*) AS reportes,
         SUM( CASE fr.estatus WHEN 'P' THEN 1 ELSE 0 END) AS pendientes,
         SUM( CASE fr.estatus WHEN 'C' THEN 1 ELSE 0 END) AS cerrado
@@ -408,6 +513,25 @@ class DashboardController extends Controller
         $data['max']=max($max,$data['max']);
         $max=0;
         ///////////////////////////////QUERY5//////////////////////////////////////////
+        if($request->has('grafica') and $request->grafica=='chart6'){
+   
+            $query5="SELECT e.numero_parte,COUNT(*) AS reportes,
+                            SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propias,
+                            SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquiladas
+                            FROM formulario_registro fr
+                            LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e 
+                            WHERE   fr.equipo_id=e.id 
+                            AND fr.deleted_at IS NULL
+                            AND fr.formulario_id=10
+                            $filtro
+                            GROUP BY e.numero_parte";
+                        
+            $res5=DB::select(DB::Raw($query5));
+
+            $tabla=to_table($res5);
+
+            return $tabla;
+        }
         $query5="SELECT fr.cliente_id,c.nombre,COUNT(*) AS reportes,
         SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propias,
         SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquiladas
@@ -429,6 +553,25 @@ class DashboardController extends Controller
         $data['max']=max($max,$data['max']);
         $max=0;
         ///////////////////////////////QUERY6//////////////////////////////////////////
+        if($request->has('grafica') and $request->grafica=='chart7'){
+   
+            $query5="SELECT e.numero_parte,COUNT(*) AS reportes,
+                            SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propias,
+                            SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquiladas
+                            FROM formulario_registro fr
+                            LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e 
+                            WHERE   fr.equipo_id=e.id 
+                            AND fr.deleted_at IS NULL
+                            AND fr.formulario_id=10
+                            $filtro
+                            GROUP BY e.numero_parte";
+                        
+            $res5=DB::select(DB::Raw($query5));
+
+            $tabla=to_table($res5);
+
+            return $tabla;
+        }
         $query6="SELECT CONCAT(u.first_name,' ',u.last_name) AS nombre,COUNT(*) AS total 
         FROM formulario_registro fr , equipos_vw e ,users u,role_users ru
         WHERE fr.equipo_id = e.id AND fr.trabajado_por = u.id 
@@ -449,6 +592,24 @@ class DashboardController extends Controller
         $data['max']=max($max,$data['max']);
         $max=0;
         ///////////////////////////////QUERY7//////////////////////////////////////////
+        if($request->has('grafica') and $request->grafica=='chart8'){
+   
+            $query7="SELECT e.numero_parte,COUNT(*) AS total 
+                    FROM formulario_registro fr , equipos_vw e ,users u,role_users ru
+                    WHERE fr.equipo_id = e.id AND fr.trabajado_por = u.id 
+                    AND u.id = ru.user_id 
+                    AND trabajado_por IS NOT NULL 
+                    AND fr.deleted_at IS NULL 
+                    AND ru.role_id =11 
+                    $filtro
+                    GROUP BY e.numero_parte";
+                        
+            $res7=DB::select(DB::Raw($query7));
+
+            $tabla=to_table($res7);
+
+            return $tabla;
+        }
         $query7="SELECT CONCAT(u.first_name,' ',u.last_name) AS nombre,COUNT(*) AS total 
         FROM formulario_registro fr , equipos_vw e ,users u,role_users ru
         WHERE fr.equipo_id = e.id AND fr.trabajado_por = u.id 
@@ -471,6 +632,26 @@ class DashboardController extends Controller
         ///////////////////////////////QUERY7//////////////////////////////////////////
         $filtro2=str_replace('e.','e3.',$filtro);
         $filtro2=str_replace('fr.','fr2.',$filtro2);
+        if($request->has('grafica') and $request->grafica=='chart9'){
+   
+            $query8="SELECT e.numero_parte,
+                    SUM( CASE WHEN fr.estatus='P' THEN 1 ELSE 0 END) AS pendientes,
+                    SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 1 ELSE 0 END) AS turno1,
+                    SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 2 ELSE 0 END) AS turno2,
+                    SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 3 ELSE 0 END) AS turno3
+                    FROM equipos_vw e LEFT JOIN formulario_registro fr ON fr.equipo_id=e.id
+                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id
+                    WHERE fr.formulario_id=2
+                    AND fr.deleted_at IS NULL
+                    $filtro
+                    GROUP BY e.numero_parte ";
+                        
+            $res8=DB::select(DB::Raw($query8));
+
+            $tabla=to_table($res8);
+
+            return $tabla;
+        }
         $query8="SELECT c.nombre, 
            SUM( CASE WHEN fr.estatus='P' THEN 1 ELSE 0 END) AS pendientes,
            SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 1 ELSE 0 END) AS turno1,
@@ -495,7 +676,7 @@ class DashboardController extends Controller
        
         $data['op']=$operativos;
         $data['in']=$inoperativos;
-        $data['number1pct']=100*$operativos/($operativos+$inoperativos);
+        $data['number1pct']=round(100*$operativos/($operativos+$inoperativos),2);
         
         $data['max']=max($max,$data['max']);
         $max=0;
@@ -557,5 +738,18 @@ class DashboardController extends Controller
         $clientes['']='Seleccione el cliente';
         
         return view($view,compact('data','clientes','id'));
+    }
+
+    
+    public function grafico_detalle(Request $request,$id){
+        $lista=array(
+            'chart0','chart1','chart2',
+            'chart3','chart4','chart5',
+            'chart6','chart7','chart8',
+            'chart9',
+        );
+        if($request->has('grafica') and in_array($request->grafica,$lista)){
+            return $this->grafica($request,$id);
+        }
     }
 }

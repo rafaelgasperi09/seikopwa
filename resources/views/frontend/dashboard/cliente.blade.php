@@ -45,7 +45,7 @@
             <div class=" mb-2 col-md-12 col chart"  >
                 <div class="row">
                     <div class="col-12">
-                        <h2>Operatividad:{{$data['number1pct']}}%</h2>
+                        <h2>Operatividad: {{$data['number1pct']}}%</h2>
                     </div>
                     <div class="col-2">
                         <h2 class="text-success">Operativos: {{$data['op']}}</h2>
@@ -59,12 +59,14 @@
         
         $graficos=[0,1,2,3,4,5,6,9];
         $f=['frontend.dashboard.grafico_circular','frontend.dashboard.grafico_columna','frontend.dashboard.grafico_columna2'];
-        $files=array($f[0],$f[1],$f[1],$f[1],$f[1],$f[1],$f[1],$f[1])
-        
+        $files=array($f[0],$f[1],$f[1],$f[1],$f[1],$f[1],$f[1],$f[1]);
         @endphp
         @foreach( $graficos as $j=>$i)         
             <div class=" mb-2 col-md-4 col chart"  >
-                <div class="grafictitle">{{$data['titulo'][$i]}}</div>
+                <div class="grafictitle">
+                    {{$data['titulo'][$i]}}
+                    <a href="#" class="viewdet" gtitle="{{$data['titulo'][$i]}}" gid="chart{{$i}}"><small>Ver</small></a>
+                </div>
                 <div id="chart{{$i}}"></div>
             </div>
             @if(!isset($data['chart'.$i]))
@@ -94,5 +96,5 @@
         </script>
 
    
-
+@include('frontend.dashboard.modal_detalle')
 @stop

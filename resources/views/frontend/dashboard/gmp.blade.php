@@ -72,7 +72,10 @@
                     @endforeach
                 @endif
                 <div class=" mb-2 col-md-{{$col}} col chart"  >
-                    <div class="grafictitle">{{$data['titulo'][$i]}}</div>
+                    <div class="grafictitle">
+                        {{$data['titulo'][$i]}}
+                        <a href="#" class="viewdet" gtitle="{{$data['titulo'][$i]}}" gid="chart{{$i}}"><small>Ver</small></a>
+                    </div>
                     <div id="chart{{$i}}"></div>
                 </div>
                 
@@ -98,5 +101,5 @@
         </script>
 
    
-
+@include('frontend.dashboard.modal_detalle')
 @stop

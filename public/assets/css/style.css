@@ -8559,6 +8559,14 @@ ion-icon {
   background: linear-gradient(87deg, rgba(227,172,19,1) 35%, rgba(5,100,253,1) 100%);
   color:#FFF;
   padding:5px;
+  width:100%;
+}
+.grafictitle>a{
+  float:right;
+  background: #6dcb45;
+  border-radius: 25px;
+  width:40px;
+  text-align:center;
 }
 @media screen and (max-width: 768px){
   .signModal .modal-dialog{
