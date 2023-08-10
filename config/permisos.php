@@ -22,7 +22,6 @@ $permisos["permissions"] = array(
   ),
   "Equipos"=>array(
     "equipos.index"=>"Listar Equipos",
-    "equipos.create"=>"Crear Equipo",
     "equipos.see_daily_check"=>"Ver Daily Check",
     "equipos.create_daily_check"=>"Crear Daily Check",
     "equipos.edit_daily_check"=>"Actualizar Daily Check",
@@ -46,7 +45,6 @@ $permisos["permissions"] = array(
     "equipos.calendar"=>"Ver Calendario (Servicio Técnico)",
     "equipos.dominio"=>"Ver filtro de dominio",
     "equipos.historial"=>"Ver historial de reportes",
-    "equipos.see_control_entrega"=>"Ver Control de Entregas",
    
   ),
   "Taller"=>array(

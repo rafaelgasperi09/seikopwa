@@ -129,13 +129,15 @@ class EquiposController extends BaseController
                 ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
                 ->join('clientes_vw','formulario_registro.cliente_id','clientes_vw.id')
                 ->leftjoin(  DB::raw("(SELECT formulario_registro_id AS id,
-                                    MAX(CASE WHEN fd.tipo ='firma' AND fc.cambio_estatus=1 THEN CONCAT(u.first_name,' ',u.last_name) ELSE '' END) AS cliente,
-                                    MAX(CASE WHEN fd.formulario_campo_id IN (968,969) THEN valor ELSE '' END) AS prioridad,
-                                    MAX(CASE WHEN fc.nombre in ('horometro','lectura_horometro')  AND fc.tipo ='number' THEN valor ELSE '' END) AS horometro
-                                    FROM formulario_data fd,formulario_campos fc ,users u 
-                                    WHERE fd.formulario_campo_id =fc.id 
-                                    AND fd.user_id =u.id  
-                                    GROUP BY formulario_registro_id)  extra "), 'formulario_registro.id', '=', 'extra.id')
+                                        MAX(CASE WHEN fd.tipo ='firma' AND fc.cambio_estatus=1 AND fd.`valor` IS NOT NULL THEN CONCAT(u.first_name,' ',u.last_name) ELSE '' END) AS cliente,
+                                        MAX(CASE WHEN fd.formulario_campo_id IN (968,969) THEN valor ELSE '' END) AS prioridad,
+                                        MAX(CASE WHEN fc.nombre IN ('horometro','lectura_horometro')  AND fc.tipo ='number' THEN valor ELSE '' END) AS horometro
+                                        FROM formulario_data fd,formulario_campos fc ,users u ,formulario_registro fr
+                                        WHERE fd.formulario_campo_id =fc.id 
+                                        AND fd.formulario_registro_id=fr.id
+                                        AND fd.user_id =u.id  
+                                        AND fr.deleted_at IS NULL
+                                        GROUP BY formulario_registro_id)  extra "), 'formulario_registro.id', '=', 'extra.id')
                 ->selectRaw("formulario_registro.*,DATE_FORMAT(formulario_registro.created_at, '%Y-%m-%d') as fecha,DATE_FORMAT(formulario_registro.created_at, '%h:%i %p') as hora,users.first_name,users.last_name,formularios.tipo,
                             clientes_vw.nombre,equipos_vw.numero_parte,
                             concat(users.first_name,' ',users.last_name) as user_name,
