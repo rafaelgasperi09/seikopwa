@@ -90,7 +90,9 @@ class FormularioRegistro extends BaseModel
             $equipo = Equipo::find($this->equipo_id);
             $solicitud = new MontacargaSolicitud();
             $consecutivo = MontacargaConsecutivo::where('consecutivo_opcion','mantenimiento-preventivo')->first();
-            $next_values_consecutivo = $consecutivo->numero_consecutivo+1;
+            $next_values_consecutivo ='';
+            if($consecutivo)
+                $next_values_consecutivo = $consecutivo->numero_consecutivo+1;
             $solicitud->cliente_id = $equipo->cliente_id;
             $solicitud->tipo_servicio_id = 3; //mantenimiento-preventivo
             $solicitud->equipo_id = $equipo->id;
