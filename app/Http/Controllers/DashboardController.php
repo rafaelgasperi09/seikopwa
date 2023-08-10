@@ -238,7 +238,7 @@ class DashboardController extends Controller
         //clientes 
         $clientes=current_user()->crm_clientes_id;
         $clientes=clientes_string($clientes);
-
+        $inoperativos=0;$operativos=0;$totales=0;
         //filtro
         $filtro='';$filtro0='';$view='frontend.dashboard.gmp';
         if(in_array($id,['gmp','cliente'])){
@@ -297,7 +297,9 @@ class DashboardController extends Controller
             $data['chart0']['n'][]=$r->nombre;
             $data['chart0']['p'][]=$r->propios;
             $data['chart0']['a'][]=$r->alquilados;
+            $totales+=$r->propios+$r->alquilados;
         }
+
     ///////////////////////////////QUERY1//////////////////////////////////////////
         $query1="SELECT fr.cliente_id,c.nombre,COUNT(DISTINCT(fr.equipo_id)) AS reportados,
         SUM( CASE fr.equipo_status WHEN 'O' THEN 1 ELSE 0 END) AS operativos,
@@ -326,7 +328,10 @@ class DashboardController extends Controller
             $data['chart2']['l'][]=$r->listo;
 
             $max++;
+            $inoperativos+=$r->inoperativos;
         }
+        $operativos=$totales-$inoperativos;
+
         $data['max']=$max;
         $max=0;
          ///////////////////////////////QUERY2//////////////////////////////////////////
@@ -487,7 +492,11 @@ class DashboardController extends Controller
             $data['chart9']['c'][]=$r->turno3;
             $max++;    
         }
-  
+       
+        $data['op']=$operativos;
+        $data['in']=$inoperativos;
+        $data['number1pct']=100*$operativos/($operativos+$inoperativos);
+        
         $data['max']=max($max,$data['max']);
         $max=0;
         

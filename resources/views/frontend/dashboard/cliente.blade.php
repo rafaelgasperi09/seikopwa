@@ -42,6 +42,19 @@
                     {{ Form::close() }}
                 </div>
             </div>
+            <div class=" mb-2 col-md-12 col chart"  >
+                <div class="row">
+                    <div class="col-12">
+                        <h2>Operatividad:{{$data['number1pct']}}%</h2>
+                    </div>
+                    <div class="col-2">
+                        <h2 class="text-success">Operativos: {{$data['op']}}</h2>
+                    </div>
+                    <div class="col-2">
+                        <h2 class="text-danger">Inoperativos: {{$data['in']}}</h2>
+                    </div>
+                </div>
+            </div>
         @php 
         
         $graficos=[0,1,2,3,4,5,6,9];
