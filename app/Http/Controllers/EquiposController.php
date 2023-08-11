@@ -407,18 +407,18 @@ class EquiposController extends BaseController
         }
 
         if($request->get('tab')== 1){
-            $tab=array('t1'=>'active','t2'=>'','t3'=>'');
-            $tab_content=array('t1'=>'active show','t2'=>'','t3'=>'');
+            $tab=array('t1'=>'active','t2'=>'','t3'=>'','t4'=>'');
+            $tab_content=array('t1'=>'active show','t2'=>'','t3'=>'','t4'=>'');
         }
 
         if($request->get('tab')== 2){
-            $tab=array('t1'=>'','t2'=>'active','t3'=>'');
-            $tab_content=array('t1'=>'','t2'=>'active show','t3'=>'');
+            $tab=array('t1'=>'','t2'=>'active','t3'=>'','t4'=>'');
+            $tab_content=array('t1'=>'','t2'=>'active show','t3'=>'','t4'=>'');
         }
 
         if($request->get('tab')== 3){
-            $tab=array('t1'=>'','t2'=>'','t3'=>'active');
-            $tab_content=array('t1'=>'','t2'=>'','t3'=>'active show');
+            $tab=array('t1'=>'','t2'=>'','t3'=>'active','t4'=>'');
+            $tab_content=array('t1'=>'','t2'=>'','t3'=>'active show','t4'=>'');
         }
         if($request->get('tab')== 4){
             $tab=array('t1'=>'','t2'=>'','t3'=>'','t4'=>'active');

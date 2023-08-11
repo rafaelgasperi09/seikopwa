@@ -48,7 +48,7 @@ class DashboardController extends Controller
         ->When(!empty($filterExtra),function($q)use($filterExtra){
             $q->whereRaw($filterExtra);
         });
-               
+      
         if($group_cliente)
         {
             $clientes= clone $r;
@@ -56,10 +56,9 @@ class DashboardController extends Controller
             return $clientes;
         }
 
-
         if(empty($pluck)){
             return  $r->orderBy('cliente_id','asc')->orderBy('created_at','desc')->get();
-
+          
         }else{
             return $r->pluck('equipo_id');
         }
@@ -179,7 +178,10 @@ class DashboardController extends Controller
             $cond1='';
         else
             $cond1=' formulario_registro.tecnico_asignado='.current_user()->id;
-        $data['serv_tec_a']=$this->getPendings($filtro,'serv_tec','A',$cond1);
+        $data['serv_tec_p']=$this->getPendings($filtro,'serv_tec','P',$cond1);      
+        $data['g_serv_tec_p']=$this->getPendings($filtro,'serv_tec','P',$cond1,true,'',true);
+
+        $data['serv_tec_a']=$this->getPendings($filtro,'serv_tec','A',$cond1);      
         $data['g_serv_tec_a']=$this->getPendings($filtro,'serv_tec','A',$cond1,true,'',true);
         //servicio tecnico EN PROCESO
         if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
