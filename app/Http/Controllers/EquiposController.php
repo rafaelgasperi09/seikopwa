@@ -194,7 +194,7 @@ class EquiposController extends BaseController
             $url=route('equipos.show_daily_check',$row->id);
             $url2=route('reporte.detalle',['form_montacarga_daily_check',$row->id]);   
             $url_edit=route('equipos.edit_daily_check',$row->id);
-            if($row->status<>'C')
+            if($row->estatus<>'C')
                 $puedo_imprimir=false;
         }
           
