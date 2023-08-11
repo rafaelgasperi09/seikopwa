@@ -120,7 +120,8 @@ class EquiposController extends BaseController
     public function reportes_datatable(Request $request,$export_datos=false){
         //dd($request->all());
         $clientes=explode(',',current_user()->crm_clientes_id);
-        $editar=current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador');
+        $editar=(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'));
+
         $carbon = new \Carbon\Carbon();
         $desde = $carbon->now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
         $data = DB::table('formulario_registro')

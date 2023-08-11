@@ -12,7 +12,7 @@
         if(isset($data['serv_tec_p']) and count($data['serv_tec_p'])){ $totstp=count($data['serv_tec_p']);  }
         if(isset($data['serv_tec_pr']) and count($data['serv_tec_pr'])){ $totstpr=count($data['serv_tec_pr']);  }
         if(isset($data['serv_tec_pi_a']) and count($data['serv_tec_pi_a'])){ $totstpia=count($data['serv_tec_pi_a']);  }
-  
+        $abierta0=true;
     @endphp
     <ul class="nav nav-tabs style1 iconed" role="tablist">
        

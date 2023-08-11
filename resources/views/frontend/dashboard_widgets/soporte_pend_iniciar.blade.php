@@ -10,7 +10,7 @@
                 <span class="chip-label ">{{$gsta->cliente()->nombre}} </span>
                 <i class="chip-icon abrirsta"  id="sta{{$gsta->cliente_id}}" >
                     <span class=" pull-right flechasta flechasta{{$gsta->cliente_id}}"title="Ver mas">
-                        @if($k==0)
+                        @if($k==0 and !$abierta0)
                         <ion-icon name="chevron-down-outline"></ion-icon></span>
                         @else
                         <ion-icon name="chevron-up-outline"></ion-icon></span>
@@ -19,7 +19,7 @@
             </div>
             @foreach($data['serv_tec_pi_a']->where('cliente_id',$gsta->cliente_id) as $sta)
             <a href="{{ route('equipos.detail',array('id'=>$sta->equipo()->id)) }}?show=rows&tab=3"
-              class="chip chip-danger chip-media ml-05 mb-05 stalist sta{{$gsta->cliente_id}}" style="width:98%; @if($k!=0)  display:none; @endif">
+              class="chip chip-danger chip-media ml-05 mb-05 stalist sta{{$gsta->cliente_id}}" style="width:98%; @if($k!=0 or $abierta0)  display:none; @endif">
                 <i class="chip-icon">
                     Ir
                 </i>

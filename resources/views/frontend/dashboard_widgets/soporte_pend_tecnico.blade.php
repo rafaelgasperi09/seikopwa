@@ -10,7 +10,7 @@
                 <span class="chip-label ">{{$gst->cliente()->nombre}} </span>
                 <i class="chip-icon abrirgst"  id="gst{{$gst->cliente_id}}" >
                     <span class=" pull-right flechagst flechagst{{$gst->cliente_id}}"title="Ver mas">
-                        @if($k==0)
+                        @if($k==0 and !$abierta0)
                         <ion-icon name="chevron-down-outline"></ion-icon></span>
                         @else
                         <ion-icon name="chevron-up-outline"></ion-icon></span>
@@ -20,7 +20,7 @@
             @foreach($data['serv_tec_p']->where('cliente_id',$gst->cliente_id) as $st)
                 @if( $st->equipo())
                 <a href="{{ route('equipos.detail',array('id'=>$st->equipo()->id)) }}?show=rows&tab=3" 
-                 class="chip chip-danger chip-media ml-05 mb-05 gstlist gst{{$gst->cliente_id}}" style="width:98%; @if($k!=0)  display:none; @endif">
+                 class="chip chip-danger chip-media ml-05 mb-05 gstlist gst{{$gst->cliente_id}}" style="width:98%; @if($k!=0 or $abierta0)  display:none; @endif">
                     <i class="chip-icon">
                         Ir
                     </i>

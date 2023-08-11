@@ -13,7 +13,7 @@
                             <span class="chip-label ">{{$gstpro->cliente()->nombre}} </span>
                             <i class="chip-icon abrirstpr"  id="stpr{{$gstpro->cliente_id}}" >
                                 <span class=" pull-right flechastpr flechastpr{{$gstpro->cliente_id}}"title="Ver mas">
-                                    @if($k==0)
+                                    @if($k==0 and !$abierta0)
                                     <ion-icon name="chevron-down-outline"></ion-icon></span>
                                     @else
                                     <ion-icon name="chevron-up-outline"></ion-icon></span>
@@ -23,7 +23,7 @@
                         @foreach($data['serv_tec_pr']->where('cliente_id',$gstpro->cliente_id)->where('equipo_status','O') as $stpr)
                             @if($stpr->equipo())
                                 <a href="{{ route('equipos.show_tecnical_support',$stpr->id) }}"  
-                                class="chip chip-media ml-05 mb-05 stprlist stpr{{$gstpro->cliente_id}}" style="padding:18px;width:98%; @if($k!=0)  display:none; @endif">
+                                class="chip chip-media ml-05 mb-05 stprlist stpr{{$gstpro->cliente_id}}" style="padding:18px;width:98%; @if($k!=0 or $abierta0)  display:none; @endif">
                                     
                                     <i class="chip-icon bg-{!!getStatusBgColor($stpr->estatus)!!}">
                                         {{$stpr->estatus}}

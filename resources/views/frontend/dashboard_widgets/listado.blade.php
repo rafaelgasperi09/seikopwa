@@ -10,7 +10,7 @@
                 <span class="chip-label">{{$gmp->cliente()->nombre}} </span>
                 <i class="chip-icon abrir"  id="{{$listado['var']}}{{$gmp->cliente_id}}" >
                 <span class=" pull-right flecha{{$listado['var']}} flecha{{$listado['var']}}{{$gmp->cliente_id}}"title="Ver mas">
-                    @if($k==0)
+                    @if($k==0 and !$abierta0)
                     <ion-icon name="chevron-down-outline"></ion-icon></span>
                     @else
                     <ion-icon name="chevron-up-outline"></ion-icon></span>
@@ -22,7 +22,7 @@
                 {{ route('equipos.edit_mant_prev',array('id'=>$mp->id)) }}
             @else
                 {{ route('equipos.detail',array('id'=>$mp->equipo_id)) }}?show=rows&tab=2
-            @endif"  class="chip chip-{{$listado['color']}} chip-media ml-05 mb-05 {{$listado['var']}}list {{$listado['var']}}{{$gmp->cliente_id}}" style="width:98%; @if($k!=0)  display:none; @endif">
+            @endif"  class="chip chip-{{$listado['color']}} chip-media ml-05 mb-05 {{$listado['var']}}list {{$listado['var']}}{{$gmp->cliente_id}}" style="width:98%; @if($k!=0 or $abierta0)  display:none; @endif">
                 <i class="chip-icon">
                     Ir
                 </i>
