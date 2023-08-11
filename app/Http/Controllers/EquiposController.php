@@ -189,10 +189,13 @@ class EquiposController extends BaseController
         $url='';
         $url2='';
         $url_edit='';
+        $puedo_imprimir=true;
         if($row->tipo=='daily_check'){
             $url=route('equipos.show_daily_check',$row->id);
             $url2=route('reporte.detalle',['form_montacarga_daily_check',$row->id]);   
             $url_edit=route('equipos.edit_daily_check',$row->id);
+            if($row->status<>'C')
+                $puedo_imprimir=false;
         }
           
         if($row->tipo=='mant_prev'){
@@ -212,11 +215,14 @@ class EquiposController extends BaseController
                         </a>';
             }
             $ret.= ' <a target="_blank" href="'.$url.'" target="_blank" class="btn btn-primary btn-sm mr-1 " title="Ver detalle">
-                        <ion-icon name="eye-outline" ></ion-icon>
-                    </a>
-                    <a target="_blank" href="'.$url2.'" target="_blank" class="btn btn-warning btn-sm mr-1 "  title="Imprimir formulario">
-                        <ion-icon name="file-tray-stacked-outline"></ion-icon>
-                    </a>';
+                        <ion-icon name="eye-outline" ></ion-icon>';
+            if($puedo_imprimir){
+                $ret.= ' </a>
+                <a target="_blank" href="'.$url2.'" target="_blank" class="btn btn-warning btn-sm mr-1 "  title="Imprimir formulario">
+                    <ion-icon name="file-tray-stacked-outline"></ion-icon>
+                </a>';
+            }            
+    
             return $ret;
         })
         ->rawColumns(['status','numero_parte', 'actions'])
@@ -807,7 +813,10 @@ class EquiposController extends BaseController
     public function imprimirMantPrev($id){
 
         $formularioRegistro = FormularioRegistro::find($id);
-        
+        if($formularioRegistro->status!='C'){
+            request()->session()->flash('message.error','Este reporte debe estar cerrado para poder imprimirse, ya que debe generar una solicitud');
+            return redirect()->back();
+        }
         $pdf = $formularioRegistro->savePdf($formularioRegistro->solicitud(),false);
         return $pdf->Output('mantenimiento_preventivo.pdf', 'I');
     }

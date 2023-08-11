@@ -159,11 +159,15 @@ class FormularioRegistro extends BaseModel
         //$formularioRegistro = FormularioRegistro::find($this->id);
         $equipo = Equipo::find($this->equipo_id);
         $formulario = Formulario::find($this->formulario_id);
-        $consecutivo = '';
-        if($solicitud)
+        $consecutivo = $horometro = $observacion ='';
+        if($solicitud){
             $consecutivo = $solicitud->consecutivo_exportable;
-        $horometro = $solicitud->horometro;
-        $observacion = $solicitud->descripcion;
+            $horometro = $solicitud->horometro;
+            $observacion = $solicitud->descripcion;
+        }
+          
+        
+       
         $width = 297;
         $y_max_pos = 300;
         if(in_array($equipo->tipo->name,['stock-picker']))  {
