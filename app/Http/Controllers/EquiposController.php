@@ -129,19 +129,20 @@ class EquiposController extends BaseController
                 ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
                 ->join('clientes_vw','formulario_registro.cliente_id','clientes_vw.id')
                 ->leftjoin(  DB::raw("(SELECT formulario_registro_id AS id,
-                                        MAX(CASE WHEN fd.tipo ='firma' AND fc.cambio_estatus=1 AND fd.`valor` IS NOT NULL THEN CONCAT(u.first_name,' ',u.last_name) ELSE '' END) AS cliente,
+                                        MAX(CASE WHEN fc.tipo ='firma' AND fc.cambio_estatus=1 AND fd.`valor` IS NOT NULL THEN CONCAT(u.first_name,' ',u.last_name) ELSE '' END) AS cliente,
                                         MAX(CASE WHEN fd.formulario_campo_id IN (968,969) THEN valor ELSE '' END) AS prioridad,
-                                        MAX(CASE WHEN fc.nombre IN ('horometro','lectura_horometro')  AND fc.tipo ='number' THEN valor ELSE '' END) AS horometro
+                                        MAX(CASE WHEN fc.nombre IN ('horometro','lectura_horometro')  AND fc.tipo ='number' THEN valor ELSE '' END) AS horometro,
+                                        u.id AS firmado_por
                                         FROM formulario_data fd,formulario_campos fc ,users u ,formulario_registro fr
                                         WHERE fd.formulario_campo_id =fc.id 
                                         AND fd.formulario_registro_id=fr.id
                                         AND fd.user_id =u.id  
                                         AND fr.deleted_at IS NULL
-                                        GROUP BY formulario_registro_id)  extra "), 'formulario_registro.id', '=', 'extra.id')
+                                        GROUP BY formulario_registro_id,u.id )  extra "), 'formulario_registro.id', '=', 'extra.id')
                 ->selectRaw("formulario_registro.*,DATE_FORMAT(formulario_registro.created_at, '%Y-%m-%d') as fecha,DATE_FORMAT(formulario_registro.created_at, '%h:%i %p') as hora,users.first_name,users.last_name,formularios.tipo,
                             clientes_vw.nombre,equipos_vw.numero_parte,
                             concat(users.first_name,' ',users.last_name) as user_name,
-                            extra.cliente,extra.prioridad,extra.horometro")
+                            extra.cliente,extra.prioridad,extra.horometro,extra.firmado_por")
                 ->whereNull('formulario_registro.deleted_at')
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
@@ -181,6 +182,10 @@ class EquiposController extends BaseController
         })
         ->editColumn('numero_parte', function($row) {
             return "<a target='_blank' href='".route('equipos.detail',$row->equipo_id)."'>$row->numero_parte</a>";
+        })
+        ->editColumn('cliente', function($row) {
+            if($row->cliente)
+            return "<a target='_blank' href='".route('usuarios.detail',$row->firmado_por)."'>$row->cliente</a>";
         })
         ->addColumn('tipo', function($row) {
             return tipo_form($row->tipo);
@@ -225,7 +230,7 @@ class EquiposController extends BaseController
     
             return $ret;
         })
-        ->rawColumns(['status','numero_parte', 'actions'])
+        ->rawColumns(['status','numero_parte', 'cliente','actions'])
         ->toJson();
 
     }
