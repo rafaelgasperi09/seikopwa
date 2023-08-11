@@ -191,9 +191,9 @@ class DashboardController extends Controller
         
         $data['g_serv_tec_a']=$this->getPendings($filtro,'serv_tec','A',$cond1,true,'',true);
         //servicio tecnico EN PROCESO
-        if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
+        
             $cond2='';
-        else
+        if(current_user()->isOnGroup('tecnico'))
             $cond2=' formulario_registro.tecnico_asignado='.current_user()->id;
 
         $data['serv_tec_pr']=$this->getPendings($filtro,'serv_tec','PR',$cond2);
