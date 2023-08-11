@@ -183,9 +183,11 @@ class EquiposController extends BaseController
         ->editColumn('numero_parte', function($row) {
             return "<a target='_blank' href='".route('equipos.detail',$row->equipo_id)."'>$row->numero_parte</a>";
         })
-        ->editColumn('cliente', function($row) {
-            if($row->cliente)
+        ->editColumn('cliente', function($row)use($editar) {
+            if($row->cliente and $editar)
             return "<a target='_blank' href='".route('usuarios.detail',$row->firmado_por)."'>$row->cliente</a>";
+
+            return $row->cliente;
         })
         ->addColumn('tipo', function($row) {
             return tipo_form($row->tipo);
