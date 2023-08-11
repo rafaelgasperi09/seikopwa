@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-6">
                 <h3 class="text-success text-left">OPERATIVOS</h3>
-                @if(count($data['serv_tec_pr']))
+                @if(count($data['g_serv_tec_pr_o']))
                     @foreach($data['g_serv_tec_pr_o'] as $k=>$gstpro)
                         <div class="chip chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
                             <span class="chip-label ">{{$gstpro->cliente()->nombre}} </span>
@@ -62,7 +62,7 @@
             </div>
             <div class="col-6">
                 <h3 class="text-danger text-left">INOPERATIVOS</h3>
-                @if(count($data['serv_tec_pr']))
+                @if(count($data['g_serv_tec_pr_i']))
                     @foreach($data['g_serv_tec_pr_i'] as $l=>$gstpri) 
                         <div class="chip chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
                             <span class="chip-label ">{{$gstpri->cliente()->nombre}} </span>
