@@ -192,7 +192,7 @@ class DashboardController extends Controller
         foreach($data['serv_tec_pr'] as $x){
             $array[]=$x->cliente()->nombre.'---'.$x->equipo()->numero_parte;
         }
-        dd($array);
+    
         if(!empty($cond2)){$cond2.=' and';}
         $cond3=$cond2." equipo_status='O'";
         $data['g_serv_tec_pr_o']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);
