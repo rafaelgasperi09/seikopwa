@@ -20,7 +20,7 @@
                                     @endif
                             </i>
                         </div>
-                        @foreach($data['serv_tec_pr']->where('cliente_id',$gstpro->cliente_id) as $stpr)
+                        @foreach($data['serv_tec_pr']->where('cliente_id',$gstpro->cliente_id)->where('equipo_status','O') as $stpr)
                             @if($stpr->equipo())
                                 <a href="{{ route('equipos.show_tecnical_support',$stpr->id) }}"  
                                 class="chip chip-media ml-05 mb-05 stprlist stpr{{$gstpro->cliente_id}}" style="padding:18px;width:98%; @if($k!=0)  display:none; @endif">

@@ -188,10 +188,6 @@ class DashboardController extends Controller
             $cond2=' formulario_registro.tecnico_asignado='.current_user()->id;
 
         $data['serv_tec_pr']=$this->getPendings($filtro,'serv_tec','PR',$cond2);
-        $array=array();
-        foreach($data['serv_tec_pr'] as $x){
-            $array[]=$x->cliente()->nombre.'---'.$x->equipo()->numero_parte;
-        }
     
         if(!empty($cond2)){$cond2.=' and';}
         $cond3=$cond2." equipo_status='O'";
