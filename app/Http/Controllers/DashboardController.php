@@ -48,14 +48,16 @@ class DashboardController extends Controller
         ->When(!empty($filterExtra),function($q)use($filterExtra){
             $q->whereRaw($filterExtra);
         });
-               
+
+      /*if($formType=='serv_tec' and $status=='A')
+      dd($r->get());*/
+
         if($group_cliente)
         {
             $clientes= clone $r;
             $clientes=$clientes->groupBy('cliente_id')->select('cliente_id')->get();
             return $clientes;
         }
-
 
         if(empty($pluck)){
             return  $r->orderBy('cliente_id','asc')->orderBy('created_at','desc')->get();
@@ -169,17 +171,24 @@ class DashboardController extends Controller
         $data['mant_prev']=$this->getPendings($filtro,'mant_prev');
         $data['g_mant_prev']=$this->getPendings($filtro,'mant_prev','P','',true,'',true);
         //servicio tecnico PENDIENTES
-        $data['serv_tec_p']=$this->getPendings($filtro,'serv_tec');
+       
         $data['g_serv_tec_p']=$this->getPendings($filtro,'serv_tec','P','',true,'',true);
+        $data['serv_tec_p']=$this->getPendings($filtro,'serv_tec');
         //servicio tecnico PENDIENTES DE INICIAR
         $data['serv_tec_pi_a']=$this->getPendings($filtro,'serv_tec','A');
         $data['g_serv_tec_pi_a']=$this->getPendings($filtro,'serv_tec','A','',true,'',true);
         //servicio tecnico ABIERTAS
        if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
-            $cond1='';
-        else
+           $cond1=''; 
+        elseif(current_user()->isOnGroup('tecnico'))
             $cond1=' formulario_registro.tecnico_asignado='.current_user()->id;
-        $data['serv_tec_a']=$this->getPendings($filtro,'serv_tec','A',$cond1);
+        else
+            $cond1=' formulario_registro.tecnico_asignado is null';
+        $data['serv_tec_p']=$this->getPendings($filtro,'serv_tec','P',$cond1);      
+        $data['g_serv_tec_p']=$this->getPendings($filtro,'serv_tec','P',$cond1,true,'',true);
+
+        $data['serv_tec_a']=$this->getPendings($filtro,'serv_tec','A',$cond1);  
+        
         $data['g_serv_tec_a']=$this->getPendings($filtro,'serv_tec','A',$cond1,true,'',true);
         //servicio tecnico EN PROCESO
         if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
@@ -188,6 +197,7 @@ class DashboardController extends Controller
             $cond2=' formulario_registro.tecnico_asignado='.current_user()->id;
 
         $data['serv_tec_pr']=$this->getPendings($filtro,'serv_tec','PR',$cond2);
+    
         if(!empty($cond2)){$cond2.=' and';}
         $cond3=$cond2." equipo_status='O'";
         $data['g_serv_tec_pr_o']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);

@@ -90,7 +90,9 @@ class FormularioRegistro extends BaseModel
             $equipo = Equipo::find($this->equipo_id);
             $solicitud = new MontacargaSolicitud();
             $consecutivo = MontacargaConsecutivo::where('consecutivo_opcion','mantenimiento-preventivo')->first();
-            $next_values_consecutivo = $consecutivo->numero_consecutivo+1;
+            $next_values_consecutivo ='';
+            if($consecutivo)
+                $next_values_consecutivo = $consecutivo->numero_consecutivo+1;
             $solicitud->cliente_id = $equipo->cliente_id;
             $solicitud->tipo_servicio_id = 3; //mantenimiento-preventivo
             $solicitud->equipo_id = $equipo->id;
@@ -157,9 +159,15 @@ class FormularioRegistro extends BaseModel
         //$formularioRegistro = FormularioRegistro::find($this->id);
         $equipo = Equipo::find($this->equipo_id);
         $formulario = Formulario::find($this->formulario_id);
-        $consecutivo = $solicitud->consecutivo_exportable;
-        $horometro = $solicitud->horometro;
-        $observacion = $solicitud->descripcion;
+        $consecutivo = $horometro = $observacion ='';
+        if($solicitud){
+            $consecutivo = $solicitud->consecutivo_exportable;
+            $horometro = $solicitud->horometro;
+            $observacion = $solicitud->descripcion;
+        }
+          
+        
+       
         $width = 297;
         $y_max_pos = 300;
         if(in_array($equipo->tipo->name,['stock-picker']))  {

@@ -1,11 +1,11 @@
 <div class="card text-white bg-light">
     <div class="card-header">
         <span ><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
-        <span class="card-title" id="tot_equipos">{{$totsta}} </span title="Se muestra la lista al tecnico asignado">Pendientes de iniciar</span>
+        <span class="card-title" id="tot_equipos">{{$totstpia}} </span title="Se muestra la lista al tecnico asignado">Pendientes de iniciar</span>
     </div>
     <div class="card-body text-right">
-    @if(count($data['serv_tec_a']))
-        @foreach($data['g_serv_tec_a'] as $k=>$gsta)
+    @if(count($data['serv_tec_pi_a']))
+        @foreach($data['g_serv_tec_pi_a'] as $k=>$gsta)
             <div class="chip chip-danger chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
                 <span class="chip-label ">{{$gsta->cliente()->nombre}} </span>
                 <i class="chip-icon abrirsta"  id="sta{{$gsta->cliente_id}}" >
@@ -17,7 +17,7 @@
                         @endif
                 </i>
             </div>
-            @foreach($data['serv_tec_a']->where('cliente_id',$gsta->cliente_id) as $sta)
+            @foreach($data['serv_tec_pi_a']->where('cliente_id',$gsta->cliente_id) as $sta)
             <a href="{{ route('equipos.detail',array('id'=>$sta->equipo()->id)) }}?show=rows&tab=3"
               class="chip chip-danger chip-media ml-05 mb-05 stalist sta{{$gsta->cliente_id}}" style="width:98%; @if($k!=0)  display:none; @endif">
                 <i class="chip-icon">

@@ -21,7 +21,9 @@ class PdfController extends Controller
         $formulario = Formulario::find($formularioRegistro->formulario_id);
         $equipo = Equipo::find($formularioRegistro->equipo_id);
         $solicitud = MontacargaSolicitud::findOrFail($formularioRegistro->solicitud_id);
-        $consecutivo = $solicitud->consecutivo_exportable;
+        $consecutivo ='';
+        if($solicitud)
+            $consecutivo = $solicitud->consecutivo_exportable;
         $horometro_campo = $formulario->campos()->whereNombre('horometro')->first();
         $horometo = $formularioRegistro->data()->whereFormularioCampoId($horometro_campo->id)->first()->valor;
 

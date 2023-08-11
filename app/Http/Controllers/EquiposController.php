@@ -129,19 +129,20 @@ class EquiposController extends BaseController
                 ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
                 ->join('clientes_vw','formulario_registro.cliente_id','clientes_vw.id')
                 ->leftjoin(  DB::raw("(SELECT formulario_registro_id AS id,
-                                        MAX(CASE WHEN fd.tipo ='firma' AND fc.cambio_estatus=1 AND fd.`valor` IS NOT NULL THEN CONCAT(u.first_name,' ',u.last_name) ELSE '' END) AS cliente,
+                                        MAX(CASE WHEN fc.tipo ='firma' AND fc.cambio_estatus=1 AND fd.`valor` IS NOT NULL THEN CONCAT(u.first_name,' ',u.last_name) ELSE '' END) AS cliente,
                                         MAX(CASE WHEN fd.formulario_campo_id IN (968,969) THEN valor ELSE '' END) AS prioridad,
-                                        MAX(CASE WHEN fc.nombre IN ('horometro','lectura_horometro')  AND fc.tipo ='number' THEN valor ELSE '' END) AS horometro
+                                        MAX(CASE WHEN fc.nombre IN ('horometro','lectura_horometro')  AND fc.tipo ='number' THEN valor ELSE '' END) AS horometro,
+                                        u.id AS firmado_por
                                         FROM formulario_data fd,formulario_campos fc ,users u ,formulario_registro fr
                                         WHERE fd.formulario_campo_id =fc.id 
                                         AND fd.formulario_registro_id=fr.id
                                         AND fd.user_id =u.id  
                                         AND fr.deleted_at IS NULL
-                                        GROUP BY formulario_registro_id)  extra "), 'formulario_registro.id', '=', 'extra.id')
+                                        GROUP BY formulario_registro_id,u.id )  extra "), 'formulario_registro.id', '=', 'extra.id')
                 ->selectRaw("formulario_registro.*,DATE_FORMAT(formulario_registro.created_at, '%Y-%m-%d') as fecha,DATE_FORMAT(formulario_registro.created_at, '%h:%i %p') as hora,users.first_name,users.last_name,formularios.tipo,
                             clientes_vw.nombre,equipos_vw.numero_parte,
                             concat(users.first_name,' ',users.last_name) as user_name,
-                            extra.cliente,extra.prioridad,extra.horometro")
+                            extra.cliente,extra.prioridad,extra.horometro,extra.firmado_por")
                 ->whereNull('formulario_registro.deleted_at')
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
@@ -182,6 +183,10 @@ class EquiposController extends BaseController
         ->editColumn('numero_parte', function($row) {
             return "<a target='_blank' href='".route('equipos.detail',$row->equipo_id)."'>$row->numero_parte</a>";
         })
+        ->editColumn('cliente', function($row) {
+            if($row->cliente)
+            return "<a target='_blank' href='".route('usuarios.detail',$row->firmado_por)."'>$row->cliente</a>";
+        })
         ->addColumn('tipo', function($row) {
             return tipo_form($row->tipo);
         })
@@ -189,6 +194,7 @@ class EquiposController extends BaseController
         $url='';
         $url2='';
         $url_edit='';
+        $puedo_imprimir=true;
         if($row->tipo=='daily_check'){
             $url=route('equipos.show_daily_check',$row->id);
             $url2=route('reporte.detalle',['form_montacarga_daily_check',$row->id]);   
@@ -199,6 +205,8 @@ class EquiposController extends BaseController
             $url=route('equipos.show_mant_prev',$row->id);  
             $url2=route('equipos.imprimir_mant_prev',$row->id);  
             $url_edit=route('equipos.edit_mant_prev',$row->id);  
+            if($row->estatus<>'C')
+                $puedo_imprimir=false;
         }
         if($row->tipo=='serv_tec'){
             $url=route('equipos.show_tecnical_support',$row->id);
@@ -212,14 +220,17 @@ class EquiposController extends BaseController
                         </a>';
             }
             $ret.= ' <a target="_blank" href="'.$url.'" target="_blank" class="btn btn-primary btn-sm mr-1 " title="Ver detalle">
-                        <ion-icon name="eye-outline" ></ion-icon>
-                    </a>
-                    <a target="_blank" href="'.$url2.'" target="_blank" class="btn btn-warning btn-sm mr-1 "  title="Imprimir formulario">
-                        <ion-icon name="file-tray-stacked-outline"></ion-icon>
-                    </a>';
+                        <ion-icon name="eye-outline" ></ion-icon>';
+            if($puedo_imprimir){
+                $ret.= ' </a>
+                <a target="_blank" href="'.$url2.'" target="_blank" class="btn btn-warning btn-sm mr-1 "  title="Imprimir formulario">
+                    <ion-icon name="file-tray-stacked-outline"></ion-icon>
+                </a>';
+            }            
+    
             return $ret;
         })
-        ->rawColumns(['status','numero_parte', 'actions'])
+        ->rawColumns(['status','numero_parte', 'cliente','actions'])
         ->toJson();
 
     }
@@ -401,18 +412,18 @@ class EquiposController extends BaseController
         }
 
         if($request->get('tab')== 1){
-            $tab=array('t1'=>'active','t2'=>'','t3'=>'');
-            $tab_content=array('t1'=>'active show','t2'=>'','t3'=>'');
+            $tab=array('t1'=>'active','t2'=>'','t3'=>'','t4'=>'');
+            $tab_content=array('t1'=>'active show','t2'=>'','t3'=>'','t4'=>'');
         }
 
         if($request->get('tab')== 2){
-            $tab=array('t1'=>'','t2'=>'active','t3'=>'');
-            $tab_content=array('t1'=>'','t2'=>'active show','t3'=>'');
+            $tab=array('t1'=>'','t2'=>'active','t3'=>'','t4'=>'');
+            $tab_content=array('t1'=>'','t2'=>'active show','t3'=>'','t4'=>'');
         }
 
         if($request->get('tab')== 3){
-            $tab=array('t1'=>'','t2'=>'','t3'=>'active');
-            $tab_content=array('t1'=>'','t2'=>'','t3'=>'active show');
+            $tab=array('t1'=>'','t2'=>'','t3'=>'active','t4'=>'');
+            $tab_content=array('t1'=>'','t2'=>'','t3'=>'active show','t4'=>'');
         }
         if($request->get('tab')== 4){
             $tab=array('t1'=>'','t2'=>'','t3'=>'','t4'=>'active');
@@ -807,7 +818,10 @@ class EquiposController extends BaseController
     public function imprimirMantPrev($id){
 
         $formularioRegistro = FormularioRegistro::find($id);
-        
+        if($formularioRegistro->status!='C'){
+            request()->session()->flash('message.error','Este reporte debe estar cerrado para poder imprimirse, ya que debe generar una solicitud');
+            return redirect()->back();
+        }
         $pdf = $formularioRegistro->savePdf($formularioRegistro->solicitud(),false);
         return $pdf->Output('mantenimiento_preventivo.pdf', 'I');
     }

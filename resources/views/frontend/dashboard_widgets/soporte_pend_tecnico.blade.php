@@ -33,22 +33,7 @@
 
     @endif
     </div>
-    @if(count($data['serv_tec_pi_a']))
-    <div class="card-header">
-        <span class="card-title" id="tot_equipos">{{$totstp}} </span>Pendientes por Iniciar</span>
-    </div>
-    <div class="card-body">
-        @foreach($data['serv_tec_pi_a'] as $st)
-        <a href="{{ route('equipos.detail',array('id'=>$st->equipo()->id)) }}?show=rows&tab=3"  class="chip chip-warning chip-media ml-05 mb-05" style="padding:18px; width:100%">
-            <i class="chip-icon">
-                Ir
-            </i>
-            <span class="chip-label">{{$st->equipo()->numero_parte}} </span>
-            <div class="fecha pull-right"><span title="Fecha de asignacion de tecnico">{{transletaDate($st->fecha_asignacion,true,'')}}</span> <br/> <span title="Tecnico asignado"> {{$st->tecnicoAsignado->getFullName()}}</span></div>
-        </a>
-        @endforeach
-    </div>
-    @endif
+    
 </div>    
 <br/>
 <script>
