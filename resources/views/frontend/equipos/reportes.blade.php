@@ -26,7 +26,7 @@
                 <th>Registrado por</th>
                 <th>Apellido</th>
                 <th>Cliente</th>
-                <th>Supervisor Cliente</th>
+                <th>Firma Cliente</th>
                 <th>Horometro</th>
                 <th>Estatus</th>
                 <th>Turno</th>
