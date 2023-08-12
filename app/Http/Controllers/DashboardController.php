@@ -161,14 +161,35 @@ class DashboardController extends Controller
                 }
             }
         }
+          $cond1=''; 
         if( current_user()->isOnGroup('supervisorc') or  current_user()->isOnGroup('programador') ){
             //daily check pendientes de firma supervisor
-            $data['daily_check']=$this->getPendings($filtro,'daily_check');
+            if(current_user()->isOnGroup('supervisorc')){
+             $lista=DB::select(DB::Raw("SELECT fd.id FROM formulario_data fd,formulario_campos fc,
+                                    formulario_registro fr 
+                                    WHERE fd.formulario_campo_id=fc.id 
+                                    AND fd.formulario_registro_id=fr.id
+                                    AND fc.nombre='supervisor_id'
+                                    AND fr.deleted_at IS NULL
+                                    AND fr.estatus='P'
+                                    AND fd.valor=".current_user()->id));
+              $lista=collect($lista)->pluck('id')->toArray();
+
+              $cond1="formulario_registro.id in (SELECT fr.id  FROM formulario_data fd,formulario_campos fc,
+              formulario_registro fr 
+              WHERE fd.formulario_campo_id=fc.id 
+              AND fd.formulario_registro_id=fr.id
+              AND fc.nombre='supervisor_id'
+              AND fr.deleted_at IS NULL
+              AND fr.estatus='P'
+              AND fd.valor=".current_user()->id.")";
+            }
+            $data['daily_check']=$this->getPendings($filtro,'daily_check','P',$cond1);
             $data['g_daily_check']=$this->getPendings($filtro,'daily_check','P','',true,'',true);
         }
 
         //mantenimientos preventivos pendientes de firma supervisor
-        $data['mant_prev']=$this->getPendings($filtro,'mant_prev');
+        $data['mant_prev']=$this->getPendings($filtro,'mant_prev','P',$cond1);
         $data['g_mant_prev']=$this->getPendings($filtro,'mant_prev','P','',true,'',true);
         //servicio tecnico PENDIENTES
        
