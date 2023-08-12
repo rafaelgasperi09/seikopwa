@@ -347,7 +347,7 @@ class DashboardController extends Controller
                     AND fr.deleted_at IS NULL
                     $filtro
                     GROUP BY e.numero_parte";
-                        
+                
             $res1=DB::select(DB::Raw($query1));
 
             $tabla=to_table($res1);
@@ -369,6 +369,7 @@ class DashboardController extends Controller
         $filtro
         GROUP BY fr.cliente_id,c.nombre
         ";
+
         $res1=DB::select(DB::Raw($query1));
         foreach($res1 as $r){
             $data['chart1']['n'][]=$r->nombre;
@@ -379,7 +380,7 @@ class DashboardController extends Controller
             $data['chart2']['n'][]=$r->nombre;
             $data['chart2']['e'][]=$r->en_espera;
             $data['chart2']['l'][]=$r->listo;
-
+    
             $max++;
             $inoperativos+=$r->inoperativos;
         }
@@ -757,8 +758,9 @@ class DashboardController extends Controller
             'chart3','chart4','chart5',
             'chart6','chart7','chart8',
             'chart9',
-        );
+        ); 
         if($request->has('grafica') and in_array($request->grafica,$lista)){
+
             return $this->grafica($request,$id);
         }
     }
