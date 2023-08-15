@@ -71,10 +71,13 @@ $permisos["permissions"] = array(
     "sp.parteB"=>"Segunda Parte del proceso (edicion hora entrada)",
     "sp.parteC"=>"Tercera Parte 2 del proceso (edicion hora salida)",
   ),
+  "Dashboard"=>array(
+    "dashboard.gmp"=>"Ver dashboard"
+  ),
  
 );
 
-if(env('APP_ENV')=='local'){
+if(env('APP_DEBUG')=='true'){
     $permisos["permissions"]["Formularios"]=array(
       "formularios.index"=>"Formularios index",
       "formularios.create"=>"Formularios create",
