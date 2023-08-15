@@ -16,7 +16,7 @@
             @foreach($data['global_sin_daily_check_hoy'] as $dce)
             <tr>
                 <td>
-                    <a href="{{ route('equipos.detail',array('id'=>$stpr->id)) }}?show=rows&tab=1" class="chip  chip-media ml-05 mb-05"  style="width:100%;background-color:#b9d1ee">
+                    <a href="{{ route('equipos.detail',array('id'=>$stpr->equipo_id)) }}?show=rows&tab=1" class="chip  chip-media ml-05 mb-05"  style="width:100%;background-color:#b9d1ee">
                         <i class="chip-icon2 bg-primary">
                             {{$dce["equipos"]}}
                         </i>
