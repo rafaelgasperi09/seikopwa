@@ -34,7 +34,7 @@
         $('#detalle_grafico').html('');
         $('#detalle_grafico').html(gtitle);
         $.ajax({
-                url: '{{ url("/dashboard/cliente/detalle") }}',
+                url: '{{ url("/dashboard/{$id}/detalle") }}',
                 dataType: "html",
                 data: "grafica="+gid+"{!!$params!!}",
                 type: 'get',

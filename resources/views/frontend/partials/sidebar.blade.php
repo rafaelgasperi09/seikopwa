@@ -39,29 +39,30 @@
                             </div>
                         </a>
                     </li>
-                    @if(!current_user()->isCliente())
-                    <li>
-                        <a href="{{ route('dashboard.gmp',['id'=>'gmp']) }}" class="item" title="Dashboard">
-                            <div class="icon-box bg-primary">
-                                <ion-icon name="analytics-outline"></ion-icon>
-                            </div>
-                            <div >
-                                Dashboard GMP
-                            </div>
-                        </a>
-                    </li>
+                    @if( \Sentinel::hasAccess('dashboard.gmp'))
+                        @if(!current_user()->isCliente())
+                        <li>
+                            <a href="{{ route('dashboard.gmp',['id'=>'gmp']) }}" class="item" title="Dashboard">
+                                <div class="icon-box bg-primary">
+                                    <ion-icon name="analytics-outline"></ion-icon>
+                                </div>
+                                <div >
+                                    Dashboard GMP
+                                </div>
+                            </a>
+                        </li>
+                        @endif
+                        <li>
+                            <a href="{{ route('dashboard.gmp',['id'=>'cliente']) }}" class="item" title="Dashboard">
+                                <div class="icon-box bg-primary">
+                                    <ion-icon name="analytics-outline"></ion-icon>
+                                </div>
+                                <div >
+                                    Dashboard Cliente
+                                </div>
+                            </a>
+                        </li>
                     @endif
-                    <li>
-                        <a href="{{ route('dashboard.gmp',['id'=>'cliente']) }}" class="item" title="Dashboard">
-                            <div class="icon-box bg-primary">
-                                <ion-icon name="analytics-outline"></ion-icon>
-                            </div>
-                            <div >
-                                Dashboard Cliente
-                            </div>
-                        </a>
-                    </li>
-                   
                     @if(\Sentinel::hasAccess('equipos.index'))
                     <li>
                         <a href="{{ route('equipos.index') }}" class="item" title="Equipos">

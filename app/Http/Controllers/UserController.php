@@ -25,13 +25,27 @@ class UserController extends Controller
     }
 
     public function search(Request $request){
-
-        $data=User::where('first_name','like',"%".$request->q."%")
+        $clientes=Cliente::where('nombre','like',"%".$request->q."%")->get()->pluck('id');
+        $where='(';
+        foreach($clientes as $k=>$c){ 
+            if($k==0)
+                $where.="crm_clientes_id like '%$c%'";
+            else
+                $where.=" or crm_clientes_id like '%$c%'";
+        }
+        $where.=')';
+        
+        $data=User::when($where<>'()',function($q) use ($where) {
+                        $q->whereRaw($where);
+                    })
+                    ->orwhere('first_name','like',"%".$request->q."%")
                     ->orWhere('last_name','like',"%".$request->q."%")
                     ->orWhere('email','like',"%".$request->q."%")
                     ->orWhereHas('roles',function ($q) use($request){
                         $q->where('name','like',"%".$request->q."%");
                     })
+                    
+
                     ->paginate(10);
 
 
