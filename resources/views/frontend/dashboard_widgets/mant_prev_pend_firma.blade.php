@@ -18,7 +18,7 @@
                 </i>
             </div>
             @foreach($data['mant_prev']->where('cliente_id',$gmp->cliente_id) as $mp)
-            <a href="@if(Sentinel::getUser()->hasAccess('equipos.edit_mant_prev'))
+            <a href="@if(Sentinel::getUser()->hasAccess('equipos.edit_mant_prev') and false)
                 {{ route('equipos.edit_mant_prev',array('id'=>$mp->id)) }}
             @else
                 {{ route('equipos.detail',array('id'=>$mp->equipo_id)) }}?show=rows&tab=2
