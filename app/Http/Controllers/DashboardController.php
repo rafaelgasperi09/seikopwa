@@ -314,9 +314,9 @@ class DashboardController extends Controller
             $query0="select * from (SELECT e.numero_parte,
             (CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN '$textos[0]' ELSE '$textos[1]' END) AS tipo
                         FROM equipos e
-                        WHERE e.deleted_at IS NULL $cond
+                        WHERE e.deleted_at IS NULL $cond 
                         ORDER BY e.numero_parte)X order by X.tipo desc,X.numero_parte";
-                
+            
             $res0=DB::connection('crm')->select(DB::Raw($query0));
             $tabla=to_table($res0);
             return $tabla;
@@ -333,7 +333,8 @@ class DashboardController extends Controller
             IFNULL(SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END),0) AS propios,
             IFNULL(SUM(CASE WHEN (e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END),0) AS alquilados
             FROM equipos e
-            where e.deleted_at is null and e.cliente_id in ($clientes)";
+            where e.deleted_at is null and e.cliente_id in ($clientes) $filtro0";
+
         }else{
             $query0="SELECT 
             'Total de equipos' AS nombre,
