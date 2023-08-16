@@ -1,6 +1,7 @@
 @php
     $asignar_sup=current_user()->isOnGroup('supervisor-alquiler') || current_user()->isOnGroup('supervisor-repuestos') || current_user()->isOnGroup('programador');
     $equipo_repuesto=current_user()->isOnGroup('tecnico') || current_user()->isOnGroup('supervisor-servicio-tecnico') || current_user()->isOnGroup('programador') || current_user()->isOnGroup('administrador');
+
     $accidente_cotizacion=current_user()->isOnGroup('tecnico') || current_user()->isSupervisor() || current_user()->isOnGroup('programador') || current_user()->isOnGroup('administrador');
 @endphp
 <div class="section mt-2" style="overflow-x:auto">
