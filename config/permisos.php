@@ -72,8 +72,8 @@ $permisos["permissions"] = array(
     "sp.parteC"=>"Tercera Parte 2 del proceso (edicion hora salida)",
   ),
   "Dashboard"=>array(
-    "dashboard.gmp"=>"Ver dashboard "
-  ),
+    "dashboard.gmp"=>"Ver dashboard"
+  )
  
 );
 
