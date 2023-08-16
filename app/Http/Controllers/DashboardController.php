@@ -282,8 +282,9 @@ class DashboardController extends Controller
             }
         }
            
-        if($request->has('cliente_id') and !empty($request->cliente_id)){
+        if(!empty($request->cliente_id)){
             $filtro0="and e.cliente_id =$request->cliente_id".PHP_EOL;
+            if($request->has('cliente_id'))
             $filtro.="and fr.cliente_id='$request->cliente_id'".PHP_EOL;
         }
             
