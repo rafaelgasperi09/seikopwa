@@ -77,7 +77,8 @@
                         </div>
                         @foreach($data['serv_tec_pr']->where('cliente_id',$gstpri->cliente_id)->where('equipo_status','I') as $stpri)
                             @if($stpri->equipo())
-                                <a href="{{ route('equipos.detail',array('id'=>$stpr->equipo_id)) }}?show=rows&tab=3"  
+
+                                <a href="{{ route('equipos.detail',array('id'=>$stpri->equipo_id)) }}?show=rows&tab=3&xxx=tttt"  
                                 class="chip chip-media ml-05 mb-05 stprlist_i stpri{{$gstpri->cliente_id}}" style="padding:18px;width:98%; @if($l!=0)  display:none; @endif">
                                     
                                     <i class="chip-icon bg-{!!getStatusBgColor($stpri->estatus)!!}">
