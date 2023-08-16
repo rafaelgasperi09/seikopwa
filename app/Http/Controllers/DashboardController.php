@@ -189,7 +189,7 @@ class DashboardController extends Controller
         }
 
         //mantenimientos preventivos pendientes de firma supervisor
-        $data['mant_prev']=$this->getPendings($filtro,'mant_prev','P',$cond1);
+        $data['mant_prev']=$this->getPendings($filtro,'mant_prev','P','');
         $data['g_mant_prev']=$this->getPendings($filtro,'mant_prev','P','',true,'',true);
         //servicio tecnico PENDIENTES
        
