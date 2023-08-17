@@ -108,7 +108,7 @@
                     </div>
                 </li>
             @endif
-            @if(\Sentinel::hasAnyAccess(['equipos.see_control_entrega']))
+            @if(\Sentinel::hasAnyAccess(['equipos.show_control_entrega']))
                 <li>
                     <div class="item">
                         <div class="icon-box bg-success">
@@ -124,7 +124,7 @@
                                     </span>
                                 </a>
                                 @endif
-                                @if(\Sentinel::hasAnyAccess(['equipos.see_control_entrega']))
+                                @if(\Sentinel::hasAnyAccess(['equipos.show_control_entrega']))
                                 <a href="{{route('equipos.detail',['id'=>$e->id])}}?show=rows&tab=3"  title="Ver">
                                     <span class="iconedbox bg-success">
                                     <ion-icon name="eye-outline"></ion-icon>
