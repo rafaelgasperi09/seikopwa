@@ -195,6 +195,7 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         
         Route::get('/download_hidratacion/{id}', array('as' => 'baterias.download_hidratacion', 'uses' => 'BateriaController@download_hidratacion'));
     
+        Route::get('/{id}/delete', array('as' => 'baterias.delete_reportes', 'uses' => 'BateriaController@deleteRegistroForm'))->middleware('hasAccess');
        
     });
 

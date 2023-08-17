@@ -189,7 +189,7 @@
             "processing": true,
             "serverSide": true,
             "autoWidth": false,
-            "ajax": "{{ url('/equipos/reportes_datatable',array('id'=>$data->id)) }}",
+            "ajax": "{{ route('baterias.datatable',array('id'=>$data->id)) }}",
             "columns":[
                 {data:'accion'},
                 {data:'fecha'},

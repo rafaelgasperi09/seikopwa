@@ -144,9 +144,9 @@ class BateriaController extends Controller
     }
 
     public function ServicioTecnicoShow($id,Request $request){
- 
+    
         $data = FormularioRegistro::findOrFail($id);
-       
+
         $componente = Componente::findOrFail($data->componente_id);
         $formulario = Formulario::whereNombre('form_bat_serv_tec')->first();
         $formularioData =$data->data()->get()->pluck('valor','formulario_campo_id');
@@ -341,5 +341,18 @@ class BateriaController extends Controller
             return Excel::download(new HidratacionExport($id), 'hidratacion.xlsx');
         }
 
+    }
+
+    public function deleteRegistroForm($id,Request $request){
+        $model = FormularioRegistro::findOrFail($id);
+        $model->deleted_by=current_user()->id;
+        $model->deleted_at = Carbon::now();
+        if($model->save()){
+            $request->session()->flash('message.success', 'Registro eliminado con éxito');
+        }else{
+            $request->session()->flash('message.error', 'Registro no se pudo eliminar');
+        }
+        return redirect(route('baterias.detail', $model->equipo_id));
+ 
     }
 }
