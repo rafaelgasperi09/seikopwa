@@ -821,7 +821,7 @@ class EquiposController extends BaseController
     public function imprimirMantPrev($id){
 
         $formularioRegistro = FormularioRegistro::find($id);
-        if($formularioRegistro->status!='C'){
+        if($formularioRegistro->estatus<>'C'){
             request()->session()->flash('message.error','Este reporte debe estar cerrado para poder imprimirse, ya que debe generar una solicitud');
             return redirect()->back();
         }
