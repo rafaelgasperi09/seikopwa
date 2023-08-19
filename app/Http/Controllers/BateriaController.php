@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Componente;
 use App\Formulario;
+use App\Equipo;
+use App\Tecnico;
 use App\FormularioData;
 use App\FormularioCampo;
 use App\FormularioRegistro;
@@ -281,19 +283,23 @@ class BateriaController extends Controller
     public function datatable_hidratacion($id){
 
         $data = DB::table('form_hidratacion_bateria_view')
+            ->leftJoin('tecnicos','form_hidratacion_bateria_view.tecnico_id','tecnicos.id')
             ->where('componente_id',$id)
             ->get();
             
         return DataTables::of($data)
+        ->editColumn('tecnico_id', function($row){
+            return $row->fullname;
+        })
         ->addColumn('accion', function($row){
-            $accion='<a href="'.route('baterias.serv_tec_show',$row->formulario_registro_id).'" target="_blank" title="Ver">
+            $accion='<a href="'.route('baterias.show_hidratacion',$row->formulario_registro_id).'" target="_blank" title="Ver">
                         <span class="iconedbox bg-success">
                         <ion-icon name="eye-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
                         </span>
                     </a>';
-            $accion.='<a href="'.route('baterias.download_st',$row->formulario_registro_id).'" target="_blank" title="Descargar">
-                        <span class="iconedbox bg-warning">
-                        <ion-icon name="download-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
+            $accion.='<a href="'.route('baterias.edit_hidratacion',$row->formulario_registro_id).'" target="_blank" title="Editar">
+                        <span class="iconedbox bg-primary">
+                        <ion-icon name="create-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
                         </span>
                     </a>';
             if(Sentinel::getUser()->hasAccess('baterias.delete_reportes')){
@@ -364,10 +370,13 @@ class BateriaController extends Controller
         $data = DB::table('form_hidratacion_bateria_view')
             ->where('componente_id',$id)
             ->orderBy('fecha','DESC')
-            ->get()->take(100);
+            ->get()->toArray();
+        $datos=array_chunk($data, 15);
+       $tecnicos=Tecnico::get()->pluck('fullname','id');
+
        //return view('frontend.baterias.hidratacion_excel',compact('bateria','data'));
         if($format=='PDF'){
-            $pdf = PDF::loadView('frontend.baterias.pdf3',compact('bateria','data'));
+            $pdf = PDF::loadView('frontend.baterias.pdf3',compact('bateria','datos','tecnicos'));
             $pdf->setPaper('a4', 'landscape');
             return $pdf->stream('historial_cargas.pdf');
         }else{
@@ -388,5 +397,49 @@ class BateriaController extends Controller
         }
         return redirect()->back();
  
+    }
+   
+    public function show_hidratacion($id,Request $request){
+        
+        $data = FormularioRegistro::findOrFail($id);
+        $componente = Componente::findOrFail($data->componente_id);
+        
+        $formulario = Formulario::whereNombre('form_hidratacion_baterias')->first();
+        $datos=array();
+        $formularioData =$data->data()->get()->pluck('valor','formulario_campo_id');
+        foreach($formulario->campos as $c){
+            if(isset($formularioData[$c->id])){
+                $datos[$c->nombre]=$formularioData[$c->id];
+            }
+        }     
+        //dd($data->cliente());
+        //$data = Equipo::find($datos->equipo_id);
+       
+        return view('frontend.baterias.hidratacion_show',compact('data','datos','componente','formulario'));
+ 
+    }
+
+    public function edit_hidratacion($id,Request $request){
+        $data = FormularioRegistro::findOrFail($id);
+        $componente = Componente::findOrFail($data->componente_id);
+        $formulario = Formulario::whereNombre('form_hidratacion_baterias')->first();
+        $tecnicos=Tecnico::get()->pluck('fullname','id');
+        $tecnico=$data->data()->where('formulario_campo_id',1082)->first();
+        if($tecnico)
+            $tecnico=$tecnico->valor;
+
+        return view('frontend.baterias.hidratacion_edit',compact('data','componente','formulario','tecnicos','tecnico'));
+ 
+    }
+
+    public function updateHidratacion(Request $request){
+        $model = FormularioRegistro::findOrFail($request->id);
+        $model->updated_at =Carbon::now();
+        if($model->save()){
+            $request->session()->flash('message.success', 'Registro editado con éxito');
+        }else{
+            $request->session()->flash('message.error', 'Registro no se pudo editado');
+        }
+        return redirect(route('baterias.detail',$model->componente_id));
     }
 }

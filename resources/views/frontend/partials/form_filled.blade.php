@@ -59,8 +59,9 @@
                                         $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre,' el supervisor',$where);
                                         
                                     }
+
                                     @endphp
-                                    @if($campo->nombre=='supervisor_id' and isset($dat[$value]))
+                                    @if(in_array($campo->nombre,['supervisor_id','tecnico_id']) and isset($dat[$value]))
                                     {{ Form::text($campo->nombre,$dat[$value],array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                     @else
                                     @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>$dat))

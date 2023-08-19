@@ -41,7 +41,7 @@ class FormularioRegistroObserver
             'user_id'=>current_user()->id,
             'estatus'=>$formularioRegistro->estatus
         ]);
-
+       
         $formulario = Formulario::find($formularioRegistro->formulario_id);
         $request = request();            
         $when = now()->addMinutes(1);
@@ -245,6 +245,7 @@ class FormularioRegistroObserver
     public function updated(FormularioRegistro $formularioRegistro)
     {
         $request = request();     
+    
         if($formularioRegistro->isDirty('estatus') or $formularioRegistro->isDirty('tecnico_asignado')){
             FormularioRegistroEstatus::create([
                 'formulario_registro_id'=>$formularioRegistro->id,

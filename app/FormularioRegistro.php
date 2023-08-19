@@ -42,7 +42,10 @@ class FormularioRegistro extends BaseModel
     }
 
     public function ult_horometro(){
-        return $this-> equipo()->ult_horometro();
+        $equipo= $this-> equipo();
+        if($equipo)
+            return $equipo->ult_horometro();
+        return null;
     }
 
     public function tecnicoAsignado(){

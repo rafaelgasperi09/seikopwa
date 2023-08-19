@@ -193,6 +193,12 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
     
         Route::post('/store_hidratacion', array('as' => 'baterias.store_hidratacion', 'uses' => 'BateriaController@guardarHidratacion'))->middleware('hasAccess');;
         
+        Route::get('/{id}/show_hidratacion', array('as' => 'baterias.show_hidratacion', 'uses' => 'BateriaController@show_hidratacion'))->middleware('hasAccess');
+        
+        Route::get('/{id}/edit_hidratacion', array('as' => 'baterias.edit_hidratacion', 'uses' => 'BateriaController@edit_hidratacion'))->middleware('hasAccess');
+        
+        Route::put('/{id}/update_hidratacion', array('as' => 'baterias.update_hidratacion', 'uses' => 'BateriaController@updateHidratacion'))->middleware('hasAccess');
+        
         Route::get('/download_hidratacion/{id}', array('as' => 'baterias.download_hidratacion', 'uses' => 'BateriaController@download_hidratacion'));
     
         Route::get('/{id}/delete', array('as' => 'baterias.delete_reportes', 'uses' => 'BateriaController@deleteRegistroForm'))->middleware('hasAccess');
