@@ -274,11 +274,11 @@ class DashboardController extends Controller
         $filtro='';$filtro0='';$view='frontend.dashboard.gmp';
         if(in_array($id,['gmp','cliente'])){
             if($id=='cliente'){
-                $filtro.=" AND e.numero_parte NOT LIKE 'GM%'";
+                //$filtro.=" AND e.numero_parte NOT LIKE 'GM%'";
                 $view='frontend.dashboard.cliente';
             }
             else{
-                $filtro.=" AND e.numero_parte LIKE 'GM%'";
+               // $filtro.=" AND e.numero_parte LIKE 'GM%'";
             }
         }
            

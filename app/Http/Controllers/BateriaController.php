@@ -252,6 +252,15 @@ class BateriaController extends Controller
                         <ion-icon name="download-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
                         </span>
                     </a>';
+            if(Sentinel::getUser()->hasAccess('baterias.delete_reportes')){
+                $accion.='<a href="'.route('baterias.delete_reportes',$row->formulario_registro_id).'" title="Borrar">
+                <span class="iconedbox bg-danger">
+                <ion-icon name="trash-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
+                </span>
+                </a>';
+            }
+
+            
             if($row->estatus=='P' and Sentinel::getUser()->hasAccess('baterias.serv_tec_update')){
                 $accion.='<a href="'.route('baterias.serv_tec_edit',$row->formulario_registro_id).'" target="_blank" title="Firmar">
                 <span class="iconedbox bg-primary">
@@ -274,8 +283,32 @@ class BateriaController extends Controller
         $data = DB::table('form_hidratacion_bateria_view')
             ->where('componente_id',$id)
             ->get();
+            
+        return DataTables::of($data)
+        ->addColumn('accion', function($row){
+            $accion='<a href="'.route('baterias.serv_tec_show',$row->formulario_registro_id).'" target="_blank" title="Ver">
+                        <span class="iconedbox bg-success">
+                        <ion-icon name="eye-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
+                        </span>
+                    </a>';
+            $accion.='<a href="'.route('baterias.download_st',$row->formulario_registro_id).'" target="_blank" title="Descargar">
+                        <span class="iconedbox bg-warning">
+                        <ion-icon name="download-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
+                        </span>
+                    </a>';
+            if(Sentinel::getUser()->hasAccess('baterias.delete_reportes')){
+                $accion.='<a href="'.route('baterias.delete_reportes',$row->formulario_registro_id).'" title="Borrar">
+                <span class="iconedbox bg-danger">
+                <ion-icon name="trash-outline" role="img" class="md hydrated" aria-label="eye outline"></ion-icon>
+                </span>
+                </a>';
+            }
 
-        return DataTables::of($data)->make(true);
+           
+            return $accion;
+        })
+        ->rawColumns(['accion'])
+        ->make(true);
     }
 
     public function download($id){
@@ -345,6 +378,7 @@ class BateriaController extends Controller
 
     public function deleteRegistroForm($id,Request $request){
         $model = FormularioRegistro::findOrFail($id);
+        $id=$model->equipo_id;
         $model->deleted_by=current_user()->id;
         $model->deleted_at = Carbon::now();
         if($model->save()){
@@ -352,7 +386,7 @@ class BateriaController extends Controller
         }else{
             $request->session()->flash('message.error', 'Registro no se pudo eliminar');
         }
-        return redirect(route('baterias.detail', $model->equipo_id));
+        return redirect()->back();
  
     }
 }

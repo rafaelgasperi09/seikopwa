@@ -165,6 +165,7 @@
                             <th>Galones aplicados</th>
                             <th>Tecnico</th>
                             <th>Comentarios</th>
+                            <th>Acciones</th>
                         </tr>
                         </thead>
                     </table>
@@ -258,6 +259,7 @@
                 {data:'galones'},
                 {data:'tecnico_id'},
                 {data:'comentarios'},
+                {data:'accion'},
             ]
         } );
    

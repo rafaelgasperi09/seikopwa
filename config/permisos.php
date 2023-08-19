@@ -63,6 +63,7 @@ $permisos["permissions"] = array(
     "baterias.hidratacion"=>"Ver hidratacion",
     "baterias.register_hidratacion"=>"Crear hidratacion",
     "baterias.store_hidratacion"=>"Guardar hidratacion",
+    "baterias.delete_reportes"=>"Borrar reportes",
   ),
   "Flujos Formulario"=>array(
     "parteA"=>"Primera Parte del proceso (creación)",
