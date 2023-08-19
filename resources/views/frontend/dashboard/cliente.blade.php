@@ -16,19 +16,25 @@
                         <div class="section full">
                             <div class="wide-block ">
                                 <div class="row">
-                                    
-                                    <div class='col-md-4' id="clientediv">
+                                    <div class='col-md-3' >
+                                        @if(count($clientes)>2)
+                                        Tipo
+                                        {{ Form::select('tipo',[''=>'Todos','alquiler'=>'Alquilados','cliente'=>'Cliente'],request('tipo'),array('class'=>'form-control','autocomplete'=>'off','id'=>'tipo')) }} 
+                                        @endif
+                                    </div>
+                                    <div class='col-md-3' id="clientediv">
                                         @if(count($clientes)>2)
                                         Cliente
                                         {{ Form::select('cliente_id',$clientes,request('cliente_id'),array('class'=>'form-control','autocomplete'=>'off','id'=>'cliente_id')) }} 
                                         @endif
                                     </div>
                                     
-                                    <div class='col-md-3'>
+                                    
+                                    <div class='col-md-2'>
                                     Desde
                                     <input name="desde" type="date" value="{{request('desde')}}" class="form-control" id="desde">
                                     </div>
-                                    <div class='col-md-3'>
+                                    <div class='col-md-2'>
                                     Hasta
                                     <input name="hasta" type="date" value="{{request('hasta')}}" class="form-control" id="hasta">
                                     </div>

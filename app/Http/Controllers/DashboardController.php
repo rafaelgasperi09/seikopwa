@@ -270,16 +270,16 @@ class DashboardController extends Controller
         $clientes=current_user()->crm_clientes_id;
         $clientes=clientes_string($clientes);
         $inoperativos=0;$operativos=0;$totales=0;
+      
         //filtro
         $filtro='';$filtro0='';$view='frontend.dashboard.gmp';
+       
         if(in_array($id,['gmp','cliente'])){
             if($id=='cliente'){
-                //$filtro.=" AND e.numero_parte NOT LIKE 'GM%'";
+                
                 $view='frontend.dashboard.cliente';
             }
-            else{
-               // $filtro.=" AND e.numero_parte LIKE 'GM%'";
-            }
+            
         }
            
         if(!empty($request->cliente_id)){
@@ -287,7 +287,20 @@ class DashboardController extends Controller
             if($request->has('cliente_id'))
             $filtro.="and fr.cliente_id='$request->cliente_id'".PHP_EOL;
         }
-            
+         //filtra propios y gmp
+         $tipo='';
+         if($request->has('tipo') and !empty($request->tipo))
+             $tipo=$request->tipo;
+         if( $tipo=='cliente'){
+            $filtro.=" AND e.numero_parte NOT LIKE 'GM%'";
+            $filtro0.=" AND e.numero_parte NOT LIKE 'GM%'";
+         }
+         if( $tipo=='alquiler'){
+            $filtro.=" AND e.numero_parte LIKE 'GM%'";
+            $filtro0.=" AND e.numero_parte LIKE 'GM%'";
+         }
+              
+     
 
         if($request->has('desde') and !empty($request->desde))
             $filtro.="and fr.created_at>='$request->desde'".PHP_EOL;
@@ -341,7 +354,7 @@ class DashboardController extends Controller
             IFNULL(SUM(CASE WHEN (e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END),0) AS propios,
             IFNULL(SUM(CASE WHEN (e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END),0) AS alquilados
             FROM equipos e
-            where e.deleted_at is null  $filtro0
+            where e.deleted_at is null  $filtro0 
              ";
         }
        
