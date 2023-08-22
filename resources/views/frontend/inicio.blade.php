@@ -35,6 +35,10 @@
         <div class="row">
             @if(current_user()->isOnGroup('operadorC') )
             <div class=" mb-2 col-md-6 col">                   
+                {{--}}TOAL EQUIPOS{{--}}
+                @include('frontend.dashboard_widgets.total_equipos')
+            </div>
+            <div class=" mb-2 col-md-6 col">                   
                 {{--}}DAILY CHECK PENDIENTE DE FIRMA {{--}}
                 @include('frontend.dashboard_widgets.equipos_pendientes_daily_check')
             </div>
