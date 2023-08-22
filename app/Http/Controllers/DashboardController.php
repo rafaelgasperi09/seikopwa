@@ -260,7 +260,7 @@ class DashboardController extends Controller
 
         }
         $tab['t1']=''; $tab['t2']='active show';
-
+        
         return view('frontend.inicio',compact('data'));
     }
 
