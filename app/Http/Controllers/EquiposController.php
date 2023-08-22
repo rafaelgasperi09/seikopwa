@@ -250,9 +250,9 @@ class EquiposController extends BaseController
             "Expires"             => "0"
         );
             //cabecera
-        $columns=array('IDREPORTE','FECHA REGISTRO','HORA', 'TIPO','EQUIPO','PRIORIDAD','REGISTRADO POR','CLIENTE','ESTATUS','SEMANA','DIA','TURNO');
+        $columns=array('IDREPORTE','FECHA REGISTRO','HORA', 'TIPO','EQUIPO','PRIORIDAD','REGISTRADO POR','CLIENTE','SEMANA','DIA','HOROMETRO','ESTATUS','TURNO');
                         
-        $campos=array('id','fecha','hora','tipo','numero_parte','prioridad','user_name','nombre','estatus','semana','dia_semana','turno_chequeo_diario');
+        $campos=array('id','fecha','hora','tipo','numero_parte','prioridad','user_name','nombre','semana','dia_semana','horometro','estatus','turno_chequeo_diario');
         $i=0;
         return Excel::download(new ReportesExport($datos), 'Equipo.xlsx');
         /*
