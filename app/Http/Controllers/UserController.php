@@ -46,6 +46,7 @@ class UserController extends Controller
                     ->when($where<>'()',function($q) use ($where) {
                         $q->whereRaw($where);
                     })
+                    ->selectRaw('users.*')
                     ->paginate(10);
 
 
