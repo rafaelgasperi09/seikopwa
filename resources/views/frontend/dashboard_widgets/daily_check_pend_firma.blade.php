@@ -19,7 +19,7 @@
             </div>
             @foreach($data['daily_check']->where('cliente_id',$gdc->cliente_id) as $dc)
                 @if($dc->equipo())
-                <a href="@if(Sentinel::getUser()->hasAccess('equipos.edit_daily_check') and false) {{ route('equipos.edit_daily_check',array('id'=>$dc->id)) }} @else {{ route('equipos.detail',array('id'=>$dc->equipo_id)) }}?show=rows&tab=1 @endif" 
+                <a href="@if(current_user()->isOnGroup('supervisorc') ) {{ route('equipos.edit_daily_check',array('id'=>$dc->id)) }} @else {{ route('equipos.detail',array('id'=>$dc->equipo_id)) }}?show=rows&tab=1 @endif" 
                  class="chip chip-warning chip-media ml-05 mb-05 gdclist gdc{{$gdc->cliente_id}}" style="width:98%;@if($k!=0 or $abierta0)  display:none; @endif">
                     <i class="chip-icon">
                         Ir
