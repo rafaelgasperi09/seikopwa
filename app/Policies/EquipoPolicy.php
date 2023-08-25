@@ -22,7 +22,7 @@ class EquipoPolicy
         
         $clientes=explode(',',$user->crm_clientes_id);
         if($_SERVER['REMOTE_ADDR'] =='200.12.208.98')
-            dd($clientes);
+            dd($user->isCliente());
         if($user->isCliente() && in_array($equipo->cliente_id ,$clientes))
             return true;
         if(Sentinel::getUser()->hasAnyAccess(['equipos.detail']) && $user->tipo='gmp')
