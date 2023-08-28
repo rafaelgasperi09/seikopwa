@@ -35,17 +35,18 @@ class UserController extends Controller
         }
         $where.=')';
         
-        $data=User::when($where<>'()',function($q) use ($where) {
-                        $q->whereRaw($where);
-                    })
-                    ->orwhere('first_name','like',"%".$request->q."%")
+        $data=User::join('activations', 'users.id','=','activations.user_id')->where('activations.completed',1)
+                    
+                    ->where('first_name','like',"%".$request->q."%")
                     ->orWhere('last_name','like',"%".$request->q."%")
                     ->orWhere('email','like',"%".$request->q."%")
                     ->orWhereHas('roles',function ($q) use($request){
                         $q->where('name','like',"%".$request->q."%");
                     })
-                    
-
+                    ->when($where<>'()',function($q) use ($where) {
+                        $q->whereRaw($where);
+                    })
+                    ->selectRaw('users.*')
                     ->paginate(10);
 
 

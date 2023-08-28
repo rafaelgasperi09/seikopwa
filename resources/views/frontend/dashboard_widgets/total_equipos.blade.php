@@ -1,4 +1,4 @@
-<div class=" mb-2 col-md-6 col @if(current_user()->isOnGroup('tecnico')) d-none @endif">
+
     <div class="card text-white bg-light">
         <div class="card-header"><span id="tot_title">Total Equipos </span><h5 class="card-title" id="tot_equipos">0</h5></div>
         <div class="card-body">
@@ -50,4 +50,3 @@
     <script>
         $('#tot_equipos').html("{{$totales}}");
     </script>
-</div>
