@@ -138,8 +138,14 @@ class FormularioRegistro extends BaseModel
                 $this->nombre_archivo = $pdf['url'];
 
                 // enviar notificacion al o los supervisores gmp
-                /*
-                $notificados = User::FilterByRoles([5])->get();
+                $roles_form=array();
+                if($equipo and substr($equipo->numero_parte,0,2)=='GM'){
+                    $roles_form[]=5;
+                }
+                $roles_form[]=1;              
+                $roles_form[]=12;              
+                $lista_noti = Supervisor::whereIn('roles_id',$roles_form)->pluck('id');
+                $notificados=User::whereIn('id',$lista_noti)->get();
                 $when = now()->addMinutes(1);
                 foreach ($notificados as $noti){
                     $when = now()->addMinutes(1);
@@ -149,7 +155,6 @@ class FormularioRegistro extends BaseModel
                             break;
                         }
                 }
-                */
 
                 FormularioRegistro::withoutEvents(function (){
                     return $this->save();
