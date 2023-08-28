@@ -29,7 +29,7 @@
                                         {{$stpr->estatus}}
                                     </i>
                                     @php
-                                        $fecha_sta=$stpr->estatusHistory()->orderBy('created_at','desc')->first()->created_at;
+                                        $fecha_sta=$stpr->estatusHistory()->where('estatus',$stpr->estatus)->orderBy('created_at','desc')->first()->created_at;
                                         $date1 = new DateTime($fecha_sta);
                                         $date2 = new DateTime(date('Y-m-d h:i:s'));
                                         $diff = $date1->diff($date2);
