@@ -138,6 +138,7 @@ class FormularioRegistro extends BaseModel
                 $this->nombre_archivo = $pdf['url'];
 
                 // enviar notificacion al o los supervisores gmp
+                /*
                 $notificados = User::FilterByRoles([5])->get();
                 $when = now()->addMinutes(1);
                 foreach ($notificados as $noti){
@@ -148,6 +149,7 @@ class FormularioRegistro extends BaseModel
                             break;
                         }
                 }
+                */
 
                 FormularioRegistro::withoutEvents(function (){
                     return $this->save();
