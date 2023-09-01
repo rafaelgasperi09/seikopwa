@@ -727,7 +727,18 @@ class DashboardController extends Controller
             $data['chart9']['c'][]=$r->turno3;
             $max++;    
         }
+        
        
+        $query9="SELECT COUNT(*) AS total FROM MONTACARGA.equipos fr WHERE deleted_at is null  $filtro";
+        $res9=DB::select(DB::Raw($query9));
+        $res9=end($res9);
+        //PROBAR QUERY
+        $query10="	SELECT DATE_FORMAT(fr.created_at,'%d %b')  AS fecha,COUNT(*) AS total FROM formulario_registro fr,formularios f
+        WHERE fr.`formulario_id`=f.`id`
+        AND f.`tipo`='daily_check'
+        AND cliente_id IN (121,72)
+        GROUP BY DATE_FORMAT(fr.created_at,'%d %M') ";
+
         $data['op']=$operativos;
         $data['in']=$inoperativos;
         $data['number1pct']=round(100*$operativos/($operativos+$inoperativos),2);
