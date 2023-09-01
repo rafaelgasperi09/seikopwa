@@ -1,7 +1,7 @@
 @extends('frontend.main-layout')
 @section('content')
     @include('frontend.partials.title',array('title'=>'Usuarios','subtitle'=>'Lista','route_back'=>route('inicio')))
-    @include('frontend.partials.search',array('title'=>'Escribir cnombre o apellido del usuario','search_url'=>'/usuarios/search'))
+    @include('frontend.partials.search',array('title'=>'Escribir nombre o apellido del usuario','search_url'=>'/usuarios/search'))
     <div class="section full mt-1">
         <div class="wide-block pt-2 pb-2">
             @if(\Sentinel::hasAccess('usuarios.create'))

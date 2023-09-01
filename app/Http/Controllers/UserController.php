@@ -42,6 +42,7 @@ class UserController extends Controller
                     ->orWhere('email','like',"%".$request->q."%")
                     ->orWhereHas('roles',function ($q) use($request){
                         $q->where('name','like',"%".$request->q."%");
+                        $q->where('long_name','like',"%".$request->q."%");
                     })
                     ->when($where<>'()',function($q) use ($where) {
                         $q->whereRaw($where);

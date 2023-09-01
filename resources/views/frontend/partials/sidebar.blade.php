@@ -19,7 +19,7 @@
                         <strong>{{ current_user()->getFullName() }}</strong>
                         <div class="text-muted">
                             <ion-icon name="business"></ion-icon>
-                            {{ current_user()->roles()->first()->name }}
+                            {{ current_user()->roles()->first()->long_name }}
                         </div>
                     </div>
                     <a href="javascript:;" class="close-sidebar-button" data-dismiss="modal">

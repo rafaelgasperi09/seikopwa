@@ -123,13 +123,12 @@ class RolController extends Controller
     {
 
         $this->validate($request, [
-            'name'        => 'required',
+            'long_name'        => 'required',
         ]);
         // store
         $rol = Sentinel::findRoleById($id);
 
-        $rol->name = $request->name;
-        $rol->slug = Str::slug($request->name);
+        $rol->long_name = $request->long_name;
         $permisos =array();
 
         // BUSCAR TODOS LOS PERMISOS

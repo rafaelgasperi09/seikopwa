@@ -8,7 +8,7 @@
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="label" for="email">Nombre</label>
-                        {{ Form::text('name',null,array('class'=>'form-control','placeholder'=>'Nombre','required','readonly')) }}
+                        {{ Form::text('long_name',$data->long_name,array('class'=>'form-control','placeholder'=>'Nombre','required')) }}
                         <i class="clear-input">
                             <ion-icon name="close-circle" role="img" class="md hydrated" aria-label="close circle"></ion-icon>
                         </i>

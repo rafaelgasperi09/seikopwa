@@ -24,7 +24,7 @@
                 </div>
                 <br/>
                 @if(count($dato->roles)>0)
-                <small>({{ $dato->roles->first()->name }})</small>
+                <small>({{ $dato->roles->first()->long_name }})</small>
                 @endif
             </div>
         </a>
