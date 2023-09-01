@@ -47,7 +47,9 @@
                     {{--}}MANTENIMIENTO PREVENTIVO PENDIENTE DE FIRMA {{--}}
                     @include('frontend.dashboard_widgets.mant_prev_pend_firma')
                 
-                @if( current_user()->isOnGroup('supervisorc') or  current_user()->isOnGroup('programador'))
+                @if( current_user()->isOnGroup('supervisorc') or
+                     current_user()->isOnGroup('supervisor-cliente') or
+                     current_user()->isOnGroup('programador'))
 
                     {{--}}DAILY CHECK PENDIENTE DE FIRMA {{--}}
                     @include('frontend.dashboard_widgets.daily_check_pend_firma')
