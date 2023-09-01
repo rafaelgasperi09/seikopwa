@@ -53,12 +53,12 @@ class FormularioRegistroObserver
         $supervisor_id='';
         if($equipo and substr($equipo->numero_parte,0,2)=='GM'){
             $roles_form[]=5;
+        }else{
+            if($formulario->tipo=='serv_tec'){
+                $roles_form[]=11;
+            }
         }
-        if($formulario->tipo=='serv_tec'){
-            $roles_form[]=11;
-            $roles_form[]=12;
-        }
-        if($formulario->tipo=='mant_prev'){
+        if(in_array($formulario->tipo,['serv_tec','mant_prev'])){
             $roles_form[]=12;
         }
        
