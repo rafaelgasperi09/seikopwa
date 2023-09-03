@@ -63,12 +63,13 @@
             </div>
         @php 
         
-        $graficos=[0,1,2,3,4,5,6,9];
+        $graficos=[0,1,2,3,4,5,6,9,10];
+        $colclass=['4','4','4','4','4','4','4','4','12'];
         $f=['frontend.dashboard.grafico_circular','frontend.dashboard.grafico_columna','frontend.dashboard.grafico_columna2'];
-        $files=array($f[0],$f[1],$f[1],$f[1],$f[1],$f[1],$f[1],$f[1]);
+        $files=array($f[0],$f[1],$f[1],$f[1],$f[1],$f[1],$f[1],$f[1],$f[1]);
         @endphp
         @foreach( $graficos as $j=>$i)         
-            <div class=" mb-2 col-md-4 col chart"  >
+            <div class=" mb-2 col-md-{{$colclass[$j]}} col chart"  >
                 <div class="grafictitle">
                     {{$data['titulo'][$i]}}
                     <a href="#" class="viewdet" gtitle="{{$data['titulo'][$i]}}" gid="chart{{$i}}"><small>Ver</small></a>

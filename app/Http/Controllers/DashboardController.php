@@ -305,15 +305,30 @@ class DashboardController extends Controller
          }
               
      
-
-        if($request->has('desde') and !empty($request->desde))
+        $fdesde=date('Ym01');
+        $fhasta=date('Ymt');
+        if($request->has('desde') and !empty($request->desde)){
             $filtro.="and fr.created_at>='$request->desde'".PHP_EOL;
+            $fdesde=\Carbon\Carbon::parse($request->desde)->format('Ym01');
+            $fhasta=\Carbon\Carbon::parse($request->desde)->format('Ymt');
 
-        if($request->has('hasta') and !empty($request->hasta))
+            $fdesde=\Carbon\Carbon::parse($request->desde)->format('Ymd');
+        }
+
+        if($request->has('hasta') and !empty($request->hasta)){
             $filtro.="and fr.created_at<='$request->hasta'".PHP_EOL;
+            $hasta1=\Carbon\Carbon::parse($request->desde)->format('Y-m');
+            $hasta2=\Carbon\Carbon::parse($request->hasta)->format('Y-m');
+            if($hasta1==$hasta2)
+                $fhasta=\Carbon\Carbon::parse($request->hasta)->format('Ymd');
+
+            $fhasta=\Carbon\Carbon::parse($request->hasta)->format('Ymd');
+        }
+           
 
         if(!empty($clientes)){
             $filtro.="and fr.cliente_id in ($clientes)".PHP_EOL;
+            $filtro0.="and e.cliente_id in ($clientes)".PHP_EOL;
         }
         $max=0;
 
@@ -361,7 +376,7 @@ class DashboardController extends Controller
             where e.deleted_at is null  $filtro0 
              ";
         }
-       
+
         $res0=DB::connection('crm')->select(DB::Raw($query0));
 
         $data=array();
@@ -728,17 +743,48 @@ class DashboardController extends Controller
             $max++;    
         }
         
-       
-        $query9="SELECT COUNT(*) AS total FROM MONTACARGA.equipos fr WHERE deleted_at is null  $filtro";
-        $res9=DB::select(DB::Raw($query9));
-        $res9=end($res9);
-        //PROBAR QUERY
-        $query10="	SELECT DATE_FORMAT(fr.created_at,'%d %b')  AS fecha,COUNT(*) AS total FROM formulario_registro fr,formularios f
-        WHERE fr.`formulario_id`=f.`id`
-        AND f.`tipo`='daily_check'
-        AND cliente_id IN (121,72)
-        GROUP BY DATE_FORMAT(fr.created_at,'%d %M') ";
 
+        $query9="SELECT COUNT(*) AS total FROM equipos e
+         WHERE e.deleted_at is null  $filtro0";
+        $res9=DB::connection('crm')->select(DB::Raw($query9));
+        $res9=end($res9);
+ 
+
+        //PROBAR QUERY
+        $query10="		SELECT DATE_FORMAT(fr.created_at,'%d-%b')  AS fecha,COUNT(*) AS total 
+        FROM formulario_registro fr,formularios f,equipos_vw e
+        WHERE fr.`formulario_id`=f.`id`
+        AND fr.equipo_id=e.id
+        AND f.`tipo`='daily_check'
+        $filtro
+        AND DATE_FORMAT(fr.created_at,'%Y%m%d') between '$fdesde'  and '$fhasta'
+        GROUP BY DATE_FORMAT(fr.created_at,'%d-%b')";
+        $res10=DB::select(DB::Raw($query10));
+       
+        $res10=collect($res10)->pluck('total','fecha')->toArray();
+       
+        $listado=array();
+        $total=$res9->total;
+        $fecha1=Carbon::parse($fdesde);
+        $fecha2=Carbon::parse($fhasta);
+        $dif= $fecha2->diffInDays($fecha1); 
+        $ffecha=$fecha1;
+        for($i=0;$i<=$dif;$i++){
+            $fechabase=(string) $i;
+            $ffecha=\Carbon\Carbon::parse($ffecha)->format('d-M');
+            $data['chart10']['n'][]=$ffecha;        
+            if(isset($res10[$ffecha])){
+                $data['chart10']['p'][]=$total-$res10[$ffecha];
+                $data['chart10']['r'][]=$res10[$ffecha];
+
+            }else{
+                $data['chart10']['p'][]=$total;
+                $data['chart10']['r'][]=0;
+
+            }
+            $ffecha=\Carbon\Carbon::parse($ffecha)->addDays(1)->format('d-M');
+        }
+ 
         $data['op']=$operativos;
         $data['in']=$inoperativos;
         $data['number1pct']=round(100*$operativos/($operativos+$inoperativos),2);
@@ -756,6 +802,7 @@ class DashboardController extends Controller
         $data['indice'][7]=['t','n'];
         $data['indice'][8]=['t','n'];
         $data['indice'][9]=['p','a','b','c','n'];
+        $data['indice'][10]=['p','r','n'];
 
     
         $data['ejey'][0]='Equipos';
@@ -768,6 +815,7 @@ class DashboardController extends Controller
         $data['ejey'][7]='Reportes';
         $data['ejey'][8]='Reportes';
         $data['ejey'][9]='Reportes';
+        $data['ejey'][10]='Reportes';
 
         $data['leyenda'][0]=['Alquilados','Propios'];
         $data['leyenda'][1]=['Reportados','Operativo','Inoperativo'];
@@ -779,6 +827,7 @@ class DashboardController extends Controller
         $data['leyenda'][7]=['Reportes'];
         $data['leyenda'][8]=['Reportes'];
         $data['leyenda'][9]=['Pendientes','1er Turno','2do Turno','3er Turno'];
+        $data['leyenda'][10]=['Pendientes','Realizados'];
 
         $data['titulo'][0]='Total equipos';
         $data['titulo'][1]='Estatus equipos';
@@ -790,6 +839,7 @@ class DashboardController extends Controller
         $data['titulo'][7]='Informes trabajados – Equipos';
         $data['titulo'][8]='Informes trabajados – Repuestos';
         $data['titulo'][9]='Resumen de Daily Check';
+        $data['titulo'][10]='Daily Check realizados por día';
       
         if(!empty($clientes)){
             $clientes=Cliente::whereRaw("(id in($clientes))")->orderBy('nombre')->get()->pluck('nombre','id');
