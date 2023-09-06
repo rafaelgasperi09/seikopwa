@@ -96,16 +96,25 @@ class User extends Authenticatable
         return Cliente::whereIn('id',explode(',',$this->crm_clientes_id))->get();
     }
 
-    public function isSupervisor()
+    public function isSupervisor($tipo='gmp')
     {
-        $a=$this->isOnGroup('supervisor');
-        $b=$this->isOnGroup('supervisor-alquiler');
-        $c=$this->isOnGroup('supervisor-servicio-tecnico');
-        $d=$this->isOnGroup('supervisor-repuestos');
-        $r=$this->roles;
-        
-        if($a or $b or $c or $d)
-            return true;
+        if($tipo=='gmp'){
+            $a=$this->isOnGroup('supervisor');
+            $b=$this->isOnGroup('supervisor-alquiler');
+            $c=$this->isOnGroup('supervisor-servicio-tecnico');
+            $d=$this->isOnGroup('supervisor-repuestos');
+            $r=$this->roles;
+            
+            if($a or $b or $c or $d)
+                return true;
+        }
+        if($tipo=='cliente'){
+            $a=$this->isOnGroup('supervisorc');
+            $b=$this->isOnGroup('supervisor-cliente');
+            if($a or $b)
+                return true;
+        }
+
 
         return false;
     }

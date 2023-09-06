@@ -233,13 +233,14 @@ class DashboardController extends Controller
          $data['serv_tec_10']=array();
          $desde = \Carbon\Carbon::now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
          $filtroExtra="(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')";
+       
          if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador') or current_user()->isSupervisor()){
             $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,false,'');
             $data['g_serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,false,'',true);
          }
-          
+    
 
-        if(current_user()->isOnGroup('supervisorc')){
+        if(current_user()->isSupervisor('cliente')){
              $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,true,'');
              $data['g_serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,true,'',true);
         }
