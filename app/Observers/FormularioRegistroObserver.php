@@ -213,7 +213,7 @@ class FormularioRegistroObserver
                   
 
                     $notificadosCli = User::whereHas('roles',function ($q){
-                                            $q->where('role_id',3);
+                                            $q->whereIn('role_id',[3,13]);
                                         })
                                         ->whereRaw("(crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%')")
                                         ->when(!empty($supervisor_id),function($q) use($supervisor_id){
@@ -223,10 +223,10 @@ class FormularioRegistroObserver
                     
                     if($campo->formulario->nombre=='form_montacarga_daily_check'){
                         foreach ($notificadosCli as $u){
-                                notifica($u,(new DailyCheckIsFinnish($formularioRegistro,$u,$notificadosCli))->delay($when));
-                                if(env_local()){
-                                    break;
-                                }
+                            notifica($u,(new DailyCheckIsFinnish($formularioRegistro,$u,$notificadosCli))->delay($when));
+                            if(env_local()){
+                                break;
+                            }
                         }
                     }
                  

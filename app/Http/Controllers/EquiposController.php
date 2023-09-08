@@ -589,7 +589,7 @@ class EquiposController extends BaseController
                 $notis = User::where('id',$request->supervisor_id)->get();
              }
             foreach ($notis as $u){
-                if($u->isOnGroup('SupervisorC')){
+                if($u->isOnGroup('supervisorc') or $u->isOnGroup('supervisor-cliente') ){
                     notifica($u,(new NewReport($model,$u,$notis))->delay($when));
                     if(env_local()){
                         break;
@@ -930,7 +930,7 @@ class EquiposController extends BaseController
                 $users = User::Join('role_users','users.id','role_users.user_id')
                 ->Join('roles','role_users.role_id','roles.id')
                 ->Join('activations','users.id','activations.user_id')
-                ->whereRaw("roles.slug='supervisorc'
+                ->whereRaw("(roles.slug='supervisorc' or roles.slug='supervisor-cliente')
                             AND activations.completed=1
                             AND (crm_clientes_id ='$equipo->cliente_id'  
                             OR crm_clientes_id LIKE '%$equipo->cliente_id,%' 
