@@ -5,7 +5,7 @@
     </div>
     <div class="card-body text-right">
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-6">
                 <h3 class="text-success text-left">OPERATIVOS</h3>
                 @if(count($data['g_serv_tec_pr_o']))
                     @foreach($data['g_serv_tec_pr_o'] as $k=>$gstpro)
@@ -60,7 +60,7 @@
                     @endforeach
                 @endif            
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
                 <h3 class="text-danger text-left">INOPERATIVOS</h3>
                 @if(count($data['g_serv_tec_pr_i']))
                     @foreach($data['g_serv_tec_pr_i'] as $l=>$gstpri) 
