@@ -30,6 +30,7 @@
                                     </i>
                                     @php
                                         $fecha_sta=$stpr->estatusHistory()->where('estatus',$stpr->estatus)->orderBy('created_at','desc')->first()->created_at;
+                                        date_default_timezone_set('America/Panama');
                                         $date1 = new DateTime($fecha_sta);
                                         $date2 = new DateTime(date('Y-m-d h:i:s'));
                                         $diff = $date1->diff($date2);
