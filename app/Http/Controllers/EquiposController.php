@@ -584,12 +584,12 @@ class EquiposController extends BaseController
 
             $when = now()->addMinutes(1);
             
-            $notis= User::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%'")->get() ;
+            $notis= User::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%' or id=1")->get() ;
             if(!empty($request->supervisor_id)){
-                $notis = User::where('id',$request->supervisor_id)->get();
+                $notis = User::whereIn('id',[$request->supervisor_id,1])->get();
              }
             foreach ($notis as $u){
-                if($u->isOnGroup('supervisorc') or $u->isOnGroup('supervisor-cliente') ){
+                if($u->isOnGroup('supervisorc') or $u->isOnGroup('supervisor-cliente') or  $u->isOnGroup('programador')  ){
                     notifica($u,(new NewReport($model,$u,$notis))->delay($when));
                     if(env_local()){
                         break;

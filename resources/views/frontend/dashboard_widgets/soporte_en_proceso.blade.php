@@ -5,7 +5,7 @@
     </div>
     <div class="card-body text-right">
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-6">
                 <h3 class="text-success text-left">OPERATIVOS</h3>
                 @if(count($data['g_serv_tec_pr_o']))
                     @foreach($data['g_serv_tec_pr_o'] as $k=>$gstpro)
@@ -31,7 +31,7 @@
                                     @php
                                         $fecha_sta=$stpr->estatusHistory()->where('estatus',$stpr->estatus)->orderBy('created_at','desc')->first()->created_at;
                                         $date1 = new DateTime($fecha_sta);
-                                        $date2 = new DateTime(date('Y-m-d h:i:s'));
+                                        $date2 = new DateTime('now', new DateTimeZone('America/Panama'));
                                         $diff = $date1->diff($date2);
                                         // will output 2 days
                                         $transcurrido='';
@@ -60,7 +60,7 @@
                     @endforeach
                 @endif            
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
                 <h3 class="text-danger text-left">INOPERATIVOS</h3>
                 @if(count($data['g_serv_tec_pr_i']))
                     @foreach($data['g_serv_tec_pr_i'] as $l=>$gstpri) 
