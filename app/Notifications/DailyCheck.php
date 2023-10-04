@@ -54,7 +54,7 @@ class DailyCheck extends Notification
         foreach($var as $v){
             $mail->line($v);
         }
-        $mail->action('Equipos',route('dashboard'))
+        $mail->action('Equipos',route('inicio'))
         ->line('Gracias por usar nuestra aplicación '.env('APP_NAME'));
         return ($mail);
        
