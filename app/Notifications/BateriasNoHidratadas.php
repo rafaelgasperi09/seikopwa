@@ -21,11 +21,15 @@ class BateriasNoHidratadas extends Notification
      *
      * @return void
      */
-    public function __construct($title='',$body='',$action='')
+    public function __construct($title='',$baterias='',$action='')
     {
         $this->title = $title;
-        $this->body = $body;
+        $this->baterias = $baterias;
+        $this->body = '';
         $this->action = $action;
+        foreach($this->baterias as $key=>$b){
+            $this->body.=$b->id_componente.',';
+        }
     }
 
     /**
