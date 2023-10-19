@@ -71,12 +71,13 @@ class notificarBateriasSinHidratar extends Command
         }
 
         $notificados = User::whereHas('roles',function ($q){
-                            $q->whereIn('role_id',[1,5]);
+                            $q->where('role_id',5);
                      })->get();
 
         foreach ($notificados as $user){
             $when = now()->addMinutes(1);
-            notifica($user,(new BateriasNoHidratadas($title,$baterias,route('baterias.index')))->delay($when));
+           // notifica($user,(new BateriasNoHidratadas($title,$message,route('baterias.index')))->delay($when));
+           $user->notify((new BateriasNoHidratadas($title,$message,route('baterias.index')))->delay($when));
             $this->info($user->getFullName());
             $this->info('body :'.$message);
             $this->info('------------------------------------------');
