@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Console\Command;
 use DB;
 use App\Componente;
+use Illuminate\Support\Facades\Mail;
 class notificarBateriasSinHidratar extends Command
 {
     /**
@@ -60,6 +61,7 @@ class notificarBateriasSinHidratar extends Command
 
         $title = 'Listado de baterias con 15 días sin hidratar.';
         $message='';
+        $caracteres=0;
         foreach($baterias as $key=>$b){
             $datos[$key]=array(
                 'marca'=>$b->marca,
@@ -67,7 +69,11 @@ class notificarBateriasSinHidratar extends Command
                 'serie'=>$b->serie,
                 'id_componente'=>$b->id_componente,
             );
+            $caracteres=strlen($message.$b->id_componente.',');
+            if($caracteres>2000)
+                break;
             $message.=$b->id_componente.',';
+           
         }
 
         $notificados = User::whereHas('roles',function ($q){
@@ -76,8 +82,7 @@ class notificarBateriasSinHidratar extends Command
 
         foreach ($notificados as $user){
             $when = now()->addMinutes(1);
-           // notifica($user,(new BateriasNoHidratadas($title,$message,route('baterias.index')))->delay($when));
-           $user->notify((new BateriasNoHidratadas($title,$message,route('baterias.index')))->delay($when));
+            notifica($user,(new BateriasNoHidratadas($title,$message,route('baterias.index')))->delay($when));
             $this->info($user->getFullName());
             $this->info('body :'.$message);
             $this->info('------------------------------------------');
