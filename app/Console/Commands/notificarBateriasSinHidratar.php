@@ -71,7 +71,7 @@ class notificarBateriasSinHidratar extends Command
         }
 
         $notificados = User::whereHas('roles',function ($q){
-                            $q->where('role_id',5);
+                            $q->whereIn('role_id',[1,5]);
                      })->get();
 
         foreach ($notificados as $user){
