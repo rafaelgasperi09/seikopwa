@@ -10,6 +10,8 @@ use Illuminate\Console\Command;
 use DB;
 use App\Componente;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SinHidratarExport;
 class notificarBateriasSinHidratar extends Command
 {
     /**
@@ -58,10 +60,13 @@ class notificarBateriasSinHidratar extends Command
         $baterias=Componente::whereTipoComponenteId(2)->whereNotIn('id',$hidatados)->get();
         $datos=array();
 
-
+     
         $title = 'Listado de baterias con 15 días sin hidratar.';
         $message='';
         $caracteres=0;
+        $dia=date('Y-m-d');
+        //$guarda=Excel::store(new SinHidratarExport(), 'Equipo_'.$dia.'.xlsx','public');
+       
         foreach($baterias as $key=>$b){
             $datos[$key]=array(
                 'marca'=>$b->marca,
@@ -77,7 +82,7 @@ class notificarBateriasSinHidratar extends Command
         }
 
         $notificados = User::whereHas('roles',function ($q){
-                            $q->where('role_id',5);
+                            $q->whereIn('role_id',[1,2,5,12]);
                      })->get();
 
         foreach ($notificados as $user){
