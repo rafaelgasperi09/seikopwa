@@ -65,7 +65,7 @@ class FormularioRegistroObserver
         $lista_noti = Supervisor::whereIn('roles_id',$roles_form)->pluck('id');
         $notificados=User::whereIn('id',$lista_noti)->get();
         //Notifica cuando se crea
-        
+
         foreach ($notificados as $n){
             if(in_array($formulario->tipo,['serv_tec','mant_prev']))
                 notifica($n,(new NewReport($formularioRegistro,$n,$notificados))->delay($when));
@@ -73,7 +73,7 @@ class FormularioRegistroObserver
                 break;
             }   
         }
-        
+       
         foreach ($fcampos as $campo) {
             $valor = '';
             $user_id = current_user()->id;
@@ -247,13 +247,14 @@ class FormularioRegistroObserver
         $request = request();     
     
         if($formularioRegistro->isDirty('estatus') or $formularioRegistro->isDirty('tecnico_asignado')){
+            
             FormularioRegistroEstatus::create([
                 'formulario_registro_id'=>$formularioRegistro->id,
                 'user_id'=>current_user()->id,
                 'estatus'=>$formularioRegistro->estatus
             ]);
       
-        }else{
+        }else{     
             $formulario = Formulario::find($formularioRegistro->formulario_id);
 
               //  DB::transaction(function () use ($request, $formulario,$formularioRegistro) {
@@ -262,9 +263,10 @@ class FormularioRegistroObserver
                     $when = now()->addMinutes(1);
                     $nousar=false;
                     $fcampos=$formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get();
-                    //dd($fcampos);
+          
                     foreach ($fcampos as $campo) {
-                        if($request->has($campo->nombre) and !empty($request->get($campo->nombre))){
+
+                        if($request->has($campo->nombre) and (!empty($request->get($campo->nombre)) or  $request->file($campo->nombre))){
                             
                             $valor = $request->get($campo->nombre);
         
@@ -273,10 +275,10 @@ class FormularioRegistroObserver
                             }
         
                             $files=array();
-                            if($campo->tipo=='files' and $request->file($campo->nombre)) {
+                            if($campo->tipo=='files') {
                                 $files = $request->file($campo->nombre);
                             }
-                            
+                          
                             if(!empty($valor) or count($files) > 0){
         
                                 if($campo->tipo=='firma'){
