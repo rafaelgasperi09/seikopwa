@@ -94,7 +94,7 @@
                                         @foreach($files as $file)
                                             @if($file<>'')
                                             <div class="col-4 mb-2">
-                                                @if(!empty($value)))
+                                                @if(!empty($value))
                                                 <a href="{{ url('/storage/equipos/'.$file) }}" download title="Clic para descargar"><img src="{{ url('/storage/equipos/'.$file) }}" alt="image" class="imaged w-100"></a>
                                                 @endif
                                             </div>
@@ -105,7 +105,7 @@
                                     <div class="row">
                                        
                                         <div class="col-4 mb-2">
-                                            @if(!empty($value)))
+                                            @if(!empty($value))
                                             <a href="{{ url('/storage/equipos/'.$value) }}" download title="Clic para descargar"><img src="{{ url('/storage/equipos/'.$value) }}" alt="image" class="imaged w-100"></a>
                                             @endif
                                         </div>

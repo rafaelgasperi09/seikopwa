@@ -247,14 +247,14 @@ class FormularioRegistroObserver
         $request = request();     
     
         if($formularioRegistro->isDirty('estatus') or $formularioRegistro->isDirty('tecnico_asignado')){
-            
+           
             FormularioRegistroEstatus::create([
                 'formulario_registro_id'=>$formularioRegistro->id,
                 'user_id'=>current_user()->id,
                 'estatus'=>$formularioRegistro->estatus
             ]);
       
-        }else{     
+        }else{      
             $formulario = Formulario::find($formularioRegistro->formulario_id);
 
               //  DB::transaction(function () use ($request, $formulario,$formularioRegistro) {
@@ -263,12 +263,12 @@ class FormularioRegistroObserver
                     $when = now()->addMinutes(1);
                     $nousar=false;
                     $fcampos=$formulario->campos()->orderBy('formulario_seccion_id')->orderBy('orden')->get();
-          
+                    
                     foreach ($fcampos as $campo) {
 
-                        if($request->has($campo->nombre) and (!empty($request->get($campo->nombre)) or  $request->file($campo->nombre))){
-                            
-                            $valor = $request->get($campo->nombre);
+                          
+                        if($request->has($campo->nombre) and !empty($request->get($campo->nombre)) or in_array($campo->tipo,['files','camera','file'])){
+                             $valor = $request->get($campo->nombre);
         
                             if($campo->nombre =="prioridad" && $valor=="No usar este equipo"){
                                 $nousar=true;
@@ -276,10 +276,27 @@ class FormularioRegistroObserver
         
                             $files=array();
                             if($campo->tipo=='files') {
+                             
                                 $files = $request->file($campo->nombre);
+                         
                             }
-                          
-                            if(!empty($valor) or count($files) > 0){
+                            if(in_array($campo->tipo,['camera','file'])){
+                                $file = $request->file($campo->nombre);
+                                
+                                if($file){
+                                    $img = Image::make($file->path());
+                                    $ext = $file->getClientOriginalExtension();
+                                    $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().'.'.$ext;
+                                
+                                    $destinationPath = storage_path('/app/public/equipos');
+                                    $img->resize(800,null, function ($constraint) {
+                                        $constraint->aspectRatio();
+                                    })->save($destinationPath.'/'.$filename);
+                                    $valor =  $filename;
+                                
+                                }
+                            }
+                            if(!empty($valor) or $files){
         
                                 if($campo->tipo=='firma'){
                                     $filename = Sentinel::getUser()->id.'_'.$campo->nombre.'_'.time().'.png';
@@ -294,22 +311,7 @@ class FormularioRegistroObserver
                                     Storage::put('public/mccheck/'.$filename,$data);
                                     $valor =  $filename;
                                 }
-                                if(in_array($campo->tipo,['camera','file'])){
-                                    $file = $request->file($campo->nombre);
                                 
-                                    if($file){
-                                        $img = Image::make($file->path());
-                                        $ext = $file->getClientOriginalExtension();
-                                        $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().'.'.$ext;
-                                    
-                                        $destinationPath = storage_path('/app/public/equipos');
-                                        $img->resize(800,null, function ($constraint) {
-                                            $constraint->aspectRatio();
-                                        })->save($destinationPath.'/'.$filename);
-                                        $valor =  $filename;
-                                    
-                                    }
-                                }
                                 if(isset($files)){
                                     if(count($files) > 0){
                                         $j=1;
