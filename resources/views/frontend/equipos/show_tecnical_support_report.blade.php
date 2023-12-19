@@ -43,7 +43,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Fecha</label>
-                            {{ Form::date('fecha',date('Y-m-d'),array('class'=>'form-control','readonly')) }}
+                            {{ Form::date('fecha',\Carbon\Carbon::parse($data->created_at)->format('Y-m-d'),array('class'=>'form-control','readonly')) }}
                         </div>
                     </div>
                 </div>
