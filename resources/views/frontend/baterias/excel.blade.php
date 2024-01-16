@@ -11,6 +11,7 @@
   <tr>
     <td rowspan="2">Fecha</td>
     <td rowspan="2">Hora de Entrada</td>
+    <td rowspan="2">Hora de Salida</td>
     <td rowspan="2">Número de Equipo</td>
     <td colspan="2">Salida del cuarto</td>
     <td colspan="2">Entrada al cuarto</td>
@@ -31,7 +32,8 @@
   @foreach($data as $dato)
   <tr>
     <td>{{ $dato->fecha }}</td>
-    <td>{{ $dato->hora_entrada }}</td>
+    <td>@if($dato->accion=='entrada') {{ $dato->hora_entrada }} @endif</td>
+    <td>@if($dato->accion=='salida'){{ $dato->hora_entrada }} @endif</td>
     <td>{{ $dato->componente_id }}</td>
     <td>{{ $dato->horometro_salida_cuarto }}</td>
     <td>{{ $dato->carga_salida_cuarto }}</td>
