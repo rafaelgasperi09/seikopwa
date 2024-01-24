@@ -85,7 +85,7 @@
             'order':['0','DESC'],
         });
 
-        $("#check_table > tr > td").click(function() {
+        $(document).on('click',"#check_table > tr > td",function() {
             var id = $(this).attr('data-id');
             var turno = $(this).attr('data-turno');
              console.log('turno :'+turno);
