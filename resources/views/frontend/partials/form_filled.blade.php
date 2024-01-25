@@ -71,10 +71,10 @@
                                     @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,'field_name'=>$campo->nombre,'items'=>$api->result(),$readonly))
                                 @elseif($campo->tipo == 'date')
                                     @if($campo->opciones=='hoy' and $value==null and false)
-                                    {{ Form::date($campo->nombre,date('Y-m-d'),array('class'=>'form-control date',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,'readonly')) }}
+                                    {{ Form::date($campo->nombre,date('Y-m-d'),array('class'=>'form-control ',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,'readonly')) }}
                                     @php $showclear=false; @endphp
                                     @else
-                                    {{ Form::date($campo->nombre,$value,array('class'=>'form-control date',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,$readonly)) }}
+                                    {{ Form::date($campo->nombre,$value,array('class'=>'form-control ',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,$readonly)) }}
                                     @endif
                                 @elseif($campo->tipo == 'file')
                                     <div class="custom-file-upload">
