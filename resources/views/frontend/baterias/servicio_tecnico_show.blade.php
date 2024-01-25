@@ -1,6 +1,6 @@
 @extends('frontend.main-layout')
 @section('content')
-    @include('frontend.partials.title',array('title'=>'Registrar Carga Bateria','subtitle'=>$componente->id_componente))
+    @include('frontend.partials.title',array('title'=>'Registrar Servicio Técnico de Bateria','subtitle'=>$componente->id_componente))
     <!-------------------------------------------------------------------->
     <div class="section full mt-2 mb-2">
         <div class="section-title">{{$formulario->titulo}}</div>

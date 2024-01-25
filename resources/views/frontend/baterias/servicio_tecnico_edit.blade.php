@@ -1,6 +1,6 @@
 @extends('frontend.main-layout')
 @section('content')
-    @include('frontend.partials.title',array('title'=>'Registrar Servicio Técnico de Bateria','subtitle'=>$componente->id_componente))
+    @include('frontend.partials.title',array('title'=>'Editar Servicio Técnico de Bateria','subtitle'=>$componente->id_componente))
     <!-------------------------------------------------------------------->
     {{Form::open(array("method" => "POST",'route' => array('baterias.serv_tec_update', $data->id),"role" => "form",'class'=>'form-horizontal','files'=>true))}}
     <div class="section full mt-2 mb-2">
