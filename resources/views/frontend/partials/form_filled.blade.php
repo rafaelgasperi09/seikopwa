@@ -70,12 +70,9 @@
                                     <?php $api = new \App\HcaApi($campo->api_endpoint);?>
                                     @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,'field_name'=>$campo->nombre,'items'=>$api->result(),$readonly))
                                 @elseif($campo->tipo == 'date')
-                                    @if($campo->opciones=='hoy' and $value==null and false)
-                                    {{ Form::text($campo->nombre,date('Y-m-d'),array('class'=>'form-control ',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,'readonly')) }}
-                                    @php $showclear=false; @endphp
-                                    @else
+
                                     {{ Form::text($campo->nombre,$value,array('class'=>'form-control ',$requerido,'date-format'=>$campo->formato_fecha,'id'=>$campo->nombre,$readonly)) }}
-                                    @endif
+
                                 @elseif($campo->tipo == 'file')
                                     <div class="custom-file-upload">
                                         {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*')) }}
@@ -113,11 +110,9 @@
                                     </div>
                                     
                                 @elseif($campo->tipo == 'time')
-                                    @if($campo->opciones=='hora' and $value==null and false)
-                                        {{ Form::text($campo->nombre,date('H:i:s'),array('class'=>'form-control',$requerido,'id'=>$campo->nombre,'readonly')) }}
-                                    @else
+
                                         {{ Form::text($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
-                                    @endif
+
                                 @elseif($campo->tipo == 'number')
                                     @if(in_array($campo->nombre,[ 'horometro','lectura_horometro']))
                                         {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>$data->ult_horometro())) }}
