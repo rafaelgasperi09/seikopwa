@@ -72,6 +72,7 @@
         </div>
     </div>
 <script>
+    /*
     $('#fecha').val('{{date('Y-m-d')}}');
     $('#fecha').attr('readonly','readonly');
     $('#hora_entrada').val('{{date('H:i')}}');
@@ -80,6 +81,6 @@
     $('#typehead_tecnico_id').val('{{current_user()->full_name}}');
     $('#tecnico_id').val('{{current_user()->id}}');
     @endif
-
+    */
 </script>
 @stop
