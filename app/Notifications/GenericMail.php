@@ -19,7 +19,7 @@ class GenericMail extends Notification
      *
      * @return void
      */
-    public function __construct(User $title,$body)
+    public function __construct($title,$body)
     {
         $this->title = $title;
         $this->body = $body;
