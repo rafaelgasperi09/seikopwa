@@ -273,12 +273,18 @@ class UserController extends Controller
         return redirect(route('usuarios.index'));
     }
 
-    public function notifica($user_id){
+    public function notifica($user_id,Request $request){
 
             $u = User::find($user_id);
             $when = now()->addMinutes(1);
-           
-            notifica($u,(new NewUser($u,'test'))->delay($when));
+
+            $subject='test sistema gmpapp';
+            $body='Esta es una prueba de envios de correos sistema gmpapp';
+            if(isset($request->subject))
+                $subject=$request->subject;
+            if(isset($request->body))
+                $body=$request->body;
+            notifica($u,(new GenericMail($subject,$body))->delay($when));
             session()->flash('message.success', 'Usuario creado con éxito. Se ha enviado un correo con los datos de acceso.');
 
         
