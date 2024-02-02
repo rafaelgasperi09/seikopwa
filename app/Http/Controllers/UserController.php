@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Cliente;
 use App\MontacargaUser;
 use App\Notifications\NewUser;
+use App\Notifications\GenericMail;
 use App\Rol;
 use App\User;
 use Carbon\Carbon;
