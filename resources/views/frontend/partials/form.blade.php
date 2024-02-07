@@ -122,11 +122,11 @@
                                 @elseif($campo->tipo == 'number')
                                     @if(in_array($campo->nombre,[ 'horometro','lectura_horometro']))
                                        @php
-                                        $min='';
+                                        $min='';$max='30000';
                                         if($value=='')
                                             $min=$data->ult_horometro();
                                         @endphp
-                                        {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>$min)) }}
+                                        {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>$min,'max'=>$max)) }}
                                     @else
                                         {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                     @endif
