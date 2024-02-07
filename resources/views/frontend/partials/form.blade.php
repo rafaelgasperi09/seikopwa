@@ -125,8 +125,27 @@
                                         $min='';$max='30000';
                                         if($value=='')
                                             $min=$data->ult_horometro();
+                                       
                                         @endphp
-                                        {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>$min,'max'=>$max)) }}
+                                        {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>$min,'max'=>$max,'maxlenght'=>5)) }}
+                                        <script>
+                                        function valida_30k(valor){
+                                            var result=valor.val();
+                                            if(valor.val().length>=5){
+                                                var valhr=valor.val().slice(0, valor.attr('maxlenght'));
+                                                if(valhr>30000)
+                                                    valhr=30000;
+                                                result=valhr;
+                                            }
+                                            return result;
+                                        }
+                                        $('#{{$campo->nombre}}').bind('input', function () {
+                                            $(this).val(valida_30k($(this)));
+                                        });
+                                        $('#{{$campo->nombre}}').on('keydown', function () {
+                                            $(this).val(valida_30k($(this)));
+                                        });
+                                        </script>
                                     @else
                                         {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                     @endif
