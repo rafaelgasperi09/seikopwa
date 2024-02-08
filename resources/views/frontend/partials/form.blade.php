@@ -122,28 +122,28 @@
                                 @elseif($campo->tipo == 'number')
                                     @if(in_array($campo->nombre,[ 'horometro','lectura_horometro']))
                                        @php
-                                        $min='';$max='30000';
+                                        $min='';$max='60000';
                                         if($value=='')
                                             $min=$data->ult_horometro();
                                        
                                         @endphp
                                         {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>$min,'max'=>$max,'maxlenght'=>5)) }}
                                         <script>
-                                        function valida_30k(valor){
+                                        function valida_max(valor){
                                             var result=valor.val();
                                             if(valor.val().length>=5){
                                                 var valhr=valor.val().slice(0, valor.attr('maxlenght'));
-                                                if(valhr>30000)
-                                                    valhr=30000;
+                                                if(valhr>{{$max}})
+                                                    valhr={{$max}};
                                                 result=valhr;
                                             }
                                             return result;
                                         }
                                         $('#{{$campo->nombre}}').bind('input', function () {
-                                            $(this).val(valida_30k($(this)));
+                                            $(this).val(valida_max($(this)));
                                         });
                                         $('#{{$campo->nombre}}').on('keydown', function () {
-                                            $(this).val(valida_30k($(this)));
+                                            $(this).val(valida_max($(this)));
                                         });
                                         </script>
                                     @else
