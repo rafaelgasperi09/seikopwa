@@ -79,7 +79,7 @@
                                     @endif
                                 @elseif($campo->tipo == 'file')
                                     <div class="custom-file-upload">
-                                        {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*')) }}
+                                        {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>".png, .jpg, .jpeg" )) }}
                                         <label for="{{ $campo->nombre }}" id="{{ $campo->nombre }}" style="background-image: url({{ url('storage/equipos/'.$value) }});background-size: cover;background-repeat: no-repeat;background-position: center;">
                                             <span>
                                                 <strong>
@@ -91,7 +91,7 @@
                                     </div>
                                 @elseif($campo->tipo == 'files')
                                     <div class="">
-                                        {{ Form::file($campo->nombre.'[]',array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*','multiple')) }}
+                                        {{ Form::file($campo->nombre.'[]',array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>".png, .jpg, .jpeg",'multiple')) }}
 
                                     </div>
                                     <div class="row">
@@ -103,7 +103,7 @@
                                     </div>
                                 @elseif($campo->tipo == 'camera')
                                     <div class="custom-file-upload">
-                                        {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>'image/*','capture'=>'camera')) }}
+                                        {{ Form::file($campo->nombre,array('class'=>'form-control file','id'=>'archivo',$requerido,'id'=>$campo->nombre,$readonly,'accept'=>".png, .jpg, .jpeg",'capture'=>'camera')) }}
                                         <label for="{{ $campo->nombre }}" id="{{ $campo->nombre }}" style="background-image: url({{ url('storage/equipos/'.$value) }});background-size: cover;background-repeat: no-repeat;background-position: center;">
                                             <span>
                                                 <strong>
