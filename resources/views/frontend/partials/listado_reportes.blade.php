@@ -136,7 +136,7 @@
                        <ion-icon name="construct-outline" title="Editar"></ion-icon><small>Completar</small>
                    </a>
                @endif
-               @if($d->estatus  == 'C')
+               @if($d->estatus  == 'C' or true)
                 <a href="{{url('equipos/reportes/form_montacarga_servicio_tecnico/'.$d->id)}}" target="_blank" class="badge badge-primary btn-sm mr-1 botones">
                     <ion-icon name="print-outline" title="Ver detalle"></ion-icon><small>Imprimir</small>
                 </a>
