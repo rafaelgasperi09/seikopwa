@@ -65,7 +65,7 @@
     $('#status_history_modal').on('show.bs.modal', function (e) {
         var id = $(e.relatedTarget).attr('data-id');
         var path='{{ url('/') }}'
-
+        $('.timeline').html('');
         $.ajax({
             url: '{{ url("api/formulario_registro_estatus") }}',
             dataType: "json",

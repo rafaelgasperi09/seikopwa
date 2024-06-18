@@ -6,7 +6,7 @@
             <div class="row">
                 @php $campos=false;$firmas=0; $dat=array();  @endphp
                 @foreach($formulario->campos()->where('formulario_seccion_id',$seccion->id)->orderBy('orden')->orderBy('id')->get() as $campo)
-                   
+                {{ Form::hidden('inicio_reporte',date('Y-m-d h:i:s')) }}
                     @if(mostrarCampo($campo->tipo))
                         @php
                         $requerido ='';

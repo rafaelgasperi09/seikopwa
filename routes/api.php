@@ -93,18 +93,25 @@ Route::get('/formulario_registro_estatus', function (Request $request) {
         }
         elseif($form->formulario->tipo=='mant_prev'){
             switch($d->estatus){
+                case 'S':
+                    $historia[]='<div class="dot bg-primary"></div>';
+                    $historia[]='<div class="content">';
+                    $historia[]='<h4 class="title">INICIADO</h4>';
+                    $historia[]='<div class="text">Iniciada la actividad por el técnico:'.$d->user->first_name.' '.$d->user->last_name.'</div>';
+                    $historia[]='</div></div>';
+                    break;
                 case 'P':
                     $historia[]='<div class="dot bg-warning"></div>';
                     $historia[]='<div class="content">';
                     $historia[]='<h4 class="title">PENDIENTE</h4>';
-                    $historia[]='<div class="text">Nuevo mantenimiento preventivo creado por '.$d->user->first_name.' '.$d->user->last_name.'</div>';
+                    $historia[]='<div class="text"> El técnico '.$d->user->first_name.' '.$d->user->last_name.' finaliza la actividad  </div>';
                     $historia[]='</div></div>';
                     break;
                 case 'C':
                     $historia[]='<div class="dot bg-secundary"></div>';
                     $historia[]='<div class="content">';
                     $historia[]='<h4 class="title">CERRADO</h4>';
-                    $historia[]='<div class="text">Reporte finalizaro por '.$d->user->first_name.' '.$d->user->last_name.' </div>';
+                    $historia[]='<div class="text">Reporte finalizado con firma '.$d->user->first_name.' '.$d->user->last_name.' </div>';
                     $historia[]='</div></div>';
                     break;
                 }
