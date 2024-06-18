@@ -59,6 +59,7 @@ Route::get('/formulario_registro_estatus', function (Request $request) {
         $historia[]='<span class="time">'.\Carbon\Carbon::parse($d->created_at)->format('d-m-Y').'<br/>'.\Carbon\Carbon::parse($d->created_at)->format('H:i:s').'</span>';
 
         if($form->formulario->tipo=='serv_tec'){
+
             switch($d->estatus){
                 case 'P':
                     $historia[]='<div class="dot bg-warning"></div>';
@@ -71,7 +72,7 @@ Route::get('/formulario_registro_estatus', function (Request $request) {
                     $historia[]='<div class="dot bg-success"></div>';
                     $historia[]='<div class="content">';
                     $historia[]='<h4 class="title">ASIGNADA</h4>';
-                    $historia[]='<div class="text">asigno ticket de servico tecnico a  '.$d->registro->tecnico_asignado->first_name.' '.$d->registro->tecnico_asignado->last_name.'</div>';
+                    $historia[]='<div class="text">asigno ticket de servico tecnico a  '.$d->registro->tecnicoAsignado->first_name.' '.$d->registro->tecnicoAsignado->last_name.'</div>';
                     $historia[]='</div></div>';
                     break;
                 case 'PR':
