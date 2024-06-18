@@ -120,7 +120,8 @@
                                     @endif
                                 @elseif($campo->tipo == 'number')
                                     @if(in_array($campo->nombre,[ 'horometro','lectura_horometro']))
-                                        {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>$data->ult_horometro())) }}
+                                        @php $min=$data->ult_horometro()+1;@endphp
+                                        {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>$min)) }}
                                     @else
                                         {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly)) }}
                                     @endif

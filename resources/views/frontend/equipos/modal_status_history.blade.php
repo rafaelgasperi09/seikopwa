@@ -130,7 +130,8 @@
                     html2_1+=' </div>';
                     i++;act='';
                 });
-                $('.timeline').html(html);
+                console.log(data.historia);
+                $('.timeline').html(data.historia);
                 $('#gallery').html(html2);
                 $('#carousel_list_images').html(html2_1);
             }

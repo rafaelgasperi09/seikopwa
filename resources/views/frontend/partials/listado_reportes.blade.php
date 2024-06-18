@@ -111,6 +111,9 @@
                         <ion-icon name="trash-outline" title="Borrar"></ion-icon><small>Borrar</small>
                     </a>
                 @endif
+                <a class="badge badge-info btn-sm mr-1 botones" data-toggle="modal" data-target="#status_history_modal" data-id="{{ $d->id }}" style="display: inline-block;">
+                   <ion-icon name="file-tray-stacked-outline"></ion-icon><small>Historial</small>
+               </a>
            @elseif($nombre == 'form_montacarga_servicio_tecnico')
                @if(\Sentinel::getUser()->hasAccess('equipos.assign_tecnical_support') && $d->estatus == 'P' )
                    <a class="badge badge-success btn-sm mr-1 botones" data-toggle="modal" data-target="#assign_tecnico_modal"

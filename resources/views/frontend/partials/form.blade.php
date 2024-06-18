@@ -63,6 +63,7 @@
                                             }
                                         }
                                     $dat=getModelList('\App\\'.$campo->modelo,$db_id,$db_nombre,$label,$where);    
+
                                     @endphp
                                     @if(($campo->nombre=='supervisor_id' and $create) or $campo->nombre!='supervisor_id')
                                         @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>$dat))
@@ -124,7 +125,7 @@
                                        @php
                                         $min='';$max='60000';
                                         if($value=='')
-                                            $min=$data->ult_horometro();
+                                            $min=$data->ult_horometro()+1;
                                        
                                         @endphp
                                         {{ Form::number($campo->nombre,$value,array('class'=>'form-control',$requerido,'id'=>$campo->nombre,$readonly,'min'=>$min,'max'=>$max,'maxlenght'=>5)) }}
