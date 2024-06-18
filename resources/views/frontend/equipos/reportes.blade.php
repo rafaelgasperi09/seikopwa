@@ -18,8 +18,8 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Fecha registro</th>
-                <th>Hora</th>
+                <th>Fecha/Hora inicio</th>
+                <th>Fecha/Hora Fin</th>
                 <th>Tipo</th>
                 <th>Equipo</th>
                 <th>Prioridad</th>
@@ -66,8 +66,8 @@
                 "ajax": "{{ url('equipos/reportes_datatable') }}?"+parameters,
                 "columns":[
                     {data:'id'},
-                    {data:'fecha',name:'formulario_registro.created_at'},
-                    {data:'hora',name:'formulario_registro.created_at'},
+                    {data:'fecha_inicio'},
+                    {data:'fecha_fin'},
                     {data:'tipo',name:'formularios.tipo'},
                     {data:'numero_parte',name:'equipos_vw.numero_parte'},
                     {data:'prioridad',name:'extra.prioridad'},

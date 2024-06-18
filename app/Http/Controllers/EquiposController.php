@@ -139,10 +139,22 @@ class EquiposController extends BaseController
                                         AND fd.user_id =u.id  
                                         AND fr.deleted_at IS NULL
                                         GROUP BY formulario_registro_id )  extra "), 'formulario_registro.id', '=', 'extra.id')
+                ->leftJoin('formulario_registro_estatus as fre', function($join)
+                {
+                    $join->on('formulario_registro.id', '=', 'fre.formulario_registro_id');
+                    $join->on('fre.estatus','=',DB::raw("'S'"));
+                })
+                ->leftJoin('formulario_registro_estatus as fre2', function($join)
+                {
+                    $join->on('formulario_registro.id', '=', 'fre2.formulario_registro_id');
+                    $join->on('fre2.estatus','=','formulario_registro.estatus');
+                })
+                         
                 ->selectRaw("formulario_registro.*,DATE_FORMAT(formulario_registro.created_at, '%Y-%m-%d') as fecha,DATE_FORMAT(formulario_registro.created_at, '%h:%i %p') as hora,users.first_name,users.last_name,formularios.tipo,
                             clientes_vw.nombre,equipos_vw.numero_parte,
                             concat(users.first_name,' ',users.last_name) as user_name,
-                            extra.cliente,extra.prioridad,extra.horometro")
+                            extra.cliente,extra.prioridad,extra.horometro,DATE_FORMAT(ifnull(fre.created_at,formulario_registro.created_at), '%h:%i %p') as hora_inicio,
+                            DATE_FORMAT(ifnull(fre2.created_at,formulario_registro.created_at), '%Y-%m-%d') as fecha_fin,DATE_FORMAT(ifnull(fre2.created_at,formulario_registro.created_at), '%h:%i %p') as hora_fin")
                 ->whereNull('formulario_registro.deleted_at')
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
@@ -190,6 +202,12 @@ class EquiposController extends BaseController
         })
         ->addColumn('tipo', function($row) {
             return tipo_form($row->tipo);
+        })
+        ->addColumn('fecha_inicio', function($row) {
+            return  $row->fecha.' '. $row->hora_inicio;
+        })
+        ->addColumn('fecha_fin', function($row) {
+            return  $row->fecha_fin.' '. $row->hora_fin;
         })
         ->addColumn('actions', function($row) use($editar) {
         $url='';
