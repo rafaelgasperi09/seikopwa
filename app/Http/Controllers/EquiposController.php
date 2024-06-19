@@ -395,7 +395,7 @@ class EquiposController extends BaseController
             if($k+1<count($dias))
                 $querySelect.=','.PHP_EOL;
         }
-       
+        $user=current_user();
         $form['dc'] =FormularioRegistro::selectRaw($querySelect)
                                         ->join('formularios','formulario_registro.formulario_id','=','formularios.id')
                                         ->join('formulario_data','formulario_data.formulario_registro_id','=','formulario_registro.id')
@@ -403,17 +403,33 @@ class EquiposController extends BaseController
                                         ->where('equipo_id',$id)
                                         ->where('formularios.nombre','form_montacarga_daily_check')
                                         ->groupBy('formulario_registro.semana','formulario_registro.ano')
+                                        ->when($user->isCliente(),function($q) use($user){
+                                            $q->whereRaw('formulario_registro.cliente_id in ('.$user->crm_clientes_id.')');
+                                        })
                                         ->get();
-       
+
         $form['st']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
-                                        ->where('equipo_id',$id)->where('formularios.tipo','serv_tec')->get();
+                                        ->where('equipo_id',$id)
+                                        ->where('formularios.tipo','serv_tec')
+                                        ->when($user->isCliente(),function($q) use($user){
+                                            $q->whereRaw('formulario_registro.cliente_id in ('.$user->crm_clientes_id.')');
+                                        })
+                                        ->get();
 
 
         $form['mp']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
-                                        ->where('equipo_id',$id)->where('formularios.tipo','mant_prev')->get();
+                                        ->where('equipo_id',$id)->where('formularios.tipo','mant_prev')
+                                        ->when($user->isCliente(),function($q) use($user){
+                                            $q->whereRaw('formulario_registro.cliente_id in ('.$user->crm_clientes_id.')');
+                                        })
+                                        ->get();
 
         $form['ca']=FormularioRegistro::selectRaw('formulario_registro.*')->join('formularios','formulario_registro.formulario_id','=','formularios.id')
-                                        ->where('equipo_id',$id)->where('formularios.tipo','control_alquiler')->get();
+                                        ->where('equipo_id',$id)->where('formularios.tipo','control_alquiler')
+                                        ->when($user->isCliente(),function($q) use($user){
+                                            $q->whereRaw('formulario_registro.cliente_id in ('.$user->crm_clientes_id.')');
+                                        })
+                                        ->get();
 
 
         //dd($data->tipo->name);
