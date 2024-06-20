@@ -159,6 +159,8 @@ class EquiposController extends BaseController
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
                     $q->whereIn("cliente_id",$clientes);
+                    $q->whereIn("formularios.tipo",['daily_check','mant_prev']);
+                    
                 })
                 ->when(!empty($request->equipo_id) and $request->equipo_id>0 ,function ($q) use($request){
                     $q->where("equipo_id",$request->equipo_id);
