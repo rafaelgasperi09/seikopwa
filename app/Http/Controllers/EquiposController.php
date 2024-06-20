@@ -190,7 +190,7 @@ class EquiposController extends BaseController
             return $row->first_name.' '.$row->last_name;
         })
         ->editColumn('created_at', function($row) {
-            return \Carbon\Carbon::parse($row->created_at)->format('Y-m-d');
+            return \Carbon\Carbon::parse($row->created_at)->format('Y-m-d H:i:s');
         })
         ->editColumn('numero_parte', function($row) {
             return "<a target='_blank' href='".route('equipos.detail',$row->equipo_id)."'>$row->numero_parte</a>";
@@ -204,10 +204,12 @@ class EquiposController extends BaseController
             return tipo_form($row->tipo);
         })
         ->addColumn('fecha_inicio', function($row) {
-            return  $row->fecha.' '. $row->hora_inicio;
+            if($row->tipo=='mant_prev')
+                return  $row->fecha.' '. $row->hora_inicio;
         })
         ->addColumn('fecha_fin', function($row) {
-            return  $row->fecha_fin.' '. $row->hora_fin;
+            if($row->tipo=='mant_prev')
+                return  $row->fecha_fin.' '. $row->hora_fin;
         })
         ->addColumn('actions', function($row) use($editar) {
         $url='';

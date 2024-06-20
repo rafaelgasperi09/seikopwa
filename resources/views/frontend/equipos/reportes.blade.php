@@ -18,6 +18,7 @@
             <thead>
             <tr>
                 <th>#</th>
+                <th>Fecha/Hora registro</th>
                 <th>Fecha/Hora inicio</th>
                 <th>Fecha/Hora Fin</th>
                 <th>Tipo</th>
@@ -66,6 +67,7 @@
                 "ajax": "{{ url('equipos/reportes_datatable') }}?"+parameters,
                 "columns":[
                     {data:'id'},
+                    {data:'created_at'},
                     {data:'fecha_inicio'},
                     {data:'fecha_fin'},
                     {data:'tipo',name:'formularios.tipo'},
