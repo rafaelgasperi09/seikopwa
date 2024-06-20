@@ -124,6 +124,7 @@ class EquiposController extends BaseController
 
         $carbon = new \Carbon\Carbon();
         $desde = $carbon->now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
+        $es_cliente=current_user()->isCliente();
         $data = DB::table('formulario_registro')
                 ->join('formularios','formulario_registro.formulario_id','formularios.id')
                 ->join('users','formulario_registro.creado_por','users.id')
@@ -203,12 +204,12 @@ class EquiposController extends BaseController
         ->addColumn('tipo', function($row) {
             return tipo_form($row->tipo);
         })
-        ->addColumn('fecha_inicio', function($row) {
-            if($row->tipo=='mant_prev')
+        ->addColumn('fecha_inicio', function($row) use($es_cliente){
+            if(($row->tipo=='mant_prev' and $es_cliente) or !$es_cliente)
                 return  $row->fecha.' '. $row->hora_inicio;
         })
-        ->addColumn('fecha_fin', function($row) {
-            if($row->tipo=='mant_prev')
+        ->addColumn('fecha_fin', function($row)  use($es_cliente){
+            if(($row->tipo=='mant_prev' and $es_cliente) or !$es_cliente)
                 return  $row->fecha_fin.' '. $row->hora_fin;
         })
         ->addColumn('actions', function($row) use($editar) {
