@@ -123,7 +123,7 @@
                                 @elseif($campo->tipo == 'number')
                                     @if(in_array($campo->nombre,[ 'horometro','lectura_horometro']))
                                        @php
-                                        $min='';$max='60000';
+                                        $min=0;$max='60000';
                                         if($value=='')
                                             $min=$data->ult_horometro()+1;
                                        
