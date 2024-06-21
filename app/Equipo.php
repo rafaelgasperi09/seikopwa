@@ -58,7 +58,6 @@ class Equipo extends BaseModel
             $horometro=$ult_form->data->whereIn('formulario_campo_id',$campos);
 
             if(count($horometro)>0){
-               
                 $horometro=$horometro->first()->valor;
             }else{
                 $horometro=0;
@@ -67,6 +66,10 @@ class Equipo extends BaseModel
         else{
             $horometro=0;
         }
+
+        if(empty($horometro))
+            $horometro=0;
+        
         return $horometro;
     }
 
