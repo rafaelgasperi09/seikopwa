@@ -37,13 +37,18 @@ class FormularioRegistroObserver
     public function created(FormularioRegistro $formularioRegistro)
     {
         if(!empty(request()->inicio_reporte)){
+            $inicio_reporte=request()->inicio_reporte;
             $inicio=FormularioRegistroEstatus::create([
                 'formulario_registro_id'=>$formularioRegistro->id,
                 'user_id'=>current_user()->id,
                 'estatus'=>'S',
             ]);
-            $inicio->created_at=request()->inicio_reporte;
-            $inicio->updated_at=request()->inicio_reporte;
+            $formularioRegistro::withoutEvents(function () use($formularioRegistro, $inicio_reporte){
+                $formularioRegistro->fecha_inicia=$inicio_reporte;
+                $formularioRegistro->save();
+            });
+            $inicio->created_at= $inicio_reporte;
+            $inicio->updated_at= $inicio_reporte;
             $inicio->save();
         }
 
