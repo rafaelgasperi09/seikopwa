@@ -272,7 +272,7 @@ class FormularioRegistroObserver
                 'estatus'=>$formularioRegistro->estatus
             ]);
             $formularioRegistro::withoutEvents(function () use($formularioRegistro){
-                $formularioRegistro->fecha_inicia=now();
+                $formularioRegistro->fecha_fin=now();
                 $formularioRegistro->save();
             });
         }else{      
