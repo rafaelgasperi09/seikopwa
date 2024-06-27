@@ -263,15 +263,18 @@ class FormularioRegistroObserver
     public function updated(FormularioRegistro $formularioRegistro)
     {
         $request = request();     
-    
+        $user_id=current_user()->id;
         if($formularioRegistro->isDirty('estatus') or $formularioRegistro->isDirty('tecnico_asignado')){
            
             FormularioRegistroEstatus::create([
                 'formulario_registro_id'=>$formularioRegistro->id,
-                'user_id'=>current_user()->id,
+                'user_id'=>$user_id,
                 'estatus'=>$formularioRegistro->estatus
             ]);
-      
+            $formularioRegistro::withoutEvents(function () use($formularioRegistro){
+                $formularioRegistro->fecha_inicia=now();
+                $formularioRegistro->save();
+            });
         }else{      
             $formulario = Formulario::find($formularioRegistro->formulario_id);
 

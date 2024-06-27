@@ -177,7 +177,7 @@ class EquiposController extends BaseController
                     $q->where("formularios.tipo",$request->tipo);
                 })
                 ->when(!empty($request->estado)  ,function ($q) use($request){
-                    $q->where("estatus",$request->estado);
+                    $q->where("formulario_registro.estatus",$request->estado);
                 })
                 ->when(!empty($request->created_by)  ,function ($q) use($request){
                     $q->where("formulario_registro.creado_por",$request->created_by);
