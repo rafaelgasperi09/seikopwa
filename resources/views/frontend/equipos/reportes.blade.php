@@ -68,8 +68,8 @@
                 "columns":[
                     {data:'id'},
                     {data:'created_at'},
-                    {data:'fecha_inicio'},
-                    {data:'fecha_final'},
+                    {data:'fecha_inicia'},
+                    {data:'fecha_fin'},
                     {data:'tipo',name:'formularios.tipo'},
                     {data:'numero_parte',name:'equipos_vw.numero_parte'},
                     {data:'prioridad',name:'extra.prioridad'},

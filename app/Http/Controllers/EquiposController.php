@@ -139,23 +139,11 @@ class EquiposController extends BaseController
                                         AND fd.formulario_registro_id=fr.id
                                         AND fd.user_id =u.id  
                                         AND fr.deleted_at IS NULL
-                                        GROUP BY formulario_registro_id )  extra "), 'formulario_registro.id', '=', 'extra.id')
-                ->leftJoin('formulario_registro_estatus as fre', function($join)
-                {
-                    $join->on('formulario_registro.id', '=', 'fre.formulario_registro_id');
-                    $join->on('fre.estatus','=',DB::raw("'S'"));
-                })
-                ->leftJoin('formulario_registro_estatus as fre2', function($join)
-                {
-                    $join->on('formulario_registro.id', '=', 'fre2.formulario_registro_id');
-                    $join->on('fre2.estatus','=','formulario_registro.estatus');
-                })
-                         
+                                        GROUP BY formulario_registro_id )  extra "), 'formulario_registro.id', '=', 'extra.id')        
                 ->selectRaw("formulario_registro.*,DATE_FORMAT(formulario_registro.created_at, '%Y-%m-%d') as fecha,DATE_FORMAT(formulario_registro.created_at, '%h:%i %p') as hora,users.first_name,users.last_name,formularios.tipo,
                             clientes_vw.nombre,equipos_vw.numero_parte,
                             concat(users.first_name,' ',users.last_name) as user_name,
-                            extra.cliente,extra.prioridad,extra.horometro,DATE_FORMAT(ifnull(fre.created_at,formulario_registro.created_at), '%h:%i %p') as hora_inicio,
-                            DATE_FORMAT(ifnull(fre2.created_at,formulario_registro.created_at), '%Y-%m-%d') as fecha_final,DATE_FORMAT(ifnull(fre2.created_at,formulario_registro.created_at), '%h:%i %p') as hora_fin")
+                            extra.cliente,extra.prioridad,extra.horometro")
                 ->whereNull('formulario_registro.deleted_at')
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
@@ -204,13 +192,13 @@ class EquiposController extends BaseController
         ->addColumn('tipo', function($row) {
             return tipo_form($row->tipo);
         })
-        ->addColumn('fecha_inicio', function($row) use($es_cliente){
+        ->editColumn('fecha_inicia', function($row) use($es_cliente){
             if(($row->tipo=='mant_prev' and $es_cliente) or !$es_cliente)
-                return  $row->fecha.' '. $row->hora_inicio;
+                return  $row->fecha_inicia;
         })
-        ->addColumn('fecha_fin', function($row)  use($es_cliente){
+        ->editColumn('fecha_fin', function($row)  use($es_cliente){
             if(($row->tipo=='mant_prev' and $es_cliente) or !$es_cliente)
-                return  $row->fecha_fin.' '. $row->hora_fin;
+                return  $row->fecha_fin;
         })
         ->addColumn('actions', function($row) use($editar) {
         $url='';
