@@ -69,7 +69,7 @@
                     {data:'id'},
                     {data:'created_at'},
                     {data:'fecha_inicio'},
-                    {data:'fecha_fin'},
+                    {data:'fecha_final'},
                     {data:'tipo',name:'formularios.tipo'},
                     {data:'numero_parte',name:'equipos_vw.numero_parte'},
                     {data:'prioridad',name:'extra.prioridad'},

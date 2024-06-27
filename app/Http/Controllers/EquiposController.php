@@ -155,7 +155,7 @@ class EquiposController extends BaseController
                             clientes_vw.nombre,equipos_vw.numero_parte,
                             concat(users.first_name,' ',users.last_name) as user_name,
                             extra.cliente,extra.prioridad,extra.horometro,DATE_FORMAT(ifnull(fre.created_at,formulario_registro.created_at), '%h:%i %p') as hora_inicio,
-                            DATE_FORMAT(ifnull(fre2.created_at,formulario_registro.created_at), '%Y-%m-%d') as fecha_fin,DATE_FORMAT(ifnull(fre2.created_at,formulario_registro.created_at), '%h:%i %p') as hora_fin")
+                            DATE_FORMAT(ifnull(fre2.created_at,formulario_registro.created_at), '%Y-%m-%d') as fecha_final,DATE_FORMAT(ifnull(fre2.created_at,formulario_registro.created_at), '%h:%i %p') as hora_fin")
                 ->whereNull('formulario_registro.deleted_at')
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
