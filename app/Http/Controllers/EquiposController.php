@@ -121,7 +121,6 @@ class EquiposController extends BaseController
         //dd($request->all());
         $clientes=explode(',',current_user()->crm_clientes_id);
         $editar=(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'));
-
         $carbon = new \Carbon\Carbon();
         $desde = $carbon->now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
         $es_cliente=current_user()->isCliente();
@@ -140,7 +139,8 @@ class EquiposController extends BaseController
                                         AND fd.user_id =u.id  
                                         AND fr.deleted_at IS NULL
                                         GROUP BY formulario_registro_id )  extra "), 'formulario_registro.id', '=', 'extra.id')        
-                ->selectRaw("formulario_registro.*,DATE_FORMAT(formulario_registro.created_at, '%Y-%m-%d') as fecha,DATE_FORMAT(formulario_registro.created_at, '%h:%i %p') as hora,users.first_name,users.last_name,formularios.tipo,
+                ->selectRaw("formulario_registro.id,formulario_registro.created_at,fecha_inicia,fecha_fin,formulario_registro.estatus,equipo_id,
+                            turno_chequeo_diario,users.first_name,users.last_name,formularios.tipo,
                             clientes_vw.nombre,equipos_vw.numero_parte,
                             concat(users.first_name,' ',users.last_name) as user_name,
                             extra.cliente,extra.prioridad,extra.horometro")
@@ -189,7 +189,7 @@ class EquiposController extends BaseController
                 return $row->cliente;
             return '';
         })
-        ->addColumn('tipo', function($row) {
+        ->editColumn('tipo', function($row) {
             return tipo_form($row->tipo);
         })
         ->editColumn('fecha_inicia', function($row) use($es_cliente){
