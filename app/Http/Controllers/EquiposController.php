@@ -192,14 +192,6 @@ class EquiposController extends BaseController
         ->editColumn('tipo', function($row) {
             return tipo_form($row->tipo);
         })
-        ->editColumn('fecha_inicia', function($row) use($es_cliente){
-            if(($row->tipo=='mant_prev' and $es_cliente) or !$es_cliente)
-                return  $row->fecha_inicia;
-        })
-        ->editColumn('fecha_fin', function($row)  use($es_cliente){
-            if(($row->tipo=='mant_prev' and $es_cliente) or !$es_cliente)
-                return  $row->fecha_fin;
-        })
         ->addColumn('actions', function($row) use($editar) {
         $url='';
         $url2='';

@@ -19,8 +19,10 @@
             <tr>
                 <th>#</th>
                 <th>Fecha/Hora registro</th>
+                @if(!current_user()->isCliente())
                 <th>Fecha/Hora inicio</th>
                 <th>Fecha/Hora Fin</th>
+                @endif
                 <th>Tipo</th>
                 <th>Equipo</th>
                 <th>Prioridad</th>
@@ -68,8 +70,10 @@
                 "columns":[
                     {data:'id'},
                     {data:'created_at'},
+                    @if(!current_user()->isCliente())
                     {data:'fecha_inicia'},
                     {data:'fecha_fin'},
+                    @endif
                     {data:'tipo',name:'formularios.tipo'},
                     {data:'numero_parte',name:'equipos_vw.numero_parte'},
                     {data:'prioridad',name:'extra.prioridad'},
