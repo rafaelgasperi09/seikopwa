@@ -1,6 +1,6 @@
 @php
 $columns=array('IDREPORTE','FECHA REGISTRO','HORA', 'TIPO','EQUIPO','PRIORIDAD','REGISTRADO POR','CLIENTE','FIRMA CLIENTE','HOROMETRO','ESTATUS','TURNO');
-$campos=array('id','fecha','hora','tipo','numero_parte','prioridad','user_name','nombre','cliente','horometro','estatus','turno_chequeo_diario');
+$campos=array('id','fecha','hora','tipo','numero_parte','prioridad','user_name','user_name','cliente','horometro','estatus','turno_chequeo_diario');
 @endphp
 <table>
 <thead>
@@ -20,6 +20,10 @@ $campos=array('id','fecha','hora','tipo','numero_parte','prioridad','user_name',
     <td >
         @if($k=='tipo')
         {{ tipo_form($data->$k)}}
+        @elseif($k=='fecha')
+        {{\Carbon\Carbon::parse($data->created_at)->format('Y-m-d')}}
+        @elseif($k=='hora')
+        {{\Carbon\Carbon::parse($data->created_at)->format('h:i:s')}}
         @elseif(($k=='cliente' and $data->$k<>$data->user_name) or $k!='cliente')
           {{$data->$k}}
         @endif

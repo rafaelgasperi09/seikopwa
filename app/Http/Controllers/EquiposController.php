@@ -124,27 +124,31 @@ class EquiposController extends BaseController
         $carbon = new \Carbon\Carbon();
         $desde = $carbon->now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
         $es_cliente=current_user()->isCliente();
-        $data = DB::table('formulario_registro')
-                ->join('formularios','formulario_registro.formulario_id','formularios.id')
-                ->join('users','formulario_registro.creado_por','users.id')
-                ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
-                ->join('clientes_vw','formulario_registro.cliente_id','clientes_vw.id')
-                ->leftjoin(  DB::raw("(SELECT formulario_registro_id AS id,
-                                        MAX(CASE WHEN fc.tipo ='firma' AND fc.cambio_estatus=1 AND fd.`valor` IS NOT NULL THEN CONCAT(u.first_name,' ',u.last_name) ELSE '' END) AS cliente,
-                                        MAX(CASE WHEN fd.formulario_campo_id IN (968,969) THEN valor ELSE '' END) AS prioridad,
-                                        MAX(CASE WHEN fc.nombre IN ('horometro','lectura_horometro')  AND fc.tipo ='number' THEN valor ELSE '' END) AS horometro
-                                        FROM formulario_data fd,formulario_campos fc ,users u ,formulario_registro fr
-                                        WHERE fd.formulario_campo_id =fc.id 
-                                        AND fd.formulario_registro_id=fr.id
-                                        AND fd.user_id =u.id  
-                                        AND fr.deleted_at IS NULL
-                                        GROUP BY formulario_registro_id )  extra "), 'formulario_registro.id', '=', 'extra.id')        
-                ->selectRaw("formulario_registro.id,formulario_registro.created_at,fecha_inicia,fecha_fin,formulario_registro.estatus,equipo_id,
-                            turno_chequeo_diario,users.first_name,users.last_name,formularios.tipo,
-                            clientes_vw.nombre,equipos_vw.numero_parte,
-                            concat(users.first_name,' ',users.last_name) as user_name,
-                            extra.cliente,extra.prioridad,extra.horometro")
-                ->whereNull('formulario_registro.deleted_at')
+        $data = DB::table('formulario_registro as fr')
+                ->join('formularios as f','fr.formulario_id','f.id')
+                ->join('users as u','fr.creado_por','u.id')
+                ->join('equipos_vw as evw','fr.equipo_id','evw.id')
+                ->join('clientes_vw as cvw','fr.cliente_id','cvw.id')
+                ->leftjoin('formulario_data as fd','fr.id','fd.formulario_registro_id')
+                ->join('formulario_campos as fc','fd.formulario_campo_id','fc.id')
+                ->join('users as usr','fd.user_id','usr.id')     
+                ->selectRaw("  fr.id, 
+                                fr.created_at, 
+                                fr.fecha_inicia, 
+                                fr.fecha_fin, 
+                                fr.estatus, 
+                                fr.equipo_id, 
+                                fr.turno_chequeo_diario, 
+                                u.first_name, 
+                                u.last_name, 
+                                f.tipo, 
+                                cvw.nombre AS cliente_nombre, 
+                                evw.numero_parte, 
+                                CONCAT(u.first_name, ' ', u.last_name) AS user_name,
+                                MAX(CASE WHEN fc.tipo = 'firma' AND fc.cambio_estatus = 1 AND fd.valor IS NOT NULL THEN CONCAT(usr.first_name, ' ', usr.last_name) ELSE '' END) AS cliente, 
+                                MAX(CASE WHEN fd.formulario_campo_id IN (968, 969) THEN fd.valor ELSE '' END) AS prioridad, 
+                                MAX(CASE WHEN fc.nombre IN ('horometro', 'lectura_horometro') AND fc.tipo = 'number' THEN fd.valor ELSE '' END) AS horometro")
+                ->whereNull('fr.deleted_at')
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
                     $q->whereIn("cliente_id",$clientes);                    
@@ -156,20 +160,22 @@ class EquiposController extends BaseController
                     $q->where("cliente_id",$request->cliente_id);
                 })
                 ->when(!empty($request->desde)  ,function ($q) use($request){
-                    $q->where("formulario_registro.created_at",'>=',$request->desde);
+                    $q->where("fr.created_at",'>=',$request->desde);
                 })
                 ->when(!empty($request->hasta)  ,function ($q) use($request){
-                    $q->where("formulario_registro.created_at",'<=',$request->hasta);
+                    $q->where("fr.created_at",'<=',$request->hasta);
                 })
                 ->when(!empty($request->tipo)  ,function ($q) use($request){
                     $q->where("formularios.tipo",$request->tipo);
                 })
                 ->when(!empty($request->estado)  ,function ($q) use($request){
-                    $q->where("formulario_registro.estatus",$request->estado);
+                    $q->where("fr.estatus",$request->estado);
                 })
                 ->when(!empty($request->created_by)  ,function ($q) use($request){
-                    $q->where("formulario_registro.creado_por",$request->created_by);
-                });
+                    $q->where("fr.creado_por",$request->created_by);
+                })
+                ->groupBy(DB::raw('fr.id, fr.created_at, fr.fecha_inicia, fr.fecha_fin, fr.estatus, fr.equipo_id,
+                fr.turno_chequeo_diario,u.first_name, u.last_name, f.tipo, cvw.nombre, evw.numero_parte, u.first_name, u.last_name'));
               
     if($export_datos){
         return $data->get();
