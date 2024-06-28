@@ -166,7 +166,7 @@ class EquiposController extends BaseController
                     $q->where("fr.created_at",'<=',$request->hasta);
                 })
                 ->when(!empty($request->tipo)  ,function ($q) use($request){
-                    $q->where("formularios.tipo",$request->tipo);
+                    $q->where("f.tipo",$request->tipo);
                 })
                 ->when(!empty($request->estado)  ,function ($q) use($request){
                     $q->where("fr.estatus",$request->estado);
