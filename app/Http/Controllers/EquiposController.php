@@ -153,7 +153,7 @@ class EquiposController extends BaseController
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when( $es_cliente ,function ($q) use($request,$clientes){
                     $q->whereIn("cliente_id",$clientes)
-                    ->where('f.tipo','<>','serv_tec');                    
+                    ->whereRaw("((f.tipo <> 'serv_tec' and evw.numero_parte like 'GM%') or evw.numero_parte not like 'GM%')");                    
                 })
                 ->when(!empty($request->equipo_id) and $request->equipo_id>0 ,function ($q) use($request){
                     $q->where("equipo_id",$request->equipo_id);

@@ -1,4 +1,8 @@
+
 @foreach($data as $e)
+    @php 
+    $ver_serv_tec=(!current_user()->isCliente() or (current_user()->isCliente() and !str_contains($e->numero_parte,'GM')));
+    @endphp
     <li class="multi-level">
         <a href="#equipo_{{ $e->id }}" class="item">
             <div class="imageWrapper">
@@ -80,7 +84,7 @@
                     </div>
                 </li>
             @endif
-            @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.assign_tecnical_support','equipos.start_tecnical_support','equipos.see_tecnical_support']) and !current_user()->isCliente())
+            @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.assign_tecnical_support','equipos.start_tecnical_support','equipos.see_tecnical_support']) and $ver_serv_tec )
                 <li>
                     <div class="item">
                         <div class="icon-box bg-warning">

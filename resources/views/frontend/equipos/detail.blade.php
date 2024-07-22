@@ -1,5 +1,7 @@
 @extends('frontend.main-layout')
-
+@php 
+    $ver_serv_tec=(!current_user()->isCliente() or (current_user()->isCliente() and !str_contains($data->numero_parte,'GM')));
+@endphp
 @section('content')
 @include('frontend.partials.title',array('title'=>'Detalle de Equipos','subtitle'=>$data->numero_parte,'image'=>getEquipoIconBySubTipo($data->tipo_equipos_id,$data->subTipo->display_name),'route_back'=>$route_back))
 <div class="section full mt-2">
@@ -92,7 +94,7 @@
                                 </a>
                             </li>
                             @endif
-                            @if(\Sentinel::hasAnyAccess(['equipos.see_tecnical_support','equipos.create_tecnical_support','equipos.edit_tecnical_support']) and !current_user()->isCliente())
+                            @if(\Sentinel::hasAnyAccess(['equipos.see_tecnical_support','equipos.create_tecnical_support','equipos.edit_tecnical_support']) and $ver_serv_tec)
                             <li class="nav-item">
                                 <a class="nav-link {{$tab['t3']}} " data-toggle="tab" href="#serv_tec" role="tab" aria-selected="true">
                                         <ion-icon name="alert-circle-outline" class="text-warning" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
@@ -153,7 +155,7 @@
                             </div>
                         </div>
                         @endif
-                        @if(\Sentinel::hasAnyAccess(['equipos.see_tecnical_support','equipos.create_tecnical_support','equipos.edit_tecnical_support']))
+                        @if(\Sentinel::hasAnyAccess(['equipos.see_tecnical_support','equipos.create_tecnical_support','equipos.edit_tecnical_support']) and $ver_serv_tec)
                         <div class="tab-pane   {{$tab_content['t3']}}" id="serv_tec" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Reporte Servicio Técnico

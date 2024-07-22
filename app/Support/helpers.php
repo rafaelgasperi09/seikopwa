@@ -356,9 +356,7 @@ function tipo_form($tipo=''){
                     'serv_tec_bat'=>'Servicio tecnico de Bateria'
     );
 
-    if(current_user()->isCliente()){
-        unset($tipos['serv_tec']);
-    }
+
 
     if(empty($tipo))
         return $tipos;
