@@ -75,11 +75,12 @@ class User extends Authenticatable
 
     public function isCliente()
     {
-
-        if(!empty($this->crm_cliente_id) or !empty($this->crm_clientes_id))
-            return true;
-        else
-            return false;
+        $es_cliente=false;
+        foreach($this->roles as $r){
+            if($r->tipo=='cliente')
+                $es_cliente= true;
+        }
+        return $es_cliente;
     }
 
     public function getFullName(){
