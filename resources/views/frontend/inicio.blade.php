@@ -59,7 +59,7 @@
 
                 @endif  
             </div>
-            @if( $data['tipo']=='cliente' or ($data['tipo']=='gmp' and  current_user()->isCliente()) or !current_user()->isCliente())
+            @if( $data['tipo']=='cliente' or  !current_user()->isCliente())
             <div class=" mb-2 col-md-6 col">
                 {{--}}SOPORTE PENDIENTE DE INICIAR {{--}}
                
