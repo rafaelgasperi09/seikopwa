@@ -59,10 +59,10 @@
 
                 @endif  
             </div>
-            @if(!current_user()->isCliente())
+            @if( $data['tipo']=='cliente' or ($data['tipo']=='gmp' and  current_user()->isCliente()) or !current_user()->isCliente())
             <div class=" mb-2 col-md-6 col">
                 {{--}}SOPORTE PENDIENTE DE INICIAR {{--}}
-            
+               
                 @include('frontend.dashboard_widgets.soporte_pend_iniciar')
                 @if( current_user()->isSupervisor() or current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador') )
                 @include('frontend.dashboard_widgets.soporte_pend_tecnico')
@@ -74,7 +74,7 @@
                 @include('frontend.dashboard_widgets.ultimos_servicio_tecnico_cerrado')
             </div>
             @endif
-    @endif
+        @endif
         </div>
     </div>
 
