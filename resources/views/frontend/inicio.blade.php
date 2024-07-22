@@ -33,7 +33,7 @@
     </ul>
     <div class="section mt-2">
         <div class="row">
-            @if(current_user()->isOnGroup('operadorC') )
+        @if(current_user()->isOnGroup('operadorC') )
             <div class=" mb-2 col-md-6 col">                   
                 {{--}}TOAL EQUIPOS{{--}}
                 @include('frontend.dashboard_widgets.total_equipos')
@@ -42,7 +42,7 @@
                 {{--}}DAILY CHECK PENDIENTE DE FIRMA {{--}}
                 @include('frontend.dashboard_widgets.equipos_pendientes_daily_check')
             </div>
-            @else
+        @else
             <div class=" mb-2 col-md-6 col">
                     {{--}}MANTENIMIENTO PREVENTIVO PENDIENTE DE FIRMA {{--}}
                     @include('frontend.dashboard_widgets.mant_prev_pend_firma')
@@ -59,9 +59,10 @@
 
                 @endif  
             </div>
+            @if(!current_user()->isCliente())
             <div class=" mb-2 col-md-6 col">
                 {{--}}SOPORTE PENDIENTE DE INICIAR {{--}}
-               
+            
                 @include('frontend.dashboard_widgets.soporte_pend_iniciar')
                 @if( current_user()->isSupervisor() or current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador') )
                 @include('frontend.dashboard_widgets.soporte_pend_tecnico')
@@ -73,6 +74,7 @@
                 @include('frontend.dashboard_widgets.ultimos_servicio_tecnico_cerrado')
             </div>
             @endif
+    @endif
         </div>
     </div>
 
