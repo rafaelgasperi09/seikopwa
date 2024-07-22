@@ -92,7 +92,7 @@
                                 </a>
                             </li>
                             @endif
-                            @if(\Sentinel::hasAnyAccess(['equipos.see_tecnical_support','equipos.create_tecnical_support','equipos.edit_tecnical_support']))
+                            @if(\Sentinel::hasAnyAccess(['equipos.see_tecnical_support','equipos.create_tecnical_support','equipos.edit_tecnical_support']) and !current_user()->isCliente())
                             <li class="nav-item">
                                 <a class="nav-link {{$tab['t3']}} " data-toggle="tab" href="#serv_tec" role="tab" aria-selected="true">
                                         <ion-icon name="alert-circle-outline" class="text-warning" role="img" class="md hydrated" aria-label="image outline"></ion-icon>

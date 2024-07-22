@@ -93,12 +93,17 @@
     {{ Form::close() }}
     </div>
 </div>
+@php
+ $current_user=current_user();
+ @endphp   
 <script>
 $(document).ready(function(){
 $('#typehead_equipo_id').typeahead({
         items:20,
         source: [
-            @foreach(\App\Equipo::pluck('numero_parte','id') as $key=>$value)
+            @foreach(\App\Equipo::when($current_user->isCliente(),function($q) use($current_user){
+                $q->whereRaw('cliente_id in ('.$current_user->crm_clientes_id.')');
+            })->pluck('numero_parte','id') as $key=>$value)
                 {id: '{{ $key }}', name: '{{ trim($value) }}'},
             @endforeach
         ],
@@ -118,11 +123,13 @@ $('#typehead_equipo_id').typeahead({
         }
     });
 
-    
+
 $('#typehead_cliente_id').typeahead({
         items:20,
         source: [
-            @foreach(\App\Cliente::orderBy('nombre')->pluck('nombre','id') as $key=>$value)
+            @foreach(\App\Cliente::orderBy('nombre')->when($current_user->isCliente(),function($q) use($current_user){
+                $q->whereRaw('id in ('.$current_user->crm_clientes_id.')');
+            })->pluck('nombre','id') as $key=>$value)
                 {id: '{{ $key }}', name: '{{ trim($value) }}'},
             @endforeach
         ],
@@ -145,7 +152,9 @@ $('#typehead_cliente_id').typeahead({
 $('#typehead_created_by').typeahead({
         items:20,
         source: [
-            @foreach(\App\User::get()->pluck('full_name','id') as $key=>$value)
+            @foreach(\App\User::when($current_user->isCliente(),function($q) use($current_user){
+                $q->whereRaw('(crm_clientes_id in ('.$current_user->crm_clientes_id.') or crm_clientes_id is null)');
+            })->get()->pluck('full_name','id') as $key=>$value)
                 {id: '{{ $key }}', name: '{{ trim($value) }}'},
             @endforeach
         ],

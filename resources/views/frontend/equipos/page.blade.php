@@ -80,7 +80,7 @@
                     </div>
                 </li>
             @endif
-            @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.assign_tecnical_support','equipos.start_tecnical_support','equipos.see_tecnical_support']))
+            @if(\Sentinel::hasAnyAccess(['equipos.create_tecnical_support','equipos.assign_tecnical_support','equipos.start_tecnical_support','equipos.see_tecnical_support']) and !current_user()->isCliente())
                 <li>
                     <div class="item">
                         <div class="icon-box bg-warning">

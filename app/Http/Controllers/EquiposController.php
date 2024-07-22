@@ -124,6 +124,7 @@ class EquiposController extends BaseController
         $carbon = new \Carbon\Carbon();
         $desde = $carbon->now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
         $es_cliente=current_user()->isCliente();
+
         $data = DB::table('formulario_registro as fr')
                 ->join('formularios as f','fr.formulario_id','f.id')
                 ->join('users as u','fr.creado_por','u.id')
@@ -150,8 +151,9 @@ class EquiposController extends BaseController
                                 MAX(CASE WHEN fc.nombre IN ('horometro', 'lectura_horometro') AND fc.tipo = 'number' THEN fd.valor ELSE '' END) AS horometro")
                 ->whereNull('fr.deleted_at')
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
-                ->when(current_user()->isCliente() ,function ($q) use($request,$clientes){
-                    $q->whereIn("cliente_id",$clientes);                    
+                ->when( $es_cliente ,function ($q) use($request,$clientes){
+                    $q->whereIn("cliente_id",$clientes)
+                    ->where('f.tipo','<>','serv_tec');                    
                 })
                 ->when(!empty($request->equipo_id) and $request->equipo_id>0 ,function ($q) use($request){
                     $q->where("equipo_id",$request->equipo_id);

@@ -75,8 +75,8 @@ class User extends Authenticatable
 
     public function isCliente()
     {
-        $sentryUser = Sentinel::findUserById($this->id);
-        if(!empty($sentryUser->crm_cliente_id) or !empty($sentryUser->crm_clientes_id))
+
+        if(!empty($this->crm_cliente_id) or !empty($this->crm_clientes_id))
             return true;
         else
             return false;
