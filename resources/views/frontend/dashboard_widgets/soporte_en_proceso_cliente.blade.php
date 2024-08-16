@@ -45,18 +45,14 @@
                                                 $transcurrido=$diff->format('%hh %im');
                                     @endphp
                                     <span class="chip-label">{{$stpr->equipo()->numero_parte}}
-                                        @if($stpr->trabajado_por<>'')
-                                        <ion-icon size="large" name="checkmark-sharp" role="img" class="md hydrated text-success" style="position: absolute;top: 0px;left: 99px;" aria-label="cube outline"></ion-icon>
-                                        @endif
+                                       
                                     </span>
                                     
                                     <div  class="fecha pull-right" >
                                         <span title="Fecha de Inicio">
                                                 {{transletaDate($fecha_sta,true,'')}}
                                         </span><br/>
-                                        <span title="Tiempo transcurrido">
-                                                Hace {{$transcurrido}}
-                                        </span>
+                                       
                                     </div>
                                 </a>
                         @endif
@@ -101,18 +97,14 @@
                                                 $transcurrido=$diff->format('%hh %im');
                                     @endphp
                                     <span class="chip-label">{{$stpri->equipo()->numero_parte}}
-                                        @if($stpri->trabajado_por<>'')
-                                        <ion-icon size="large" name="checkmark-sharp" role="img" class="md hydrated text-success" style="position: absolute;top: 0px;left: 99px;" aria-label="cube outline"></ion-icon>
-                                        @endif
+                                     
                                     </span>
                                     
                                     <div  class="fecha pull-right" >
                                         <span title="Fecha de Inicio">
                                                 {{transletaDate($fecha_sta,true,'')}}
                                         </span><br/>
-                                        <span title="Tiempo transcurrido">
-                                                Hace {{$transcurrido}}
-                                        </span>
+                                     
                                     </div>
                                 </a>
                         @endif
