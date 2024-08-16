@@ -62,7 +62,7 @@
             @if( $data['tipo']=='cliente' or  !current_user()->isCliente())
             <div class=" mb-2 col-md-6 col">
                 {{--}}SOPORTE PENDIENTE DE INICIAR {{--}}
-               
+                
                 @include('frontend.dashboard_widgets.soporte_pend_iniciar')
                 @if( current_user()->isSupervisor() or current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador') )
                 @include('frontend.dashboard_widgets.soporte_pend_tecnico')
@@ -73,6 +73,11 @@
                 {{--}}ULTIMOS SERVICIO TECNICO CERRADOS{{--}}
                 @include('frontend.dashboard_widgets.ultimos_servicio_tecnico_cerrado')
             </div>
+            @else
+                <div class=" mb-2 col-md-6 col">
+                {{--}}SOPORTE TECNICO EN PROCESO {{--}}
+                @include('frontend.dashboard_widgets.soporte_en_proceso_cliente')
+                </div>
             @endif
         @endif
         </div>

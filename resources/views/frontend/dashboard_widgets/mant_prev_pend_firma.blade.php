@@ -7,7 +7,7 @@
     @if(count($data['mant_prev']))
         @foreach($data['g_mant_prev'] as $k=>$gmp )
             <div class="chip chip-warning chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
-                <span class="chip-label">{{$gmp->cliente()->nombre}} </span>
+                <span class="chip-label">{{\App\ClientesVw::find($gmp->cliente_id)->nombre}} </span>
                 <i class="chip-icon abrir"  id="gmp{{$gmp->cliente_id}}" >
                 <span class=" pull-right flechagmp flechagmp{{$gmp->cliente_id}}"title="Ver mas">
                     @if($k==0 and !$abierta0)
