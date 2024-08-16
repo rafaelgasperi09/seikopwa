@@ -5,10 +5,10 @@
     </div>
     <div class="card-body text-right">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <h3 class="text-success text-left">OPERATIVOS</h3>
-                @if(count($data['g_serv_tec_pr_o']))
-                    @foreach($data['g_serv_tec_pr_o'] as $k=>$gstpro)
+                @if(count($data['g_serv_tec_pr_o_cli']))
+                    @foreach($data['g_serv_tec_pr_o_cli'] as $k=>$gstpro)
                         <div class="chip chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
                             <span class="chip-label ">
                                 @if($gstpro->cliente())
@@ -24,7 +24,7 @@
                                     @endif
                             </i>
                         </div>
-                        @foreach($data['serv_tec_pr']->where('cliente_id',$gstpro->cliente_id)->where('equipo_status','O') as $stpr)
+                        @foreach($data['serv_tec_pr_cli']->where('cliente_id',$gstpro->cliente_id)->where('equipo_status','O') as $stpr)
                             @if($stpr->equipo())
                                 <a href="{{ route('equipos.detail',array('id'=>$stpr->equipo_id)) }}?show=rows&tab=3"  
                                 class="chip chip-media ml-05 mb-05 stprlist stpr{{$gstpro->cliente_id}}" style="padding:18px;width:98%; @if($k!=0 or $abierta0)  display:none; @endif">
@@ -64,7 +64,7 @@
                     @endforeach
                 @endif            
             </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <h3 class="text-danger text-left">INOPERATIVOS</h3>
                 @if(count($data['g_serv_tec_pr_i']))
                     @foreach($data['g_serv_tec_pr_i'] as $l=>$gstpri) 
@@ -79,7 +79,7 @@
                                     @endif
                             </i>
                         </div>
-                        @foreach($data['serv_tec_pr']->where('cliente_id',$gstpri->cliente_id)->where('equipo_status','I') as $stpri)
+                        @foreach($data['serv_tec_pr_cli']->where('cliente_id',$gstpri->cliente_id)->where('equipo_status','I') as $stpri)
                             @if($stpri->equipo())
 
                                 <a href="{{ route('equipos.detail',array('id'=>$stpri->equipo_id)) }}?show=rows&tab=3"  

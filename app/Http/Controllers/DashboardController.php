@@ -32,10 +32,12 @@ class DashboardController extends Controller
        $lista=implode(',',$lista);
        if(empty($lista))
         $lista='0';
+       
 
        // $equipos=DB::connection('crm')->select(DB::raw('SELECT * FROM montacarga.equipos WHERE cliente_id in ('.$lista.')'));
-       $r=FormularioRegistro::selectRaw('formulario_registro.*')
+       $r=FormularioRegistro::selectRaw('formulario_registro.*,equipos_vw.numero_parte')
         ->join('formularios','formulario_registro.formulario_id','formularios.id')
+        ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
          ->whereNotNull('equipo_id')
         ->where('formularios.tipo',$formType)
         ->whereRaw("(formulario_registro.estatus='C' and TIMESTAMPDIFF(DAY,formulario_registro.created_at,'2023-07-20')<=45 or formulario_registro.estatus<>'C')")
@@ -43,11 +45,12 @@ class DashboardController extends Controller
             $q->where('formulario_registro.estatus',$status);
         })
         ->When(!empty($userFilter),function($q)use($userFilter,$lista){
-            $q->whereRaw(' equipo_id IN ('.$lista.')');
+            $q->whereRaw(' equipo_id IN ('.$lista.')');      
         })
         ->When(!empty($filterExtra),function($q)use($filterExtra){
             $q->whereRaw($filterExtra);
         });
+
 
       /*if($formType=='serv_tec' and $status=='A')
       dd($r->get());*/
@@ -222,7 +225,8 @@ class DashboardController extends Controller
             $cond2=' formulario_registro.tecnico_asignado='.current_user()->id;
 
         $data['serv_tec_pr']=$this->getPendings($filtro,'serv_tec','PR',$cond2);
-    
+        $data['serv_tec_pr_cli']=$this->getPendings($filtro,'serv_tec','PR','');
+
         if(!empty($cond2)){$cond2.=' and';}
         $cond3=" equipo_status='O'";
         $data['g_serv_tec_pr_o_cli']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);
