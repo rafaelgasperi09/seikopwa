@@ -181,6 +181,7 @@
                                         @endforeach
                                     </div>
                                 @elseif($campo->tipo == 'firma')
+                                    <input type="hidden" name="firma_hidden_field_{{$campo->nombre}}" value="{{$value}}">
                                     @if($value=="") 
                                         @if(\Sentinel::hasAccess($campo->permiso) and (current_user()->isSupervisor() or  current_user()->isOnGroup('SupervisorC')))   
                                         <div id="grupo_{{$campo->nombre}}" style="background: #ffffff;">
