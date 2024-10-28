@@ -27,7 +27,12 @@
             @endphp
             <tr>
                 <td data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ $date->startOfWeek()->format('Y-m-d') }} a {{ $date->endOfWeek()->format('Y-m-d')  }}" aria-describedby="tooltip112589" >
-                    {{ $d->ano.'-'.$d->semana }}
+                    @php
+                    $semana=$d->semana;
+                    if($semana<=9)
+                        $semana='0'.$semana;
+                    @endphp
+                    {{ $d->ano.'-'.$semana }}
                 </td>
                 @foreach($dias as $dia)
                 @php
