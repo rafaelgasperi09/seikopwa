@@ -29,6 +29,7 @@ class DashboardController extends Controller
        foreach($idqeuipos as $k=>$i){
            $lista[]=$i->id;
        }
+       dd($lista);
        $lista=implode(',',$lista);
        if(empty($lista))
         $lista='0';
