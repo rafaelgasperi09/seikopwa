@@ -29,7 +29,6 @@ class DashboardController extends Controller
        foreach($idqeuipos as $k=>$i){
            $lista[]=$i->id;
        }
-       
        $lista=implode(',',$lista);
        if(empty($lista))
         $lista='0';
@@ -53,8 +52,8 @@ class DashboardController extends Controller
         });
 
 
-      if($formType=='serv_tec' and $status=='PR')
-      dd($r->get());
+      /*if($formType=='serv_tec' and $status=='A')
+      dd($r->get());*/
 
         if($group_cliente)
         {
