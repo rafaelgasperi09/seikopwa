@@ -41,7 +41,7 @@ class DashboardController extends Controller
         ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
          ->whereNotNull('equipo_id')
         ->where('formularios.tipo',$formType)
-        ->whereRaw("(formulario_registro.estatusq='C' and TIMESTAMPDIFF(DAY,formulario_registro.created_at,'2023-07-20')<=45 or formulario_registro.estatus<>'C')")
+        ->whereRaw("(formulario_registro.estatus='C' and TIMESTAMPDIFF(DAY,formulario_registro.created_at,'2023-07-20')<=45 or formulario_registro.estatus<>'C')")
         ->When(!empty($status),function($q)use($status){
             $q->where('formulario_registro.estatus',$status);
         })
@@ -53,8 +53,8 @@ class DashboardController extends Controller
         });
 
 
-      /*if($formType=='serv_tec' and $status=='A')
-      dd($r->get());*/
+      if($formType=='serv_tec' and $status=='PR')
+      dd($r->get());
 
         if($group_cliente)
         {
