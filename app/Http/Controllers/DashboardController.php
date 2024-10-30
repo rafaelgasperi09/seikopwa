@@ -238,7 +238,7 @@ class DashboardController extends Controller
 
         $cond3=$cond2." equipo_status='I'";
         $data['g_serv_tec_pr_i']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);
-
+        dd($data['g_serv_tec_pr_o'] );
          //servicio tecnico EN PROCESO
          $data['serv_tec_10']=array();
          $desde = \Carbon\Carbon::now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
