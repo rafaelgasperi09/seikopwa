@@ -222,7 +222,7 @@ class DashboardController extends Controller
         
             $cond2='';
         if(current_user()->isOnGroup('tecnico'))
-            $cond2=' formulario_registro.tecnico_asignado='.current_user()->id;
+            $cond2=' 1formulario_registro.tecnico_asignado='.current_user()->id;
 
         $data['serv_tec_pr']=$this->getPendings($filtro,'serv_tec','PR',$cond2);
         $data['serv_tec_pr_cli']=$this->getPendings($filtro,'serv_tec','PR','');
@@ -232,7 +232,7 @@ class DashboardController extends Controller
         $data['g_serv_tec_pr_o_cli']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);
         $cond3=" equipo_status='I'";
         $data['g_serv_tec_pr_i_cli']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);
-        $cond3=" equipo_status1='O'";
+        $cond3=" equipo_status='O'";
         $cond3=$cond2.$cond3;
         $data['g_serv_tec_pr_o']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);
 
