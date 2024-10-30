@@ -233,7 +233,7 @@ class DashboardController extends Controller
         $cond3=" equipo_status='I'";
         $data['g_serv_tec_pr_i_cli']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);
 
-        $cond3=$cond2.$cond3;
+        $cond3=$cond2." equipo_status='O'";
         $data['g_serv_tec_pr_o']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);
 
         $cond3=$cond2." equipo_status='I'";
