@@ -17,9 +17,10 @@ class DashboardController extends Controller
 {
     private function getPendings($filtro,$formType,$status='P',$filterExtra='',$equipos=true,$pluck='',$group_cliente=false){
         $userFilter=$filtro;
-        
+        $filtro_cliente='';
         if(current_user()->crm_clientes_id){
-              $userFilter=' cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).') and '.$filtro;
+              $filtro_cliente=' cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).')';
+              $userFilter=$filtro_cliente.' and '.$filtro;
         }
           
 
@@ -44,8 +45,8 @@ class DashboardController extends Controller
         ->When(!empty($status),function($q)use($status){
             $q->where('formulario_registro.estatus',$status);
         })
-        ->When(!empty($userFilter),function($q)use($userFilter){
-            $q->whereRaw($userFilter);      
+        ->When(!empty($filtro_cliente),function($q)use($filtro_cliente){
+            $q->whereRaw($filtro_cliente);      
         })
         ->When(!empty($filterExtra),function($q)use($filterExtra){
             $q->whereRaw($filterExtra);
