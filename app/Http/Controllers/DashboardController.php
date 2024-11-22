@@ -16,14 +16,14 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     private function getPendings($filtro,$formType,$status='P',$filterExtra='',$equipos=true,$pluck='',$group_cliente=false){
-        $userFilter='WHERE '.$filtro;
+        $userFilter=$filtro;
         
         if(current_user()->crm_clientes_id){
-              $userFilter='WHERE cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).') and '.$filtro;
+              $userFilter=' cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).') and '.$filtro;
         }
           
 
-       $idqeuipos=DB::connection('crm')->select(DB::raw('SELECT id FROM montacarga.equipos '.$userFilter));
+       $idqeuipos=DB::connection('crm')->select(DB::raw('SELECT id FROM montacarga.equipos WHERE'.$userFilter));
        $lista=array();
        
        foreach($idqeuipos as $k=>$i){
@@ -44,8 +44,8 @@ class DashboardController extends Controller
         ->When(!empty($status),function($q)use($status){
             $q->where('formulario_registro.estatus',$status);
         })
-        ->When(!empty($userFilter),function($q)use($userFilter,$lista){
-            $q->whereRaw(' equipo_id IN ('.$lista.')');      
+        ->When(!empty($userFilter),function($q)use($userFilter){
+            $q->whereRaw($userFilter);      
         })
         ->When(!empty($filterExtra),function($q)use($filterExtra){
             $q->whereRaw($filterExtra);
