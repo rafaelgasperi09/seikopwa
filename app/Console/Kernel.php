@@ -36,7 +36,8 @@ class Kernel extends ConsoleKernel
              ->dailyAt('07:30')
              ->sendOutputTo(storage_path('logs/notificar_baterias_no_hidratadas-'.$fec.'.log'));
         $schedule->command('importar:equipos')
-             ->dailyAt('06:30')->dailyAt('12:00');
+             ->dailyAt('06:30')->dailyAt('12:00')
+             ->sendOutputTo(storage_path('logs/importar-equipos'.$fec.'.log'));;
     }
 
     /**
