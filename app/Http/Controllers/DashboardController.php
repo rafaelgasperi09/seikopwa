@@ -24,7 +24,7 @@ class DashboardController extends Controller
         }
           
 
-       $idqeuipos=DB::connection('crm')->select(DB::raw('SELECT id FROM montacarga.equipos WHERE'.$userFilter));
+       $idqeuipos=DB::connection('crm')->select(DB::raw('SELECT id FROM montacarga.equipos WHERE '.$userFilter));
        $lista=array();
        
        foreach($idqeuipos as $k=>$i){
