@@ -19,8 +19,8 @@ class DashboardController extends Controller
         $userFilter=$filtro;
         $filtro_cliente='';
         if(current_user()->crm_clientes_id){
-              $filtro_cliente=' cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).')'.$filtro;
-              $userFilter=$filtro_cliente.' and '.$filtro;
+              $filtro_cliente=' cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).')'.' and '.$filtro;
+              $userFilter=$filtro_cliente;
         }
           
 
