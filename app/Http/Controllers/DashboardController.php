@@ -46,7 +46,7 @@ class DashboardController extends Controller
             $q->where('formulario_registro.estatus',$status);
         })
         ->When(!empty($filtro_cliente),function($q)use($filtro_cliente,$lista){
-            $q->whereRaw($filtro_cliente)->whereIn('equipo_id',$lista);      
+            $q->whereRaw($filtro_cliente." and equipo_id in ($lista)");      
         })
         ->When(!empty($filterExtra),function($q)use($filterExtra){
             $q->whereRaw($filterExtra);
