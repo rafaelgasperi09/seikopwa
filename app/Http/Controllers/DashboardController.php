@@ -19,8 +19,8 @@ class DashboardController extends Controller
         $userFilter=$filtro;
         $filtro_cliente='';
         if(current_user()->crm_clientes_id){
-              $filtro_cliente=' cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).')'.' and '.$filtro;
-              $userFilter=$filtro_cliente;
+              $filtro_cliente=' cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).')';
+              $userFilter=$filtro_cliente.' and '.$filtro;;
         }
           
 
@@ -46,7 +46,7 @@ class DashboardController extends Controller
             $q->where('formulario_registro.estatus',$status);
         })
         ->When(!empty($filtro_cliente),function($q)use($filtro_cliente){
-            $q->whereRaw($filtro_cliente);      
+            $q->whereRaw($filtro_cliente)->whereIn('equipo_id',$lista);      
         })
         ->When(!empty($filterExtra),function($q)use($filterExtra){
             $q->whereRaw($filterExtra);
