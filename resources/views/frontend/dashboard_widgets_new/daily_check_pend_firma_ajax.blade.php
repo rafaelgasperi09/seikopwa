@@ -30,7 +30,7 @@
     });
     setTimeout(function(){
         $.ajax({
-            url: '{{url('data_inicio')}}',
+            url: '{{secure_url('data_inicio')}}',
             dataType: "html",
             data: "tag=daily_check_pend_firma&user_id={{current_user()->id}}",
             type: 'get',

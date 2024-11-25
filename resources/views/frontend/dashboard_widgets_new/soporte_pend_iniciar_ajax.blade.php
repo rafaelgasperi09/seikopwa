@@ -32,7 +32,7 @@
     });
     setTimeout(function(){
         $.ajax({
-            url: '{{url('data_inicio')}}',
+            url: '{{secure_url('data_inicio')}}',
             dataType: "html",
             data: "tag=soporte_pend_iniciar&user_id={{current_user()->id}}",
             type: 'get',

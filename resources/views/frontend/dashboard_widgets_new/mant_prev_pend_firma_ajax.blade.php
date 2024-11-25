@@ -34,7 +34,7 @@
 
     setTimeout(function(){
         $.ajax({
-            url: '{{url('data_inicio')}}',
+            url: '{{secure_url('data_inicio')}}',
             dataType: "html",
             data: "tag=mant_prev_pend_firma&user_id={{current_user()->id}}",
             type: 'get',

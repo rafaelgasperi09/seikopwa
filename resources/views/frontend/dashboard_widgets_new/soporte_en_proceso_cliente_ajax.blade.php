@@ -53,7 +53,7 @@
 
     setTimeout(function(){
         $.ajax({
-            url: '{{url('data_inicio')}}',
+            url: '{{secure_url('data_inicio')}}',
             dataType: "html",
             data: "tag=servicio_tecnico_proceso_cliente&user_id={{current_user()->id}}",
             type: 'get',
