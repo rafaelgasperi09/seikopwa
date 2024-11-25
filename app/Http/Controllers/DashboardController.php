@@ -80,8 +80,8 @@ class DashboardController extends Controller
 
         /////////FILTRO CLIENTE GMP/////////////
         $data['tipo']='gmp';
-        $filtro['gmp']="equipos.numero_parte like 'GM%'";
-        $filtro['cliente']="equipos.numero_parte not like 'GM%'";
+        $filtro['gmp']="numero_parte like 'GM%'";
+        $filtro['cliente']="numero_parte not like 'GM%'";
         if(current_user()->isCliente())
             $data['tipo']='cliente';
      
