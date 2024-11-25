@@ -237,7 +237,7 @@ class ApiController extends Controller
                         if($dc->equipo()){
                         
                          if(current_user()->isOnGroup('supervisorc') )
-                            $result.='<a href="'.route('equipos.edit_daily_check',array('id'=>$dc->id));
+                            $result.='<a href="'.route('equipos.edit_daily_check',array('id'=>$dc->id)).'?show=rows&tab=1" ';
                         else $result.='<a href="'.route('equipos.detail',array('id'=>$dc->equipo_id)) .'?show=rows&tab=1" '; 
                         $display='';
                         if($k!=0)
