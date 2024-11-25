@@ -19,8 +19,8 @@ class ApiController extends Controller
     public function data_inicio(Request $request){
         $dashboard=app('App\Http\Controllers\DashboardController');
         $data['tipo']='gmp';
-        $filtro['gmp']="equipos.numero_parte like 'GM%'";
-        $filtro['cliente']="equipos.numero_parte not like 'GM%'";
+        $filtro['gmp']="numero_parte like 'GM%'";
+        $filtro['cliente']="numero_parte not like 'GM%'";
         if(current_user()->isCliente())
             $data['tipo']='cliente';
         $filtro=$filtro[$data['tipo']];
