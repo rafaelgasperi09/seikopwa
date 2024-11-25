@@ -8,6 +8,7 @@ use App\Cliente;
 use App\Formulario;
 use App\FormularioRegistro;
 use App\SubEquipo;
+use App\User;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -70,9 +71,42 @@ class DashboardController extends Controller
 
     }
 
+    public function getDailyCheckRN(){
+        $equipos=array();
+        $lista=User::whereNotNull('crm_clientes_id')->get();
+        $query="select X.*,X.turno1+X.turno2+X.turno3+X.turno4 as total
+                from (select fr.equipo_id ,DATE_FORMAT(fr.created_at,'%Y-%m-%d') as fecha,
+                max(case turno_chequeo_diario when 1 then 1 else 0 end ) as turno1,
+                max(case turno_chequeo_diario when 2 then 1 else 0 end ) as turno2,
+                max(case turno_chequeo_diario when 3 then 1 else 0 end ) as turno3,
+                max(case turno_chequeo_diario when 4 then 1 else 0 end ) as turno4
+                from formulario_registro fr
+                where formulario_id =2
+                and fr.deleted_at is NULL 
+                and fr.estatus ='C'
+                and DATE_FORMAT(fr.created_at,'%Y-%m-%d')='2024-11-19'
+                group by  fr.equipo_id ,DATE_FORMAT(fr.created_at,'%Y-%m-%d') )X";
+        $dailyCheck=DB::select($query);
+        $arrayDailyCheck=array();
+        foreach($dailyCheck as $d){
+            $arrayDailyCheck[$d->equipo_id]=$d;
+        }
+        //dd($arrayDailyCheck);
+        foreach ($lista as $user){
+            foreach($user->clientes() as $cliente){
+                foreach($cliente->equipos as $equipo){
+                    $equipos[$cliente->id][$equipo->numero_parte]=array('id'=>$equipo->id,
+                                                                        'numero_parte'=>$equipo->numero_parte,
+                                                                         );
+                }
+                
+            }
+        }
+       // dd($equipos);
+    }
 
     public function index(Request $request){
-
+        //$this->getDailyCheckRN();
         /////////FILTRO CLIENTE GMP/////////////
         $data['tipo']='gmp';
         $filtro['gmp']="equipos.numero_parte like 'GM%'";
