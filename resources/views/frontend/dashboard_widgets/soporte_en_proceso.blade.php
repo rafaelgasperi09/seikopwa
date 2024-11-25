@@ -6,7 +6,7 @@
     <div class="card-body text-right">
         <div class="row">
             <div class="col-md-6">
-                <h3 class="text-success text-left">OPERATIVOS</h3>
+                <h3 class="text-success text-left" cant="{{count($data['g_serv_tec_pr_o'])}}">OPERATIVOS</h3>
                 @if(count($data['g_serv_tec_pr_o']))
                     @foreach($data['g_serv_tec_pr_o'] as $k=>$gstpro)
                         <div class="chip chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">

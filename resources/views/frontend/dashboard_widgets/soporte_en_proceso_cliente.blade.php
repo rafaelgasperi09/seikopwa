@@ -5,10 +5,17 @@
     </div>
     <div class="card-body text-right">
         <div class="row">
+<<<<<<< HEAD
             <div class="col-md-6">
                 <h3 class="text-success text-left">OPERATIVOS</h3>
                 @if(count($data['g_serv_tec_pr_o']))
                     @foreach($data['g_serv_tec_pr_o'] as $k=>$gstpro)
+=======
+            <div class="col-md-12">
+                <h3 class="text-success text-left">OPERATIVOS</h3>
+                @if(count($data['g_serv_tec_pr_o_cli']))
+                    @foreach($data['g_serv_tec_pr_o_cli'] as $k=>$gstpro)
+>>>>>>> desarrollo
                         <div class="chip chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
                             <span class="chip-label ">
                                 @if($gstpro->cliente())
@@ -24,9 +31,15 @@
                                     @endif
                             </i>
                         </div>
+<<<<<<< HEAD
                         @foreach($data['serv_tec_pr']->where('cliente_id',$gstpro->cliente_id)->where('equipo_status','O') as $stpr)
                             @if($stpr->equipo())
                                 <a href="{{ route('equipos.detail',array('id'=>$stpr->equipo_id)) }}?show=rows&tab=3"  
+=======
+                        @foreach($data['serv_tec_pr_cli']->where('cliente_id',$gstpro->cliente_id)->where('equipo_status','O') as $stpr)
+                            @if($stpr->equipo())
+                                <a href2="{{ route('equipos.detail',array('id'=>$stpr->equipo_id)) }}?show=rows&tab=3"  href="#"
+>>>>>>> desarrollo
                                 class="chip chip-media ml-05 mb-05 stprlist stpr{{$gstpro->cliente_id}}" style="padding:18px;width:98%; @if($k!=0 or $abierta0)  display:none; @endif">
                                     
                                     <i class="chip-icon bg-{!!getStatusBgColor($stpr->estatus)!!}">
@@ -45,18 +58,26 @@
                                                 $transcurrido=$diff->format('%hh %im');
                                     @endphp
                                     <span class="chip-label">{{$stpr->equipo()->numero_parte}}
+<<<<<<< HEAD
                                         @if($stpr->trabajado_por<>'')
                                         <ion-icon size="large" name="checkmark-sharp" role="img" class="md hydrated text-success" style="position: absolute;top: 0px;left: 99px;" aria-label="cube outline"></ion-icon>
                                         @endif
+=======
+                                       
+>>>>>>> desarrollo
                                     </span>
                                     
                                     <div  class="fecha pull-right" >
                                         <span title="Fecha de Inicio">
                                                 {{transletaDate($fecha_sta,true,'')}}
                                         </span><br/>
+<<<<<<< HEAD
                                         <span title="Tiempo transcurrido">
                                                 Hace {{$transcurrido}}
                                         </span>
+=======
+                                       
+>>>>>>> desarrollo
                                     </div>
                                 </a>
                         @endif
@@ -64,7 +85,11 @@
                     @endforeach
                 @endif            
             </div>
+<<<<<<< HEAD
             <div class="col-md-6">
+=======
+            <div class="col-md-12">
+>>>>>>> desarrollo
                 <h3 class="text-danger text-left">INOPERATIVOS</h3>
                 @if(count($data['g_serv_tec_pr_i']))
                     @foreach($data['g_serv_tec_pr_i'] as $l=>$gstpri) 
@@ -79,10 +104,17 @@
                                     @endif
                             </i>
                         </div>
+<<<<<<< HEAD
                         @foreach($data['serv_tec_pr']->where('cliente_id',$gstpri->cliente_id)->where('equipo_status','I') as $stpri)
                             @if($stpri->equipo())
 
                                 <a href="{{ route('equipos.detail',array('id'=>$stpri->equipo_id)) }}?show=rows&tab=3"  
+=======
+                        @foreach($data['serv_tec_pr_cli']->where('cliente_id',$gstpri->cliente_id)->where('equipo_status','I') as $stpri)
+                            @if($stpri->equipo())
+
+                                <a href2="{{ route('equipos.detail',array('id'=>$stpri->equipo_id)) }}?show=rows&tab=3"  href="#"
+>>>>>>> desarrollo
                                 class="chip chip-media ml-05 mb-05 stprlist_i stpri{{$gstpri->cliente_id}}" style="padding:18px;width:98%; @if($l!=0)  display:none; @endif">
                                     
                                     <i class="chip-icon bg-{!!getStatusBgColor($stpri->estatus)!!}">
@@ -101,18 +133,26 @@
                                                 $transcurrido=$diff->format('%hh %im');
                                     @endphp
                                     <span class="chip-label">{{$stpri->equipo()->numero_parte}}
+<<<<<<< HEAD
                                         @if($stpri->trabajado_por<>'')
                                         <ion-icon size="large" name="checkmark-sharp" role="img" class="md hydrated text-success" style="position: absolute;top: 0px;left: 99px;" aria-label="cube outline"></ion-icon>
                                         @endif
+=======
+                                     
+>>>>>>> desarrollo
                                     </span>
                                     
                                     <div  class="fecha pull-right" >
                                         <span title="Fecha de Inicio">
                                                 {{transletaDate($fecha_sta,true,'')}}
                                         </span><br/>
+<<<<<<< HEAD
                                         <span title="Tiempo transcurrido">
                                                 Hace {{$transcurrido}}
                                         </span>
+=======
+                                     
+>>>>>>> desarrollo
                                     </div>
                                 </a>
                         @endif

@@ -5,7 +5,7 @@
             Equipos pendientes por Daily Check<br/>
         </span>
     </div>
-    <div class="card-body">
+    <div class="card-body" id="epdc_body">
     @if(count($data['equipos_sin_daily_check_hoy']))
         @foreach($data['equipos_sin_daily_check_hoy'] as $id=>$equipo)
             <a href="@if(Sentinel::getUser()->hasAccess('equipos.create_daily_check') and false)

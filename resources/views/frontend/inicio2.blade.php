@@ -33,52 +33,60 @@
     </ul>
     <div class="section mt-2">
         <div class="row">
-        @if(current_user()->isOnGroup('operadorC') )
+        @if(current_user()->isOnGroup('operadorC'))
             <div class=" mb-2 col-md-6 col">                   
                 {{--}}TOTAL EQUIPOS{{--}}
-                @include('frontend.dashboard_widgets.total_equipos')
+                @include('frontend.dashboard_widgets_new.total_equipos_ajax')
             </div>
             <div class=" mb-2 col-md-6 col">                   
                 {{--}}DAILY CHECK PENDIENTE DE FIRMA {{--}}
-                @include('frontend.dashboard_widgets.equipos_pendientes_daily_check')
+                @include('frontend.dashboard_widgets_new.equipos_pendientes_daily_check_ajax')
             </div>
         @else
             <div class=" mb-2 col-md-6 col">
+
                     {{--}}MANTENIMIENTO PREVENTIVO PENDIENTE DE FIRMA {{--}}
-                    @include('frontend.dashboard_widgets.mant_prev_pend_firma')
-                
+                    @include('frontend.dashboard_widgets_new.mant_prev_pend_firma_ajax')
+          
                 @if( current_user()->isOnGroup('supervisorc') or
                      current_user()->isOnGroup('supervisor-cliente') or
                      current_user()->isOnGroup('programador'))
 
                     {{--}}DAILY CHECK PENDIENTE DE FIRMA {{--}}
-                    @include('frontend.dashboard_widgets.daily_check_pend_firma')
-
+                    @include('frontend.dashboard_widgets_new.daily_check_pend_firma_ajax')
+                   
                     {{--}}EQUIPOS SIN DAILY CHECK {{--}}
-                    @include('frontend.dashboard_widgets.equipos_pendientes_daily_check')
-
+                     @include('frontend.dashboard_widgets_new.equipos_pendientes_daily_check_ajax')
+                    
                 @endif  
+ 
             </div>
+
             @if( $data['tipo']=='cliente' or  !current_user()->isCliente())
             <div class=" mb-2 col-md-6 col">
                 {{--}}SOPORTE PENDIENTE DE INICIAR {{--}}
                 
-                @include('frontend.dashboard_widgets.soporte_pend_iniciar')
+                @include('frontend.dashboard_widgets_new.soporte_pend_iniciar_ajax')
+                
                 @if( current_user()->isSupervisor() or current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador') )
-                @include('frontend.dashboard_widgets.soporte_pend_tecnico')
+                @include('frontend.dashboard_widgets_new.soporte_pend_tecnico_ajax')
                 @endif
+                <?php /*
                 {{--}}SOPORTE TECNICO EN PROCESO {{--}}
                 @include('frontend.dashboard_widgets.soporte_en_proceso')
 
                 {{--}}ULTIMOS SERVICIO TECNICO CERRADOS{{--}}
                 @include('frontend.dashboard_widgets.ultimos_servicio_tecnico_cerrado')
+                 */ ?>
             </div>
             @else
                 <div class=" mb-2 col-md-6 col">
                 {{--}}SOPORTE TECNICO EN PROCESO {{--}}
-                @include('frontend.dashboard_widgets.soporte_en_proceso_cliente')
+                @include('frontend.dashboard_widgets_new.soporte_en_proceso_cliente_ajax')
+
                 </div>
             @endif
+            
         @endif
         </div>
     </div>

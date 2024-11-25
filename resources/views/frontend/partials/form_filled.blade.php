@@ -181,8 +181,9 @@
                                         @endforeach
                                     </div>
                                 @elseif($campo->tipo == 'firma')
+                                    <input type="hidden" name="firma_hidden_field_{{$campo->nombre}}" value="{{$value}}" permiso="{{\Sentinel::hasAccess($campo->permiso)}}" supervisor="{{current_user()->isSupervisor('cliente')}}">
                                     @if($value=="") 
-                                        @if(\Sentinel::hasAccess($campo->permiso) and (current_user()->isSupervisor() or  current_user()->isOnGroup('SupervisorC')))   
+                                        @if(\Sentinel::hasAccess($campo->permiso) and (current_user()->isSupervisor() or  current_user()->isSupervisor('cliente')))   
                                         <div id="grupo_{{$campo->nombre}}" style="background: #ffffff;">
                                             <img id="img_{{$campo->nombre}}" width="100%" style="max-width:550px" data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}"  class="signRequest">
                                             <button type="button" id="btn{{$campo->nombre}}" class="signRequest align-self-center"  data-toggle="modal" data-target="#signModal" data-field="{{$campo->nombre}}">

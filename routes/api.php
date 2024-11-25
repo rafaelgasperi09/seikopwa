@@ -146,3 +146,4 @@ Route::get('/equipo', function (Request $request) {
         "draw"=> 1,
         'data' => $data]);
 });
+

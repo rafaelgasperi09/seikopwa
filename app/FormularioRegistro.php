@@ -716,7 +716,7 @@ class FormularioRegistro extends BaseModel
                     $valor=explode('|',$valor);
                     $firmante[$datos["nombre"]]='';
                     if(in_array($datos["nombre"],['operador','ok_supervisor'])){
-                        if(isset($users[end($valor)])){
+                        if(isset($users[end($valor)]) and !empty($valor[0])){
                             $firmante[$datos["nombre"]]=$users[end($valor)];
                         }                       
                     }

@@ -43,8 +43,10 @@ Route::put('usuarios/{id}/password', array('as' => 'usuarios.update_password', '
 
 Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), function() {
 
+    Route::get('data_inicio', array('as' => 'data_inicio','uses' => 'ApiController@data_inicio'));
     Route::get('logout', array('as' => 'logout','uses' => 'LoginController@logout'));
     Route::get('/inicio', array('as' => 'inicio', 'uses' => 'DashboardController@index'));
+    Route::get('/inicio2', array('as' => 'inicio2', 'uses' => 'DashboardController@index2'));
     Route::get('/dashboard/{id}/detalle', array('as' => 'dashboard.grafico_detalle', 'uses' => 'DashboardController@grafico_detalle'));
     Route::get('/dashboard/{id}', array('as' => 'dashboard.gmp', 'uses' => 'DashboardController@grafica'))->middleware('hasAccess');
    

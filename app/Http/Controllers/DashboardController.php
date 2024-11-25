@@ -14,17 +14,19 @@ use DB;
 use Illuminate\Http\Request;
 
 
+
 class DashboardController extends Controller
 {
-    private function getPendings($filtro,$formType,$status='P',$filterExtra='',$equipos=true,$pluck='',$group_cliente=false){
-        $userFilter='WHERE '.$filtro;
-        
+    public function getPendings($filtro,$formType,$status='P',$filterExtra='',$equipos=true,$pluck='',$group_cliente=false){
+        $userFilter=$filtro;
+        $filtro_cliente=$filtro;
         if(current_user()->crm_clientes_id){
-              $userFilter='WHERE cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).') and '.$filtro;
+              $filtro_cliente=' cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).')';
+              $userFilter=$filtro_cliente.' and '.$filtro;
         }
           
 
-       $idqeuipos=DB::connection('crm')->select(DB::raw('SELECT id FROM montacarga.equipos '.$userFilter));
+       $idqeuipos=DB::connection('crm')->select(DB::raw('SELECT id FROM montacarga.equipos WHERE '.$userFilter));
        $lista=array();
        
        foreach($idqeuipos as $k=>$i){
@@ -33,22 +35,25 @@ class DashboardController extends Controller
        $lista=implode(',',$lista);
        if(empty($lista))
         $lista='0';
+       
 
        // $equipos=DB::connection('crm')->select(DB::raw('SELECT * FROM montacarga.equipos WHERE cliente_id in ('.$lista.')'));
-       $r=FormularioRegistro::selectRaw('formulario_registro.*')
+       $r=FormularioRegistro::selectRaw('formulario_registro.*,equipos_vw.numero_parte')
         ->join('formularios','formulario_registro.formulario_id','formularios.id')
+        ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
          ->whereNotNull('equipo_id')
         ->where('formularios.tipo',$formType)
-        ->whereRaw("(formulario_registro.estatus='C' and TIMESTAMPDIFF(DAY,formulario_registro.created_at,'2023-07-20')<=45 or formulario_registro.estatus<>'C')")
+        ->whereRaw("(formulario_registro.estatus='C' and TIMESTAMPDIFF(DAY,formulario_registro.created_at,now())<=45 or formulario_registro.estatus<>'C')")
         ->When(!empty($status),function($q)use($status){
             $q->where('formulario_registro.estatus',$status);
         })
-        ->When(!empty($userFilter),function($q)use($userFilter,$lista){
-            $q->whereRaw(' equipo_id IN ('.$lista.')');
+        ->When(!empty($filtro_cliente),function($q)use($filtro_cliente,$lista){
+            $q->whereRaw($filtro_cliente." and equipo_id in ($lista)");      
         })
         ->When(!empty($filterExtra),function($q)use($filterExtra){
             $q->whereRaw($filterExtra);
         });
+
 
       /*if($formType=='serv_tec' and $status=='A')
       dd($r->get());*/
@@ -71,46 +76,13 @@ class DashboardController extends Controller
 
     }
 
-    public function getDailyCheckRN(){
-        $equipos=array();
-        $lista=User::whereNotNull('crm_clientes_id')->get();
-        $query="select X.*,X.turno1+X.turno2+X.turno3+X.turno4 as total
-                from (select fr.equipo_id ,DATE_FORMAT(fr.created_at,'%Y-%m-%d') as fecha,
-                max(case turno_chequeo_diario when 1 then 1 else 0 end ) as turno1,
-                max(case turno_chequeo_diario when 2 then 1 else 0 end ) as turno2,
-                max(case turno_chequeo_diario when 3 then 1 else 0 end ) as turno3,
-                max(case turno_chequeo_diario when 4 then 1 else 0 end ) as turno4
-                from formulario_registro fr
-                where formulario_id =2
-                and fr.deleted_at is NULL 
-                and fr.estatus ='C'
-                and DATE_FORMAT(fr.created_at,'%Y-%m-%d')='2024-11-19'
-                group by  fr.equipo_id ,DATE_FORMAT(fr.created_at,'%Y-%m-%d') )X";
-        $dailyCheck=DB::select($query);
-        $arrayDailyCheck=array();
-        foreach($dailyCheck as $d){
-            $arrayDailyCheck[$d->equipo_id]=$d;
-        }
-        //dd($arrayDailyCheck);
-        foreach ($lista as $user){
-            foreach($user->clientes() as $cliente){
-                foreach($cliente->equipos as $equipo){
-                    $equipos[$cliente->id][$equipo->numero_parte]=array('id'=>$equipo->id,
-                                                                        'numero_parte'=>$equipo->numero_parte,
-                                                                         );
-                }
-                
-            }
-        }
-       // dd($equipos);
-    }
 
     public function index(Request $request){
-        //$this->getDailyCheckRN();
+
         /////////FILTRO CLIENTE GMP/////////////
         $data['tipo']='gmp';
-        $filtro['gmp']="equipos.numero_parte like 'GM%'";
-        $filtro['cliente']="equipos.numero_parte not like 'GM%'";
+        $filtro['gmp']="numero_parte like 'GM%'";
+        $filtro['cliente']="numero_parte not like 'GM%'";
         if(current_user()->isCliente())
             $data['tipo']='cliente';
      
@@ -256,10 +228,17 @@ class DashboardController extends Controller
             $cond2=' formulario_registro.tecnico_asignado='.current_user()->id;
 
         $data['serv_tec_pr']=$this->getPendings($filtro,'serv_tec','PR',$cond2);
-    
+        $data['serv_tec_pr_cli']=$this->getPendings($filtro,'serv_tec','PR','');
+
         if(!empty($cond2)){$cond2.=' and';}
+        $cond3=" equipo_status='O'";
+        $data['g_serv_tec_pr_o_cli']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);
+        $cond3=" equipo_status='I'";
+        $data['g_serv_tec_pr_i_cli']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);
+
         $cond3=$cond2." equipo_status='O'";
         $data['g_serv_tec_pr_o']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);
+
         $cond3=$cond2." equipo_status='I'";
         $data['g_serv_tec_pr_i']=$this->getPendings($filtro,'serv_tec','PR',$cond3,true,'',true);
 
@@ -300,6 +279,9 @@ class DashboardController extends Controller
         }
         $tab['t1']=''; $tab['t2']='active show';
         
+        if(!empty($return) and isset($data[$return]))
+            return $data[$return];
+
         return view('frontend.inicio',compact('data'));
     }
 
@@ -902,5 +884,14 @@ class DashboardController extends Controller
 
             return $this->grafica($request,$id);
         }
+    }
+
+    public function index2(Request $request){
+    $data=array();
+    $data['tipo']='gmp';
+    if(current_user()->isCliente())
+        $data['tipo']='cliente';
+
+      return view('frontend.inicio2',compact('data'));
     }
 }
