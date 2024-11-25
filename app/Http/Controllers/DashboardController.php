@@ -18,7 +18,7 @@ class DashboardController extends Controller
 {
     public function getPendings($filtro,$formType,$status='P',$filterExtra='',$equipos=true,$pluck='',$group_cliente=false){
         $userFilter=$filtro;
-        $filtro_cliente='';
+        $filtro_cliente=$filtro;
         if(current_user()->crm_clientes_id){
               $filtro_cliente=' cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).')';
               $userFilter=$filtro_cliente.' and '.$filtro;
