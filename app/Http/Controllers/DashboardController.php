@@ -13,9 +13,10 @@ use DB;
 use Illuminate\Http\Request;
 
 
+
 class DashboardController extends Controller
 {
-    private function getPendings($filtro,$formType,$status='P',$filterExtra='',$equipos=true,$pluck='',$group_cliente=false){
+    public function getPendings($filtro,$formType,$status='P',$filterExtra='',$equipos=true,$pluck='',$group_cliente=false){
         $userFilter=$filtro;
         $filtro_cliente='';
         if(current_user()->crm_clientes_id){
@@ -75,7 +76,7 @@ class DashboardController extends Controller
     }
 
 
-    public function index(Request $request){
+    public function index(Request $request,$return=''){
 
         /////////FILTRO CLIENTE GMP/////////////
         $data['tipo']='gmp';
@@ -277,6 +278,9 @@ class DashboardController extends Controller
         }
         $tab['t1']=''; $tab['t2']='active show';
         
+        if(!empty($return) and isset($data[$return]))
+            return $data[$return];
+
         return view('frontend.inicio',compact('data'));
     }
 
@@ -879,5 +883,14 @@ class DashboardController extends Controller
 
             return $this->grafica($request,$id);
         }
+    }
+
+    public function index2(Request $request){
+    $data=array();
+    $data['tipo']='gmp';
+    if(current_user()->isCliente())
+        $data['tipo']='cliente';
+
+      return view('frontend.inicio2',compact('data'));
     }
 }
