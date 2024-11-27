@@ -4,7 +4,7 @@
         <span class="card-title" id="tot_equipos">{{$totstpr}} </span>En proceso</span>
     </div>
     <div class="card-body text-right">
-        <div class="row" id="soporte_tecnico_pr_cli">
+        <div class="row" id="soporte_en_proceso">
             <div class="spinner-border text-primary text-center" role="status">
                 <span class="sr-only">Loading...</span>
             </div>   
@@ -13,7 +13,8 @@
     </div>
 </div> <br/>
 <script>
-    $(document).on('click','.abrirstpr',function(){
+
+$(document).on('click','.abrirstpr',function(){
         var id=$(this).attr('id');
         var clase='.'+id;
         var flechastpr='.flecha'+id;
@@ -30,9 +31,8 @@
         $(flechastpr).html(' <ion-icon name="chevron-down-outline"></ion-icon></span>');
 
     });
-</script>
-<script>
-     $(document).on('click','.abrirstpr_i',function(){
+
+    $(document).on('click','.abrirstpr_i',function(){
         console.log('inoperativo');
         var id=$(this).attr('id');
         var clase='.'+id;
@@ -55,10 +55,10 @@
         $.ajax({
             url: '/data_inicio',
             dataType: "html",
-            data: "tag=servicio_tecnico_proceso_cliente&user_id={{current_user()->id}}",
+            data: "tag=soporte_en_proceso&user_id={{current_user()->id}}",
             type: 'get',
             success: function(data) {
-                $('#soporte_tecnico_pr_cli').html(data);
+                $('#soporte_en_proceso').html(data);
 
             }
         });

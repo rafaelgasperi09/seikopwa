@@ -23,7 +23,7 @@
         $('#tot_equipos').html("{{$totales}}");
         setTimeout(function(){
             $.ajax({
-                url: '{{secure_url('data_inicio')}}',
+                url: '/data_inicio',
                 dataType: "html",
                 data: "tag=total_equipo&user_id={{current_user()->id}}",
                 type: 'get',

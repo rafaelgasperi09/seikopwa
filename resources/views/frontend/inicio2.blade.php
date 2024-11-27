@@ -62,7 +62,7 @@
  
             </div>
 
-            @if( $data['tipo']=='cliente' or  !current_user()->isCliente())
+            @if($data['tipo']=='cliente' or  !current_user()->isCliente())
             <div class=" mb-2 col-md-6 col">
                 {{--}}SOPORTE PENDIENTE DE INICIAR {{--}}
                 
@@ -71,13 +71,11 @@
                 @if( current_user()->isSupervisor() or current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador') )
                 @include('frontend.dashboard_widgets_new.soporte_pend_tecnico_ajax')
                 @endif
-                <?php /*
+              
                 {{--}}SOPORTE TECNICO EN PROCESO {{--}}
-                @include('frontend.dashboard_widgets.soporte_en_proceso')
-
+                @include('frontend.dashboard_widgets_new.soporte_en_proceso_ajax')
                 {{--}}ULTIMOS SERVICIO TECNICO CERRADOS{{--}}
-                @include('frontend.dashboard_widgets.ultimos_servicio_tecnico_cerrado')
-                 */ ?>
+                @include('frontend.dashboard_widgets_new.ultimos_servicio_tecnico_cerrado_ajax')
             </div>
             @else
                 <div class=" mb-2 col-md-6 col">
@@ -94,8 +92,8 @@
 
 
 
-    <script>
-     
+<script>
+
      $('#tot_title').html("{{$totales_title}}");
      $(document).ready( function () {
          $('.datatable').DataTable({
