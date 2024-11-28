@@ -279,10 +279,12 @@ class ApiController extends Controller
 
        if($request->tag=='soporte_pend_iniciar'){
         $result5='';
+        $totales=0;
         //servicio tecnico PENDIENTES DE INICIAR
         $data['serv_tec_pi_a']=$dashboard->getPendings($filtro,'serv_tec','A');
         $data['g_serv_tec_pi_a']=$dashboard->getPendings($filtro,'serv_tec','A','',true,'',true);
-            if(count($data['serv_tec_pi_a'])){
+        $totales=count($data['serv_tec_pi_a']);
+            if($totales){
                 foreach($data['g_serv_tec_pi_a'] as $k=>$gsta){
                     foreach($data['g_serv_tec_pi_a'] as $k=>$gsta){
                         $result5.='<div class="chip chip-danger chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
@@ -313,6 +315,11 @@ class ApiController extends Controller
                     }
                 }
             }
+
+            $result5.="<script>
+            $('#serv_tect_pend_ini').html($totales);
+
+           </script>";
         return $result5;
         }
 
@@ -320,6 +327,7 @@ class ApiController extends Controller
         if($request->tag=='soporte_pend_tecnico'){
 
             $result6='';
+            $totales=0;
             if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
                 $cond1=''; 
             elseif(current_user()->isOnGroup('tecnico'))
@@ -328,7 +336,9 @@ class ApiController extends Controller
                 $cond1=' formulario_registro.tecnico_asignado is null';
             $data['serv_tec_p']=$dashboard->getPendings($filtro,'serv_tec','P',$cond1);      
             $data['g_serv_tec_p']=$dashboard->getPendings($filtro,'serv_tec','P',$cond1,true,'',true);
-            if(count($data['serv_tec_p'])){
+            $totales=count($data['serv_tec_p']);
+            if($totales){
+                
                 foreach($data['g_serv_tec_p'] as $k=>$gst ){
                     $result6.='<div class="chip chip-danger chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
                                 <span class="chip-label ">'.$gst->cliente()->nombre.' </span>
@@ -359,7 +369,11 @@ class ApiController extends Controller
                     }
                 }
             }    
-            
+
+            $result6.="<script>
+            $('#tot_equipos_stpat').html($totales);
+
+           </script>";
             return $result6;
         }
 
@@ -490,7 +504,9 @@ class ApiController extends Controller
 
         return $result7;
         }
+
         if($request->tag=='soporte_en_proceso'){
+            $totales=0;
             $result7='';
             $cond2='';
             if(current_user()->isOnGroup('tecnico'))
@@ -511,12 +527,13 @@ class ApiController extends Controller
                         <h3 class="text-success text-left" cant="'.count($data['g_serv_tec_pr_o']).'">OPERATIVOS</h3>';
                         if(count($data['g_serv_tec_pr_o'])){
                             foreach($data['g_serv_tec_pr_o'] as $k=>$gstpro){
+                                
                                  $result7.='<div class="chip chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
                                     <span class="chip-label ">';
                                         if($gstpro->cliente())
                                          $result7.=$gstpro->cliente()->nombre;
 
-                        $result7.='</span>
+                            $result7.='</span>
                                     <i class="chip-icon abrirstpr"  id="stpr'.$gstpro->cliente_id.'" >
                                         <span class=" pull-right flechastpr flechastpr'.$gstpro->cliente_id.'"title="Ver mas">';
                                             if($k==0 and !$abierta0)
@@ -528,9 +545,10 @@ class ApiController extends Controller
                                 </div>';
                                 foreach($data['serv_tec_pr']->where('cliente_id',$gstpro->cliente_id)->where('equipo_status','O') as $stpr){
                                     if($stpr->equipo()){
+                                        $totales++;
                                         if($k<>0 and !$abierta0)
                                             $display='display:none';
-                                        $$result7.='<a href="'. route('equipos.detail',array('id'=>$stpr->equipo_id)) .'?show=rows&tab=3"  
+                                        $result7.='<a href="'. route('equipos.detail',array('id'=>$stpr->equipo_id)) .'?show=rows&tab=3"  
                                         class="chip chip-media ml-05 mb-05 stprlist stpr'.$gstpro->cliente_id.'" style="padding:18px;width:98%; '.$display.'">
                                             <i class="chip-icon bg-'.getStatusBgColor($stpr->estatus).'">
                                                 '.$stpr->estatus.'
@@ -583,6 +601,7 @@ class ApiController extends Controller
                              $result7.='</i>
                                 </div>';
                                 foreach($data['serv_tec_pr']->where('cliente_id',$gstpri->cliente_id)->where('equipo_status','I') as $stpri){
+                                    $totales++;
                                     if($stpri->equipo()){
                                         if($k<>0 and !$abierta0)
                                             $display='display:none';
@@ -604,7 +623,7 @@ class ApiController extends Controller
                                             
                                             $result7.='<span class="chip-label">'.$stpri->equipo()->numero_parte;
                                                 if($stpri->trabajado_por<>'')
-                                                $$result7.='<ion-icon size="large" name="checkmark-sharp" role="img" class="md hydrated text-success" style="position: absolute;top: 0px;left: 99px;" aria-label="cube outline"></ion-icon>';
+                                                $result7.='<ion-icon size="large" name="checkmark-sharp" role="img" class="md hydrated text-success" style="position: absolute;top: 0px;left: 99px;" aria-label="cube outline"></ion-icon>';
                                                 
                                             $result7.='</span>
                                             
@@ -622,7 +641,9 @@ class ApiController extends Controller
                             }
                         }            
                     $result7.='</div>';
-
+            $result7.="<script>
+            $('#soporte_en_proceso_tot').html($totales);
+            </script>";
         return $result7;
         }
         if($request->tag="servicio_tecnico_cerrado"){
@@ -651,17 +672,17 @@ class ApiController extends Controller
                         <i class="chip-icon abrirgst10"  id="gst10'.$gst10->cliente_id.'" >
                             <span class=" pull-right flechagst10 flechagst10'.$gst10->cliente_id.'"title="Ver mas">';
                                 if($k==0 and !$abierta0)
-                                $$result8.='<ion-icon name="chevron-down-outline"></ion-icon></span>';
+                                $result8.='<ion-icon name="chevron-down-outline"></ion-icon></span>';
                                 else
-                                $$result8.='<ion-icon name="chevron-up-outline"></ion-icon></span>';
+                                $result8.='<ion-icon name="chevron-up-outline"></ion-icon></span>';
                               
-                     $$result8.='</i>
+                     $result8.='</i>
                     </div>';
                     foreach($data['serv_tec_10']->where('cliente_id',$gst10->cliente_id) as $st10){
                         if($st10->equipo()){
                             if($k<>0 and !$abierta0)
                             $display='display:none';
-                            $$result8.='<a href="'. route('equipos.detail',array('id'=>$st10->equipo()->id)) .'?show=rows&tab=3"
+                            $result8.='<a href="'. route('equipos.detail',array('id'=>$st10->equipo()->id)) .'?show=rows&tab=3"
                                 class="chip  chip-media ml-05 mb-05 gst10list gst10'.$gst10->cliente_id.'"  style="width:98%; '.$display.'">
                                 <i class="chip-icon bg-'.getStatusBgColor($st10->estatus).'">
                                     '.$st10->estatus.'
