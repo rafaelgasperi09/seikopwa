@@ -1,7 +1,7 @@
 <div class="card text-white bg-light">
     <div class="card-header">
         <span ><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
-        <span class="card-title" id="tot_equipos">{{$totstpr}} </span>En proceso</span>
+        <span class="card-title" id="tot_equipos">{{$totstpr}} </span> En proceso</span>
     </div>
     <div class="card-body text-right">
         <div class="row" id="soporte_tecnico_pr_cli">

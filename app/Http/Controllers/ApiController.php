@@ -30,6 +30,7 @@ class ApiController extends Controller
         $data=array();
         $user=User::find($request->user_id);
         $result1=''; 
+
         //////////////////////////////////////////////////////////////////////////////////////////
         if($request->tag=='total_equipo'){
             $result1='';
@@ -646,7 +647,7 @@ class ApiController extends Controller
             </script>";
         return $result7;
         }
-        if($request->tag="servicio_tecnico_cerrado"){
+        if($request->tag=="servicio_tecnico_cerrado"){
 
             //servicio tecnico EN PROCESO
             $result8='';
@@ -695,7 +696,127 @@ class ApiController extends Controller
             }
             return $result8;    
         }
+        
+        if($request->tag=="daily_check_completados"){
 
+                $data=$equipo_sin_daily=$equipo_con_daily=array();
+                $data['tipo']='gmp';
+                $data['g_daily_check_hoy']=array();
+                $equipos =  Equipo::FiltroCliente()->whereRaw($filtro)->pluck('cliente_id','id');
+                $filtro_cliente='';
+                if(limpiar_lista(current_user()->crm_clientes_id)<>''){
+                    $filtro_cliente="and fr.cliente_id in (".limpiar_lista(current_user()->crm_clientes_id).")";
+                    $clientes=Cliente::whereRaw('id in ('.limpiar_lista(current_user()->crm_clientes_id).')')->pluck('nombre','id');
+                }else{
+                    $clientes=Cliente::pluck('nombre','id');
+                }
+                
+            
+                $data['daily_check_hoy']=DB::select("select  fr.cliente_id,date_format(fr.created_at,'%Y-%m-%d') as fecha ,numero_parte,fr.equipo_id ,
+                                                    max(case fr.turno_chequeo_diario when 1 then fr.estatus end) as turno1,
+                                                    max(case fr.turno_chequeo_diario when 2 then fr.estatus end) as turno2,
+                                                    max(case fr.turno_chequeo_diario when 3 then fr.estatus end) as turno3,
+                                                    max(case fr.turno_chequeo_diario when 4 then fr.estatus end) as turno4
+                                                    from equipos_vw ev 
+                                                    left join formulario_registro fr on ev.id =fr.equipo_id and fr.deleted_at is null 
+                                                    where  ev.deleted_at is null
+                                                    and date_format(fr.created_at,'%Y-%m-%d')='2024-11-01' 
+                                                    $filtro_cliente
+                                                    and $filtro
+                                                    and fr.formulario_id =2
+                                                    group by  fr.cliente_id,date_format(fr.created_at,'%Y-%m-%d'),numero_parte,fr.equipo_id 
+                                                    order by numero_parte ");
+
+                foreach($data['daily_check_hoy'] as $dc){
+                    $equipo_con_daily[$dc->cliente_id][$dc->equipo_id]=$dc;
+                    unset( $equipos[$dc->equipo_id]);
+                }
+                foreach($equipos as $e=>$c){
+                    $equipo_sin_daily[$c][$e]=Equipo::find($e)->numero_parte;
+                }
+                $data['equipo_con_daily']=$equipo_con_daily;
+                $data['equipo_sin_daily']=$equipo_sin_daily;
+                $data['equipos']=$equipos;
+                $data['clientes']=$clientes;
+
+                $result9='';
+                $result9.='<div class="col-md-6">
+                <h3 class="text-success text-left" cant="6">COMPLETADOS</h3>';
+
+                foreach($data['equipo_con_daily'] as $k=>$e){
+                    if(current_user()->isOnGroup('programador') and $i++>=10){
+                        break;
+                    }
+                    $result9.=' <div class="chip chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
+                            <span class="chip-label "> '.$data['clientes'][$k].'</span>
+                            <i class="chip-icon abrirecd" id="ecd_'.$k.'">
+                                <span class=" pull-right flechaecd flechaecd_'.$k.'" title="Ver mas">
+                                <ion-icon name="chevron-up-outline" role="img" class="md hydrated" aria-label="chevron up outline"></ion-icon>
+                                </span>
+                            </i>
+                            </div>';
+                    foreach($e as $d){
+                        $gancho='<ion-icon class="checkday md icon-large hydrated" name="checkmark-outline" size="large" style="color:green;" role="img" aria-label="checkmark outline" title></ion-icon>';
+                        $equis='<ion-icon name="close-outline" style="color:red;" size="large" role="img" class="md icon-large hydrated" aria-label="close outline" title></ion-icon>';
+                        $turnos=array();
+                        for($i=1;$i<=4;$i++){
+                            $turnos[$i]=str_replace('title','title="Turno '.$i.'"',$equis);
+                            $var='turno'.$i;
+                            if($d->$var)
+                                $turnos[$i]=str_replace('title','title="Turno '.$i.'"',$gancho);
+                        }                      
+                            
+                        $result9.='<a href="'. route('equipos.detail',array('id'=>$d->equipo_id)) .'?show=rows&tab=1"  class="chip  chip-media ml-05 mb-05 ecdlist ecd_'.$k.'" style="width: 98%;display:none">
+         
+                                <table width="100%">
+                                    <tr>
+                                        <td width="50%" class=" text-left"><span class="chip-label">'.$d->numero_parte.'</span></td>
+                                        <td>'.$turnos[1].'</td>
+                                        <td>'.$turnos[2].'</td>
+                                        <td>'.$turnos[3].'</td>
+                                        <td>'.$turnos[4].'</td>
+                                    </tr>
+                                </table>
+                            </a>';
+                    }
+                }
+
+                $result9.='</div>';
+
+                $result9.='<div class="col-md-6">
+                                <h3 class="text-danger text-left" cant="6">SIN COMPLETAR</h3>';
+                                foreach($data['equipo_sin_daily'] as $k=>$e){
+                                    if(current_user()->isOnGroup('programador') and $i++>=10){
+                                        break;
+                                    }
+                                    $cli_name='';
+                                    if(isset($data['clientes'][$k]))
+                                        $cli_name=$data['clientes'][$k];
+                                        $result9.= '<div class="chip chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
+                                            <span class="chip-label "> '.$cli_name.'</span>
+                                            <i class="chip-icon abriresd" id="esd_'.$k.'">
+                                                <span class=" pull-right flechaesd flechaesd_'.$k.'" title="Ver mas">
+                                                <ion-icon name="chevron-up-outline" role="img" class="md hydrated" aria-label="chevron up outline"></ion-icon>
+                                                </span>
+                                            </i>
+                                            </div>';
+                                    foreach($e as $y=>$d){
+
+                                        $result9.='<a href="'. route('equipos.detail',array('id'=>$y)) .'?show=rows&tab=1" class="chip  chip-media ml-05 mb-05 esdlist esd_'.$k.'" style="width: 98%;display:none">
+                        
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="50%" class=" text-left"><span class="chip-label">'.$d.'</span></td>
+                                                    </tr>
+                                                </table>
+                                            </a>';
+                                    }
+                                }
+                                
+                $result9.='</div>';
+
+         return $result9;
+        }
 
 
     }

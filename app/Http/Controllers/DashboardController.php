@@ -281,7 +281,7 @@ class DashboardController extends Controller
         if(!empty($return) and isset($data[$return]))
             return $data[$return];
 
-        return view('frontend.inicio',compact('data'));
+        return view('frontend.inicio1',compact('data'));
     }
 
     function grafica(Request $request,$id){
@@ -885,12 +885,49 @@ class DashboardController extends Controller
         }
     }
 
-    public function index2(Request $request){
-    $data=array();
+    public function inicio(Request $request){
+    $data=$equipo_sin_daily=$equipo_con_daily=array();
     $data['tipo']='gmp';
+    $data['g_daily_check_hoy']=array();
+    $equipos =  Equipo::FiltroCliente()->pluck('cliente_id','id');
+    $filtro_cliente='';
+    if(limpiar_lista(current_user()->crm_clientes_id)<>''){
+        $filtro_cliente="and fr.cliente_id in (".limpiar_lista(current_user()->crm_clientes_id).")";
+        $clientes=Cliente::whereRaw('id in ('.limpiar_lista(current_user()->crm_clientes_id).')')->pluck('nombre','id');
+    }else{
+        $clientes=Cliente::pluck('nombre','id');
+    }
+      
+
+    $data['daily_check_hoy']=DB::select("select  fr.cliente_id,date_format(fr.created_at,'%Y-%m-%d') as fecha ,numero_parte,fr.equipo_id ,
+                                        max(case fr.turno_chequeo_diario when 1 then fr.estatus end) as turno1,
+                                        max(case fr.turno_chequeo_diario when 2 then fr.estatus end) as turno2,
+                                        max(case fr.turno_chequeo_diario when 3 then fr.estatus end) as turno3,
+                                        max(case fr.turno_chequeo_diario when 4 then fr.estatus end) as turno4
+                                        from equipos_vw ev 
+                                        left join formulario_registro fr on ev.id =fr.equipo_id and fr.deleted_at is null 
+                                        where  ev.deleted_at is null
+                                        and date_format(fr.created_at,'%Y-%m-%d')='2024-11-01' 
+                                        $filtro_cliente
+                                        and fr.formulario_id =2
+                                        group by  fr.cliente_id,date_format(fr.created_at,'%Y-%m-%d'),numero_parte,fr.equipo_id 
+                                        order by numero_parte ");
+    foreach($data['daily_check_hoy'] as $dc){
+        $equipo_con_daily[$dc->cliente_id][$dc->equipo_id]=$dc;
+        unset( $equipos[$dc->equipo_id]);
+    }
+    foreach($equipos as $e=>$c){
+        $equipo_sin_daily[$c][$e]=Equipo::find($e)->numero_parte;
+    }
+    $data['equipo_con_daily']=$equipo_con_daily;
+    $data['equipo_sin_daily']=$equipo_sin_daily;
+    $data['equipos']=$equipos;
+    $data['clientes']=$clientes;
+    ////////////////////////////////////////////////
+
     if(current_user()->isCliente())
         $data['tipo']='cliente';
-
-      return view('frontend.inicio2',compact('data'));
+    
+      return view('frontend.inicio',compact('data'));
     }
 }
