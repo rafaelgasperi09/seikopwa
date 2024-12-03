@@ -55,7 +55,7 @@ $(document).on('click','.abrirstpr',function(){
         $.ajax({
             url: '/data_inicio',
             dataType: "html",
-            data: "tag=soporte_en_proceso&user_id={{current_user()->id}}",
+            data: "tag=soporte_en_proceso&user_id={{current_user()->id}}&tipo={{request()->tipo}}",
             type: 'get',
             success: function(data) {
                 $('#soporte_en_proceso').html(data);

@@ -36,7 +36,7 @@
         $.ajax({
             url: '/data_inicio',
             dataType: "html",
-            data: "tag=mant_prev_pend_firma&user_id={{current_user()->id}}",
+            data: "tag=mant_prev_pend_firma&user_id={{current_user()->id}}&tipo={{request()->tipo}}",
             type: 'get',
             success: function(data) {
                 $('#mant_prev_pend_firma').html(data);

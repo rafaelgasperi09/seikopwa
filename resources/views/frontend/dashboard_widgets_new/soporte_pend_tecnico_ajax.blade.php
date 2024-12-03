@@ -35,7 +35,7 @@
         $.ajax({
             url: '/data_inicio',
             dataType: "html",
-            data: "tag=soporte_pend_tecnico&user_id={{current_user()->id}}",
+            data: "tag=soporte_pend_tecnico&user_id={{current_user()->id}}&tipo={{request()->tipo}}",
             type: 'get',
             success: function(data) {
                 $('#soporte_pend_tecnico').html(data);

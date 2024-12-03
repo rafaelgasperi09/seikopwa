@@ -38,7 +38,7 @@
         $.ajax({
             url: '/data_inicio',
             dataType: "html",
-            data: "tag=servicio_tecnico_cerrado&user_id={{current_user()->id}}",
+            data: "tag=servicio_tecnico_cerrado&user_id={{current_user()->id}}&tipo={{request()->tipo}}",
             type: 'get',
             success: function(data) {
                 $('#servicio_tecnico_cerrado').html(data);

@@ -55,7 +55,7 @@
         $.ajax({
             url: '/data_inicio',
             dataType: "html",
-            data: "tag=servicio_tecnico_proceso_cliente&user_id={{current_user()->id}}",
+            data: "tag=servicio_tecnico_proceso_cliente&user_id={{current_user()->id}}&tipo={{request()->tipo}}",
             type: 'get',
             success: function(data) {
                 $('#soporte_tecnico_pr_cli').html(data);

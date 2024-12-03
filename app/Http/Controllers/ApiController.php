@@ -13,6 +13,9 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use DateTime;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\GenericExcel;
+
 
 class ApiController extends Controller
 {
@@ -25,6 +28,9 @@ class ApiController extends Controller
         $filtro['cliente']="numero_parte not like 'GM%'";
         if(current_user()->isCliente())
             $data['tipo']='cliente';
+        if($request->has('tipo') and !empty($request->tipo) and in_array($request->tipo,['gmp','cliente'])){
+            $data['tipo']=$request->tipo;
+        }
         $filtro=$filtro[$data['tipo']];
 
         $data=array();
@@ -702,17 +708,30 @@ class ApiController extends Controller
                 $data=$equipo_sin_daily=$equipo_con_daily=array();
                 $data['tipo']='gmp';
                 $data['g_daily_check_hoy']=array();
-                $equipos =  Equipo::FiltroCliente()->whereRaw($filtro)->pluck('cliente_id','id');
+                $equipos =  Equipo::FiltroCliente()->whereNotNull('cliente_id')->whereRaw($filtro)->pluck('cliente_id','id');
                 $filtro_cliente='';
+                $totales1= $totales2=0;
                 if(limpiar_lista(current_user()->crm_clientes_id)<>''){
                     $filtro_cliente="and fr.cliente_id in (".limpiar_lista(current_user()->crm_clientes_id).")";
                     $clientes=Cliente::whereRaw('id in ('.limpiar_lista(current_user()->crm_clientes_id).')')->pluck('nombre','id');
                 }else{
                     $clientes=Cliente::pluck('nombre','id');
                 }
-                
-            
-                $data['daily_check_hoy']=DB::select("select  fr.cliente_id,date_format(fr.created_at,'%Y-%m-%d') as fecha ,numero_parte,fr.equipo_id ,
+                $fechasql="and date_format(fr.created_at,'%Y-%m-%d')";
+               
+                if($request->has('fecha_desde') and !empty($request->fecha_desde)){
+                    $fecha_desde=$request->fecha_desde;
+                    if($request->has('fecha_hasta') and !empty($fecha_hasta))
+                        $fecha_hasta=$request->fecha_hasta;
+                    else
+                        $fecha_hasta=$fecha_desde;
+                    $fechasql.=" between '$fecha_desde' and  '$fecha_hasta'";
+                }else{
+                    //$fechasql.="=date_format(now(),'%Y-%m-%d')";
+                    $fechasql.="='2024-11-01'";
+                }
+
+                $sql="select  fr.cliente_id,date_format(fr.created_at,'%Y-%m-%d') as fecha ,numero_parte,fr.equipo_id ,
                                                     max(case fr.turno_chequeo_diario when 1 then fr.estatus end) as turno1,
                                                     max(case fr.turno_chequeo_diario when 2 then fr.estatus end) as turno2,
                                                     max(case fr.turno_chequeo_diario when 3 then fr.estatus end) as turno3,
@@ -720,17 +739,21 @@ class ApiController extends Controller
                                                     from equipos_vw ev 
                                                     left join formulario_registro fr on ev.id =fr.equipo_id and fr.deleted_at is null 
                                                     where  ev.deleted_at is null
-                                                    and date_format(fr.created_at,'%Y-%m-%d')='2024-11-01' 
+                                                    $fechasql
                                                     $filtro_cliente
                                                     and $filtro
                                                     and fr.formulario_id =2
                                                     group by  fr.cliente_id,date_format(fr.created_at,'%Y-%m-%d'),numero_parte,fr.equipo_id 
-                                                    order by numero_parte ");
+                                                    order by numero_parte ";
+                     
+                $data['daily_check_hoy']=DB::select($sql);
 
                 foreach($data['daily_check_hoy'] as $dc){
                     $equipo_con_daily[$dc->cliente_id][$dc->equipo_id]=$dc;
                     unset( $equipos[$dc->equipo_id]);
                 }
+
+
                 foreach($equipos as $e=>$c){
                     $equipo_sin_daily[$c][$e]=Equipo::find($e)->numero_parte;
                 }
@@ -739,6 +762,11 @@ class ApiController extends Controller
                 $data['equipos']=$equipos;
                 $data['clientes']=$clientes;
 
+                if($request->return=='true'){
+                    return $data;
+                }
+
+                $i=0;
                 $result9='';
                 $result9.='<div class="col-md-6">
                 <h3 class="text-success text-left" cant="6">COMPLETADOS</h3>';
@@ -756,6 +784,7 @@ class ApiController extends Controller
                             </i>
                             </div>';
                     foreach($e as $d){
+                        $totales1++;
                         $gancho='<ion-icon class="checkday md icon-large hydrated" name="checkmark-outline" size="large" style="color:green;" role="img" aria-label="checkmark outline" title></ion-icon>';
                         $equis='<ion-icon name="close-outline" style="color:red;" size="large" role="img" class="md icon-large hydrated" aria-label="close outline" title></ion-icon>';
                         $turnos=array();
@@ -801,7 +830,7 @@ class ApiController extends Controller
                                             </i>
                                             </div>';
                                     foreach($e as $y=>$d){
-
+                                        $totales2++;
                                         $result9.='<a href="'. route('equipos.detail',array('id'=>$y)) .'?show=rows&tab=1" class="chip  chip-media ml-05 mb-05 esdlist esd_'.$k.'" style="width: 98%;display:none">
                         
                                                 <table width="100%">
@@ -814,11 +843,87 @@ class ApiController extends Controller
                                 }
                                 
                 $result9.='</div>';
-
+    
+        $result9.="<script>
+        $('#tot_daily_check_completados').html($totales1);
+        $('#tot_daily_check_no_completados').html($totales2);
+        </script>";
          return $result9;
+        }
+    }
+
+    public function downloadExcel(Request $request,$id){
+        $datos;
+        $param_txt='';
+        if($id=='daily_check_completados'){
+            $fecha_desde=Carbon::parse($request->fecha_desde)->format('Y-m-d');
+            $fecha_hasta=Carbon::parse($request->fecha_hasta)->format('Y-m-d');
+            $fecha_actual=$fecha_desde;
+            $data['lista']=array();
+            while(Carbon::parse($fecha_actual)->lt($fecha_hasta)){
+
+                $params=['tag'=>'daily_check_completados',
+                        'return'=>true,
+                        'tipo'=>$request->tipo,
+                        'fecha_desde'=>$fecha_actual,
+                        'fecha_hasta'=>$fecha_actual];
+              
+                $request_data= (clone request())->replace($params);
+                $datos=$this->data_inicio($request_data);
+                $data['title']="Reporte de daily check completados/sin completar ";
+                $data['subtitle']=$param_txt;
+
+                $line=0;
+                
+                foreach($datos['daily_check_hoy'] as $d){
+                    $turnos=array();
+                    for($i=1;$i<=4;$i++){
+                        $var='turno'.$i;
+                        $turnos[$i]='NO';
+                        if($d->$var)
+                            $turnos[$i]='SI';
+                    }      
+        
+                    array_push($data['lista'],array(
+                        'line'=>++$line,
+                        'bodega'=>$datos['clientes'][$d->cliente_id],
+                        'fecha'=>$d->fecha,
+                        'equipo'=>$d->numero_parte,
+                        'turno1'=>$turnos[1],
+                        'turno2'=>$turnos[2],
+                        'turno3'=>$turnos[3],
+                        'turno4'=>$turnos[4]
+                    ));
+        
+                }
+                foreach($datos['equipo_sin_daily'] as $k=>$d){
+                    if(!isset($datos['clientes'][$k])){
+                        dd($datos['equipo_sin_daily']);
+                    }
+                    array_push($data['lista'],array(
+                        'line'=>++$line,
+                        'bodega'=>$datos['clientes'][$k],
+                        'fecha'=>$fecha_actual,
+                        'equipo'=>$d,
+                        'turno1'=>'NO',
+                        'turno2'=>'NO',
+                        'turno3'=>'NO',
+                        'turno4'=>'NO'
+                    ));
+        
+                }
+
+                $fecha_actual=Carbon::parse($fecha_actual)->addDays(1)->format('Y-m-d');           
+            
+                  
+            }   
+
+                
         }
 
 
-    }
+        return Excel::download(new GenericExcel($data), 'Reporte_daily_check.xlsx');
+
+    }   
 }
     

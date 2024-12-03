@@ -49,6 +49,7 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
     Route::get('/inicio1', array('as' => 'inicio1', 'uses' => 'DashboardController@index'));
     Route::get('/dashboard/{id}/detalle', array('as' => 'dashboard.grafico_detalle', 'uses' => 'DashboardController@grafico_detalle'));
     Route::get('/dashboard/{id}', array('as' => 'dashboard.gmp', 'uses' => 'DashboardController@grafica'))->middleware('hasAccess');
+    Route::get('/dashboard/download_excel/{id}', array('as' => 'dashboard.download_excel', 'uses' => 'ApiController@downloadExcel'));
    
     Route::get('/calendar', array('as' => 'equipos.calendar', 'uses' => 'EquiposController@calendar'));
 
