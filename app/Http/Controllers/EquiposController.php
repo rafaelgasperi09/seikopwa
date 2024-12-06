@@ -1384,4 +1384,65 @@ class EquiposController extends BaseController
             ->with('otrosCampos',$otrosDatos)
             ->with('data',$data);
     }
+
+    public function daily_check_list(Request $request){
+        $filtro=false;
+        return view('frontend.equipos.reportes_daily_check')->with('filtro',$filtro);;
+    }
+
+    public function daily_check_list_datatable(Request $request){
+        $filtro='';
+        $es_cliente=current_user()->isCliente();
+        $clientes=array();
+        if($es_cliente)
+            $clientes=explode(',',current_user()->crm_clientes_id);
+        
+        $data=DB::table('formulario_registro as fr')
+                ->join('users as u','fr.creado_por','u.id')
+                ->join('equipos_vw as evw','fr.equipo_id','evw.id')
+                ->join('clientes_vw as cvw','fr.cliente_id','cvw.id')
+                ->leftjoin('formulario_data as fd','fr.id','fd.formulario_registro_id')  
+                ->WhereRaw("date_format(fr.created_at,'%Y-%m-%d')>='2024-11-01'")
+                ->where('fr.formulario_id',2)
+                ->whereNull('fr.deleted_at')
+                ->groupBy('fr.created_at','equipo_id' ,'numero_parte','cvw.nombre','fr.id','u.first_name','u.last_name')
+                ->selectRaw("equipo_id,fr.created_at,date_format(fr.created_at,'%Y-%m-%d') as fecha,
+                            date_format(fr.created_at,'%H:%i') as hora,
+                            numero_parte as equipo,cvw.nombre as cliente,fr.id as reporte,
+                            sum(case fd.valor when 'R' then 1 else 0 end ) as valorr,
+                            sum(case fd.valor when 'M' then 1 else 0 end ) as valorm,
+                            sum(case fd.valor when 'OK' then 1 else 0 end ) as valorok,
+                            CONCAT(u.first_name,' ',u.last_name) as registrado_por")
+                ->when( $es_cliente ,function ($q) use($clientes){
+                    $q->whereIn("cliente_id",$clientes);                  
+                })
+                ->when(!empty($request->equipo_id) and $request->equipo_id>0 ,function ($q) use($request){
+                    $q->where("equipo_id",$request->equipo_id);
+                })
+                ->when(!empty($request->cliente_id)  ,function ($q) use($request){
+                    $q->where("cliente_id",$request->cliente_id);
+                })
+                ->when(!empty($request->desde)  ,function ($q) use($request){
+                    $q->where("fr.created_at",'>=',$request->desde);
+                })
+                ->when(!empty($request->hasta)  ,function ($q) use($request){
+                    $q->where("fr.created_at",'<=',$request->hasta);
+                })
+                ->when(!empty($request->tipo)  ,function ($q) use($request){
+                    $q->where("f.tipo",$request->tipo);
+                })
+                ->when(!empty($request->estado)  ,function ($q) use($request){
+                    $q->where("fr.estatus",$request->estado);
+                })
+                ->when(!empty($request->created_by)  ,function ($q) use($request){
+                    $q->where("fr.creado_por",$request->created_by);
+                });
+
+        //$data=DB::select($query);
+        return DataTables::of($data)->toJson();
+    }
+
+    public function daily_check_list_export(Request $request){
+
+    }
 }

@@ -64,6 +64,12 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::get('/reportes_datatable', array('as' => 'equipos.reportes_datatable', 'uses' => 'EquiposController@reportes_datatable'));
    
         Route::get('/reportes_export', array('as' => 'equipos.reportes_export', 'uses' => 'EquiposController@reportes_export'));
+    
+        Route::get('/daily_check_list', array('as' => 'equipos.daily_check_list', 'uses' => 'EquiposController@daily_check_list'));
+        
+        Route::get('/daily_check_list_datatable', array('as' => 'equipos.daily_check_list_datatable', 'uses' => 'EquiposController@daily_check_list_datatable'));
+   
+        Route::get('/daily_check_list_export', array('as' => 'equipos.daily_check_list_export', 'uses' => 'EquiposController@daily_check_list_export'));
 
         Route::get('/{sub}/tipo/{id}', array('as' => 'equipos.tipo', 'uses' => 'EquiposController@tipo'));
 

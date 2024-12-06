@@ -100,6 +100,18 @@
                                 </a>
                             </li>
                         </ul>
+                        <ul>
+                            <li>
+                                <a href="{{ route('equipos.daily_check_list') }}" class="item" title="Historial de daily check">
+                                    <div class="icon-box bg-primary">
+                                        <ion-icon name="list-outline" title="daily check"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        Daily Check resumen
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
                         @endif
                     </li>
                     @endif

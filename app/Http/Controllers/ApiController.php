@@ -727,8 +727,8 @@ class ApiController extends Controller
                         $fecha_hasta=$fecha_desde;
                     $fechasql.=" between '$fecha_desde' and  '$fecha_hasta'";
                 }else{
-                    //$fechasql.="=date_format(now(),'%Y-%m-%d')";
-                    $fechasql.="='2024-11-01'";
+                    $fechasql.="=date_format(now(),'%Y-%m-%d')";
+                    //$fechasql.="='2024-11-01'";
                 }
 
                 $sql="select  fr.cliente_id,date_format(fr.created_at,'%Y-%m-%d') as fecha ,numero_parte,fr.equipo_id ,
@@ -757,6 +757,7 @@ class ApiController extends Controller
                 foreach($equipos as $e=>$c){
                     $equipo_sin_daily[$c][$e]=Equipo::find($e)->numero_parte;
                 }
+
                 $data['equipo_con_daily']=$equipo_con_daily;
                 $data['equipo_sin_daily']=$equipo_sin_daily;
                 $data['equipos']=$equipos;
@@ -771,6 +772,10 @@ class ApiController extends Controller
                 $result9.='<div class="col-md-6">
                 <h3 class="text-success text-left" cant="6">COMPLETADOS</h3>';
 
+                $gancho='<ion-icon class="checkday md icon-large hydrated" name="checkmark-outline" size="large" style="color:green;" role="img" aria-label="checkmark outline" title></ion-icon>';
+                $equis='<ion-icon name="close-outline" style="color:red;" size="large" role="img" class="md icon-large hydrated" aria-label="close outline" title></ion-icon>'; 
+                $turnos=$turnosx=array($equis,$equis,$equis,$equis,$equis);
+                
                 foreach($data['equipo_con_daily'] as $k=>$e){
                     if(current_user()->isOnGroup('programador') and $i++>=10){
                         break;
@@ -783,13 +788,13 @@ class ApiController extends Controller
                                 </span>
                             </i>
                             </div>';
+
+                   
                     foreach($e as $d){
                         $totales1++;
-                        $gancho='<ion-icon class="checkday md icon-large hydrated" name="checkmark-outline" size="large" style="color:green;" role="img" aria-label="checkmark outline" title></ion-icon>';
-                        $equis='<ion-icon name="close-outline" style="color:red;" size="large" role="img" class="md icon-large hydrated" aria-label="close outline" title></ion-icon>';
-                        $turnos=array();
+                        
                         for($i=1;$i<=4;$i++){
-                            $turnos[$i]=str_replace('title','title="Turno '.$i.'"',$equis);
+                            $turnos[$i]=$turnosx[$i]=str_replace('title','title="Turno '.$i.'"',$equis);
                             $var='turno'.$i;
                             if($d->$var)
                                 $turnos[$i]=str_replace('title','title="Turno '.$i.'"',$gancho);
@@ -836,6 +841,10 @@ class ApiController extends Controller
                                                 <table width="100%">
                                                     <tr>
                                                         <td width="50%" class=" text-left"><span class="chip-label">'.$d.'</span></td>
+                                                        <td>'.$turnosx[1].'</td>
+                                                        <td>'.$turnosx[2].'</td>
+                                                        <td>'.$turnosx[3].'</td>
+                                                        <td>'.$turnosx[4].'</td>
                                                     </tr>
                                                 </table>
                                             </a>';
@@ -860,7 +869,7 @@ class ApiController extends Controller
             $fecha_hasta=Carbon::parse($request->fecha_hasta)->format('Y-m-d');
             $fecha_actual=$fecha_desde;
             $data['lista']=array();
-            while(Carbon::parse($fecha_actual)->lt($fecha_hasta)){
+            while(Carbon::parse($fecha_actual)->lte($fecha_hasta)){
 
                 $params=['tag'=>'daily_check_completados',
                         'return'=>true,
@@ -896,21 +905,22 @@ class ApiController extends Controller
                     ));
         
                 }
+
                 foreach($datos['equipo_sin_daily'] as $k=>$d){
-                    if(!isset($datos['clientes'][$k])){
-                        dd($datos['equipo_sin_daily']);
+                    foreach($d as $eq){
+
+                        array_push($data['lista'],array(
+                            'line'=>++$line,
+                            'bodega'=>$datos['clientes'][$k],
+                            'fecha'=>$fecha_actual,
+                            'equipo'=>$eq,
+                            'turno1'=>'NO',
+                            'turno2'=>'NO',
+                            'turno3'=>'NO',
+                            'turno4'=>'NO'
+                        ));
+            
                     }
-                    array_push($data['lista'],array(
-                        'line'=>++$line,
-                        'bodega'=>$datos['clientes'][$k],
-                        'fecha'=>$fecha_actual,
-                        'equipo'=>$d,
-                        'turno1'=>'NO',
-                        'turno2'=>'NO',
-                        'turno3'=>'NO',
-                        'turno4'=>'NO'
-                    ));
-        
                 }
 
                 $fecha_actual=Carbon::parse($fecha_actual)->addDays(1)->format('Y-m-d');           

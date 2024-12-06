@@ -48,7 +48,7 @@
             <div class=" mb-2 col-md-6 col">
                     {{--}}MANTENIMIENTO PREVENTIVO PENDIENTE DE FIRMA {{--}}
                     @include('frontend.dashboard_widgets_new.mant_prev_pend_firma_ajax')
-                    
+
                 @if( current_user()->isOnGroup('supervisorc') or
                      current_user()->isOnGroup('supervisor-cliente') or
                      current_user()->isOnGroup('programador'))
