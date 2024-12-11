@@ -319,6 +319,9 @@
     @endif
     
         $( "form" ).on('submit',function(e){
+            @if($formulario->nombre=="form_montacarga_daily_check")
+            $("#prioridad").removeAttr('disabled');
+            @endif
             $('#loadingModal').modal('show');
         });
     </script>

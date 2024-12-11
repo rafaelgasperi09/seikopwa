@@ -70,6 +70,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::get('/daily_check_list_datatable', array('as' => 'equipos.daily_check_list_datatable', 'uses' => 'EquiposController@daily_check_list_datatable'));
    
         Route::get('/daily_check_list_export', array('as' => 'equipos.daily_check_list_export', 'uses' => 'EquiposController@daily_check_list_export'));
+        
+        Route::post('/asignar_turno/{id}', array('as' => 'equipos.asignar_turno', 'uses' => 'EquiposController@asignar_turno'));
 
         Route::get('/{sub}/tipo/{id}', array('as' => 'equipos.tipo', 'uses' => 'EquiposController@tipo'));
 

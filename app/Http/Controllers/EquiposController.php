@@ -23,6 +23,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use App\TipoEquipo;
 use App\Equipo;
+use App\EquiposVw;
 use App\Cliente;
 use App\SubEquipo;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,7 @@ use Response;
 use Yajra\DataTables\Facades\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ReportesExport;
+use App\Exports\GenericExcel;
 
 class EquiposController extends BaseController
 {
@@ -1392,6 +1394,7 @@ class EquiposController extends BaseController
 
     public function daily_check_list_datatable(Request $request){
         $filtro='';
+
         $es_cliente=current_user()->isCliente();
         $clientes=array();
         if($es_cliente)
@@ -1412,6 +1415,7 @@ class EquiposController extends BaseController
                             sum(case fd.valor when 'R' then 1 else 0 end ) as valorr,
                             sum(case fd.valor when 'M' then 1 else 0 end ) as valorm,
                             sum(case fd.valor when 'OK' then 1 else 0 end ) as valorok,
+                            max(case fd.formulario_campo_id when 968 then fd.valor else '' end) as prioridad,
                             CONCAT(u.first_name,' ',u.last_name) as registrado_por")
                 ->when( $es_cliente ,function ($q) use($clientes){
                     $q->whereIn("cliente_id",$clientes);                  
@@ -1437,12 +1441,39 @@ class EquiposController extends BaseController
                 ->when(!empty($request->created_by)  ,function ($q) use($request){
                     $q->where("fr.creado_por",$request->created_by);
                 });
-
+        if($request->has('datos') && $request->datos=true){
+            return $data->get();
+        }
         //$data=DB::select($query);
         return DataTables::of($data)->toJson();
     }
 
     public function daily_check_list_export(Request $request){
+        $data['title']="Reportes de daily check ";
+        $data['subtitle']='';
+        $lista=$request->all();
+        $lista['datos']=true;
+        $request_data= (clone $request)->replace($lista);
 
+        $data['lista']=$this->daily_check_list_datatable($request_data);
+
+        return Excel::download(new GenericExcel($data), 'Reporte_daily_check.xlsx');
     }
+
+    public function asignar_turno(Request $request,$id){
+
+       $equipo1= Equipo::find($id);
+       $equipo2= EquiposVw::find($id);
+       $equipo1->turnos=$request->turnos;
+       if($equipo1->save()){
+            $request->session()->flash('message.success','Turnos actualizado con exito.');
+            $equipo2->turnos=$request->turnos;
+            $equipo2->save();
+       }else{
+            $request->session()->flash('message.error','No se pudo actualizar los turnos.');
+       }
+
+       return redirect(route('equipos.detail',array('id'=>$id)));
+    }
+    
 }

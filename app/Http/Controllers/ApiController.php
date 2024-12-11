@@ -879,7 +879,7 @@ class ApiController extends Controller
               
                 $request_data= (clone request())->replace($params);
                 $datos=$this->data_inicio($request_data);
-                $data['title']="Reporte de daily check completados/sin completar ";
+                $data['title']="Reporte de daily check completados/sin completar";
                 $data['subtitle']=$param_txt;
 
                 $line=0;

@@ -63,6 +63,12 @@
                                 <dt class="col-sm-3">Descripción</dt>
                                 <dd class="col-sm-9">{{ $data->descripcion }}</dd>
                             </dl>
+                            <dl class="row">
+                                <dt class="col-sm-3">Turnos</dt>
+                                <dd class="col-sm-9">
+                                <button type="button" id="turnos" class="btn btn-text-default" data-toggle="modal" data-target="#assign_turno_modal">{{ $data->turnos }}</button>
+                                </dd>
+                            </dl>
 
                         </div>
                 </div>
@@ -202,6 +208,7 @@
             @include('frontend.equipos.modals.asigna_supervisor_gmp')
             @include('frontend.equipos.modals.cotizado_modal')
             @include('frontend.equipos.modals.accidente_modal')
+            @include('frontend.equipos.modal_asignar_turnos',['data'=>$data])
         </div>
     </div>
 </div>
