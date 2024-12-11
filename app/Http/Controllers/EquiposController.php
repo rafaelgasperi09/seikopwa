@@ -492,12 +492,12 @@ class EquiposController extends BaseController
              ->whereRaw('created_at >= CURDATE()')
              ->orderBy('id','DESC')
              ->first();
-        
+
 
          if($formulario_registro){
-            if($formulario_registro->turno_chequeo_diario>=4){
+            if($formulario_registro->turno_chequeo_diario>=$data->turnos){
                 $fecha=Carbon::parse($formulario_registro->created_at)->format('d/M/Y');
-                request()->session()->flash('message.error','Ya ha completado los cuatro turnos para el dia '.$fecha);
+                request()->session()->flash('message.error','Ya ha completado los '.$data->turnos.' turnos para el dia '.$fecha);
                 return redirect()->back();
             }
              $turno = $formulario_registro->turno_chequeo_diario+1;

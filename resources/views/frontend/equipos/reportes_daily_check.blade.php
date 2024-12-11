@@ -56,7 +56,7 @@
                 "order": [[ 0, "desc" ]],
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ url('equipos/daily_check_list_datatable') }}?"+parameters,
+                "ajax": "/equipos/daily_check_list_datatable/?"+parameters,
                 "columns":[
                     {data:'fecha'},
                     {data:'hora'},

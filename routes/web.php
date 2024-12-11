@@ -14,11 +14,9 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', function () {
-
     if(\Sentinel::check()){
         return redirect(route('inicio'));
     }
-
     return view('frontend.login');
 });
 

@@ -15,12 +15,14 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url('images/AppImages/android/icon-192x192.png') }}">
     @yield('css')
     <link rel="stylesheet" href="{{ url('assets/css/style.css?time='.time()) }}">
-    <link rel="stylesheet" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+     <!-- <link rel="stylesheet" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"> -->
+    <link rel="stylesheet" href="{{ url('assets/css/jquery.dataTables.min.css') }}">
     @laravelPWA
     <!-- Jquery -->
     <script src="{{ url('assets/js/lib/jquery-3.4.1.min.js') }}"></script>
     <script src="{{ url('assets/js/toast.js') }}"></script>
-    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="{{ url('assets/js/jquery.dataTables.min.js') }}"></script>
+     <!-- <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script> -->
     {{ Html::script('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js') }}
     <!-- fullcalendar -->
     {{ Html::script('assets/js/moment.min.js') }}

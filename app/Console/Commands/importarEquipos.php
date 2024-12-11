@@ -52,6 +52,7 @@ class ImportarEquipos extends Command
         e.modelo       AS modelo,
         e.serie        AS serie,
         c.descripcion  AS cliente,
+        e.turnos,
         e.updated_at 
       FROM (montacarga.equipos e
          JOIN montacarga.contactos c)

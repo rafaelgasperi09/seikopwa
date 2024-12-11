@@ -62,7 +62,7 @@
                 "order": [[ 0, "desc" ]],
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ url('equipos/reportes_datatable') }}?"+parameters,
+                "ajax": "/equipos/reportes_datatable/?"+parameters,
                 "columns":[
                     {data:'id'},
                     {data:'created_at'},
