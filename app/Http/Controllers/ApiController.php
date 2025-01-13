@@ -234,7 +234,7 @@ class ApiController extends Controller
               AND fd.valor=".current_user()->id.")";
             }
 
-            $cond1='';
+           // $cond1='';
             $mes=\Carbon\Carbon::now()->subMonth(1)->format('Y-m-d');
             if(!empty($cond1))
                 $cond1.=' AND ';
