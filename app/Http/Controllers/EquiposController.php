@@ -258,7 +258,7 @@ class EquiposController extends BaseController
     public function reportes_export(Request $request){
         $file='reportes.csv';
        
-        $datos=$this->reportes_datatable($request,true);
+        $datos=$this->reportes_datos($request,true);
       
         $headers = array(
             "Content-Encoding"        => "UTF-8",
