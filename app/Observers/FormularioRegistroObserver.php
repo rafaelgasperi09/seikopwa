@@ -253,6 +253,8 @@ class FormularioRegistroObserver
                 }
             }
         }
+
+        registraExtra($formularioRegistro->id);
     }
     /**
      * Handle the formulario data "updated" event.
@@ -470,7 +472,7 @@ class FormularioRegistroObserver
                 return back()->withInput();
             }*/
         }
-
+        registraExtra($formularioRegistro->id);
     }
 
 }

@@ -114,15 +114,9 @@ class EquiposController extends BaseController
         return view('frontend.equipos.lista')->with('equipos',$equipos)->with('datos',$datos)->with('dominio',$dominio)->with('clientes',$clientes)->with('cliente_id',$cliente_id);
     }
 
-    public function reportes_list(Request $request){
-        $filtro='false';
-        return view('frontend.equipos.reportes')->with('filtro',$filtro);
-    }
-
-    public function reportes_datatable(Request $request,$export_datos=false){
-        //dd($request->all());
+    public function reportes_datos(Request $request,$export_datos=false){
         $clientes=explode(',',current_user()->crm_clientes_id);
-        $editar=(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'));
+       
         $carbon = new \Carbon\Carbon();
         $desde = $carbon->now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
         $es_cliente=current_user()->isCliente();
@@ -132,9 +126,7 @@ class EquiposController extends BaseController
                 ->join('users as u','fr.creado_por','u.id')
                 ->join('equipos_vw as evw','fr.equipo_id','evw.id')
                 ->join('clientes_vw as cvw','fr.cliente_id','cvw.id')
-                ->leftjoin('formulario_data as fd','fr.id','fd.formulario_registro_id')
-                ->join('formulario_campos as fc','fd.formulario_campo_id','fc.id')
-                ->join('users as usr','fd.user_id','usr.id')     
+                ->join('formulario_extra as fe','fr.id','fe.formulario_registro_id')
                 ->selectRaw("  fr.id, 
                                 fr.created_at, 
                                 fr.fecha_inicia, 
@@ -148,9 +140,7 @@ class EquiposController extends BaseController
                                 cvw.nombre AS cliente_nombre, 
                                 evw.numero_parte, 
                                 CONCAT(u.first_name, ' ', u.last_name) AS user_name,
-                                MAX(CASE WHEN fc.tipo = 'firma' AND fc.cambio_estatus = 1 AND fd.valor IS NOT NULL THEN CONCAT(usr.first_name, ' ', usr.last_name) ELSE '' END) AS cliente, 
-                                MAX(CASE WHEN fd.formulario_campo_id IN (968, 969) THEN fd.valor ELSE '' END) AS prioridad, 
-                                MAX(CASE WHEN fc.nombre IN ('horometro', 'lectura_horometro') AND fc.tipo = 'number' THEN fd.valor ELSE '' END) AS horometro")
+                               fe.cliente,fe.prioridad,fe.horometro")
                 ->whereNull('fr.deleted_at')
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
                 ->when( $es_cliente ,function ($q) use($request,$clientes){
@@ -179,11 +169,29 @@ class EquiposController extends BaseController
                     $q->where("fr.creado_por",$request->created_by);
                 })
                 ->groupBy(DB::raw('fr.id, fr.created_at, fr.fecha_inicia, fr.fecha_fin, fr.estatus, fr.equipo_id,
-                fr.turno_chequeo_diario,u.first_name, u.last_name, f.tipo, cvw.nombre, evw.numero_parte, u.first_name, u.last_name'));
+                fr.turno_chequeo_diario,u.first_name, u.last_name, f.tipo, cvw.nombre, evw.numero_parte,fe.cliente,fe.prioridad,fe.horometro'));
               
-    if($export_datos){
-        return $data->get();
+        if($export_datos){
+            return $data->get();
+        }
+
+        return $data;
     }
+
+    public function reportes_list(Request $request){
+        $filtro='false';
+        $data='';
+        /*$data= $this->reportes_datos($request)->paginate(10);*/
+        $editar=(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'));
+        return view('frontend.equipos.reportes')->with(compact('filtro','data','editar'));
+    }
+
+    public function reportes_datatable(Request $request,$export_datos=false){
+        //dd($request->all());
+
+    $editar=(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'));
+    $data=$this->reportes_datos( $request,$export_datos);
+
     return DataTables::of($data)
         ->editColumn('creado_por', function($row) {
             return $row->first_name.' '.$row->last_name;
@@ -632,6 +640,9 @@ class EquiposController extends BaseController
                     break;
                 }
             }
+
+  
+
             if($not_ok and $model->status=='C'){
                  return redirect(route('equipos.create_tecnical_support_prefilled',[$equipo_id,$model->id]));
             }
@@ -668,10 +679,10 @@ class EquiposController extends BaseController
             $model->updated_at =Carbon::now();
          
             $model->save();
-          
+
     
             $request->session()->flash('message.success', 'Registro guardado con éxito');
-
+            
             if($model->data()->wherein('valor',['M','R'])->count()>0){
                 return redirect(route('equipos.create_tecnical_support_prefilled',[$model->equipo_id,$model->id]));
             }
@@ -797,7 +808,7 @@ class EquiposController extends BaseController
             });
 
             //aqui hay que ver a quien notificar
-
+  
             $request->session()->flash('message.success', 'Registro creado con éxito');
             return redirect(route('equipos.detail', $equipo_id));
 
@@ -831,7 +842,7 @@ class EquiposController extends BaseController
             }else{
                 $request->session()->flash('message.error', 'Hubo algun error y no se pudo actualizar');
             }
-
+  
             return redirect(route('equipos.detail', $model->equipo_id));
 
         } catch (\Exception $e) {
@@ -979,7 +990,7 @@ class EquiposController extends BaseController
                 Throw new \Exception('Hubo un problema y no se creo el registro!');
             }
         //});
-
+        registraExtra($id);
         $request->session()->flash('message.success','Registro creado con exito');
         return redirect(route('equipos.detail',$equipo_id));
     }
@@ -1012,6 +1023,8 @@ class EquiposController extends BaseController
             }
             $model->updated_at =Carbon::now();
             $model->save();
+
+  
             $request->session()->flash('message.success', 'Registro guardado con éxito');
             return redirect(route('equipos.detail', $model->equipo_id));
 
