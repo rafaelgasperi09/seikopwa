@@ -423,13 +423,15 @@ function registraExtra($id){
         $fr->cliente=$datos->cliente;
         $fr->save();
     }else{
+        if($datos){
+            \App\FormularioExtra::create([
+                'formulario_registro_id'=>$id,
+                'prioridad'=>$datos->prioridad,
+                'horometro'=>$datos->horometro,
+                'cliente'=>$datos->cliente
+            ]);
+        }
 
-        \App\FormularioExtra::create([
-            'formulario_registro_id'=>$id,
-            'prioridad'=>$datos->prioridad,
-            'horometro'=>$datos->horometro,
-            'cliente'=>$datos->cliente
-        ]);
     }
 
 }   
