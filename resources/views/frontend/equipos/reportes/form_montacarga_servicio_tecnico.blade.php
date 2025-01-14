@@ -197,7 +197,7 @@ $cFirma='style="border-bottom:1px solid black"';
                     <td {!!$cTD3!!} >
                         @if($key==0)
                         <small style="width:650px">Imagenes (tecnico)</small><br/>
-                        $imagenx="data:image/png;base64,".base64_encode(file_get_contents(storage_path('app/public/equipos/'.$ft) ));
+                        @php $imagenx="data:image/png;base64,".base64_encode(file_get_contents(storage_path('app/public/equipos/'.$ft) )); @endphp
                         @endif
                         <img src="{{$imagenx}}" width="500px" style="max-height:400px">
                     </td>
