@@ -430,3 +430,7 @@ function registraExtra($id){
     }
 
 }   
+
+function img_pdf($img_storage){
+return "data:image/png;base64,".base64_encode(file_get_contents($img_storage));
+}
