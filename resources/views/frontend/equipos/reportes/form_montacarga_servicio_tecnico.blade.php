@@ -185,7 +185,8 @@ $cFirma='style="border-bottom:1px solid black"';
         <tr>
             <td {!!$cTD3!!} >
                 <small style="width:500px">Imagen reportada por el cliente</small><br/>
-                <img src="{{storage_path('app/public/equipos/'.$datos['det'][0]->foto_cliente)}}" width="500px" style="max-height:400px">
+                @php $imagen1="data:image/png;base64,".base64_encode(file_get_contents(storage_path('app/public/equipos/'.$datos['det'][0]->foto_cliente) )); @endphp
+                <img src="{{$imagen1}}" width="500px" style="max-height:400px">
             </td>
         </tr>
         @endif
@@ -196,8 +197,9 @@ $cFirma='style="border-bottom:1px solid black"';
                     <td {!!$cTD3!!} >
                         @if($key==0)
                         <small style="width:650px">Imagenes (tecnico)</small><br/>
+                        $imagenx="data:image/png;base64,".base64_encode(file_get_contents(storage_path('app/public/equipos/'.$ft) ));
                         @endif
-                        <img src="{{storage_path('app/public/equipos/'.$ft)}}" width="500px" style="max-height:400px">
+                        <img src="{{$imagenx}}" width="500px" style="max-height:400px">
                     </td>
                 </tr>
                 @endif
@@ -210,13 +212,15 @@ $cFirma='style="border-bottom:1px solid black"';
                     <tr>
                         <td {!!$cFirma!!} width="40%">
                             @if(strlen($datos['det'][0]->firma_cliente)>0)
-                            <img src="{{storage_path('/app/public/firmas/'.$datos['det'][0]->firma_cliente)}}" height="60px">
+                            @php $firma1="data:image/png;base64,".base64_encode(file_get_contents(storage_path('/app/public/firmas/'.$datos['det'][0]->firma_cliente) )); @endphp
+                            <img src="{{$firma1}}" height="60px">
                             @endif
                         </td>
                         <td>&nbsp;</td>
                         <td {!!$cFirma!!} width="40%">
                         @if(strlen($datos['det'][0]->firma_tecnico)>0)
-                        <img src="{{storage_path('/app/public/firmas/'.$datos['det'][0]->firma_tecnico)}}"  height="60px">
+                        @php $firma2="data:image/png;base64,".base64_encode(file_get_contents(storage_path('/app/public/firmas/'.$datos['det'][0]->firma_tecnico) )); @endphp
+                        <img src="{{$firma2}}"  height="60px">
                         @endif
                         </td>
                     </tr>

@@ -127,7 +127,7 @@ class EquiposController extends BaseController
                 ->join('equipos_vw as evw','fr.equipo_id','evw.id')
                 ->join('clientes_vw as cvw','fr.cliente_id','cvw.id')
                 ->join('formulario_extra as fe','fr.id','fe.formulario_registro_id')
-                ->selectRaw("  fr.id, 
+                ->selectRaw("fr.id, 
                                 fr.created_at, 
                                 fr.fecha_inicia, 
                                 fr.fecha_fin, 
