@@ -121,7 +121,7 @@ class EquiposController extends BaseController
         $desde = $carbon->now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
         $es_cliente=current_user()->isCliente();
 
-        $data = DB::table('formulario_registro1 as fr')
+        /*$data = DB::table('formulario_registro1 as fr')
                 ->join('formularios as f','fr.formulario_id','f.id')
                 ->join('users as u','fr.creado_por','u.id')
                 ->join('equipos_vw as evw','fr.equipo_id','evw.id')
@@ -141,11 +141,12 @@ class EquiposController extends BaseController
                                 evw.numero_parte, 
                                 CONCAT(u.first_name, ' ', u.last_name) AS user_name,
                                fe.cliente,fe.prioridad,fe.horometro")
-                ->whereNull('fr.deleted_at')
+                ->whereNull('fr.deleted_at')*/
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
+                $data = DB::table('reportes_list')
                 ->when( $es_cliente ,function ($q) use($request,$clientes){
                     $q->whereIn("cliente_id",$clientes)
-                    ->whereRaw("((f.tipo <> 'serv_tec' and evw.numero_parte like 'GM%') or evw.numero_parte not like 'GM%')");                    
+                    ->whereRaw("((tipo <> 'serv_tec' and numero_parte like 'GM%') or numero_parte not like 'GM%')");                    
                 })
                 ->when(!empty($request->equipo_id) and $request->equipo_id>0 ,function ($q) use($request){
                     $q->where("equipo_id",$request->equipo_id);
@@ -154,22 +155,20 @@ class EquiposController extends BaseController
                     $q->where("cliente_id",$request->cliente_id);
                 })
                 ->when(!empty($request->desde)  ,function ($q) use($request){
-                    $q->where("fr.created_at",'>=',$request->desde);
+                    $q->where("created_at",'>=',$request->desde);
                 })
                 ->when(!empty($request->hasta)  ,function ($q) use($request){
-                    $q->where("fr.created_at",'<=',$request->hasta);
+                    $q->where("created_at",'<=',$request->hasta);
                 })
                 ->when(!empty($request->tipo)  ,function ($q) use($request){
-                    $q->where("f.tipo",$request->tipo);
+                    $q->where("tipo",$request->tipo);
                 })
                 ->when(!empty($request->estado)  ,function ($q) use($request){
-                    $q->where("fr.estatus",$request->estado);
+                    $q->where("estatus",$request->estado);
                 })
                 ->when(!empty($request->created_by)  ,function ($q) use($request){
-                    $q->where("fr.creado_por",$request->created_by);
-                })
-                ->groupBy(DB::raw('fr.id, fr.created_at, fr.fecha_inicia, fr.fecha_fin, fr.estatus, fr.equipo_id,
-                fr.turno_chequeo_diario,u.first_name, u.last_name, f.tipo, cvw.nombre, evw.numero_parte,fe.cliente,fe.prioridad,fe.horometro'));
+                    $q->where("creado_por",$request->created_by);
+                });
               
         if($export_datos){
             return $data->get();
