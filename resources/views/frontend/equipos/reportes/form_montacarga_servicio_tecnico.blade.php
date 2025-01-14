@@ -212,14 +212,14 @@ $cFirma='style="border-bottom:1px solid black"';
                     <tr>
                         <td {!!$cFirma!!} width="40%">
                             @if(strlen($datos['det'][0]->firma_cliente)>0)
-                            @php $firma1=img_pdf(storage_path('/app/public/firmas/'.$datos['det'][0]->firma_cliente) ); @endphp
+                            @php $firma1=img_pdf(storage_path('app/public/firmas/'.$datos['det'][0]->firma_cliente) ); @endphp
                             <img src="{{$firma1}}" height="60px">
                             @endif
                         </td>
                         <td>&nbsp;</td>
                         <td {!!$cFirma!!} width="40%">
                         @if(strlen($datos['det'][0]->firma_tecnico)>0)
-                        @php $firma2=img_pdf(storage_path('/app/public/firmas/'.$datos['det'][0]->firma_tecnico) ); @endphp
+                        @php $firma2=img_pdf(storage_path('app/public/firmas/'.$datos['det'][0]->firma_tecnico) ); @endphp
                         <img src="{{$firma2}}"  height="60px">
                         @endif
                         </td>

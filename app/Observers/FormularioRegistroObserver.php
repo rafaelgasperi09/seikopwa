@@ -133,10 +133,10 @@ class FormularioRegistroObserver
                     $ext = $file->getClientOriginalExtension();
                     if(!empty($formularioRegistro->componente_id)){
                         $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->componente_id.'_'.time().'.'.$ext;
-                        $destinationPath = storage_path('/app/public/baterias');
+                        $destinationPath = storage_path('app/public/baterias');
                     }else{
                         $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().'.'.$ext;
-                        $destinationPath = storage_path('/app/public/equipos');
+                        $destinationPath = storage_path('app/public/equipos');
                     }
                     $image_info = getimagesize($_FILES[$campo->nombre]["tmp_name"]);
                     $image_width = $image_info[0];
@@ -161,7 +161,7 @@ class FormularioRegistroObserver
                             $folder = 'equipos' ;
                         }
 
-                        $destinationPath = storage_path( '/app/public/'.$folder);
+                        $destinationPath = storage_path( 'app/public/'.$folder);
                         $img->resize(1200, 1200)->save($destinationPath.'/'.$filename);
                         $valor .=  $filename.',';
                         File::create([
@@ -311,7 +311,7 @@ class FormularioRegistroObserver
                                     $ext = $file->getClientOriginalExtension();
                                     $filename = $formulario->tipo.'_'.$formularioRegistro->id.'_'.$formularioRegistro->equipo_id.'_'.time().'.'.$ext;
                                 
-                                    $destinationPath = storage_path('/app/public/equipos');
+                                    $destinationPath = storage_path('app/public/equipos');
                                     $img->resize(800,null, function ($constraint) {
                                         $constraint->aspectRatio();
                                     })->save($destinationPath.'/'.$filename);
@@ -350,7 +350,7 @@ class FormularioRegistroObserver
                                                     $folder = 'equipos' ;
                                                 }
         
-                                                $destinationPath = storage_path( '/app/public/'.$folder);
+                                                $destinationPath = storage_path( 'app/public/'.$folder);
                                                 $img->resize(800,null, function ($constraint) {
                                                     $constraint->aspectRatio();
                                                 })->save($destinationPath.'/'.$filename);

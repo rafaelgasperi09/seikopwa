@@ -361,11 +361,11 @@ class FormularioRegistro extends BaseModel
                     if( $campo->tipo=='firma' && $this->data()->whereFormularioCampoId($campo->id)->first()){
 
                         if($campo->nombre=='trabajo_recibido_por'){
-                            $firmasPath[1] =  storage_path('/app/public/firmas/'.$this->data()->whereFormularioCampoId($campo->id)->first()->valor);
+                            $firmasPath[1] =  storage_path('app/public/firmas/'.$this->data()->whereFormularioCampoId($campo->id)->first()->valor);
                         }
 
                         if($campo->nombre=='trabajo_realizado_por'){
-                            $firmasPath[2] =  storage_path('/app/public/firmas/'.$this->data()->whereFormularioCampoId($campo->id)->first()->valor);
+                            $firmasPath[2] =  storage_path('app/public/firmas/'.$this->data()->whereFormularioCampoId($campo->id)->first()->valor);
                             $nombreTecnico=$this->data()->whereFormularioCampoId($campo->id)->first()->user_id;
                             $nombreTecnico=User::find( $nombreTecnico)->full_name;
                           

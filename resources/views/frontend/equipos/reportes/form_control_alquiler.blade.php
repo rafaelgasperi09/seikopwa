@@ -422,13 +422,13 @@ $cFirma='style="border-bottom:1px solid black"';
                         <tr>
                             <td {!!$cFirma!!} width="40%">
                                 @if(strlen($datos['det'][0]->trabajo_recibido_por)>0)
-                                <img src="{{img_pdf(storage_path('/app/public/firmas/'.$datos['det'][0]->trabajo_recibido_por))}}" height="60px">
+                                <img src="{{img_pdf(storage_path('app/public/firmas/'.$datos['det'][0]->trabajo_recibido_por))}}" height="60px">
                                 @endif
                             </td>
                             <td>&nbsp;</td>
                             <td {!!$cFirma!!} width="40%">
                             @if(strlen($datos['det'][0]->trabajo_realizado_por)>0)
-                            <img src="{{img_pdf(storage_path('/app/public/firmas/'.$datos['det'][0]->trabajo_realizado_por))}}"  height="60px">
+                            <img src="{{img_pdf(storage_path('app/public/firmas/'.$datos['det'][0]->trabajo_realizado_por))}}"  height="60px">
                             @endif
                             </td>
                         </tr>
