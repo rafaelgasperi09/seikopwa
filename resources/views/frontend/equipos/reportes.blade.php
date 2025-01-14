@@ -61,7 +61,6 @@
                 "autoWidth": false,
                 "order": [[ 0, "desc" ]],
                 "processing": true,
-                "searching": false
                 "serverSide": true,
                 "ajax": "{{url('equipos/reportes_datatable') }}?"+parameters,
                 "columns":[
