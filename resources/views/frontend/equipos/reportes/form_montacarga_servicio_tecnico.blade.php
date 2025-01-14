@@ -185,7 +185,7 @@ $cFirma='style="border-bottom:1px solid black"';
         <tr>
             <td {!!$cTD3!!} >
                 <small style="width:500px">Imagen reportada por el cliente</small><br/>
-                @php $imagen1="data:image/png;base64,".base64_encode(file_get_contents(storage_path('app/public/equipos/'.$datos['det'][0]->foto_cliente) )); @endphp
+                @php $imagen1=img_pdf(storage_path('app/public/equipos/'.$datos['det'][0]->foto_cliente) ); @endphp
                 <img src="{{$imagen1}}" width="500px" style="max-height:400px">
             </td>
         </tr>
@@ -197,7 +197,7 @@ $cFirma='style="border-bottom:1px solid black"';
                     <td {!!$cTD3!!} >
                         @if($key==0)
                         <small style="width:650px">Imagenes (tecnico)</small><br/>
-                        @php $imagenx="data:image/png;base64,".base64_encode(file_get_contents(storage_path('app/public/equipos/'.$ft) )); @endphp
+                        @php $imagenx=img_pdf(storage_path('app/public/equipos/'.$ft) ); @endphp
                         @endif
                         <img src="{{$imagenx}}" width="500px" style="max-height:400px">
                     </td>
@@ -212,14 +212,14 @@ $cFirma='style="border-bottom:1px solid black"';
                     <tr>
                         <td {!!$cFirma!!} width="40%">
                             @if(strlen($datos['det'][0]->firma_cliente)>0)
-                            @php $firma1="data:image/png;base64,".base64_encode(file_get_contents(storage_path('/app/public/firmas/'.$datos['det'][0]->firma_cliente) )); @endphp
+                            @php $firma1=img_pdf(storage_path('/app/public/firmas/'.$datos['det'][0]->firma_cliente) ); @endphp
                             <img src="{{$firma1}}" height="60px">
                             @endif
                         </td>
                         <td>&nbsp;</td>
                         <td {!!$cFirma!!} width="40%">
                         @if(strlen($datos['det'][0]->firma_tecnico)>0)
-                        @php $firma2="data:image/png;base64,".base64_encode(file_get_contents(storage_path('/app/public/firmas/'.$datos['det'][0]->firma_tecnico) )); @endphp
+                        @php $firma2=img_pdf(storage_path('/app/public/firmas/'.$datos['det'][0]->firma_tecnico) ); @endphp
                         <img src="{{$firma2}}"  height="60px">
                         @endif
                         </td>
