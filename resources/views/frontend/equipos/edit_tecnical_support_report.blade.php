@@ -88,7 +88,7 @@
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">Hora Salida</label>
-                            @if(isset($otrosCampos[0]))
+                            @if(isset($otrosCampos[1]))
                             {{ Form::text('numero_parte',$otrosCampos[1],array('class'=>'form-control','readonly')) }}
                             @endif
                         </div>
