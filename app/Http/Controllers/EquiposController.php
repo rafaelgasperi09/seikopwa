@@ -121,7 +121,7 @@ class EquiposController extends BaseController
         $desde = $carbon->now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
         $es_cliente=current_user()->isCliente();
 
-        $data = DB::table('formulario_registro as fr')
+        $data = DB::table('formulario_registro1 as fr')
                 ->join('formularios as f','fr.formulario_id','f.id')
                 ->join('users as u','fr.creado_por','u.id')
                 ->join('equipos_vw as evw','fr.equipo_id','evw.id')
