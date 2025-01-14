@@ -337,15 +337,18 @@ function semana_rango($fecha,$semana){
 }
 
 function notifica($user,$notification)
-{   
+{     
+    $when=now()->addMinutes(rand(1,5));
+    
     if(env_local()){
         $user_local=\App\User::find(1);
-        return $user_local->notify($notification);
+      
+        return $user_local->notify($notification->delay($when));
     }   
     if($user->id==48) //no enviar correo a este usuario Rofolfo fuentes
         return true;
     
-    return $user->notify($notification);
+    return $user->notify($notification->delay($when));
 }
 function tipo_form($tipo=''){
     $tipos=array(   ''=>'Seleccione',
