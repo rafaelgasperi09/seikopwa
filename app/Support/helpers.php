@@ -409,11 +409,24 @@ function to_table($data){
 
 function registraExtra($id){
     $fr=\App\FormularioExtra::where('formulario_registro_id',$id)->first(); 
+   
     $datos=DB::select("select * from listado_extra_fields where formulario_registro_id=$id");
     $datos=end($datos);
 
-    $fr->prioridad=$datos->prioridad;
-    $fr->horometro=$datos->horometro;
-    $fr->cliente=$datos->cliente;
-    $fr->save();
+    if($fr){
+
+        $fr->prioridad=$datos->prioridad;
+        $fr->horometro=$datos->horometro;
+        $fr->cliente=$datos->cliente;
+        $fr->save();
+    }else{
+
+        \App\FormularioExtra::create([
+            'formulario_registro_id'=>$id,
+            'prioridad'=>$datos->prioridad,
+            'horometro'=>$datos->horometro,
+            'cliente'=>$datos->cliente
+        ]);
+    }
+
 }   

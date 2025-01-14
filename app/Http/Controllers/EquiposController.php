@@ -610,6 +610,8 @@ class EquiposController extends BaseController
                 if(!$model->save())
                 {
                     Throw new \Exception('Hubo un problema y no se creo el registro!');
+                }else{
+                    registraExtra($model->id);
                 }
 
             });
@@ -803,6 +805,7 @@ class EquiposController extends BaseController
                 if (!$model->save()) {
                     throw new \Exception('Hubo un problema y no se creo el registro!');
                 }else{
+                    registraExtra($model->id);
                   $model->createSolicitudMontacarga();
                 }
             });
@@ -964,7 +967,7 @@ class EquiposController extends BaseController
             }
             if($model->save())
             {
-                
+                registraExtra($model->id);
                 $users = User::Join('role_users','users.id','role_users.user_id')
                 ->Join('roles','role_users.role_id','roles.id')
                 ->Join('activations','users.id','activations.user_id')
@@ -990,7 +993,7 @@ class EquiposController extends BaseController
                 Throw new \Exception('Hubo un problema y no se creo el registro!');
             }
         //});
-        registraExtra($id);
+
         $request->session()->flash('message.success','Registro creado con exito');
         return redirect(route('equipos.detail',$equipo_id));
     }

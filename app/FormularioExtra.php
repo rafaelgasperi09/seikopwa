@@ -11,5 +11,4 @@ class FormularioExtra extends BaseModel
     protected $table = 'formulario_extra';
     protected $guarded = ['id'];
 
-   
 }
