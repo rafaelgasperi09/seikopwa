@@ -197,8 +197,9 @@ $cFirma='style="border-bottom:1px solid black"';
                     <td {!!$cTD3!!} >
                         @if($key==0)
                         <small style="width:650px">Imagenes (tecnico)</small><br/>
-                        @php $imagenx=img_pdf(storage_path('app/public/equipos/'.$ft) ); @endphp
                         @endif
+                        @php $imagenx=img_pdf(storage_path('app/public/equipos/'.$ft) ); @endphp
+                        
                         <img src="{{$imagenx}}" width="500px" style="max-height:400px">
                     </td>
                 </tr>
