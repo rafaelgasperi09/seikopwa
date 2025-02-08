@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Componente extends Model
 {
     use SoftDeletes;
-    protected $connection='crm';
+
 
     public function cliente(){
         return $this->belongsTo(Cliente::class,'cliente_id')->withDefault([

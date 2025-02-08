@@ -25,7 +25,7 @@ class DashboardController extends Controller
         }
           
 
-       $idqeuipos=DB::connection('crm')->select(DB::raw('SELECT id FROM montacarga.equipos WHERE '.$userFilter));
+       $idqeuipos=DB::select(DB::raw('SELECT id FROM equipos WHERE '.$userFilter));
        $lista=array();
        
        foreach($idqeuipos as $k=>$i){
@@ -36,10 +36,10 @@ class DashboardController extends Controller
         $lista='0';
        
 
-       // $equipos=DB::connection('crm')->select(DB::raw('SELECT * FROM montacarga.equipos WHERE cliente_id in ('.$lista.')'));
+      
        $r=FormularioRegistro::selectRaw('formulario_registro.*,equipos_vw.numero_parte')
         ->join('formularios','formulario_registro.formulario_id','formularios.id')
-        ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
+        ->join('equipos','formulario_registro.equipo_id','equipos_vw.id')
          ->whereNotNull('equipo_id')
         ->where('formularios.tipo',$formType)
         ->whereRaw("(formulario_registro.estatus='C' and TIMESTAMPDIFF(DAY,formulario_registro.created_at,now())<=45 or formulario_registro.estatus<>'C')")
@@ -365,7 +365,7 @@ class DashboardController extends Controller
                         WHERE e.deleted_at IS NULL $cond  $filtro0
                         ORDER BY e.numero_parte)X order by X.tipo desc,X.numero_parte";
 
-            $res0=DB::connection('crm')->select(DB::Raw($query0));
+            $res0=DB::select(DB::Raw($query0));
             $tabla=to_table($res0);
             return $tabla;
         }
@@ -393,7 +393,7 @@ class DashboardController extends Controller
              ";
         }
 
-        $res0=DB::connection('crm')->select(DB::Raw($query0));
+        $res0=DB::select(DB::Raw($query0));
 
         $data=array();
         foreach($res0 as $r){
@@ -762,7 +762,7 @@ class DashboardController extends Controller
 
         $query9="SELECT COUNT(*) AS total FROM equipos e
          WHERE e.deleted_at is null  $filtro0";
-        $res9=DB::connection('crm')->select(DB::Raw($query9));
+        $res9=DB::select(DB::Raw($query9));
         $res9=end($res9);
  
 

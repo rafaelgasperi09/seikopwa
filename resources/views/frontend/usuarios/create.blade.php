@@ -48,7 +48,7 @@
                         </i>
                     </div>
                 </div>
-                @include('frontend.partials.typeahead',array('field_label'=>'Usuario','field_name'=>'crm_user_id','items'=>$users,'valor_th'=>['',''],'display'=>'none'))
+                
                 @include('frontend.partials.typeahead',array('field_label'=>'Cliente','field_name'=>'crm_cliente_id','items'=>$clientes,'valor_th'=>['',''],'display'=>'none','small'=>'Esta selección sirve para determinar que equipos pertecen a este nuevo cliente usando la información del CRM.'))
 
                 <div class="divider  mt-2 mb-3"></div>

@@ -8,7 +8,7 @@ use DB;
 class Equipo extends BaseModel
 {
     use SoftDeletes;
-    protected $connection='crm';
+
     protected $table = 'equipos';
 
     public function tipo(){

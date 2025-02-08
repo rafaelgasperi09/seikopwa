@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Cliente;
-use App\MontacargaUser;
 use App\Notifications\NewUser;
 use App\Notifications\GenericMail;
 use App\Rol;
@@ -88,12 +87,12 @@ class UserController extends Controller
                 ->get()
                 ->pluck('full_name','id');
 
-        $users = MontacargaUser::whereNotIn('id',User::whereNotNull('crm_user_id')->pluck('crm_user_id'))
+       /* $users = MontacargaUser::whereNotIn('id',User::whereNotNull('crm_user_id')->pluck('crm_user_id'))
             ->orderBy('name')
             ->get()
-            ->pluck('full_name','id');
+            ->pluck('full_name','id');*/
 
-        return view('frontend.usuarios.create',compact('roles','clientes','users'));
+        return view('frontend.usuarios.create',compact('roles','clientes'));
 
     }
 

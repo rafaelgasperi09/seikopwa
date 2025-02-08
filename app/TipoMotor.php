@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipoMotor extends Model
 {
-    protected $connection='crm';
+
     protected $table = 'tipo_motores';
 
     public function equipos(){

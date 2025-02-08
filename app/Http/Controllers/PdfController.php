@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 use App\Equipo;
 use App\Formulario;
 use App\FormularioRegistro;
-use App\MontacargaSolicitud;
+/*use App\MontacargaSolicitud;*/
 use App\TCPDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,10 +20,10 @@ class PdfController extends Controller
         $formularioRegistro = FormularioRegistro::find($formulario_registro_id);
         $formulario = Formulario::find($formularioRegistro->formulario_id);
         $equipo = Equipo::find($formularioRegistro->equipo_id);
-        $solicitud = MontacargaSolicitud::findOrFail($formularioRegistro->solicitud_id);
         $consecutivo ='';
-        if($solicitud)
-            $consecutivo = $solicitud->consecutivo_exportable;
+        /*$solicitud = MontacargaSolicitud::findOrFail($formularioRegistro->solicitud_id);
+       if($solicitud)
+            $consecutivo = $solicitud->consecutivo_exportable;*/
         $horometro_campo = $formulario->campos()->whereNombre('horometro')->first();
         $horometo = $formularioRegistro->data()->whereFormularioCampoId($horometro_campo->id)->first()->valor;
 

@@ -6,10 +6,7 @@ use App\FormularioData;
 use App\FormularioRegistro;
 use App\FormularioRegistroEstatus;
 use App\Http\Requests\SaveFormEquipoRequest;
-use App\MontacargaConsecutivo;
-use App\MontacargaCopiaSolicitud;
 use App\MontacargaImagen;
-use App\MontacargaSolicitud;
 use App\Notifications\NewReport;
 use App\Notifications\NewTecnicalSupportAssignTicket;
 use App\Notifications\NewTecnicalSupport;
@@ -805,7 +802,7 @@ class EquiposController extends BaseController
                     throw new \Exception('Hubo un problema y no se creo el registro!');
                 }else{
                     registraExtra($model->id);
-                  $model->createSolicitudMontacarga();
+               /*   $model->createSolicitudMontacarga();*/
                 }
             });
 
@@ -839,7 +836,7 @@ class EquiposController extends BaseController
             $formulario = Formulario::findOrFail($model->formulario_id);
             $model->updated_at =Carbon::now();
             if($model->save()){
-                $model->createSolicitudMontacarga();
+                /*$model->createSolicitudMontacarga();*/
                 $request->session()->flash('message.success', 'Registro guardado con éxito');
             }else{
                 $request->session()->flash('message.error', 'Hubo algun error y no se pudo actualizar');
