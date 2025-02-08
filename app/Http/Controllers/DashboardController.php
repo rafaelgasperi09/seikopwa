@@ -60,12 +60,12 @@ class DashboardController extends Controller
         if($group_cliente)
         {
             $clientes= clone $r;
-            $clientes=$clientes->groupBy('cliente_id')->select('cliente_id')->get();
+            $clientes=$clientes->groupBy('equipos.cliente_id')->select('equipos.cliente_id')->get();
             return $clientes;
         }
 
         if(empty($pluck)){
-            return  $r->orderBy('cliente_id','asc')->orderBy('created_at','desc')->get();
+            return  $r->orderBy('equipos.cliente_id','asc')->orderBy('created_at','desc')->get();
 
         }else{
             return $r->pluck('equipo_id');
