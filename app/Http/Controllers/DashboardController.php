@@ -40,7 +40,7 @@ class DashboardController extends Controller
        $r=FormularioRegistro::selectRaw('formulario_registro.*,equipos.numero_parte')
         ->join('formularios','formulario_registro.formulario_id','formularios.id')
         ->join('equipos','formulario_registro.equipo_id','equipos.id')
-         ->whereNotNull('equipo_id')
+         ->whereNotNull('formulario_registro.equipo_id')
         ->where('formularios.tipo',$formType)
         ->whereRaw("(formulario_registro.estatus='C' and TIMESTAMPDIFF(DAY,formulario_registro.created_at,now())<=45 or formulario_registro.estatus<>'C')")
         ->When(!empty($status),function($q)use($status){
@@ -65,7 +65,7 @@ class DashboardController extends Controller
         }
 
         if(empty($pluck)){
-            return  $r->orderBy('equipos.cliente_id','asc')->orderBy('created_at','desc')->get();
+            return  $r->orderBy('cliente_id','asc')->orderBy('created_at','desc')->get();
 
         }else{
             return $r->pluck('equipo_id');
