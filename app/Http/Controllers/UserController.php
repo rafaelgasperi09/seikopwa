@@ -113,10 +113,10 @@ class UserController extends Controller
         if($role->tipo == 'cliente' && empty($request->crm_cliente_id) && empty($request->crm_clientes_id)){
             session()->flash('message.error', 'Para rol de cliente la selección de la lista de contactos del CRM es requerida.');
             return redirect(route('usuarios.create'));
-        }elseif($role->tipo == 'gmp' && empty($request->crm_user_id)){
+        }/*elseif($role->tipo == 'gmp' && empty($request->crm_user_id)){
             session()->flash('message.error', 'Para rol de GMP la selección de la lista de usuarios del CRM es requerida.');
             return redirect(route('usuarios.create'));
-        }
+        }*/
 
 
         $user = Sentinel::registerAndActivate(array(
