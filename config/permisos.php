@@ -78,7 +78,11 @@ $permisos["permissions"] = array(
     "sp.parteB"=>"Segunda Parte del proceso (edicion hora entrada)",
     "sp.parteC"=>"Tercera Parte 2 del proceso (edicion hora salida)",
   ),
-  
+  "Maestros"=>array(
+    "maestros.index"=>"Ver maestros",
+    "maestros.store"=>"Guardar",
+    "maestros.update"=>"Actualizar",
+  ),
  
 );
 

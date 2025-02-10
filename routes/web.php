@@ -295,6 +295,11 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
 });
 
+Route::group(array('prefix' => 'maestros'), function() {
+
+    Route::get('/', array('as' => 'maestros.index', 'uses' => 'MaestrosController@index'))->middleware('hasAccess');
+});
+
 Route::get('/offline', function () {
     return view('offline');
 });

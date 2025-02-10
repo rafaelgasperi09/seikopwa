@@ -163,6 +163,50 @@
                             </a>
                         </li>
                     @endif
+                    @if(\Sentinel::hasAccess('role.index'))
+                        <li>
+                            <a href="{{ route('maestros.index') }}" class="item"  title="Calendario">
+                                <div class="icon-box bg-primary">
+                                    <ion-icon name="file-tray-stacked-outline"></ion-icon>
+                                </div>
+                                <div class="in">
+                                    <div>Maestros</div>
+                                </div>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="{{ route('maestros.index') }}" class="item"  title="Calendario">
+                                        <div class="icon-box bg-primary">
+                                        <ion-icon name="globe-outline"></ion-icon>
+                                        </div>
+                                        <div class="in">
+                                            <div>Clientes</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('maestros.index') }}" class="item"  title="Calendario">
+                                        <div class="icon-box bg-primary">
+                                        <img src="{{url('/images/icons/mcwhite.png')}}" width="22px">
+                                        </div>
+                                        <div class="in">
+                                            <div>Equipos</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('maestros.index') }}" class="item"  title="Calendario">
+                                        <div class="icon-box bg-primary">
+                                            <ion-icon name="extension-puzzle-outline"></ion-icon>
+                                        </div>
+                                        <div class="in">
+                                            <div>Componentes</div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
                     <li>
                         <div class="item">
                             <div class="icon-box bg-primary">
