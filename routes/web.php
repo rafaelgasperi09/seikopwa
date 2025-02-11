@@ -298,6 +298,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 Route::group(array('prefix' => 'maestros'), function() {
 
     Route::get('/', array('as' => 'maestros.index', 'uses' => 'MaestrosController@index'))->middleware('hasAccess');
+    Route::get('/clientes', array('as' => 'maestros.clientes', 'uses' => 'MaestrosController@clientes'));
+    Route::get('/clientes/create/', array('as' => 'maestros.clientes_create', 'uses' => 'MaestrosController@clientes_create'));
 });
 
 Route::get('/offline', function () {

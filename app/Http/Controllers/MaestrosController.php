@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Sentinel;
 use Cartalyst\Sentinel\Roles\RoleInterface;
+use App\Cliente;
+use Illuminate\Support\Facades\Schema;
 
 class MaestrosController extends Controller
 {
@@ -21,5 +23,17 @@ class MaestrosController extends Controller
        
         $data='';
         return view('frontend.maestros.index')->with('data',$data);
+    }
+    public function clientes(Request $request)
+    {
+        $columns = Schema::getColumnListing('contactos');
+        $data=Cliente::get();
+        return view('frontend.maestros.clientes ')->with(compact('data','columns'));
+    }
+    public function clientes_create()
+    {
+        $columns = Schema::getColumnListing('contactos');
+        $data=Cliente::get();
+        return view('frontend.maestros.clientes_create')->with(compact('data','columns'));
     }
 }
