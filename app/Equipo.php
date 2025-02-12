@@ -10,6 +10,7 @@ class Equipo extends BaseModel
     use SoftDeletes;
 
     protected $table = 'equipos';
+    protected $guarded = ['id'];
 
     public function tipo(){
         return $this->belongsTo(TipoEquipo::class,'tipo_equipos_id')->withDefault([
@@ -28,6 +29,12 @@ class Equipo extends BaseModel
 
     public function estado(){
         return $this->belongsTo(Estado::class,'estado_id');
+    }
+    public function funcion_hidraulica(){
+        return $this->belongsTo(FuncionHidraulica::class,'funcion_hidraulica_id')
+        ->withDefault([
+            'display_name'=>'N/A'
+        ]);;
     }
 
     public function cliente(){

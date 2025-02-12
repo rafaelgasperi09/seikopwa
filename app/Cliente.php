@@ -9,6 +9,7 @@ class Cliente extends BaseModel
 {
     
     protected $table = 'contactos';
+    protected $guarded = ['id'];
 
     public function equipos(){
         return $this->hasMany(Equipo::class);

@@ -175,7 +175,7 @@
                             </a>
                             <ul>
                                 <li>
-                                    <a href="{{ route('maestros.index') }}" class="item"  title="Calendario">
+                                    <a href="{{ route('maestros.clientes.index') }}" class="item"  title="Calendario">
                                         <div class="icon-box bg-primary">
                                         <ion-icon name="globe-outline"></ion-icon>
                                         </div>
@@ -185,7 +185,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('maestros.index') }}" class="item"  title="Calendario">
+                                    <a href="{{ route('maestros.equipos.index') }}" class="item"  title="Calendario">
                                         <div class="icon-box bg-primary">
                                         <img src="{{url('/images/icons/mcwhite.png')}}" width="22px">
                                         </div>
@@ -195,7 +195,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('maestros.index') }}" class="item"  title="Calendario">
+                                    <a href="{{ route('maestros.componentes.index') }}" class="item"  title="Calendario">
                                         <div class="icon-box bg-primary">
                                             <ion-icon name="extension-puzzle-outline"></ion-icon>
                                         </div>

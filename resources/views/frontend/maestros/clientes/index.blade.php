@@ -1,7 +1,8 @@
 @extends('frontend.main-layout')
 @section('content')
     @include('frontend.partials.title',array('title'=>'Maestros','subtitle'=>'Listado de clientes'))
-    <div class="container-fluid">
+    <div class="section full mt-1">
+    <br/>
         <div class="table-responsive">
             <table class="table datatable table-bordered table-striped table-actions">
                 <thead>
@@ -33,7 +34,7 @@
                                 @endif
                             @endforeach
                                     <td>
-                                        <a target="_blank" href="" class="btn btn-success btn-sm mr-1" title="Editar">
+                                        <a href="{{route('maestros.clientes.edit',$d->id)}}" class="btn btn-success btn-sm mr-1" title="Editar">
                                             <ion-icon name="pencil-outline" role="img" class="md hydrated" aria-label="pencil outline"></ion-icon>
                                         </a>
                                     </td>
@@ -45,7 +46,12 @@
     </div>
     <script>
         $('.datatable').DataTable({
-
+            'order':['0','DESC'],
         });
+        var button='<span style="float:right">\
+            <a href="{{route('maestros.clientes.create')}}" class="btn btn-success ">\
+                <ion-icon name="add-circle-outline"></ion-icon>Agregar nuevo\
+                </a>';
+        $('.title').append(button);
     </script>
 @stop
