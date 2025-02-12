@@ -22,22 +22,21 @@
                 <tbody>
                     @foreach($data as $d)
                         <tr>
-                            @foreach($columns as $c)
-                                @if(!in_array($c,['tipo_contacto','updated_at']))
-                                    <td>
-                                    @if($c=='zona_id')
-                                        {{$d->zona->display_name}}
-                                    @else
-                                        {{$d->$c}}
-                                    @endif
-                                    </td>
-                                @endif
-                            @endforeach
-                                    <td>
-                                        <a href="{{route('maestros.clientes.edit',$d->id)}}" class="btn btn-success btn-sm mr-1" title="Editar">
-                                            <ion-icon name="pencil-outline" role="img" class="md hydrated" aria-label="pencil outline"></ion-icon>
-                                        </a>
-                                    </td>
+                            <td>{{$d->id}}</td>
+                            <td>{{$d->nombre}}</td>
+                            <td>{{$d->contacto}}</td>
+                            <td>{{$d->telefono}}</td>
+                            <td>{{$d->correo}}</td>
+                            <td>{{$d->direccion}}</td>
+                            <td>{{$d->pagina_web}}</td>
+                            <td>{{$d->descripcion}}</td>
+                            <td>{{$d->created_at}}</td>
+                            <td>{{$d->zona->display_name}}</td>
+                            <td>
+                                <a href="{{route('maestros.clientes.edit',$d->id)}}" class="btn btn-success btn-sm mr-1" title="Editar">
+                                    <ion-icon name="pencil-outline" role="img" class="md hydrated" aria-label="pencil outline"></ion-icon>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
