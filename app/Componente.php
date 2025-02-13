@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Componente extends Model
 {
     use SoftDeletes;
-
+    protected $guarded = ['id'];
 
     public function cliente(){
         return $this->belongsTo(Cliente::class,'cliente_id')->withDefault([
@@ -65,5 +65,41 @@ class Componente extends Model
             $horometro=0;
         }
         return $horometro;
+    }
+
+    public function tipoRueda(){
+        return $this->belongsTo(TipoRueda::class,'tipo_rueda_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
+    }
+
+    public function tipoAditamento(){
+        return $this->belongsTo(TipoAditamento::class,'tipo_aditamento_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
+    }
+
+    public function tipoEquipoRueda(){
+        return $this->belongsTo(TipoEquipoRueda::class,'tipo_equipo_rueda_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
+    }
+
+    public function tipoComponente(){
+        return $this->belongsTo(TipoComponente::class,'tipo_componente_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
+    }
+
+    public function subEquipo(){
+        return $this->belongsTo(SubEquipo::class,'sub_equipo_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
+    }
+
+    public function tipoFiltro(){
+        return $this->belongsTo(TipoFiltro::class,'tipo_filtro_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
     }
 }

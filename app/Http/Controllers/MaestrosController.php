@@ -9,6 +9,7 @@ use Sentinel;
 use Cartalyst\Sentinel\Roles\RoleInterface;
 use App\Cliente;
 use App\Equipo;
+use App\Componente;
 use Illuminate\Support\Facades\Schema;
 
 class MaestrosController extends Controller
@@ -118,4 +119,53 @@ class MaestrosController extends Controller
 
         return redirect(route('maestros.equipos.index'));
     }
+
+     //componentes    
+     public function componentes(Request $request)
+     {
+         $columns = Schema::getColumnListing('componentes');
+         $data=Componente::get();
+
+         return view('frontend.maestros.componentes.index')->with(compact('data','columns'));
+     }
+ 
+     public function componentes_create()
+     {
+         return view('frontend.maestros.componentes.create');
+     }
+ 
+     public function componentes_store(Request $request)
+     {   
+ 
+         $componente=New Componente();
+         $componente->fill($request->except('_token'));
+         $componente->usuario_id=current_user()->id;
+         
+         if($componente->save())
+             $request->session()->flash('message.success','Registro de componente creado con éxito');
+         else
+             $request->session()->flash('message.error','Registro de componente no pudo ser creado');
+ 
+         return redirect(route('maestros.componentes.index'));
+     }
+ 
+     public function componentes_edit($id)
+     {
+         $data=Componente::find($id);
+         return view('frontend.maestros.componentes.edit')->with(compact('data'));
+     }
+     
+     public function componentes_update($id,Request $request)
+     {
+         $componente=Componente::find($id);
+         $componente->fill($request->except('_token'));
+         $componente->usuario_id=current_user()->id;
+         
+         if($componente->save())
+             $request->session()->flash('message.success','Registro creado con éxito');
+         else
+             $request->session()->flash('message.error','Registro no pudo ser creado');
+ 
+         return redirect(route('maestros.componentes.index'));
+     }
 }
