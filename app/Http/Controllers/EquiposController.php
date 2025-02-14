@@ -307,12 +307,12 @@ class EquiposController extends BaseController
                      'tipoName'=>getTipoEquipo($id,$sub));
 
         if($id=='todos'){
-            $equipos=Equipo::where('equipos.estado','A')->FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->paginate(10);
+            $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->paginate(10);
         }
         else if($sub=='electricas') {
-            $equipos=Equipo::where('equipos.estado','A')->FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->where('tipo_equipos_id',$id)->paginate(10);
+            $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->where('tipo_equipos_id',$id)->paginate(10);
         }else{
-            $equipos=Equipo::where('equipos.estado','A')->FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->whereNull('tipo_equipos_id')->where('tipo_motore_id',$id)->paginate(10);
+            $equipos=Equipo::FiltroCliente()->where('sub_equipos_id',getSubEquipo($sub))->whereNull('tipo_equipos_id')->where('tipo_motore_id',$id)->paginate(10);
         }
 
         return view('frontend.equipos.index')->with('equipos',$equipos)->with('datos',$datos);
@@ -339,7 +339,6 @@ class EquiposController extends BaseController
             }
             $equipos=Equipo::selectRaw('equipos.*')->FiltroCliente()
             ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
-
             ->when($filtro<>'',function($q) use($filtro){
                 $q->whereRaw($filtro);
             })
@@ -351,7 +350,6 @@ class EquiposController extends BaseController
             $equipos=Equipo::selectRaw('equipos.*')->FiltroCliente()
                 ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
                 ->where('sub_equipos_id',getSubEquipo($sub))
-                ->where('equipos.estado','A')
                 ->whereRaw("(numero_parte like '%".$request->q."%' or contactos.nombre like '%".$request->q."%')")
                 ->paginate(10);
         }else
@@ -360,7 +358,6 @@ class EquiposController extends BaseController
                 ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
                 ->where('sub_equipos_id',getSubEquipo($sub))
                 ->where('tipo_equipos_id',$id)
-                ->where('equipos.estado','A')
                 ->whereRaw("(numero_parte like '%".$request->q."%' or contactos.nombre like '%".$request->q."%')")
                 ->paginate(10);
         }else if(getSubEquipo($sub)==1){
@@ -368,7 +365,6 @@ class EquiposController extends BaseController
                 ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
                 ->where('sub_equipos_id',getSubEquipo($sub))
                 ->where('tipo_motore_id',$id)
-                ->where('equipos.estado','A')
                 ->whereRaw("(numero_parte like '%".$request->q."%' or contactos.nombre like '%".$request->q."%')")
                 ->paginate(10);
         }
