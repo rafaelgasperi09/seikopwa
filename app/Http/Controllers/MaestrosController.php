@@ -10,6 +10,7 @@ use Cartalyst\Sentinel\Roles\RoleInterface;
 use App\Cliente;
 use App\Equipo;
 use App\Componente;
+use App\FormularioRegistro;
 use Illuminate\Support\Facades\Schema;
 
 class MaestrosController extends Controller
@@ -76,7 +77,7 @@ class MaestrosController extends Controller
     public function equipos(Request $request)
     {
         $columns = Schema::getColumnListing('equipos');
-        $data=Equipo::get();
+        $data=Equipo::where('estado','A')->get();
 
         return view('frontend.maestros.equipos.index')->with(compact('data','columns'));
     }
@@ -106,6 +107,7 @@ class MaestrosController extends Controller
         $data=Equipo::find($id);
         return view('frontend.maestros.equipos.edit')->with(compact('data'));
     }
+    
     public function equipos_update($id,Request $request)
     {
         $equipo=Equipo::find($id);
@@ -120,6 +122,27 @@ class MaestrosController extends Controller
         return redirect(route('maestros.equipos.index'));
     }
 
+    public function equipos_delete($id,Request $request)
+    {
+        $equipo=Equipo::find($id);
+        $reportes=FormularioRegistro::where('equipo_id',$id)->count();
+
+        if($reportes==0){
+              if($equipo->delete())
+                $request->session()->flash('message.success','Equipo borrado con éxito');
+            else
+                $request->session()->flash('message.error','Equipo no pudo ser borrado');   
+        }else{
+             $equipo->estado='I';
+            if($equipo->save())
+                $request->session()->flash('message.success','Equipo inactivado con éxito');
+            else
+                $request->session()->flash('message.error','Equipo no pudo ser inactivado');   
+        }
+        
+
+        return redirect(route('maestros.equipos.index'));
+    }
      //componentes    
      public function componentes(Request $request)
      {

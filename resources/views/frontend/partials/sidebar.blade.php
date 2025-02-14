@@ -163,9 +163,9 @@
                             </a>
                         </li>
                     @endif
-                    @if(\Sentinel::hasAccess('role.index'))
+                    @if(\Sentinel::hasAccess('maestros.index'))
                         <li>
-                            <a href="{{ route('maestros.index') }}" class="item"  title="Calendario">
+                            <a  class="item"  title="Calendario">
                                 <div class="icon-box bg-primary">
                                     <ion-icon name="file-tray-stacked-outline"></ion-icon>
                                 </div>

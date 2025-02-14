@@ -27,7 +27,7 @@ class Equipo extends BaseModel
         return $this->belongsTo(Marca::class,'marca_id');
     }
 
-    public function estado(){
+    public function Estado(){
         return $this->belongsTo(Estado::class,'estado_id');
     }
     public function funcion_hidraulica(){

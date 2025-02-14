@@ -303,6 +303,7 @@ Route::group(array('prefix' => 'maestros'), function() {
         Route::get('create/', array('as' => 'maestros.clientes.create', 'uses' => 'MaestrosController@clientes_create'));
         Route::get('edit/{id}', array('as' => 'maestros.clientes.edit', 'uses' => 'MaestrosController@clientes_edit'));
         Route::post('update/{id}', array('as' => 'maestros.clientes.update', 'uses' => 'MaestrosController@clientes_update'));
+        Route::get('delete/{id}', array('as' => 'maestros.clientes.delete', 'uses' => 'MaestrosController@clientes_delete'));
     });
     Route::group(array('prefix' => 'equipos'), function() {
         Route::get('/', array('as' => 'maestros.equipos.index', 'uses' => 'MaestrosController@equipos'));
@@ -310,6 +311,7 @@ Route::group(array('prefix' => 'maestros'), function() {
         Route::get('create/', array('as' => 'maestros.equipos.create', 'uses' => 'MaestrosController@equipos_create'));
         Route::get('edit/{id}', array('as' => 'maestros.equipos.edit', 'uses' => 'MaestrosController@equipos_edit'));
         Route::post('update/{id}', array('as' => 'maestros.equipos.update', 'uses' => 'MaestrosController@equipos_update'));
+        Route::get('delete/{id}', array('as' => 'maestros.equipos.delete', 'uses' => 'MaestrosController@equipos_delete'));
     });
     Route::group(array('prefix' => 'componentes'), function() {
         Route::get('/', array('as' => 'maestros.componentes.index', 'uses' => 'MaestrosController@componentes'));
@@ -317,6 +319,7 @@ Route::group(array('prefix' => 'maestros'), function() {
         Route::get('create/', array('as' => 'maestros.componentes.create', 'uses' => 'MaestrosController@componentes_create'));
         Route::get('edit/{id}', array('as' => 'maestros.componentes.edit', 'uses' => 'MaestrosController@componentes_edit'));
         Route::post('update/{id}', array('as' => 'maestros.componentes.update', 'uses' => 'MaestrosController@componentes_update'));
+        Route::get('delete/{id}', array('as' => 'maestros.componentes.delete', 'uses' => 'MaestrosController@componentes_delete'));
     });
 });
 
