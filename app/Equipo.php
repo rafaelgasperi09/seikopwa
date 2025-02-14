@@ -12,6 +12,14 @@ class Equipo extends BaseModel
     protected $table = 'equipos';
     protected $guarded = ['id'];
 
+
+    protected static function booted()
+    {
+            self::addGlobalScope('estado', function ($query){
+                $query->where('equipos.estado','A');
+            });
+    
+    }
     public function tipo(){
         return $this->belongsTo(TipoEquipo::class,'tipo_equipos_id')->withDefault([
             'display_name'=>'N/A',

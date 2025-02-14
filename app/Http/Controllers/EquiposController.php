@@ -339,7 +339,7 @@ class EquiposController extends BaseController
             }
             $equipos=Equipo::selectRaw('equipos.*')->FiltroCliente()
             ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
-            ->where('equipos.estado','A')
+
             ->when($filtro<>'',function($q) use($filtro){
                 $q->whereRaw($filtro);
             })
