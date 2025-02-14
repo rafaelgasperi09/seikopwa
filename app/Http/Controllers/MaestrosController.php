@@ -92,7 +92,7 @@ class MaestrosController extends Controller
         }
         
 
-        return redirect(route('maestros.componentes.index'));
+        return redirect(route('maestros.clientes.index'));
     }
 
     //equipos    
