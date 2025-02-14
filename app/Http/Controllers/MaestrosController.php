@@ -78,7 +78,7 @@ class MaestrosController extends Controller
         $cliente=Cliente::find($id);
         $reportes=FormularioRegistro::where('cliente_id',$id)->count();
 
-        if($cliente==0){
+        if($reportes==0){
               if($cliente->delete())
                 $request->session()->flash('message.success','Cliente borrado con éxito');
             else
