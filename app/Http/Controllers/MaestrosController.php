@@ -72,6 +72,28 @@ class MaestrosController extends Controller
 
         return redirect(route('maestros.clientes.index'));
     }
+    
+    public function clientes_delete($id,Request $request)
+    {
+        $cliente=Cliente::find($id);
+        $reportes=FormularioRegistro::where('cliente_id',$id)->count();
+
+        if($cliente==0){
+              if($cliente->delete())
+                $request->session()->flash('message.success','Cliente borrado con éxito');
+            else
+                $request->session()->flash('message.error','Cliente no pudo ser borrado');   
+        }else{
+             $cliente->estado='I';
+            if($cliente->save())
+                $request->session()->flash('message.success','Cliente inactivado con éxito');
+            else
+                $request->session()->flash('message.error','Cliente no pudo ser inactivado');   
+        }
+        
+
+        return redirect(route('maestros.componentes.index'));
+    }
 
     //equipos    
     public function equipos(Request $request)
@@ -188,6 +210,28 @@ class MaestrosController extends Controller
              $request->session()->flash('message.success','Registro creado con éxito');
          else
              $request->session()->flash('message.error','Registro no pudo ser creado');
+ 
+         return redirect(route('maestros.componentes.index'));
+     }
+
+     public function componentes_delete($id,Request $request)
+     {
+         $componente=Componente::find($id);
+         $reportes=FormularioRegistro::where('componente_id',$id)->count();
+ 
+         if($reportes==0){
+               if($componente->delete())
+                 $request->session()->flash('message.success','Componente borrado con éxito');
+             else
+                 $request->session()->flash('message.error','Componente no pudo ser borrado');   
+         }else{
+              $componente->estado='I';
+             if($componente->save())
+                 $request->session()->flash('message.success','Componente inactivado con éxito');
+             else
+                 $request->session()->flash('message.error','Componente no pudo ser inactivado');   
+         }
+         
  
          return redirect(route('maestros.componentes.index'));
      }
