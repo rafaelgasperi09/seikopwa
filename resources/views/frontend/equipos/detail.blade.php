@@ -18,7 +18,7 @@
                         <div class="wide-block pt-2 pb-2" id="detail">
                             <dl class="row">
                                 <dt class="col-sm-3">Estado</dt>
-                                <dd class="col-sm-9">{{ $data->estado->display_name }}</dd>
+                                <dd class="col-sm-9">{{ $data->Estado->display_name }}</dd>
                             </dl>
                             <dl class="row">
                                 <dt class="col-sm-3">Tipo</dt>
