@@ -11,6 +11,14 @@ class Cliente extends BaseModel
     protected $table = 'contactos';
     protected $guarded = ['id'];
 
+
+    protected static function booted()
+    {
+            self::addGlobalScope('estado', function ($query){
+                $query->where('contactos.estado','A');
+            });
+    
+    }
     public function equipos(){
         return $this->hasMany(Equipo::class);
     }

@@ -113,6 +113,7 @@
     <script>
         $('.datatable').DataTable({
             'order':['0','DESC'],
+            "responsive": true,
         });
         var button='<span style="float:right">\
             <a href="{{route('maestros.equipos.create')}}" class="btn btn-success ">\

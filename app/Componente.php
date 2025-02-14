@@ -8,8 +8,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Componente extends Model
 {
     use SoftDeletes;
+    protected $table = 'componentes';
     protected $guarded = ['id'];
 
+    protected static function booted()
+    {
+            self::addGlobalScope('estado', function ($query){
+                $query->where('componentes.estado','A');
+            });
+    
+    }
     public function cliente(){
         return $this->belongsTo(Cliente::class,'cliente_id')->withDefault([
             'nombre'=>'N/A'

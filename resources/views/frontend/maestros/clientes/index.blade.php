@@ -36,6 +36,11 @@
                                 <a href="{{route('maestros.clientes.edit',$d->id)}}" class="btn btn-success btn-sm mr-1" title="Editar">
                                     <ion-icon name="pencil-outline" role="img" class="md hydrated" aria-label="pencil outline"></ion-icon>
                                 </a>
+                                @if(current_user()->id==1)
+                                <a href="{{route('maestros.clientes.delete',$d->id)}}" class="btn btn-danger btn-sm mr-1" title="Eliminar">
+                                    <ion-icon name="trash-outline" role="img" class="md hydrated" aria-label="pencil outline"></ion-icon>
+                                </a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
