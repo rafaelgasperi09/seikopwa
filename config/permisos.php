@@ -79,9 +79,18 @@ $permisos["permissions"] = array(
     "sp.parteC"=>"Tercera Parte 2 del proceso (edicion hora salida)",
   ),
   "Maestros"=>array(
-    "maestros.index"=>"Ver maestros",
-    "maestros.store"=>"Guardar",
-    "maestros.update"=>"Actualizar",
+    "maestros.clientes.index"=>"Ver clientes",
+    "maestros.clientes.store"=>"Guardar clientes",
+    "maestros.clientes.update"=>"Actualizar clientes",
+    "maestros.clientes.delete"=>"Borrar clientes",
+    "maestros.equipos.index"=>"Ver Equipos",
+    "maestros.equipos.store"=>"Guardar Equipos",
+    "maestros.equipos.update"=>"Actualizar Equipos",
+    "maestros.equipos.delete"=>"Borrar Equipos",
+    "maestros.componentes.index"=>"Ver Componentes",
+    "maestros.componentes.store"=>"Guardar Componentes",
+    "maestros.componentes.update"=>"Actualizar Componentes",
+    "maestros.componentes.delete"=>"Borrar Componentes",
   ),
  
 );

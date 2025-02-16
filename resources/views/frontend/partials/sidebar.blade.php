@@ -163,7 +163,7 @@
                             </a>
                         </li>
                     @endif
-                    @if(\Sentinel::hasAccess('maestros.index'))
+                    @if(\Sentinel::hasAnyAccess(['maestros.clientes.index','maestros.equipos.index','maestros.componentes.index']))
                         <li>
                             <a  class="item"  title="Calendario">
                                 <div class="icon-box bg-primary">
@@ -174,6 +174,7 @@
                                 </div>
                             </a>
                             <ul>
+                                @if(\Sentinel::hasAccess('maestros.clientes.index'))
                                 <li>
                                     <a href="{{ route('maestros.clientes.index') }}" class="item"  title="Calendario">
                                         <div class="icon-box bg-primary">
@@ -184,6 +185,8 @@
                                         </div>
                                     </a>
                                 </li>
+                                @endif
+                                @if(\Sentinel::hasAccess('maestros.equipos.index'))
                                 <li>
                                     <a href="{{ route('maestros.equipos.index') }}" class="item"  title="Calendario">
                                         <div class="icon-box bg-primary">
@@ -194,6 +197,8 @@
                                         </div>
                                     </a>
                                 </li>
+                                @endif
+                                @if(\Sentinel::hasAccess('maestros.componentes.index'))
                                 <li>
                                     <a href="{{ route('maestros.componentes.index') }}" class="item"  title="Calendario">
                                         <div class="icon-box bg-primary">
@@ -204,6 +209,7 @@
                                         </div>
                                     </a>
                                 </li>
+                                @endif
                             </ul>
                         </li>
                     @endif
