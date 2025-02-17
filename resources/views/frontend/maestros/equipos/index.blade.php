@@ -97,7 +97,7 @@
                                 <a href="{{route('maestros.equipos.edit',$d->id)}}" class="btn btn-success btn-sm mr-1" title="Editar">
                                     <ion-icon name="pencil-outline" role="img" class="md hydrated" aria-label="pencil outline"></ion-icon>
                                 </a>
-                                @if(current_user()->id==1)
+                                @if(\Sentinel::hasAccess('maestros.equipos.delete'))
                                 <a href="{{route('maestros.equipos.delete',$d->id)}}" class="btn btn-danger btn-sm mr-1" title="Eliminar">
                                     <ion-icon name="trash-outline" role="img" class="md hydrated" aria-label="pencil outline"></ion-icon>
                                 </a>
