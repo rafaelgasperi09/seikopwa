@@ -11,13 +11,25 @@ class Componente extends Model
     protected $table = 'componentes';
     protected $guarded = ['id'];
 
-    protected static function booted()
+
+        protected static function booted()
     {
-            self::addGlobalScope('estado', function ($query){
-                $query->where('componentes.estado','A');
+            $eliminados=request()->get('eliminados');
+            $estado = 'A';
+            if($eliminados=='true'){
+                $estado='I';
+            }
+            if(!empty(request()->get('estado')))
+                $estado = request()->get('estado');
+            $ruta=\Request::route()->getName();
+            
+            self::addGlobalScope('estado', function ($query) use($estado,$ruta){
+               if(!str_contains($ruta,'maestros.componentes.update') and !str_contains($ruta,'maestros.componentes.edit') )
+                    $query->where('componentes.estado',$estado);
             });
     
     }
+    
     public function cliente(){
         return $this->belongsTo(Cliente::class,'cliente_id')->withDefault([
             'nombre'=>'N/A'

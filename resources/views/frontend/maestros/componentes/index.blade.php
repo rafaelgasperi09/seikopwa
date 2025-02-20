@@ -130,10 +130,10 @@
                             <td>{{$d->annio_adquisicion}}</td>
                             <td>{{$d->cuenta}}</td>
                             <td>
-                                <a href="{{route('maestros.componentes.edit',$d->id)}}" class="btn btn-success btn-sm mr-1" title="Editar">
+                                <a href="{{route('maestros.componentes.edit',['id'=>$d->id,'estado'=>$d->estado])}}" class="btn btn-success btn-sm mr-1" title="Editar">
                                     <ion-icon name="pencil-outline" role="img" class="md hydrated" aria-label="pencil outline"></ion-icon>
                                 </a>
-                                @if(\Sentinel::hasAccess('maestros.componentes.delete'))
+                                @if(\Sentinel::hasAccess('maestros.componentes.delete') and $d->estado=='A')
                                 <a href="{{route('maestros.componentes.delete',$d->id)}}" class="btn btn-danger btn-sm mr-1" title="Eliminar">
                                     <ion-icon name="trash-outline" role="img" class="md hydrated" aria-label="pencil outline"></ion-icon>
                                 </a>
@@ -152,10 +152,33 @@
             'order':['0','DESC'],
             "responsive": true,
         });
+
+        
+        @php
+        $checked='';
+        if(request()->get('eliminados')=='true')
+            $checked='checked="checked"';
+        @endphp
         var button='<span style="float:right">\
-            <a href="{{route('maestros.componentes.create')}}" class="btn btn-success ">\
-                <ion-icon name="add-circle-outline"></ion-icon>Agregar nuevo\
-                </a>';
+            <div class="row">\
+                <div class="col-md-6">\
+                    <a href="{{route('maestros.componentes.create')}}" class="btn btn-success ">\
+                    <ion-icon name="add-circle-outline"></ion-icon>Agregar nuevo\
+                    </a>\
+                </div>\
+                 <div class="col-md-6">\
+                   <div class="custom-control custom-switch col-12">\
+                        <input name="eliminados"  type="checkbox" {{$checked}} class="custom-control-input eliminados" id="customSwitch_eliminados">\
+                        <label class="custom-control-label" for="customSwitch_eliminados"></label>\
+                        <div style="font-size:10px">Ver eliminados</div>\
+                    </div>\
+                </div>\
+            </div>\
+            </span>';
         $('.title').append(button);
+        $('.eliminados').click(function(){
+           // alert($(this).prop('checked'));
+           window.location.href = "{{route('maestros.componentes.index')}}" + "?eliminados="+$(this).prop('checked');
+        });
     </script>
 @stop

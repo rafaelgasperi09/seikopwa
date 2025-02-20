@@ -14,8 +14,19 @@ class Cliente extends BaseModel
 
     protected static function booted()
     {
-            self::addGlobalScope('estado', function ($query){
-                $query->where('contactos.estado','A');
+
+            $eliminados=request()->get('eliminados');
+            $estado = 'A';
+            if($eliminados=='true'){
+                $estado='I';
+            }
+            if(!empty(request()->get('estado')))
+                $estado = request()->get('estado');
+            $ruta=\Request::route()->getName();
+            
+            self::addGlobalScope('estado', function ($query) use($estado,$ruta){
+                if(!str_contains($ruta,'clientes.update') and !str_contains($ruta,'clientes.edit') )
+                    $query->where('contactos.estado',$estado);
             });
     
     }

@@ -105,7 +105,15 @@
                         {{ Form::textarea('descripcion',$data->descripcion,array('class'=>'form-control','id'=>'descripcion','maxlength'=>'255','rows'=>3)) }}
                     </div>
                 </div>
-                
+                 <div class="form-group boxed col-6">
+                    <div class="input-wrapper">
+                        <label class="label" for="zona_id">ESTADO</label>
+                        {{ Form::select('estado',['A'=>'Activo','I'=>'Inactivo'],$data->estado,array('class'=>'form-control','autocomplete'=>'off','id'=>'estado','required')) }} 
+                        <i class="clear-input">
+                        <ion-icon name="checkmark-outline" role="img" class="md hydrated" aria-label="checkmark outline"></ion-icon>
+                        </i>
+                    </div>
+                </div>
                 <div class="form-group boxed col-6 text-right">
                     <button type="submit" class="btn btn-primary">Guardar</button>
                     <br/><br/><br/>

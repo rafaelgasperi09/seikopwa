@@ -78,7 +78,7 @@ class MaestrosController extends Controller
         $cliente=Cliente::find($id);
         $reportes=FormularioRegistro::where('cliente_id',$id)->count();
 
-        if($reportes==0){
+        if($reportes==0 and false){
               if($cliente->delete())
                 $request->session()->flash('message.success','Cliente borrado con éxito');
             else
@@ -99,7 +99,7 @@ class MaestrosController extends Controller
     public function equipos(Request $request)
     {
         $columns = Schema::getColumnListing('equipos');
-        $data=Equipo::where('estado','A')->get();
+        $data=Equipo::get();
 
         return view('frontend.maestros.equipos.index')->with(compact('data','columns'));
     }
@@ -149,7 +149,7 @@ class MaestrosController extends Controller
         $equipo=Equipo::find($id);
         $reportes=FormularioRegistro::where('equipo_id',$id)->count();
 
-        if($reportes==0){
+        if($reportes==0 and false){
               if($equipo->delete())
                 $request->session()->flash('message.success','Equipo borrado con éxito');
             else
@@ -219,7 +219,7 @@ class MaestrosController extends Controller
          $componente=Componente::find($id);
          $reportes=FormularioRegistro::where('componente_id',$id)->count();
  
-         if($reportes==0){
+         if($reportes==0 and false){
                if($componente->delete())
                  $request->session()->flash('message.success','Componente borrado con éxito');
              else

@@ -10,7 +10,7 @@
             @php
                 $clientes = \App\Cliente::pluck('nombre', 'id')->prepend('Seleccione', '');
                 $subEquipos = \App\SubEquipo::pluck('name', 'id')->prepend('Seleccione', '');
-                $proveedores = \App\Cliente::pluck('nombre', 'id')->prepend('Seleccione', '');
+                $proveedores = $clientes;
                 $tipoComponentes = \App\TipoComponente::pluck('display_name', 'id')->prepend('Seleccione', '');
                 $tipoFiltros = \App\TipoFiltro::pluck('display_name', 'id')->prepend('Seleccione', '');
                 $tipoAditamentos = \App\TipoAditamento::pluck('display_name', 'id')->prepend('Seleccione', '');
@@ -98,6 +98,15 @@
                 <div class="input-wrapper">
                     <label class="label" for="descripcion">DESCRIPCIÓN</label>
                     {{ Form::textarea('descripcion', $data->descripcion, ['class' => 'form-control', 'id' => 'descripcion', 'maxlength' => '255', 'rows' => 3]) }}
+                </div>
+            </div>
+             <div class="form-group boxed col-6">
+                <div class="input-wrapper">
+                    <label class="label" for="zona_id">ESTADO</label>
+                    {{ Form::select('estado',['A'=>'Activo','I'=>'Inactivo'],$data->estado,array('class'=>'form-control','autocomplete'=>'off','id'=>'estado','required')) }} 
+                    <i class="clear-input">
+                    <ion-icon name="checkmark-outline" role="img" class="md hydrated" aria-label="checkmark outline"></ion-icon>
+                    </i>
                 </div>
             </div>
             
