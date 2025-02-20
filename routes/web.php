@@ -292,36 +292,36 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
      Route::post('/push','PushController@store');
 
-
-});
-
-Route::group(array('prefix' => 'maestros'), function() {
-    Route::get('/', array('as' => 'maestros.index', 'uses' => 'MaestrosController@index'))->middleware('hasAccess');
-    Route::group(array('prefix' => 'clientes'), function() {
-        Route::get('/', array('as' => 'maestros.clientes.index', 'uses' => 'MaestrosController@clientes'))->middleware('hasAccess');
-        Route::post('store/', array('as' => 'maestros.clientes.store', 'uses' => 'MaestrosController@clientes_store'))->middleware('hasAccess');
-        Route::get('create/', array('as' => 'maestros.clientes.create', 'uses' => 'MaestrosController@clientes_create'));
-        Route::get('edit/{id}', array('as' => 'maestros.clientes.edit', 'uses' => 'MaestrosController@clientes_edit'));
-        Route::post('update/{id}', array('as' => 'maestros.clientes.update', 'uses' => 'MaestrosController@clientes_update'))->middleware('hasAccess');
-        Route::get('delete/{id}', array('as' => 'maestros.clientes.delete', 'uses' => 'MaestrosController@clientes_delete'))->middleware('hasAccess');
-    });
-    Route::group(array('prefix' => 'equipos'), function() {
-        Route::get('/', array('as' => 'maestros.equipos.index', 'uses' => 'MaestrosController@equipos'))->middleware('hasAccess');
-        Route::post('store/', array('as' => 'maestros.equipos.store', 'uses' => 'MaestrosController@equipos_store'))->middleware('hasAccess');
-        Route::get('create/', array('as' => 'maestros.equipos.create', 'uses' => 'MaestrosController@equipos_create'));
-        Route::get('edit/{id}', array('as' => 'maestros.equipos.edit', 'uses' => 'MaestrosController@equipos_edit'));
-        Route::post('update/{id}', array('as' => 'maestros.equipos.update', 'uses' => 'MaestrosController@equipos_update'))->middleware('hasAccess');
-        Route::get('delete/{id}', array('as' => 'maestros.equipos.delete', 'uses' => 'MaestrosController@equipos_delete'))->middleware('hasAccess');
-    });
-    Route::group(array('prefix' => 'componentes'), function() {
-        Route::get('/', array('as' => 'maestros.componentes.index', 'uses' => 'MaestrosController@componentes'))->middleware('hasAccess');
-        Route::post('store/', array('as' => 'maestros.componentes.store', 'uses' => 'MaestrosController@componentes_store'))->middleware('hasAccess');
-        Route::get('create/', array('as' => 'maestros.componentes.create', 'uses' => 'MaestrosController@componentes_create'));
-        Route::get('edit/{id}', array('as' => 'maestros.componentes.edit', 'uses' => 'MaestrosController@componentes_edit'));
-        Route::post('update/{id}', array('as' => 'maestros.componentes.update', 'uses' => 'MaestrosController@componentes_update'))->middleware('hasAccess');
-        Route::get('delete/{id}', array('as' => 'maestros.componentes.delete', 'uses' => 'MaestrosController@componentes_delete'))->middleware('hasAccess');
+    Route::group(array('prefix' => 'maestros'), function() {
+        Route::get('/', array('as' => 'maestros.index', 'uses' => 'MaestrosController@index'))->middleware('hasAccess');
+        Route::group(array('prefix' => 'clientes'), function() {
+            Route::get('/', array('as' => 'maestros.clientes.index', 'uses' => 'MaestrosController@clientes'))->middleware('hasAccess');
+            Route::post('store/', array('as' => 'maestros.clientes.store', 'uses' => 'MaestrosController@clientes_store'))->middleware('hasAccess');
+            Route::get('create/', array('as' => 'maestros.clientes.create', 'uses' => 'MaestrosController@clientes_create'));
+            Route::get('edit/{id}', array('as' => 'maestros.clientes.edit', 'uses' => 'MaestrosController@clientes_edit'));
+            Route::post('update/{id}', array('as' => 'maestros.clientes.update', 'uses' => 'MaestrosController@clientes_update'))->middleware('hasAccess');
+            Route::get('delete/{id}', array('as' => 'maestros.clientes.delete', 'uses' => 'MaestrosController@clientes_delete'))->middleware('hasAccess');
+        });
+        Route::group(array('prefix' => 'equipos'), function() {
+            Route::get('/', array('as' => 'maestros.equipos.index', 'uses' => 'MaestrosController@equipos'))->middleware('hasAccess');
+            Route::post('store/', array('as' => 'maestros.equipos.store', 'uses' => 'MaestrosController@equipos_store'))->middleware('hasAccess');
+            Route::get('create/', array('as' => 'maestros.equipos.create', 'uses' => 'MaestrosController@equipos_create'));
+            Route::get('edit/{id}', array('as' => 'maestros.equipos.edit', 'uses' => 'MaestrosController@equipos_edit'));
+            Route::post('update/{id}', array('as' => 'maestros.equipos.update', 'uses' => 'MaestrosController@equipos_update'))->middleware('hasAccess');
+            Route::get('delete/{id}', array('as' => 'maestros.equipos.delete', 'uses' => 'MaestrosController@equipos_delete'))->middleware('hasAccess');
+        });
+        Route::group(array('prefix' => 'componentes'), function() {
+            Route::get('/', array('as' => 'maestros.componentes.index', 'uses' => 'MaestrosController@componentes'))->middleware('hasAccess');
+            Route::post('store/', array('as' => 'maestros.componentes.store', 'uses' => 'MaestrosController@componentes_store'))->middleware('hasAccess');
+            Route::get('create/', array('as' => 'maestros.componentes.create', 'uses' => 'MaestrosController@componentes_create'));
+            Route::get('edit/{id}', array('as' => 'maestros.componentes.edit', 'uses' => 'MaestrosController@componentes_edit'));
+            Route::post('update/{id}', array('as' => 'maestros.componentes.update', 'uses' => 'MaestrosController@componentes_update'))->middleware('hasAccess');
+            Route::get('delete/{id}', array('as' => 'maestros.componentes.delete', 'uses' => 'MaestrosController@componentes_delete'))->middleware('hasAccess');
+        });
     });
 });
+
+
 
 Route::get('/offline', function () {
     return view('offline');
