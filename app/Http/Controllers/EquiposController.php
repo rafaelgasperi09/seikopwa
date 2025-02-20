@@ -942,8 +942,11 @@ class EquiposController extends BaseController
         $tipo_equipos_id = $request->tipo_equipos_id;
         $formulario = Formulario::find($formulario_id);
         $model = new FormularioRegistro();
-        $equipo = Equipo::findOrFail($equipo_id);
+        
+        $equipo = Equipo::find($equipo_id);
+  
         $status='P';
+
         if($model->status=='C')
             $status='C';
         //DB::transaction(function() use($model,$request,$formulario,$equipo,$status){
@@ -962,7 +965,7 @@ class EquiposController extends BaseController
                 $model->estatus = $status;
             }
             if($model->save())
-            {
+            {      
                 registraExtra($model->id);
                 $users = User::Join('role_users','users.id','role_users.user_id')
                 ->Join('roles','role_users.role_id','roles.id')

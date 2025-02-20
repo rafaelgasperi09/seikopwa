@@ -19,7 +19,8 @@ class Equipo extends BaseModel
             if($eliminados=='true'){
                 $estado='I';
             }
-            if(!empty(request()->get('estado')))
+       
+            if(!empty(request()->get('estado')) and in_array(request()->get('estado'),['A','I']))
                 $estado = request()->get('estado');
 
             $ruta=\Request::route()->getName();
