@@ -5,7 +5,7 @@
         <br/>
         <div class="container-fluid">
         <br>
-            {{Form::open(array("method" => "POST","action" => "MaestrosController@equipos_store","role" => "form",'class'=>'form-horizontal'))}}
+            {{Form::open(array("method" => "POST",'route' => array('MaestrosController@equipos_store'),"role" => "form",'class'=>'form-horizontal'))}}
                 <div class="form-group boxed col-6">
                     <div class="input-wrapper">
                         <label class="label" for="numero_parte">NÚMERO DE PARTE</label>
@@ -39,6 +39,12 @@
                         {{ Form::select('sub_equipos_id',\App\SubEquipo::pluck('name','id')->prepend('Seleccione',''),null,array('class'=>'form-control')) }}
                     </div>
                 </div>
+                <div class="form-group boxed col-6">
+                    <div class="input-wrapper">
+                        <label class="label" for="cliente_id">TIPO MASTIL</label>
+                        {{ Form::select('sub_equipos_id',\App\TipoMastil::pluck('name','id')->prepend('Seleccione',''),null,array('class'=>'form-control')) }}
+                    </div>
+                </div>
                 
                 <div class="form-group boxed col-6">
                     <div class="input-wrapper">
@@ -53,7 +59,7 @@
                         {{ Form::select('estado_id',\App\Estado::pluck('display_name','id')->prepend('Seleccione',''),null,array('class'=>'form-control','required')) }}
                     </div>
                 </div>
-                                
+                
                 <div class="form-group boxed col-6">
                     <div class="input-wrapper">
                         <label class="label" for="mastil">MÁSTIL</label>
@@ -69,7 +75,7 @@
                 <div class="form-group boxed col-6">
                     <div class="input-wrapper">
                         <label class="label" for="voltaje">FUNCION HIDRAULICA</label>
-                        {{ Form::select('funcion_hidraulica_id',\App\FuncionHidraulica::pluck('display_name','id')->prepend('Seleccione',''),null,array('class'=>'form-control','required'=>'required')) }}
+                        {{ Form::select('funcion_hidraulica_id',\App\FuncionHidraulica::pluck('display_name','id')->prepend('Seleccione',''),null,array('class'=>'form-control','required')) }}
                     </div>
                 </div>
                 
@@ -78,7 +84,7 @@
                         <label class="label" for="capacidad_de_carga">CAPACIDAD DE CARGA</label>
                         <input class="form-control" id="capacidad_de_carga" name="capacidad_de_carga" type="text">
                     </div>
-                </div>                
+                </div>
                 <div class="form-group boxed col-6">
                     <div class="input-wrapper">
                         <label class="label" for="garantia_activacion">GARANTÍA ACTIVACIÓN</label>
@@ -91,7 +97,6 @@
                         <input class="form-control" id="garantia_culminacion" name="garantia_culminacion" type="date">
                     </div>
                 </div>
-                
                 
                 <div class="form-group boxed col-6">
                     <div class="input-wrapper">
@@ -106,7 +111,12 @@
                         {{ Form::textarea('descripcion',null,array('class'=>'form-control','id'=>'descripcion','maxlength'=>'255','rows'=>3)) }}
                     </div>
                 </div>
-                
+                <div class="form-group boxed col-6">
+                    <div class="input-wrapper">
+                        <label class="label" for="zona_id">ESTADO</label>
+                        {{ Form::select('estado',['A'=>'Activo','I'=>'Inactivo'],null,array('class'=>'form-control','autocomplete'=>'off','id'=>'estado','required')) }} 
+                    </div>
+                </div>
                 <div class="form-group boxed col-6 text-right">
                     <button type="submit" class="btn btn-primary">Guardar</button>
                     <br/><br/><br/>

@@ -64,11 +64,13 @@
                     ];
                 @endphp
 
-                @foreach($selectFields as $name => [$label, $options])
+                @foreach($selectFields as $name => [$label, $options]).
+                    @php $required='';
+                    @endphp
                     <div class="form-group boxed col-6">
                         <div class="input-wrapper">
                             <label class="label" for="{{ $name }}">{{ $label }}</label>
-                            {{ Form::select($name, $options->prepend('Seleccione', ''), $data->$name, ['class' => 'form-control', 'required']) }}
+                            {{ Form::select($name, $options->prepend('Seleccione', ''), $data->$name, ['class' => 'form-control', $required]) }}
                         </div>
                     </div>
                 @endforeach
