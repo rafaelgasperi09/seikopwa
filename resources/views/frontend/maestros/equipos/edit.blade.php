@@ -1,119 +1,95 @@
 @extends('frontend.main-layout')
 @section('content')
-    @include('frontend.partials.title',array('title'=>'Equipos','subtitle'=>'Crear equipo'))
+    @include('frontend.partials.title', ['title' => 'Equipos', 'subtitle' => 'Crear equipo'])
     <div class="container-fluid">
         <br/>
         <div class="container-fluid">
         <br>
-            {{Form::open(array("method" => "POST",'route' => array('maestros.equipos.update', $data->id),"role" => "form",'class'=>'form-horizontal'))}}
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="numero_parte">NÚMERO DE PARTE</label>
-                        <input class="form-control" id="numero_parte" name="numero_parte" required="required" type="text" value="{{$data->numero_parte}}">
+            {{ Form::open(['method' => 'POST', 'route' => ['maestros.equipos.update', $data->id], 'role' => 'form', 'class' => 'form-horizontal']) }}
+
+                @php
+                    $fields = [
+                        'numero_parte' => 'NÚMERO DE PARTE',
+                        'modelo' => 'MODELO',
+                        'serie' => 'SERIE',
+                        'mastil' => 'MÁSTIL',
+                        'truck_data_number' => 'TRUCK DATA NUMBER',
+                        'voltaje' => 'VOLTAJE',
+                        'numero_parte_motor_hidraulico' => 'NÚMERO PARTE MOTOR HIDRÁULICO',
+                        'numero_parte_motor_traccion' => 'NÚMERO PARTE MOTOR TRACCIÓN',
+                        'numero_parte_motor_direccion' => 'NÚMERO PARTE MOTOR DIRECCIÓN',
+                        'capacidad_de_carga' => 'CAPACIDAD DE CARGA',
+                        'numero_mastil' => 'NÚMERO MÁSTIL',
+                        'altura_mastil' => 'ALTURA MÁSTIL',
+                        'precio' => 'PRECIO',
+                        'precio_alquiler' => 'PRECIO ALQUILER',
+                        'storage_operation' => 'STORAGE OPERATION',
+                        'cuenta' => 'CUENTA',
+                        'turnos' => 'TURNOS'
+                    ];
+                @endphp
+
+                @foreach($fields as $name => $label)
+                    <div class="form-group boxed col-6">
+                        <div class="input-wrapper">
+                            <label class="label" for="{{ $name }}">{{ $label }}</label>
+                            <input class="form-control" id="{{ $name }}" name="{{ $name }}" type="text" value="{{ $data->$name }}">
+                        </div>
                     </div>
-                </div>
-                
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="modelo">MODELO</label>
-                        <input class="form-control" id="modelo" name="modelo" required="required" type="text" value="{{$data->modelo}}">
+                @endforeach
+
+                @php
+                    $dateFields = ['garantia_activacion' => 'GARANTÍA ACTIVACIÓN', 'garantia_culminacion' => 'GARANTÍA CULMINACIÓN', 'fecha_inicio_alquiler' => 'FECHA INICIO ALQUILER'];
+                @endphp
+
+                @foreach($dateFields as $name => $label)
+                    <div class="form-group boxed col-6">
+                        <div class="input-wrapper">
+                            <label class="label" for="{{ $name }}">{{ $label }}</label>
+                            <input class="form-control" id="{{ $name }}" name="{{ $name }}" type="date" value="{{ $data->$name }}">
+                        </div>
                     </div>
-                </div>
-                
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="serie">SERIE</label>
-                        <input class="form-control" id="serie" name="serie" required="required" type="text" value="{{$data->serie}}">
+                @endforeach
+
+                @php
+                    $selectFields = [
+                        'marca_id' => ['MARCA', \App\Marca::pluck('display_name', 'id')],
+                        'sub_equipos_id' => ['TIPO', \App\SubEquipo::pluck('name', 'id')],
+                        'tipo_mastil_id' => ['TIPO MASTIL', \App\TipoMastil::pluck('name', 'id')],
+                        'tipo_equipos_id' => ['TIPO DE EQUIPO', \App\TipoEquipo::pluck('display_name', 'id')],
+                        'estado_id' => ['ESTADO', \App\Estado::pluck('display_name', 'id')],
+                        'funcion_hidraulica_id' => ['FUNCION HIDRÁULICA', \App\FuncionHidraulica::pluck('display_name', 'id')],
+                        'cliente_id' => ['CLIENTE', \App\Cliente::pluck('nombre', 'id')],
+                        'proveedor_id' => ['PROVEEDOR', \App\Proveedor::pluck('nombre', 'id')]
+                    ];
+                @endphp
+
+                @foreach($selectFields as $name => [$label, $options])
+                    <div class="form-group boxed col-6">
+                        <div class="input-wrapper">
+                            <label class="label" for="{{ $name }}">{{ $label }}</label>
+                            {{ Form::select($name, $options->prepend('Seleccione', ''), $data->$name, ['class' => 'form-control', 'required']) }}
+                        </div>
                     </div>
-                </div>
-                
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="marca_id">MARCA</label>
-                        {{ Form::select('marca_id',\App\Marca::pluck('display_name','id')->prepend('Seleccione',''),$data->marca_id,array('class'=>'form-control','required')) }}
-                    </div>
-                </div>
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="cliente_id">TIPO</label>
-                        {{ Form::select('sub_equipos_id',\App\SubEquipo::pluck('name','id')->prepend('Seleccione',''),$data->sub_equipos_id,array('class'=>'form-control')) }}
-                    </div>
-                </div>
-                
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="tipo_equipos_id">TIPO DE EQUIPO</label>
-                        {{ Form::select('tipo_equipos_id',\App\TipoEquipo::pluck('display_name','id')->prepend('Seleccione',''),$data->tipo_equipos_id,array('class'=>'form-control')) }}
-                    </div>
-                </div>
-                
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="estado_id">ESTADO</label>
-                        {{ Form::select('estado_id',\App\Estado::pluck('display_name','id')->prepend('Seleccione',''),$data->estado_id,array('class'=>'form-control','required')) }}
-                    </div>
-                </div>
-                                
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="mastil">MÁSTIL</label>
-                        <input class="form-control" id="mastil" name="mastil" type="text" value="{{$data->mastil}}">
-                    </div>
-                </div>
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="voltaje">VOLTAJE</label>
-                        <input class="form-control" id="voltaje" name="voltaje" type="text" value="{{$data->voltaje}}">
-                    </div>
-                </div>
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="voltaje">FUNCION HIDRAULICA</label>
-                        {{ Form::select('funcion_hidraulica_id',\App\FuncionHidraulica::pluck('display_name','id')->prepend('Seleccione',''),$data->funcion_hidraulica_id,array('class'=>'form-control','required')) }}
-                    </div>
-                </div>
-                
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="capacidad_de_carga">CAPACIDAD DE CARGA</label>
-                        <input class="form-control" id="capacidad_de_carga" name="capacidad_de_carga" type="text" value="{{$data->capacidad_de_carga}}">
-                    </div>
-                </div>                
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="garantia_activacion">GARANTÍA ACTIVACIÓN</label>
-                        <input class="form-control" id="garantia_activacion" name="garantia_activacion" type="date" value="{{$data->garantia_activacion}}">
-                    </div>
-                </div>
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="garantia_culminacion">GARANTÍA CULMINACIÓN</label>
-                        <input class="form-control" id="garantia_culminacion" name="garantia_culminacion" type="date" value="{{$data->garantia_culminacion}}">
-                    </div>
-                </div>
-                
-                <div class="form-group boxed col-6">
-                    <div class="input-wrapper">
-                        <label class="label" for="cliente_id">CLIENTE</label>
-                        {{ Form::select('cliente_id',\App\Cliente::pluck('nombre','id')->prepend('Seleccione',''),$data->cliente_id,array('class'=>'form-control')) }}
-                    </div>
-                </div>
-                
+                @endforeach
+
                 <div class="form-group boxed col-6">
                     <div class="input-wrapper">
                         <label class="label" for="descripcion">DESCRIPCIÓN</label>
-                        {{ Form::textarea('descripcion',$data->descripcion,array('class'=>'form-control','id'=>'descripcion','maxlength'=>'255','rows'=>3)) }}
+                        {{ Form::textarea('descripcion', $data->descripcion, ['class' => 'form-control', 'id' => 'descripcion', 'maxlength' => '255', 'rows' => 3]) }}
                     </div>
                 </div>
-                 <div class="form-group boxed col-6">
+
+                <div class="form-group boxed col-6">
                     <div class="input-wrapper">
-                        <label class="label" for="zona_id">ESTADO</label>
-                        {{ Form::select('estado',['A'=>'Activo','I'=>'Inactivo'],$data->estado,array('class'=>'form-control','autocomplete'=>'off','id'=>'estado','required')) }} 
+                        <label class="label" for="estado">ESTADO</label>
+                        {{ Form::select('estado', ['A' => 'Activo', 'I' => 'Inactivo'], $data->estado, ['class' => 'form-control', 'id' => 'estado', 'required']) }}
                         <i class="clear-input">
-                        <ion-icon name="checkmark-outline" role="img" class="md hydrated" aria-label="checkmark outline"></ion-icon>
+                            <ion-icon name="checkmark-outline" role="img" class="md hydrated" aria-label="checkmark outline"></ion-icon>
                         </i>
                     </div>
                 </div>
+
                 <div class="form-group boxed col-6 text-right">
                     <button type="submit" class="btn btn-primary">Guardar</button>
                     <br/><br/><br/>
