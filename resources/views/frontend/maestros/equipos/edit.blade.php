@@ -60,7 +60,7 @@
                         'estado_id' => ['ESTADO', \App\Estado::pluck('display_name', 'id')],
                         'funcion_hidraulica_id' => ['FUNCION HIDRÁULICA', \App\FuncionHidraulica::pluck('display_name', 'id')],
                         'cliente_id' => ['CLIENTE', \App\Cliente::pluck('nombre', 'id')],
-                        'proveedor_id' => ['PROVEEDOR', \App\Proveedor::pluck('nombre', 'id')]
+                        'proveedor_id' => ['PROVEEDOR', \App\Cliente::pluck('nombre', 'id')]
                     ];
                 @endphp
 
