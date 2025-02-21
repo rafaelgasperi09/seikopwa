@@ -55,7 +55,7 @@
                     $selectFields = [
                         'marca_id' => ['MARCA', \App\Marca::pluck('display_name', 'id')],
                         'sub_equipos_id' => ['TIPO', \App\SubEquipo::pluck('name', 'id')],
-                        'tipo_mastil_id' => ['TIPO MASTIL', \App\TipoMastil::pluck('name', 'id')],
+                        'tipo_mastil_id' => ['TIPO MASTIL', \App\TipoMastil::pluck('nbombre', 'id')],
                         'tipo_equipos_id' => ['TIPO DE EQUIPO', \App\TipoEquipo::pluck('display_name', 'id')],
                         'estado_id' => ['ESTADO', \App\Estado::pluck('display_name', 'id')],
                         'funcion_hidraulica_id' => ['FUNCION HIDRÁULICA', \App\FuncionHidraulica::pluck('display_name', 'id')],
