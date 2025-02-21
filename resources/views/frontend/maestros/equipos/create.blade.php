@@ -42,7 +42,7 @@
                 <div class="form-group boxed col-6">
                     <div class="input-wrapper">
                         <label class="label" for="cliente_id">TIPO MASTIL</label>
-                        {{ Form::select('sub_equipos_id',\App\TipoMastil::pluck('nombre','id')->prepend('Seleccione',''),null,array('class'=>'form-control')) }}
+                        {{ Form::select('tipo_mastil_id',\App\TipoMastil::pluck('nombre','id')->prepend('Seleccione',''),null,array('class'=>'form-control')) }}
                     </div>
                 </div>
                 
