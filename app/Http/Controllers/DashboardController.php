@@ -54,13 +54,15 @@ class DashboardController extends Controller
         });
 
 
-      /*if($formType=='serv_tec' and $status=='A')
-      dd($r->get());*/
 
         if($group_cliente)
         {
             $clientes= clone $r;
-            $clientes=$clientes->groupBy('equipos.cliente_id')->select('equipos.cliente_id')->get();
+
+        $groupby='equipos.cliente_id';
+        if($formType=='serv_tec' and $status=='PR')
+            $groupby='equipos.cliente_id1';
+            $clientes=$clientes->groupBy($groupby)->select($groupby)->get();
             return $clientes;
         }
 
