@@ -5,7 +5,7 @@
         <br/>
         <div class="container-fluid">
         <br>
-            {{Form::open(array("method" => "POST",'route' => array('MaestrosController@equipos_store'),"role" => "form",'class'=>'form-horizontal'))}}
+            {{Form::open(array("method" => "POST",'action' => 'MaestrosController@equipos_store',"role" => "form",'class'=>'form-horizontal'))}}
                 <div class="form-group boxed col-6">
                     <div class="input-wrapper">
                         <label class="label" for="numero_parte">NÚMERO DE PARTE</label>
