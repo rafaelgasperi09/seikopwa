@@ -60,9 +60,9 @@ class DashboardController extends Controller
             $clientes= clone $r;
 
         $groupby='equipos.cliente_id';
-        if($formType=='serv_tec' and $status=='PR' and $filterExtra=" equipo_status='I'"  and current_user()->id==1)
-            $groupby='equipos.cliente_id1';
-            $clientes=$clientes->groupBy($groupby)->select($groupby)->get();
+        /*if($formType=='serv_tec' and $status=='PR' and $filterExtra=" equipo_status='I'"  and current_user()->id==1)
+            $groupby='equipos.cliente_id';*/
+            $clientes=$clientes->groupBy('equipos.cliente_id')->select('equipos.cliente_id')->get();
             return $clientes;
         }
 
