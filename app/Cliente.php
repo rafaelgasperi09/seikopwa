@@ -26,7 +26,7 @@ class Cliente extends BaseModel
             $ruta=\Request::route()->getName();
             
             self::addGlobalScope('estado', function ($query) use($estado,$ruta){
-                if(!str_contains($ruta,'clientes.update') and !str_contains($ruta,'clientes.edit') )
+                if(str_contains($ruta,'maestros')  )
                     $query->where('contactos.estado',$estado);
             });
     
