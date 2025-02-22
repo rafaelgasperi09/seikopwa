@@ -160,6 +160,20 @@ $arr=array();
     return $arr;
 }
 
+function getStatusHtmlEquipos($status){
+    $color=array(
+        'A'=>'success',
+        'I'=>'danger'
+    );
+    $estado=array(
+        'A'=>'Activo',
+        'I'=>'Inactivo'
+    );
+
+    $html='<span class="badge badge-'.$color[$status].'">'.$estado[$status].'</span>';
+    return $html;
+}
+
 function getListUsersByRol($rol_name){
 
     $arr=array();
