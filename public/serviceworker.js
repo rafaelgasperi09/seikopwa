@@ -94,6 +94,11 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(fetch(event.request));
         return;
     }
+    if( event.request.url.includes('/logout')){
+        localStorage.removeItem('authUser');
+        sessionStorage.removeItem('authUser');
+    }
+
 
     event.respondWith(
         caches.match(event.request).then((response) => {
