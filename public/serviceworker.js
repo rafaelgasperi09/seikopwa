@@ -84,3 +84,10 @@ self.addEventListener('notificationclick', function(event) {
         event.waitUntil(clients.openWindow(url));
     }
 });
+
+self.addEventListener('fetch', (event) => {
+    if (event.request.url.includes('/login') || event.request.url.includes('/logout')) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
+});
