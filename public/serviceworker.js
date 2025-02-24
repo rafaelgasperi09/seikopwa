@@ -85,9 +85,19 @@ self.addEventListener('notificationclick', function(event) {
     }
 });
 
+
 self.addEventListener('fetch', (event) => {
-    if (event.request.url.includes('/login') || event.request.url.includes('/logout')) {
+    // Evitar cachear cualquier solicitud relacionada con autenticación
+    if (event.request.url.includes('/login') || 
+        event.request.url.includes('/logout') || 
+        event.request.url.includes('/user')) { 
         event.respondWith(fetch(event.request));
         return;
     }
+
+    event.respondWith(
+        caches.match(event.request).then((response) => {
+            return response || fetch(event.request);
+        })
+    );
 });
