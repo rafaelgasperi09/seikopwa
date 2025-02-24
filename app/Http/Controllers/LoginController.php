@@ -92,18 +92,26 @@ class LoginController extends Controller
         ]);
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
+        // Desloguear en Sentinel
+        Sentinel::logout(null, true); // true elimina la sesión persistente en cookies
+
+        // Limpiar la sesión de Laravel
         Session::flush();
-        Sentinel::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        // Borrar cookies manualmente si es necesario
+        Cookie::queue(Cookie::forget('cartalyst_sentinel'));
+
         return redirect('/')->withHeaders([
             'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
             'Pragma' => 'no-cache',
             'Expires' => 'Sat, 01 Jan 2000 00:00:00 GMT'
         ]);
     }
-
+    
     protected function authenticated(Request $request, $user)
     {
         if ( !$user->activated ) {
