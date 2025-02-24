@@ -97,7 +97,7 @@ class LoginController extends Controller
         Sentinel::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect(route('login'))->withHeaders([
+        return redirect('/')->withHeaders([
             'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
             'Pragma' => 'no-cache',
             'Expires' => 'Sat, 01 Jan 2000 00:00:00 GMT'
