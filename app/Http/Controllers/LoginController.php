@@ -104,6 +104,16 @@ class LoginController extends Controller
         ]);
     }
 
+    protected function authenticated(Request $request, $user)
+    {
+        if ( !$user->activated ) {
+            auth()->logout();
+
+            return back()->withErrors(['email' => 'Your account is not activated yet, please verify your Account.']);
+        }
+
+        return redirect()->intended($this->redirectPath());
+    }
 
 
 }
