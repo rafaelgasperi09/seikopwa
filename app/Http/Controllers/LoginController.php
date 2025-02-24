@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Sentinel;
 use Illuminate\Http\Request;
-
+use Cookie;
 class LoginController extends Controller
 {
     public function login(Request $request){
@@ -111,7 +111,7 @@ class LoginController extends Controller
             'Expires' => 'Sat, 01 Jan 2000 00:00:00 GMT'
         ]);
     }
-    
+
     protected function authenticated(Request $request, $user)
     {
         if ( !$user->activated ) {
