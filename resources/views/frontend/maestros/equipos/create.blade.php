@@ -62,7 +62,7 @@
                 
                 <div class="form-group boxed col-6">
                     <div class="input-wrapper">
-                        <label class="label" for="estado_id">ESTADO</label>
+                        <label class="label" for="estado_id">ESTATUS</label>
                         {{ Form::select('estado_id',\App\Estado::pluck('display_name','id')->prepend('Seleccione',''),null,array('class'=>'form-control','required')) }}
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                 <div class="form-group boxed col-6">
                     <div class="input-wrapper">
                         <label class="label" for="voltaje">FUNCION HIDRAULICA</label>
-                        {{ Form::select('funcion_hidraulica_id',\App\FuncionHidraulica::pluck('display_name','id')->prepend('Seleccione',''),null,array('class'=>'form-control','required')) }}
+                        {{ Form::select('funcion_hidraulica_id',\App\FuncionHidraulica::pluck('display_name','id')->prepend('Seleccione',''),null,array('class'=>'form-control')) }}
                     </div>
                 </div>
                 

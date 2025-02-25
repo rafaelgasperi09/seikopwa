@@ -77,7 +77,7 @@
                 <div class="form-group boxed col-6">
                     <div class="input-wrapper">
                         <label class="label" for="{{ $field }}">{{ strtoupper(str_replace('_', ' ', $field)) }}</label>
-                        {{ Form::select($field, $options, null, ['class' => 'form-control', 'required']) }}
+                        {{ Form::select($field, $options, null, ['class' => 'form-control']) }}
                     </div>
                 </div>
             @endforeach
