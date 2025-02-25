@@ -278,7 +278,7 @@ class EquiposController extends BaseController
             }
             break;
         }
-        */
+        
         $callback = function() use($datos,$file,$columns,$campos) {
 
             $file = fopen('php://output', 'w');
@@ -297,6 +297,7 @@ class EquiposController extends BaseController
         };
         return response()->stream($callback, 200, $headers);
         exit();
+        */
     }
 
     public function tipo($sub,$id){
