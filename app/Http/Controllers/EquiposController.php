@@ -255,8 +255,8 @@ class EquiposController extends BaseController
         $file='reportes.csv';
        
         $datos=$this->reportes_datos($request,true);
-      
-        $headers = array(
+        
+        /*$headers = array(
             "Content-Encoding"        => "UTF-8",
             "Content-type"        => "text/csv",
             "Content-Disposition" => "attachment; filename=$file",
@@ -268,7 +268,7 @@ class EquiposController extends BaseController
         $columns=array('IDREPORTE','FECHA REGISTRO','HORA', 'TIPO','EQUIPO','PRIORIDAD','REGISTRADO POR','CLIENTE','SEMANA','DIA','HOROMETRO','ESTATUS','TURNO');
                         
         $campos=array('id','fecha','hora','tipo','numero_parte','prioridad','user_name','nombre','semana','dia_semana','horometro','estatus','turno_chequeo_diario');
-        $i=0;
+        $i=0;*/
         return Excel::download(new ReportesExport($datos), 'Equipo.xlsx');
         /*
         foreach($datos as $value){
