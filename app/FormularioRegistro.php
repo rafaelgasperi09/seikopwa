@@ -215,7 +215,7 @@ class FormularioRegistro extends BaseModel
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x + 3, $y);
-        $clinete = $this->cliente ? $this->cliente->nombre : "";
+        $clinete = $this->cliente() ? $this->cliente()->nombre : "";
         $pdf->Cell(50, 6,  html_entity_decode($clinete), 0, 0, 'L');
         $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderSolid()));
 
