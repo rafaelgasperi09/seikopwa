@@ -517,7 +517,7 @@ class FormularioRegistro extends BaseModel
         $y = $pdf->GetY();
         $w = $pdf->getPageWidth() ;
         $pdf->SetXY($x, $y - 6);
-        $pdf->MultiCell(265, 30, $solicitud->descripcion, 1, 'L');
+        $pdf->MultiCell(265, 30, $observacion, 1, 'L');
         $pdf->Ln();
 
         $pdf->SetFont('helvetica', 'B', 14);
