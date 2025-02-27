@@ -277,9 +277,12 @@ class UserController extends Controller
     public function activar($id){
 
         $user = Sentinel::findUserById($id);
-        $activation = Activation::create($user);
-
-        if( $activation)
+        $activacion=Activation::exists($user);
+        if($activacion)
+            Activation::remove($user);
+        $activation_new = Activation::create($user);
+        Activation::complete($user,$activation_new->code);
+        if( $activation_new)
             session()->flash('message.success', 'Usuario activado con éxito. ');
         else
             session()->flash('message.error', 'Usuario no fue activado con éxito. ');
