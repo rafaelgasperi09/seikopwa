@@ -54,32 +54,33 @@
                 </a>
             </li>
             @endif
-            @if(\Sentinel::hasAccess('usuarios.delete') && !$dato->isOnGroup('programador') and $dato->completed==1)
-            <li>
-                <a href="#" class="item" data-toggle="modal" data-target="#deleteModal"
-                data-action="{{ route('usuarios.delete',$dato->id) }}" data-message="Estas seguro que deseas desactivar a este usuario ?">
-                    <div  class="icon-box bg-danger">
-                    <ion-icon name="close-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
-                    </div>
-                    <div class="in">
-                        <div>Desactivar</div>
-                    </div>
-                </a>
+            @if(\Sentinel::hasAccess('usuarios.delete') && !$dato->isOnGroup('programador'))
+                @if($dato->completed)
+                <li>
+                    <a href="#" class="item" data-toggle="modal" data-target="#deleteModal"
+                    data-action="{{ route('usuarios.delete',$dato->id) }}" data-message="Estas seguro que deseas desactivar a este usuario ?">
+                        <div  class="icon-box bg-danger">
+                        <ion-icon name="close-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
+                        </div>
+                        <div class="in">
+                            <div>Desactivar</div>
+                        </div>
+                    </a>
 
-            </li>
-            @endif
-            @if(\Sentinel::hasAccess('usuarios.delete') && !$dato->isOnGroup('programador') and $dato->completed=='')
-            <li>
-                <a href="{{ route( 'usuarios.activar',$dato->id) }}" class="item" >
-                    <div  class="icon-box bg-success">
-                        <ion-icon name="checkmark-circle-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
-                    </div>
-                    <div class="in">
-                        <div>Activar</div>
-                    </div>
-                </a>
+                </li>
+                @else
+                <li>
+                    <a href="{{ route( 'usuarios.activar',$dato->id) }}" class="item" >
+                        <div  class="icon-box bg-success">
+                            <ion-icon name="checkmark-circle-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
+                        </div>
+                        <div class="in">
+                            <div>Activar</div>
+                        </div>
+                    </a>
 
-            </li>
+                </li>
+                @endif
             @endif
         </ul>
         <!-- * sub menu -->
