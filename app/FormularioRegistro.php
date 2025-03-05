@@ -594,6 +594,8 @@ class FormularioRegistro extends BaseModel
                 AND fr.semana=$formularioRegistro->semana
                 AND fr.ano=$formularioRegistro->ano
                 AND fr.equipo_id=$this->equipo_id
+                AND fr.deleted_at is null
+                AND fd.deleted_at is null
                 GROUP BY fr.semana,fr.ano,fd.formulario_campo_id,fc.nombre,fc.tipo ";
        
         $data=\DB::select(DB::Raw($dataQuery));
