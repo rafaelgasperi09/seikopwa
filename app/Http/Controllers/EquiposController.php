@@ -528,6 +528,8 @@ class EquiposController extends BaseController
         if(!current_user()->can('see',$equipo)){
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
+        }elseif(current_user()->can('see',$equipo)){
+            return redirect( route('equipos.show_daily_check',array('id'=>$id)));
         }elseif(!current_user()->can('edit',$data)){
             request()->session()->flash('message.error','Este registro no esta disponible para ser modificado.');
             return redirect(route('equipos.detail',$equipo->id));
