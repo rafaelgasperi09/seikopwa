@@ -103,8 +103,8 @@
         {{ Form::hidden('formulario_id',$formulario->id,array('required')) }}
         {{ Form::hidden('formulario_registro_id',$data->id,array('required')) }}
         @include('frontend.partials.form_filled',array('formulario'=>$formulario,'datos'=>$datos))
-        <div class="modal-footer {{$data->firmas_completas()}} {{ current_user()->isSupervisor() }}">
-            @if($data->firmas_completas()>0 and current_user()->isSupervisor())
+        <div class="modal-footer {{$data->firmas_completas()}} {{ current_user()->isSupervisor('cliente') }}">
+            @if($data->firmas_completas()>0 and current_user()->isSupervisor('cliente'))
             @include('frontend.partials.btnSubmit')
             @endif
         </div>
