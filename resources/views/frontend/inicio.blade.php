@@ -71,7 +71,7 @@
                 
                 @include('frontend.dashboard_widgets_new.soporte_pend_iniciar_ajax')
                 
-                @if( current_user()->isSupervisor('cliente') or current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador') )
+                @if( current_user()->isSupervisor() or current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador') )
                 @include('frontend.dashboard_widgets_new.soporte_pend_tecnico_ajax')
                 @endif
               

@@ -169,10 +169,11 @@ class DashboardController extends Controller
             }
         }
           $cond1=''; 
-        if( current_user()->isSupervisor('cliente') or  
+        if( current_user()->isOnGroup('supervisorc') or  
+            current_user()->isOnGroup('supervisor-cliente') or  
             current_user()->isOnGroup('programador') ){
             //daily check pendientes de firma supervisor
-
+            if(current_user()->isOnGroup('supervisorc')){
              $lista=DB::select(DB::Raw("SELECT fd.id FROM formulario_data fd,formulario_campos fc,
                                     formulario_registro fr 
                                     WHERE fd.formulario_campo_id=fc.id 
@@ -191,7 +192,7 @@ class DashboardController extends Controller
               AND fr.deleted_at IS NULL
               AND fr.estatus='P'
               AND fd.valor=".current_user()->id.")";
-            
+            }
 
             $data['daily_check']=$this->getPendings($filtro,'daily_check','P',$cond1);
           
@@ -247,7 +248,7 @@ class DashboardController extends Controller
          $desde = \Carbon\Carbon::now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
          $filtroExtra="(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')";
        
-         if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador') or current_user()->isSupervisor('cliente')){
+         if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador') or current_user()->isSupervisor()){
             $data['serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,false,'');
             $data['g_serv_tec_10']=$this->getPendings($filtro,'serv_tec','C',$filtroExtra,false,'',true);
          }
