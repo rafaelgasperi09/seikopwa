@@ -258,7 +258,7 @@ class ApiController extends Controller
                     foreach($data['daily_check']->where('cliente_id',$gdc->cliente_id) as $dc){
                         if($dc->equipo()){
                         
-                         if(current_user()->isOnGroup('supervisorc') )
+                         if(current_user()->isSupervisor() )
                             $result4.='<a href="'.route('equipos.edit_daily_check',array('id'=>$dc->id)).'?show=rows&tab=1" ';
                         else $result4.='<a href="'.route('equipos.detail',array('id'=>$dc->equipo_id)) .'?show=rows&tab=1" '; 
                         
