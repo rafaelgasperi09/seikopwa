@@ -191,7 +191,7 @@ class DashboardController extends Controller
               AND fr.deleted_at IS NULL
               AND fr.estatus='P'
               AND fd.valor=".current_user()->id.")";
-            }
+            
 
             $data['daily_check']=$this->getPendings($filtro,'daily_check','P',$cond1);
           
