@@ -1,7 +1,7 @@
 <div class="card text-white bg-light">
     <div class="card-header">
         <span ><ion-icon  class="text-secondary" size="large" name="calendar-outline"></ion-icon> Daily Check<br/>
-        <span class="card-title" id="tot_equipos">{{$totdc}} </span>Pendientes de firma</span>
+        <span class="card-title" id="tot_equipos">{{$totdc}} </span> Pendientes de firma</span>
     </div>
     <div class="card-body  text-right">
     @if(count($data['daily_check']))
