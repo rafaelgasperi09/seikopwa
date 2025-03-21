@@ -294,8 +294,12 @@ class ApiController extends Controller
             if($totales){
                 foreach($data['g_serv_tec_pi_a'] as $k=>$gsta){
                     foreach($data['g_serv_tec_pi_a'] as $k=>$gsta){
+                        $cliente=$gsta->cliente();
+                        $nombre='';
+                        if($cliente)
+                            $nombre=$cliente->nombre;
                         $result5.='<div class="chip chip-danger chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
-                            <span class="chip-label ">'.$gsta->cliente()->nombre.' </span>
+                            <span class="chip-label ">'.$nombre.' </span>
                             <i class="chip-icon abrirsta"  id="sta'.$gsta->cliente_id.'" >
                                 <span class=" pull-right flechasta flechasta'.$gsta->cliente_id.'"title="Ver mas">';
                         if($k==0 )
