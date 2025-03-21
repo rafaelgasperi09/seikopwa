@@ -258,7 +258,7 @@ class ApiController extends Controller
                     foreach($data['daily_check']->where('cliente_id',$gdc->cliente_id) as $dc){
                         if($dc->equipo()){
                         
-                         if(current_user()->isOnGroup('supervisorc') )
+                         if(current_user()->isSupervisor('cliente') )
                             $result4.='<a href="'.route('equipos.edit_daily_check',array('id'=>$dc->id)).'?show=rows&tab=1" ';
                         else $result4.='<a href="'.route('equipos.detail',array('id'=>$dc->equipo_id)) .'?show=rows&tab=1" '; 
                         
@@ -294,8 +294,12 @@ class ApiController extends Controller
             if($totales){
                 foreach($data['g_serv_tec_pi_a'] as $k=>$gsta){
                     foreach($data['g_serv_tec_pi_a'] as $k=>$gsta){
+                        $cliente=$gsta->cliente();
+                        $nombre='';
+                        if($cliente)
+                            $nombre=$cliente->nombre;
                         $result5.='<div class="chip chip-danger chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
-                            <span class="chip-label ">'.$gsta->cliente()->nombre.' </span>
+                            <span class="chip-label ">'.$nombre.' </span>
                             <i class="chip-icon abrirsta"  id="sta'.$gsta->cliente_id.'" >
                                 <span class=" pull-right flechasta flechasta'.$gsta->cliente_id.'"title="Ver mas">';
                         if($k==0 )
@@ -661,7 +665,7 @@ class ApiController extends Controller
             $desde = \Carbon\Carbon::now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
             $filtroExtra="(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')";
 
-            if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador') or current_user()->isSupervisor()){
+            if(current_user()->isOnGroup('administrador') or current_user()->isOnGroup('programador') or current_user()->isSupervisor('cliente')){
                 $data['serv_tec_10']=$dashboard->getPendings($filtro,'serv_tec','C',$filtroExtra,false,'');
                 $data['g_serv_tec_10']=$dashboard->getPendings($filtro,'serv_tec','C',$filtroExtra,false,'',true);
             }
