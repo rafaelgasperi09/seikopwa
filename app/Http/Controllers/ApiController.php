@@ -293,7 +293,7 @@ class ApiController extends Controller
         $totales=count($data['serv_tec_pi_a']);
             if($totales){
                 foreach($data['g_serv_tec_pi_a'] as $k=>$gsta){
-                    foreach($data['g_serv_tec_pi_a'] as $k=>$gsta){
+
                         $cliente=$gsta->cliente();
                         $nombre='';
                         if($cliente)
@@ -310,20 +310,20 @@ class ApiController extends Controller
 
                         foreach($data['serv_tec_pi_a']->where('cliente_id',$gsta->cliente_id) as $sta){
                         
-                        if($k<>0 and !$abierta0)
-                            $display='display:none';
-                        $result5.='<a href="'.route('equipos.detail',array('id'=>$sta->equipo()->id)) .'?show=rows&tab=3"
-                        class="chip chip-danger chip-media ml-05 mb-05 stalist sta'.$gsta->cliente_id.'" style="width:98%;'.$display.'">
-                            <i class="chip-icon">
-                                Ir
-                            </i>
-                            <span class="chip-label">'.$sta->equipo()->numero_parte.' </span>
-                            <span class="fecha pull-right" title="Fecha de asignacion de tecnico">
-                                    '.transletaDate($sta->estatusHistory()->orderBy('created_at','desc')->first()->created_at,true,'').'
-                            </span>
-                        </a>';
+                            if($k<>0 and !$abierta0)
+                                $display='display:none';
+                            $result5.='<a href="'.route('equipos.detail',array('id'=>$sta->equipo()->id)) .'?show=rows&tab=3"
+                            class="chip chip-danger chip-media ml-05 mb-05 stalist sta'.$gsta->cliente_id.'" style="width:98%;'.$display.'">
+                                <i class="chip-icon">
+                                    Ir
+                                </i>
+                                <span class="chip-label">'.$sta->equipo()->numero_parte.' </span>
+                                <span class="fecha pull-right" title="Fecha de asignacion de tecnico">
+                                        '.transletaDate($sta->estatusHistory()->orderBy('created_at','desc')->first()->created_at,true,'').'
+                                </span>
+                            </a>';
                         }
-                    }
+                    
                 }
             }
 
