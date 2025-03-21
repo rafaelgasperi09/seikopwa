@@ -163,11 +163,13 @@ $arr=array();
 function getStatusHtmlEquipos($status){
     $color=array(
         'A'=>'success',
-        'I'=>'danger'
+        'I'=>'danger',
+        ''=>''
     );
     $estado=array(
         'A'=>'Activo',
-        'I'=>'Inactivo'
+        'I'=>'Inactivo',
+        ''=>'N/A'
     );
 
     $html='<span class="badge badge-'.$color[$status].'">'.$estado[$status].'</span>';

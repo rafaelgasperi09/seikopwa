@@ -59,7 +59,8 @@ class Equipo extends BaseModel
 
     public function cliente(){
         return $this->belongsTo(Cliente::class,'cliente_id')->withDefault([
-            'nombre'=>'N/A'
+            'nombre'=>'N/A',
+            'estado'=>''
         ]);
     }
 
