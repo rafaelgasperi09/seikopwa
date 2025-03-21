@@ -527,12 +527,11 @@ class EquiposController extends BaseController
         $equipo = Equipo::findOrFail($data->equipo_id);
         if(!current_user()->can('see',$equipo)){
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
-            return redirect(route('equipos.index'));
-        }elseif(current_user()->can('see',$equipo) and !current_user()->can('edit',$data)){
-            return redirect( route('equipos.show_daily_check',array('id'=>$id)));
+            return redirect(route('equipos.detail',$equipo->id));
         }elseif(!current_user()->can('edit',$data)){
             request()->session()->flash('message.error','Este registro no esta disponible para ser modificado.');
-            return redirect(route('equipos.detail',$equipo->id));
+                return redirect( route('equipos.show_daily_check',array('id'=>$id)));
+            
         }
 
         $formulario = Formulario::findOrFail($data->formulario_id);
