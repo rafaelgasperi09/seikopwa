@@ -28,7 +28,7 @@
     <tr>
        <td>{{$d->id}}</td>
        <td>{{$d->creador->first_name.' '.$d->creador->last_name}}</td>
-        <td>{{$d->cliente()->nombre}}</td>
+        <td>@if($d->cliente()) {{$d->cliente()->nombre}} @endif</td>
        <td>{{ \Carbon\Carbon::parse($d->created_at)->format('Y-m-d')}}</td>
        <td>
         {!!getStatusHtml($d->estatus)!!}
