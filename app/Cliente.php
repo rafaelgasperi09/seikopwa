@@ -4,6 +4,7 @@ namespace App;
 use App\Zona;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Cliente extends BaseModel
 {
@@ -11,6 +12,14 @@ class Cliente extends BaseModel
     protected $table = 'contactos';
     protected $guarded = ['id'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('ordenPorDefecto', function (Builder $builder) {
+            $builder->orderBy('nombre', 'asc'); // Cambia 'nombre_columna' y 'asc' según necesites
+        });
+    }
 
     protected static function booted()
     {

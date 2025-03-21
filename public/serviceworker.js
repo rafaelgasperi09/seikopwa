@@ -84,3 +84,25 @@ self.addEventListener('notificationclick', function(event) {
         event.waitUntil(clients.openWindow(url));
     }
 });
+
+
+self.addEventListener('fetch', (event) => {
+    // Evitar cachear cualquier solicitud relacionada con autenticación
+    if (event.request.url.includes('/login') || 
+        event.request.url.includes('/logout') || 
+        event.request.url.includes('/user')) { 
+        event.respondWith(fetch(event.request));
+        return;
+    }
+    if( event.request.url.includes('/logout')){
+        localStorage.removeItem('authUser');
+        sessionStorage.removeItem('authUser');
+    }
+
+
+    event.respondWith(
+        caches.match(event.request).then((response) => {
+            return response || fetch(event.request);
+        })
+    );
+});

@@ -35,7 +35,7 @@ class UserController extends Controller
         }
         $where.=')';
         
-        $data=User::join('activations', 'users.id','=','activations.user_id')->where('activations.completed',1)
+        $data=User::leftjoin('activations', 'users.id','=','activations.user_id')->where('activations.completed',1)
                     
                     ->where('first_name','like',"%".$request->q."%")
                     ->orWhere('last_name','like',"%".$request->q."%")
@@ -47,7 +47,7 @@ class UserController extends Controller
                     ->when($where<>'()',function($q) use ($where) {
                         $q->whereRaw($where);
                     })
-                    ->selectRaw('users.*')
+                    ->selectRaw('users.*,activations.completed')
                     ->paginate(10);
 
 
@@ -270,6 +270,22 @@ class UserController extends Controller
 
         $user = Sentinel::findUserById($id);
         Activation::remove($user);
+        return redirect(route('usuarios.index'));
+    }
+
+    
+    public function activar($id){
+
+        $user = Sentinel::findUserById($id);
+        $activacion=Activation::exists($user);
+        if($activacion)
+            Activation::remove($user);
+        $activation_new = Activation::create($user);
+        Activation::complete($user,$activation_new->code);
+        if( $activation_new)
+            session()->flash('message.success', 'Usuario activado con éxito. ');
+        else
+            session()->flash('message.error', 'Usuario no fue activado con éxito. ');
         return redirect(route('usuarios.index'));
     }
 

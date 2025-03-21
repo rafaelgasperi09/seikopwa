@@ -215,7 +215,7 @@ class FormularioRegistro extends BaseModel
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x + 3, $y);
-        $clinete = $solicitud->cliente ? $solicitud->cliente->nombre : "";
+        $clinete = $this->cliente() ? $this->cliente()->nombre : "";
         $pdf->Cell(50, 6,  html_entity_decode($clinete), 0, 0, 'L');
         $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderSolid()));
 
@@ -517,7 +517,7 @@ class FormularioRegistro extends BaseModel
         $y = $pdf->GetY();
         $w = $pdf->getPageWidth() ;
         $pdf->SetXY($x, $y - 6);
-        $pdf->MultiCell(265, 30, $solicitud->descripcion, 1, 'L');
+        $pdf->MultiCell(265, 30, $observacion, 1, 'L');
         $pdf->Ln();
 
         $pdf->SetFont('helvetica', 'B', 14);
@@ -594,6 +594,8 @@ class FormularioRegistro extends BaseModel
                 AND fr.semana=$formularioRegistro->semana
                 AND fr.ano=$formularioRegistro->ano
                 AND fr.equipo_id=$this->equipo_id
+                AND fr.deleted_at is null
+                AND fd.deleted_at is null
                 GROUP BY fr.semana,fr.ano,fd.formulario_campo_id,fc.nombre,fc.tipo ";
        
         $data=\DB::select(DB::Raw($dataQuery));

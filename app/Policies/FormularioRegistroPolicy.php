@@ -20,7 +20,7 @@ class FormularioRegistroPolicy
     public function edit(User $user,FormularioRegistro $formularoRegistro){
 
         if($formularoRegistro->estatus <> 'C' 
-            && ($user->isOnGroup('supervisorc') or $user->isSupervisor()))
+            && ( $user->isSupervisor()))
             return true;
 
         return false;

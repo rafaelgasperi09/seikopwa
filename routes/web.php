@@ -159,6 +159,7 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
             Route::post('/agregar_status', array('as' => 'equipos.agregar_status', 'uses' => 'EquiposController@agregar_status'));
            
             Route::get('/{id}/delete', array('as' => 'equipos.delete_tecnical_support', 'uses' => 'EquiposController@deleteRegistroForm'));          
+       
 
         });
 
@@ -240,6 +241,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::put('/{id}/photo', array('as' => 'usuarios.update_photo', 'uses' => 'UserController@updatePhoto'));
 
         Route::delete('/{id}', array('as' => 'usuarios.delete', 'uses' => 'UserController@delete'))->middleware('hasAccess');
+
+        Route::get('/{id}/activar', array('as' => 'usuarios.activar', 'uses' => 'UserController@activar'));
 
         Route::get('/{id}/notifica', array('as' => 'usuarios.notifica', 'uses' => 'UserController@notifica'));
 

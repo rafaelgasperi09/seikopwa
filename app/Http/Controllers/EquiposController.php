@@ -255,8 +255,8 @@ class EquiposController extends BaseController
         $file='reportes.csv';
        
         $datos=$this->reportes_datos($request,true);
-      
-        $headers = array(
+        
+        /*$headers = array(
             "Content-Encoding"        => "UTF-8",
             "Content-type"        => "text/csv",
             "Content-Disposition" => "attachment; filename=$file",
@@ -268,7 +268,7 @@ class EquiposController extends BaseController
         $columns=array('IDREPORTE','FECHA REGISTRO','HORA', 'TIPO','EQUIPO','PRIORIDAD','REGISTRADO POR','CLIENTE','SEMANA','DIA','HOROMETRO','ESTATUS','TURNO');
                         
         $campos=array('id','fecha','hora','tipo','numero_parte','prioridad','user_name','nombre','semana','dia_semana','horometro','estatus','turno_chequeo_diario');
-        $i=0;
+        $i=0;*/
         return Excel::download(new ReportesExport($datos), 'Equipo.xlsx');
         /*
         foreach($datos as $value){
@@ -278,7 +278,7 @@ class EquiposController extends BaseController
             }
             break;
         }
-        */
+        
         $callback = function() use($datos,$file,$columns,$campos) {
 
             $file = fopen('php://output', 'w');
@@ -297,6 +297,7 @@ class EquiposController extends BaseController
         };
         return response()->stream($callback, 200, $headers);
         exit();
+        */
     }
 
     public function tipo($sub,$id){
@@ -527,6 +528,8 @@ class EquiposController extends BaseController
         if(!current_user()->can('see',$equipo)){
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
             return redirect(route('equipos.index'));
+        }elseif(current_user()->can('see',$equipo)){
+            return redirect( route('equipos.show_daily_check',array('id'=>$id)));
         }elseif(!current_user()->can('edit',$data)){
             request()->session()->flash('message.error','Este registro no esta disponible para ser modificado.');
             return redirect(route('equipos.detail',$equipo->id));
@@ -622,7 +625,7 @@ class EquiposController extends BaseController
                 $notis = User::whereIn('id',[$request->supervisor_id])->get();
              }
             foreach ($notis as $u){
-                if($u->isOnGroup('supervisorc') or $u->isOnGroup('supervisor-cliente') or  $u->isOnGroup('programador')  ){
+                if($u->isSupervisor() or  $u->isOnGroup('programador')  ){
                     notifica($u,(new NewReport($model,$u,$notis))->delay($when));
                     if(env_local()){
                         break;
