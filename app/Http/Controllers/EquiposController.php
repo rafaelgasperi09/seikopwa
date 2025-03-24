@@ -583,15 +583,16 @@ class EquiposController extends BaseController
         $equipo_id = $request->equipo_id;
         $formulario_id = $request->formulario_id;
         $formulario = Formulario::find($formulario_id);
-        $requeridos=['supervisor_id'=>'required'];
-      
-        if($formulario){
+        $requeridos=['supervisor_id'=>'required',
+                     'operador'=>'required'];
+
+        /*if($formulario){
             foreach($formulario->campos as $c){
                 if($c->requerido and !$c->cambio_estatus){
                     $requeridos[$c->nombre]='required';
                 }
             }       
-        }
+        }*/
    
         $this->validate($request, $requeridos);
         try{
