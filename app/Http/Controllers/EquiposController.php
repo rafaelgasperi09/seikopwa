@@ -587,7 +587,7 @@ class EquiposController extends BaseController
       
         if($formulario){
             foreach($formulario->campos as $c){
-                if($c->requerido){
+                if($c->requerido and !$c->cambio_estatus){
                     $requeridos[$c->nombre]='required';
                 }
             }       
