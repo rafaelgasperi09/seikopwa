@@ -592,7 +592,7 @@ class EquiposController extends BaseController
                 }
             }       
         }
-        dd($requeridos);
+   
         $this->validate($request, $requeridos);
         try{
    
