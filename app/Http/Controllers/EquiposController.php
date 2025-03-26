@@ -580,15 +580,23 @@ class EquiposController extends BaseController
 
     public function storeDailyCheck(Request $request){
 
+        $equipo_id = $request->equipo_id;
+        $formulario_id = $request->formulario_id;
+        $formulario = Formulario::find($formulario_id);
+        $requeridos=['supervisor_id'=>'required',
+                     'operador'=>'required'];
 
-        $this->validate($request, [
-            'supervisor_id'          => 'required'
-        ]);
-
+        /*if($formulario){
+            foreach($formulario->campos as $c){
+                if($c->requerido and !$c->cambio_estatus){
+                    $requeridos[$c->nombre]='required';
+                }
+            }       
+        }*/
+   
+        $this->validate($request, $requeridos);
         try{
-            $equipo_id = $request->equipo_id;
-            $formulario_id = $request->formulario_id;
-            $formulario = Formulario::find($formulario_id);
+   
             $equipo = Equipo::find($equipo_id);
             $model = new FormularioRegistro();
             DB::transaction(function() use($model,$request,$formulario,$equipo){
@@ -624,7 +632,7 @@ class EquiposController extends BaseController
                 $notis = User::whereIn('id',[$request->supervisor_id])->get();
              }
             foreach ($notis as $u){
-                if($u->isSupervisor() or  $u->isOnGroup('programador')  ){
+                if($u->isSupervisor('cliente') or  $u->isOnGroup('programador')  ){
                     notifica($u,(new NewReport($model,$u,$notis))->delay($when));
                     if(env_local()){
                         break;
