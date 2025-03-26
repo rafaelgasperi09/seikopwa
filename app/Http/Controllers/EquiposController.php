@@ -632,7 +632,7 @@ class EquiposController extends BaseController
                 $notis = User::whereIn('id',[$request->supervisor_id])->get();
              }
             foreach ($notis as $u){
-                if($u->isSupervisor() or  $u->isOnGroup('programador')  ){
+                if($u->isSupervisor('cliente') or  $u->isOnGroup('programador')  ){
                     notifica($u,(new NewReport($model,$u,$notis))->delay($when));
                     if(env_local()){
                         break;
