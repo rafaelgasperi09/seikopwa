@@ -181,7 +181,7 @@ class ApiController extends Controller
                     foreach($data['mant_prev'] as $k=>$mp){
                         $cliente=Cliente::find($mp->cliente_id);
                         if($cliente){
-                            if(!isset($clientes_list[$mp->cliente_id]))
+                            if(!isset($clientes_list[$mp->cliente_id])){
                                 $result3.='<div class="chip chip-warning chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
                                 <span class="chip-label">
                                 '.$cliente->nombre.' 
