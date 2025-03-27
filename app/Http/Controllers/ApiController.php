@@ -194,7 +194,7 @@ class ApiController extends Controller
     
                                         $result3.='</i>
                                     </div>';
-                            $result3.='<a href="'.route('equipos.detail',array('id'=>$mp->equipo_id)) .'?show=rows&tab=2"  class="chip chip-warning chip-media ml-05 mb-05 gmplist gmp'.$gmp->cliente_id.'" style="width:98%;';
+                            $result3.='<a href="'.route('equipos.detail',array('id'=>$mp->equipo_id)) .'?show=rows&tab=2"  class="chip chip-warning chip-media ml-05 mb-05 gmplist gmp'.$mp->cliente_id.'" style="width:98%;';
                             
                             if($k<>0 and !$abierta0)  
                                     $display='display:none;';
