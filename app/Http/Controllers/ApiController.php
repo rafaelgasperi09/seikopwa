@@ -174,36 +174,39 @@ class ApiController extends Controller
             //mantenimientos preventivos pendientes de firma supervisor
             $data['mant_prev']=$dashboard->getPendings($filtro,'mant_prev','P','');
             $data['g_mant_prev']=$dashboard->getPendings($filtro,'mant_prev','P','',true,'',true);
-            dd( $data['g_mant_prev'],$data['mant_prev']);
             $totalpf=count($data['mant_prev']);
             if($totalpf){
-                foreach($data['g_mant_prev'] as $k=>$gmp ){
-                    $result3.='<div class="chip chip-warning chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
-                                <span class="chip-label">
-                                '.$gmp->cliente()->nombre.' 
-                                </span>
-                                <i class="chip-icon abrir"  id="gmp'.$gmp->cliente_id.'" >
-                                <span class=" pull-right flechagmp flechagmp'.$gmp->cliente_id.'"title="Ver mas">';
-                    if($k==0)
-                     $result3.='<ion-icon name="chevron-down-outline"></ion-icon></span>';
-                    else
-                     $result3.='<ion-icon name="chevron-up-outline"></ion-icon></span>';
-
-                                 $result3.='</i>
-                            </div>';
-                    foreach($data['mant_prev']->where('cliente_id',$gmp->cliente_id) as $mp){
-                     $result3.='<a href="'.route('equipos.detail',array('id'=>$mp->equipo_id)) .'?show=rows&tab=2"  class="chip chip-warning chip-media ml-05 mb-05 gmplist gmp'.$gmp->cliente_id.'" style="width:98%;';
-                     
-                     if($k<>0 and !$abierta0)  
-                            $display='display:none;';
-                        $result3.=$display.'"><i class="chip-icon">
-                            Ir
-                        </i>
-                        <span class="chip-label">'.$mp->equipo()->numero_parte.' </span>
-                        <span class="fecha pull-right" title="Fecha de creacion">'.transletaDate($mp->created_at,true,'').'</span>
-                    </a>';
+                //foreach($data['g_mant_prev'] as $k=>$gmp ){
+                   
+                    foreach($data['mant_prev'] as $k=>$mp){
+                        $cliente=Cliente::find($mp->cliente_id);
+                        if($cliente){
+                            $result3.='<div class="chip chip-warning chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
+                            <span class="chip-label">
+                            '.$cliente->nombre.' 
+                            </span>
+                            <i class="chip-icon abrir"  id="gmp'.$mp->cliente_id.'" >
+                            <span class=" pull-right flechagmp flechagmp'.$mp->cliente_id.'"title="Ver mas">';
+                            if($k==0)
+                            $result3.='<ion-icon name="chevron-down-outline"></ion-icon></span>';
+                            else
+                            $result3.='<ion-icon name="chevron-up-outline"></ion-icon></span>';
+    
+                                        $result3.='</i>
+                                    </div>';
+                            $result3.='<a href="'.route('equipos.detail',array('id'=>$mp->equipo_id)) .'?show=rows&tab=2"  class="chip chip-warning chip-media ml-05 mb-05 gmplist gmp'.$gmp->cliente_id.'" style="width:98%;';
+                            
+                            if($k<>0 and !$abierta0)  
+                                    $display='display:none;';
+                                $result3.=$display.'"><i class="chip-icon">
+                                    Ir
+                                </i>
+                                <span class="chip-label">'.$mp->equipo()->numero_parte.' </span>
+                                <span class="fecha pull-right" title="Fecha de creacion">'.transletaDate($mp->created_at,true,'').'</span>
+                            </a>';
+                        }
                     }
-                }
+                //}
                     
                 
             }
