@@ -174,6 +174,7 @@ class ApiController extends Controller
             //mantenimientos preventivos pendientes de firma supervisor
             $data['mant_prev']=$dashboard->getPendings($filtro,'mant_prev','P','');
             $data['g_mant_prev']=$dashboard->getPendings($filtro,'mant_prev','P','',true,'',true);
+            dd( $data['g_mant_prev'],$data['mant_prev']);
             $totalpf=count($data['mant_prev']);
             if($totalpf){
                 foreach($data['g_mant_prev'] as $k=>$gmp ){
