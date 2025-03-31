@@ -191,16 +191,20 @@ class ApiController extends Controller
                                  $result3.='</i>
                             </div>';
                     foreach($data['mant_prev']->where('cliente_id',$gmp->cliente_id) as $mp){
-                     $result3.='<a href="'.route('equipos.detail',array('id'=>$mp->equipo_id)) .'?show=rows&tab=2"  class="chip chip-warning chip-media ml-05 mb-05 gmplist gmp'.$gmp->cliente_id.'" style="width:98%;';
+                     if($mp->equipo()){
+                        $result3.='<a href="'.route('equipos.detail',array('id'=>$mp->equipo_id)) .'?show=rows&tab=2"  class="chip chip-warning chip-media ml-05 mb-05 gmplist gmp'.$gmp->cliente_id.'" style="width:98%;';
                      
-                     if($k<>0 and !$abierta0)  
-                            $display='display:none;';
-                        $result3.=$display.'"><i class="chip-icon">
-                            Ir
-                        </i>
-                        <span class="chip-label">'.$mp->equipo()->numero_parte.' </span>
-                        <span class="fecha pull-right" title="Fecha de creacion">'.transletaDate($mp->created_at,true,'').'</span>
-                    </a>';
+                        if($k<>0 and !$abierta0)  
+                               $display='display:none;';
+                           $result3.=$display.'"><i class="chip-icon">
+                               Ir
+                           </i>
+                           <span class="chip-label">'.$mp->equipo()->numero_parte.' </span>
+                           <span class="fecha pull-right" title="Fecha de creacion">'.transletaDate($mp->created_at,true,'').'</span>
+                       </a>';
+                     }else{
+                       dd($mp);
+                     }
                     }
                 }
                     
