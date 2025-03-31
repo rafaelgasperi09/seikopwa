@@ -26,7 +26,7 @@ class Equipo extends BaseModel
             $ruta=\Request::route()->getName();
             
             self::addGlobalScope('estado', function ($query) use($estado,$ruta){
-                 if(!str_contains($ruta,'maestros.equipos.update') and !str_contains($ruta,'maestros.equipos.edit') )
+                 if(!str_contains($ruta,'maestros.equipos.update') and !str_contains($ruta,'maestros.equipos.edit')  and !str_contains($ruta,'inicio')  )
                     $query->where('equipos.estado',$estado);
             });
 
