@@ -164,16 +164,24 @@ class FormularioRegistro extends BaseModel
         }
     }
 
-    public function savePdf($solicitud,$uploadFile=true)
+    public function savePdf($formularioRegistro,$uploadFile=true)
     {
         //$formularioRegistro = FormularioRegistro::find($this->id);
         $equipo = Equipo::find($this->equipo_id);
         $formulario = Formulario::find($this->formulario_id);
         $consecutivo = $horometro = $observacion ='';
-        if($solicitud){
-            $consecutivo = $solicitud->consecutivo_exportable;
-            $horometro = $solicitud->horometro;
-            $observacion = $solicitud->descripcion;
+        if($formularioRegistro){
+            //$consecutivo = $solicitud->consecutivo_exportable;
+            $horometroCampo = $this->formulario()->first()->campos()->where('nombre','horometro')->first();
+            $horoData = $this->data()->whereFormularioCampoId($horometroCampo->id)->first();
+            if($horoData){
+                $horometro = $horoData->valor;
+            }
+            $obsCampo = $this->formulario()->first()->campos()->where('nombre','observacion')->first();
+            $obsData = $this->data()->whereFormularioCampoId($obsCampo->id)->first();
+            if($obsData){
+                $observacion = $obsData->valor;
+            }
         }
           
         

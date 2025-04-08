@@ -867,7 +867,7 @@ class EquiposController extends BaseController
             request()->session()->flash('message.error','Este reporte debe estar cerrado para poder imprimirse, ya que debe generar una solicitud');
             return redirect()->back();
         }
-        $pdf = $formularioRegistro->savePdf($formularioRegistro->solicitud(),false);
+        $pdf = $formularioRegistro->savePdf($formularioRegistro,false);
         return $pdf->Output('mantenimiento_preventivo.pdf', 'I');
     }
     /******************* FORM DE SOPORTE TECNICO **************************/
