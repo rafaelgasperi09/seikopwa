@@ -175,6 +175,7 @@ class ApiController extends Controller
             $data['mant_prev']=$dashboard->getPendings($filtro,'mant_prev','P','');
             $data['g_mant_prev']=$dashboard->getPendings($filtro,'mant_prev','P','',true,'',true);
             $totalpf=count($data['mant_prev']);
+            $totalmppf=0;
             if($totalpf){
                 foreach($data['g_mant_prev'] as $k=>$gmp ){
                     $result3.='<div class="chip chip-warning chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
@@ -192,6 +193,7 @@ class ApiController extends Controller
                             </div>';
                     foreach($data['mant_prev']->where('cliente_id',$gmp->cliente_id) as $mp){
                      if($mp->equipo()){
+                        $totalmppf++;
                         $result3.='<a href="'.route('equipos.detail',array('id'=>$mp->equipo_id)) .'?show=rows&tab=2"  class="chip chip-warning chip-media ml-05 mb-05 gmplist gmp'.$gmp->cliente_id.'" style="width:98%;';
                      
                         if($k<>0 and !$abierta0)  
@@ -211,7 +213,7 @@ class ApiController extends Controller
                 
             }
             $result3.="<script>
-            $('#tot_equipos_pf').html($totalpf);
+            $('#tot_equipos_pf').html($totalmppf);
 
            </script>";
 
