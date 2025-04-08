@@ -171,7 +171,8 @@ class FormularioRegistro extends BaseModel
         $formulario = Formulario::find($this->formulario_id);
         $consecutivo = $horometro = $observacion ='';
         if($formularioRegistro){
-            //$consecutivo = $solicitud->consecutivo_exportable;
+            
+            $consecutivo = $formularioRegistro->id;
             $horometroCampo = $this->formulario()->first()->campos()->where('nombre','horometro')->first();
             $horoData = $this->data()->whereFormularioCampoId($horometroCampo->id)->first();
             if($horoData){
