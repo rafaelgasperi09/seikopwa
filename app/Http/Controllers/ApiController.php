@@ -212,6 +212,9 @@ class ApiController extends Controller
                     
                 
             }
+
+            if($totalmppf==0)
+                $result3='';
             $result3.="<script>
             $('#tot_equipos_pf').html($totalmppf);
 
