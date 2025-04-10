@@ -777,7 +777,7 @@ class DashboardController extends Controller
         $filtro
         AND DATE_FORMAT(fr.created_at,'%Y%m%d') between '$fdesde'  and '$fhasta'
         GROUP BY DATE_FORMAT(fr.created_at,'%d-%b')";
-        dd($query10);
+        
         $res10=DB::select(DB::Raw($query10));
        
         $res10=collect($res10)->pluck('total','fecha')->toArray();
