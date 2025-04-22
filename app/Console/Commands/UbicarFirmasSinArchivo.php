@@ -50,8 +50,8 @@ class UbicarFirmasSinArchivo extends Command
         $k=0;
         foreach($data as $d){
             if(file_exists( storage_path('app/public/firmas/'.$d->valor))){
-                $data->file_path=$d->valor;
-                $data->save();
+                $d->file_path=$d->valor;
+                $d->save();
             }else{
                 $this->info("------------------NO SE ENCONTRO PARA EL REPORTE ".$d->formulario_registro_id."-------------------");
             }
