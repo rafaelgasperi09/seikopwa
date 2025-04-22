@@ -53,10 +53,11 @@ class UbicarFirmasSinArchivo extends Command
                 $d->file_path=$d->valor;
                 $d->save();
             }else{
-                if(file_exists( storage_path('app/public/firmasold/'.$d->valor))){
-                    $this->info("------------------SE ENCONTRO EN FIRMAS OLD ".$d->formulario_registro_id."-------------------");
-                    break;
-                }
+                $filename=$d->valor;
+                $filename=explode('_',$filename);
+                $filename[count($filename)-1]='';
+                $filename=implode('_',$filename);
+                dd($filename);
                 $this->info("------------------NO SE ENCONTRO PARA EL REPORTE ".$d->formulario_registro_id."-------------------");
             }
             
