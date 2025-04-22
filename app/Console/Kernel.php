@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\notificarChequeoDiario::class,
         \App\Console\Commands\notificarBateriasSinHidratar::class,
         \App\Console\Commands\ImportarEquipos::class,
+        \App\Console\Commands\UbicarFirmasSinArchivo::class,
     ];
 
     /**
