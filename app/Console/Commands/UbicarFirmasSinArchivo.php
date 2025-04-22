@@ -57,8 +57,9 @@ class UbicarFirmasSinArchivo extends Command
             }
             
             $k++;
-            if($k==1000)
-                break;
+            if($k%100==1)
+                  $this->info("------------------ANALIZANDO REGISTRO $k y REPORTE ".$d->formulario_registro_id."-------------------");
+            
 
         }
     }
