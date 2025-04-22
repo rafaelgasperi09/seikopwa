@@ -46,7 +46,7 @@ class UbicarFirmasSinArchivo extends Command
     public function handle()
     {
        // $dataQuery="SELECT * FROM `formulario_data` WHERE tipo='firma' AND LENGTH(valor)>3 AND file_path IS NULL";
-        $data=FormularioData::where('tipo','firma')->whereNull('file_path')->where('created_at'>='2025-01-01')->whereRaw("LENGTH(valor)>3")->get();
+        $data=FormularioData::where('tipo','firma')->whereNull('file_path')->whereRaw("(LENGTH(valor)>3 and created_at>=cast('20250101' as date))")->get();
         $k=0;$r=0;
         foreach($data as $d){
             if(file_exists( storage_path('app/public/firmas/'.$d->valor))){
