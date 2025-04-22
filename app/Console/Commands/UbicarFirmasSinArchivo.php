@@ -63,7 +63,7 @@ class UbicarFirmasSinArchivo extends Command
                     copy( storage_path('app/public/firmas/'.$file->valor), storage_path('app/public/firmas/'.$d->valor));
                 }
                 
-               // $this->info("------------------NO SE ENCONTRO PARA EL REPORTE ".$d->formulario_registro_id."-------------------");
+                $this->info("------------------NO SE ENCONTRO PARA EL REPORTE ".$d->formulario_registro_id."-------------------");
                // dd($d->formulario_registro_id);
             }
             
