@@ -60,7 +60,10 @@ class UbicarFirmasSinArchivo extends Command
                 $file=FormularioData::where('tipo','firma')->whereNotNull('file_path')->whereRaw("LENGTH(valor)>3 and valor like '$filename%'")->inRandomOrder()->first();
                 if($file){
                     $r++;
-                    copy( storage_path('app/public/firmas/'.$file->valor), storage_path('app/public/firmas/'.$d->valor));
+                    if(copy( storage_path('app/public/firmas/'.$file->valor), storage_path('app/public/firmas/'.$d->valor))){
+                        $d->file_path=$d->valor;
+                        $d->save();
+                    }
                 }
                 
                 $this->info("------------------NO SE ENCONTRO PARA EL REPORTE ".$d->formulario_registro_id."-------------------");
