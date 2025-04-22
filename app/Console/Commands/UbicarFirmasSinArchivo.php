@@ -47,7 +47,7 @@ class UbicarFirmasSinArchivo extends Command
     {
        // $dataQuery="SELECT * FROM `formulario_data` WHERE tipo='firma' AND LENGTH(valor)>3 AND file_path IS NULL";
         $data=FormularioData::where('tipo','firma')->whereNull('file_path')->whereRaw("LENGTH(valor)>3")->get();
-        $k=0;
+        $k=0;$r=0;
         foreach($data as $d){
             if(file_exists( storage_path('app/public/firmas/'.$d->valor))){
                 $d->file_path=$d->valor;
@@ -58,16 +58,21 @@ class UbicarFirmasSinArchivo extends Command
                 $filename[count($filename)-1]='';
                 $filename=implode('_',$filename);
                 $file=FormularioData::where('tipo','firma')->whereNotNull('file_path')->whereRaw("LENGTH(valor)>3 and valor like '$filename%'")->inRandomOrder()->first();
-                copy( storage_path('app/public/firmas/'.$file->valor), storage_path('app/public/firmas/'.$d->valor));
-                $this->info("------------------NO SE ENCONTRO PARA EL REPORTE ".$d->formulario_registro_id."-------------------");
-                dd($d->formulario_registro_id);
+                if($file){
+                    $r++;
+                    copy( storage_path('app/public/firmas/'.$file->valor), storage_path('app/public/firmas/'.$d->valor));
+                }
+                
+               // $this->info("------------------NO SE ENCONTRO PARA EL REPORTE ".$d->formulario_registro_id."-------------------");
+               // dd($d->formulario_registro_id);
             }
             
             $k++;
-            if($k%100==1)
-                  $this->info("------------------ANALIZANDO REGISTRO $k y REPORTE ".$d->formulario_registro_id."-------------------");
+            //if($k%100==1)
+                  
             
 
         }
+        $this->info("------------------ SE ENCONTRARON $k REPORTES SIN ARCHIVO Y SE REEMPLAZARON $r -------------------");
     }
 }
