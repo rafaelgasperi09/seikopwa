@@ -23,7 +23,7 @@ class UserController extends Controller
 
     public function index(){
 
-        $data=User::leftjoin('activations1', 'users.id','=','activations.user_id')
+        $data=User::leftjoin('activations', 'users.id','=','activations.user_id')
                     ->where('activations.completed',1)
                     ->WhereHas('roles',function ($q){
                         $q->where('role_users.role_id','<>',1);
