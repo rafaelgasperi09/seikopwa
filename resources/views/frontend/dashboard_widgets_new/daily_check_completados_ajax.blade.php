@@ -1,16 +1,19 @@
 <div class="card text-white bg-light">
     <div class="card-header">
         <div class="row">
-        <div class="col-md-8">
-        <span ><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Equipos con Daily Check
-        </div>
-        <div class="col-md-4 text-right">
-        <a id="exporter" data-toggle="modal" data-target="#reporte_modal" type="button" class="btn btn-success btn-rounded btn-condensed btn-sm pull-right"  title="Exportar"> <ion-icon name="download-outline" role="img" class="md hydrated" aria-label="download outline"></ion-icon></a>
-        </div>
+            <div class="col-md-8">
+                <span >
+                    <ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>
+                    Equipos con Daily Check
+            </div>
+            <div class="col-md-4 text-right">
+            <a id="exporter" data-toggle="modal" data-target="#reporte_modal" type="button" class="btn btn-success btn-rounded btn-condensed btn-sm pull-right"  title="Exportar"> <ion-icon name="download-outline" role="img" class="md hydrated" aria-label="download outline"></ion-icon></a>
+            </div>
         </div>
         <br/>
         <span class="card-title" id="tot_daily_check_completados">{{$totstpr}} </span>Completados /
-         <span class="card-title" id="tot_daily_check_no_completados">{{$totstpr}} </span>Sin Completar</span>
+        <span class="card-title" id="tot_daily_check_no_completados">{{$totstpr}} </span>Sin Completar</span>
+        <span  id="fecha_daily_check">[ {{date('d-M-Y')}} ]
     </div>
     <div class="card-body text-right">
         <div class="row" id="daily_check_completados">
@@ -38,13 +41,12 @@
             <div class="col-md-6 col-12">
                 <div class="form-group basic">
                     <div class="input-wrapper">
-                        <label class="label" for="name1">Fecha </label>
+                        <label class="label" for="name1">Fecha desde </label>
                         {{ Form::date('fecha_desde',date('Y-m-d'),array('class'=>'form-control','id'=>'fecha_desde')) }}
                     </div>
                 </div>
             </div>
-            {{---------
-            <div class="col-md-6 col-12 hide">
+            <div class="col-md-6 col-12">
                 <div class="form-group basic">
                     <div class="input-wrapper">
                         <label class="label" for="name1">Fecha hasta</label>
@@ -52,7 +54,6 @@
                     </div>
                 </div>
             </div>
-            -----}}
         </div>
         <div class="modal-footer">
             <div class="btn-inline">
@@ -68,7 +69,7 @@
         
         var fecha_desde=$('#fecha_desde').val();
         var fecha_hasta=$('#fecha_hasta').val();
-        var url="{{route('dashboard.download_excel',array('id'=>'daily_check_completados'))}}/?fecha_desde="+fecha_desde+"&fecha_hasta="+fecha_desde;
+        var url="{{route('dashboard.download_excel',array('id'=>'daily_check_completados'))}}/?fecha_desde="+fecha_desde+"&fecha_hasta="+fecha_hasta;
         window.location.href=url;
         console.log('clic'+url);
       });
@@ -93,7 +94,7 @@
 
     });
       $(document).on('click','.abriresd',function(){
-      console.log('abrir');
+      //console.log('abrir');
         var id=$(this).attr('id');
         var clase='.'+id;
         var flechagedc='.flecha'+id;

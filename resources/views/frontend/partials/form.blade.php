@@ -66,7 +66,15 @@
 
                                     @endphp
                                     @if(($campo->nombre=='supervisor_id' and $create) or $campo->nombre!='supervisor_id')
-                                        @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>$dat))
+                                        @php 
+                                            $valor=['',''];
+                                            if(!empty($data->supervisor_id)){
+                                                $user=\App\User::find($data->supervisor_id)->fullname;
+                                                $valor=[$data->supervisor_id,$user];
+                                            }
+                                                
+                                        @endphp
+                                        @include('frontend.partials.typeahead',array('field_label'=>$campo->etiqueta,$readonly,$requerido,'field_name'=>$campo->nombre,'items'=>$dat,'valor_th'=>$valor))
                                     @endif
                                 @elseif($campo->tipo == 'api')
                                     <?php $api = new \App\HcaApi($campo->api_endpoint);?>

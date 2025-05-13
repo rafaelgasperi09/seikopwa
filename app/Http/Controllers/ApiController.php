@@ -53,7 +53,7 @@ class ApiController extends Controller
                 ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
                 ->where('equipos.sub_equipos_id','=',2)
                 
-                ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id')
+                ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id','tipo_equipos.display_name')
                 ->get();
 
 
@@ -75,7 +75,7 @@ class ApiController extends Controller
                 ->FiltroCliente()
                 ->join('tipo_motores','equipos.tipo_motore_id','=','tipo_motores.id')
                 ->where('equipos.sub_equipos_id','=',1)
-                ->groupBy('equipos.sub_equipos_id','equipos.tipo_motore_id')
+                ->groupBy('equipos.sub_equipos_id','equipos.tipo_motore_id','tipo_motores.display_name')
                 ->get();
 
 
@@ -722,6 +722,7 @@ class ApiController extends Controller
                 $data['tipo']='gmp';
                 $data['g_daily_check_hoy']=array();
                 $equipos =  Equipo::FiltroCliente()->whereNotNull('cliente_id')->whereRaw($filtro)->pluck('cliente_id','id');
+
                 $filtro_cliente='';
                 $totales1= $totales2=0;
                 if(limpiar_lista(current_user()->crm_clientes_id)<>''){
@@ -748,31 +749,55 @@ class ApiController extends Controller
                                                     max(case fr.turno_chequeo_diario when 1 then fr.estatus end) as turno1,
                                                     max(case fr.turno_chequeo_diario when 2 then fr.estatus end) as turno2,
                                                     max(case fr.turno_chequeo_diario when 3 then fr.estatus end) as turno3,
-                                                    max(case fr.turno_chequeo_diario when 4 then fr.estatus end) as turno4
-                                                    from equipos_vw ev 
-                                                    left join formulario_registro fr on ev.id =fr.equipo_id and fr.deleted_at is null 
+                                                    max(case fr.turno_chequeo_diario when 4 then fr.estatus end) as turno4,
+                                                    max(CASE fr.turno_chequeo_diario when 1 THEN fr.equipo_status end) as equipo_status1,
+                                                    max(CASE fr.turno_chequeo_diario when 2 THEN fr.equipo_status end) as equipo_status2,
+                                                    max(CASE fr.turno_chequeo_diario when 3 THEN fr.equipo_status end) as equipo_status3,
+                                                    max(CASE fr.turno_chequeo_diario when 4 THEN fr.equipo_status end) as equipo_status4,
+                                                    CONCAT(u1.first_name,' ',u1.last_name) AS supervisor,
+                                                    CONCAT(u2.first_name,' ',u1.last_name) AS operador,
+                                                    ev.turnos,
+                                                    MAX(fr.turno_chequeo_diario) AS max_turno
+                                                    from equipos ev 
+                                                    left join formulario_registro fr on ev.id =fr.equipo_id and fr.deleted_at is null
+                                                    LEFT JOIN users u1 ON ev.supervisor_id=u1.id
+                                                    LEFT JOIN users u2 ON ev.operador_id=u2.id 
                                                     where  ev.deleted_at is null
                                                     $fechasql
                                                     $filtro_cliente
                                                     and $filtro
                                                     and fr.formulario_id =2
-                                                    group by  fr.cliente_id,date_format(fr.created_at,'%Y-%m-%d'),numero_parte,fr.equipo_id 
+                                                    group by  fr.cliente_id,date_format(fr.created_at,'%Y-%m-%d'),numero_parte,fr.equipo_id,CONCAT(u1.first_name,' ',u1.last_name),CONCAT(u2.first_name,' ',u1.last_name),ev.turnos 
                                                     order by numero_parte ";
-                     
+
                 $data['daily_check_hoy']=DB::select($sql);
+                $supervisores_equipo=$operadores_equipos=$turnos_equipo=array();
+                foreach($equipos as $e=>$c){
+                    $equipo_det=Equipo::find($e);
+                    $supervisores_equipo[$e]=$equipo_det->supervisor->fullname;
+                    $operadores_equipos[$e]=$equipo_det->operador->fullname;
+                    $turnos_equipo[$e]=$equipo_det->turnos;
+                }
 
                 foreach($data['daily_check_hoy'] as $dc){
                     $equipo_con_daily[$dc->cliente_id][$dc->equipo_id]=$dc;
                     unset( $equipos[$dc->equipo_id]);
                 }
 
-
                 foreach($equipos as $e=>$c){
-                    $equipo_sin_daily[$c][$e]=Equipo::find($e)->numero_parte;
+                    $equipo_det=Equipo::find($e);
+                    $equipo_sin_daily[$c][$e]=$equipo_det->numero_parte;
+                    $supervisores_equipo[$e]=$equipo_det->supervisor->fullname;
+                    $operadores_equipos[$e]=$equipo_det->operador->fullname;
+                    $turnos_equipo[$e]=$equipo_det->turnos;
                 }
+  
 
                 $data['equipo_con_daily']=$equipo_con_daily;
                 $data['equipo_sin_daily']=$equipo_sin_daily;
+                $data['supervisores_equipo']=$supervisores_equipo;
+                $data['operadores_equipos']=$operadores_equipos;
+                $data['turnos_equipo']=$turnos_equipo;
                 $data['equipos']=$equipos;
                 $data['clientes']=$clientes;
 
@@ -788,8 +813,10 @@ class ApiController extends Controller
                 $gancho='<ion-icon class="checkday md icon-large hydrated" name="checkmark-outline" size="large" style="color:green;" role="img" aria-label="checkmark outline" title></ion-icon>';
                 $equis='<ion-icon name="close-outline" style="color:red;" size="large" role="img" class="md icon-large hydrated" aria-label="close outline" title></ion-icon>'; 
                 $turnos=$turnosx=array($equis,$equis,$equis,$equis,$equis);
-                
+                $turnoscdc=array();
+
                 foreach($data['equipo_con_daily'] as $k=>$e){
+                    
                     if(current_user()->isOnGroup('programador') and $i++>=10){
                         break;
                     }
@@ -804,24 +831,31 @@ class ApiController extends Controller
 
                    
                     foreach($e as $d){
-                        $totales1++;
-                        
+                        $totales1++;        
                         for($i=1;$i<=4;$i++){
-                            $turnos[$i]=$turnosx[$i]=str_replace('title','title="Turno '.$i.'"',$equis);
-                            $var='turno'.$i;
-                            if($d->$var)
-                                $turnos[$i]=str_replace('title','title="Turno '.$i.'"',$gancho);
+                            if($i>$data['turnos_equipo'][$d->equipo_id]){
+                                $turnos[$i]="";
+                            }else{
+                                $turnos[$i]=$turnosx[$i]=str_replace('title','title="Turno '.$i.'"',$equis);
+                                $var='turno'.$i;
+                                if($d->$var)
+                                    $turnos[$i]=str_replace('title','title="Turno '.$i.'"',$gancho);
+                            }
                         }                      
+                        if($d->max_turno<$d->turnos){
+                            $turnoscdc[$d->equipo_id]=$turnos; 
+                            $data['equipo_sin_daily'][$k][$d->equipo_id]=$d->numero_parte;
+                        }
                             
                         $result9.='<a href="'. route('equipos.detail',array('id'=>$d->equipo_id)) .'?show=rows&tab=1"  class="chip  chip-media ml-05 mb-05 ecdlist ecd_'.$k.'" style="width: 98%;display:none">
          
                                 <table width="100%">
                                     <tr>
-                                        <td width="50%" class=" text-left"><span class="chip-label">'.$d->numero_parte.'</span></td>
-                                        <td>'.$turnos[1].'</td>
-                                        <td>'.$turnos[2].'</td>
-                                        <td>'.$turnos[3].'</td>
-                                        <td>'.$turnos[4].'</td>
+                                        <td width="60%" class=" text-left"><span class="chip-label">'.$d->numero_parte.'</span></td>
+                                        <td width="10%" >'.$turnos[1].'</td>
+                                        <td width="10%" >'.$turnos[2].'</td>
+                                        <td width="10%" >'.$turnos[3].'</td>
+                                        <td width="10%" >'.$turnos[4].'</td>
                                     </tr>
                                 </table>
                             </a>';
@@ -829,10 +863,11 @@ class ApiController extends Controller
                 }
 
                 $result9.='</div>';
-
+  
                 $result9.='<div class="col-md-6">
                                 <h3 class="text-danger text-left" cant="6">SIN COMPLETAR</h3>';
                                 foreach($data['equipo_sin_daily'] as $k=>$e){
+                                   
                                     if(current_user()->isOnGroup('programador') and $i++>=10){
                                         break;
                                     }
@@ -847,20 +882,34 @@ class ApiController extends Controller
                                                 </span>
                                             </i>
                                             </div>';
+                                     asort($e);
                                     foreach($e as $y=>$d){
+                                        $turnosx=array($equis,$equis,$equis,$equis,$equis);
+                                         for($i=4;$i>max($data['turnos_equipo'][$y],1);$i--){
+                                            $turnosx[$i]='<ion-icon name="qr-scanner" style="color:red;" size="large" role="img" class="md icon-large hydrated" aria-label="close outline" title></ion-icon>';
+                                         }
+                                        
+                                         if(isset($turnoscdc[$y])){
+                                            $turnosx=$turnoscdc[$y];
+                                         }
+                                           
                                         $totales2++;
-                                        $result9.='<a href="'. route('equipos.detail',array('id'=>$y)) .'?show=rows&tab=1" class="chip  chip-media ml-05 mb-05 esdlist esd_'.$k.'" style="width: 98%;display:none">
-                        
+                                        $result9.='<div style="width: 98%;display:none"  class="chip  chip-media ml-05 mb-05 esdlist esd_'.$k.'" >
                                                 <table width="100%">
                                                     <tr>
-                                                        <td width="50%" class=" text-left"><span class="chip-label">'.$d.'</span></td>
-                                                        <td>'.$turnosx[1].'</td>
-                                                        <td>'.$turnosx[2].'</td>
-                                                        <td>'.$turnosx[3].'</td>
-                                                        <td>'.$turnosx[4].'</td>
+                                                        <td width="40%" class=" text-left">
+                                                            <a href="'. route('equipos.detail',array('id'=>$y)) .'?show=rows&tab=1">
+                                                                <span class="chip-label">'.$d.'</span>
+                                                            </a>
+                                                        </td>
+                                                        <td width="30%"><a href="'.route('equipos.inoperativo_daily_check',array('id'=>$y)).'" class="badge badge-warning" title="¿Marcar este equipo como inoperativo?"><small>¿Inoperativo?</small></a></td>
+                                                        <td width="7%">'.$turnosx[1].'</td>
+                                                        <td width="7%">'.$turnosx[2].'</td>
+                                                        <td width="7%">'.$turnosx[3].'</td>
+                                                        <td width="7%">'.$turnosx[4].'</td>
                                                     </tr>
                                                 </table>
-                                            </a>';
+                                            </div>';
                                     }
                                 }
                                 
@@ -888,62 +937,78 @@ class ApiController extends Controller
                         'return'=>true,
                         'tipo'=>$request->tipo,
                         'fecha_desde'=>$fecha_actual,
-                        'fecha_hasta'=>$fecha_actual];
-              
+                        'fecha_hasta'=>$fecha_hasta];
+
                 $request_data= (clone request())->replace($params);
                 $datos=$this->data_inicio($request_data);
                 $data['title']="Reporte de daily check completados/sin completar";
                 $data['subtitle']=$param_txt;
 
                 $line=0;
-                
+            
                 foreach($datos['daily_check_hoy'] as $d){
                     $turnos=array();
                     for($i=1;$i<=4;$i++){
                         $var='turno'.$i;
                         $turnos[$i]='NO';
-                        if($d->$var)
-                            $turnos[$i]='SI';
+                        if($d->$var){
+                            $var="equipo_status$i";
+                            if($d->$var=='I')
+                                $turnos[$i]='Inoperativo';
+                            else
+                                $turnos[$i]='SI';
+                        }
                     }      
-        
+
                     array_push($data['lista'],array(
                         'line'=>++$line,
                         'bodega'=>$datos['clientes'][$d->cliente_id],
                         'fecha'=>$d->fecha,
                         'equipo'=>$d->numero_parte,
+                        'equipo_id'=>$d->equipo_id,
                         'turno1'=>$turnos[1],
                         'turno2'=>$turnos[2],
                         'turno3'=>$turnos[3],
-                        'turno4'=>$turnos[4]
+                        'turno4'=>$turnos[4],
+                        'supervisor'=>$datos['supervisores_equipo'][$d->equipo_id],
+                        'operador'=>$datos['operadores_equipos'][$d->equipo_id]
                     ));
         
                 }
-
+                
                 foreach($datos['equipo_sin_daily'] as $k=>$d){
-                    foreach($d as $eq){
-
+                    foreach($d as $i=>$eq){
                         array_push($data['lista'],array(
                             'line'=>++$line,
                             'bodega'=>$datos['clientes'][$k],
                             'fecha'=>$fecha_actual,
                             'equipo'=>$eq,
+                            'equipo_id'=>$i,
                             'turno1'=>'NO',
                             'turno2'=>'NO',
                             'turno3'=>'NO',
-                            'turno4'=>'NO'
+                            'turno4'=>'NO',
+                            'supervisor'=>$datos['supervisores_equipo'][$i],
+                            'operador'=>$datos['operadores_equipos'][$i]
                         ));
             
                     }
                 }
 
                 $fecha_actual=Carbon::parse($fecha_actual)->addDays(1)->format('Y-m-d');           
-            
+                
                   
             }   
-
+            
+            foreach($data['lista'] as $k=>$l){
+                if(isset($datos['turnos_equipo'][$l['equipo_id']])){
+                    for($i=4;$i>max($datos['turnos_equipo'][$l['equipo_id']],1);$i--){
+                        $data['lista'][$k]["turno$i"]="";  
+                    }
+                }                
+            }
                 
         }
-
 
         return Excel::download(new GenericExcel($data), 'Reporte_daily_check.xlsx');
 

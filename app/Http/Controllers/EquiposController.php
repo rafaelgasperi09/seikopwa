@@ -177,15 +177,16 @@ class EquiposController extends BaseController
     public function reportes_list(Request $request){
         $filtro='false';
         $data='';
+        $cu=current_user();
         /*$data= $this->reportes_datos($request)->paginate(10);*/
-        $editar=(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'));
+        $editar=($cu->isOnGroup('programador') or $cu->isOnGroup('administrador'));
         return view('frontend.equipos.reportes')->with(compact('filtro','data','editar'));
     }
 
     public function reportes_datatable(Request $request,$export_datos=false){
         //dd($request->all());
-
-    $editar=(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'));
+    $cu=current_user();
+    $editar=($cu->isOnGroup('programador') or $cu->isOnGroup('administrador'));
     $data=$this->reportes_datos( $request,$export_datos);
 
     return DataTables::of($data)
@@ -206,7 +207,7 @@ class EquiposController extends BaseController
         ->editColumn('tipo', function($row) {
             return tipo_form($row->tipo);
         })
-        ->addColumn('actions', function($row) use($editar) {
+        ->addColumn('actions', function($row) use($editar,$cu) {
         $url='';
         $url2='';
         $url_edit='';
@@ -215,6 +216,9 @@ class EquiposController extends BaseController
             $url=route('equipos.show_daily_check',$row->id);
             $url2=route('reporte.detalle',['form_montacarga_daily_check',$row->id]);   
             $url_edit=route('equipos.edit_daily_check',$row->id);
+            if($cu->isOnGroup('administrador-cliente') ){
+                $editar=true;
+            }
         }
           
         if($row->tipo=='mant_prev'){
@@ -1488,17 +1492,80 @@ class EquiposController extends BaseController
     public function asignar_turno(Request $request,$id){
 
        $equipo1= Equipo::find($id);
-       $equipo2= EquiposVw::find($id);
        $equipo1->turnos=$request->turnos;
        if($equipo1->save()){
             $request->session()->flash('message.success','Turnos actualizado con exito.');
-            $equipo2->turnos=$request->turnos;
-            $equipo2->save();
        }else{
             $request->session()->flash('message.error','No se pudo actualizar los turnos.');
        }
 
        return redirect(route('equipos.detail',array('id'=>$id)));
     }
+
+    public function asignar_varios(Request $request,$id){
+
+        $equipo1= Equipo::find($id);
+
+        $equipo1->supervisor_id=$request->supervisor_id;
+        $equipo1->operador_id=$request->operador_id;
+        $equipo1->area=$request->area;
+        if($equipo1->save()){
+             $request->session()->flash('message.success','Datos actualizados con exito.');
+
+        }else{
+             $request->session()->flash('message.error','No se pudo actualizar los datos.');
+        }
+ 
+        return redirect(route('equipos.detail',array('id'=>$id)));
+     }
+
+     public function inoperar_equipo(Request $request,$id){
+        
+        $equipo= Equipo::find($id);
+        $ultimo_hoy=FormularioRegistro::where('equipo_id',$id)->where('formulario_id',2)->where('created_at','>=', Carbon::today())->max('turno_chequeo_diario');
+        $proximo_turno=1;
+        if(!empty($ultimo_hoy))
+            $proximo_turno=$ultimo_hoy;
+        $model = new FormularioRegistro();
+
+        try{
+            DB::transaction(function() use($model, $proximo_turno,$equipo){
+
+                $model->formulario_id = 2;
+                $model->creado_por = Sentinel::getUser()->id;
+                $model->equipo_id = $equipo->id;
+                $model->turno_chequeo_diario =  $proximo_turno;
+                $model->cliente_id = $equipo->cliente_id;
+                $model->estatus = 'P';
+                $model->equipo_status = 'I';
+                $model->repuesto_status = 'L';
+                $model->dia_semana = getDayOfWeek(date('N'));
+                $model->semana = date('W');
+                $model->ano = date('Y');
+    
+                if(!$model->save())
+                {
+                    Throw new \Exception('Hubo un problema y no se creo el registro!');
+                }else{
+                    registraExtra($model->id);
+                    $equipo=Equipo::find($model->equipo_id);
+                    $datos=FormularioData::where('formulario_registro_id',$model->id)->get();
+                    foreach ($datos as $d) {
+                       if($d->tipo=='radio'){
+                        $d->valor='M';
+                        $d->save();
+                       }
+                    }
+
+                }
+            });       
+        }catch (\Exception $e){
+            $request->session()->flash('message.error',$e->getMessage());
+            return redirect(route('inicio'));
+        }
+        return redirect(route('inicio'));
+
+     }
+
     
 }

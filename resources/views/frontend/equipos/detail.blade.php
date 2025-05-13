@@ -70,9 +70,27 @@
                                 </dd>
                             </dl>
                             <dl class="row">
+                                <dt class="col-sm-3">Asignado a</dt>
+                                <dd class="col-sm-6">
+                                    <table class="table">
+                                        <tr>
+                                            <th width="35%">Supervisor Operador</th>
+                                            <th width="35%">Operador</th>
+                                            <th>Area</th>   
+                                            <th> <button type="button" id="turnos" class="badge badge-primary" data-toggle="modal" data-target="#assign_user_modal">ASIGNAR</button></th>   
+                                        </tr>
+                                        <tr>
+                                            <td>{{$data->supervisor->fullname}}</td>
+                                            <td>{{$data->operador->fullname}}</td>
+                                            <td>{{$data->area}}</td>
+                                        </tr>
+                                    </table>
+                                </dd>
+                            </dl>
+                            <dl class="row">
                                 <dt class="col-sm-3">Estado</dt>
                                 <dd class="col-sm-9">
-                                <button type="button" id="turnos" class="btn btn-text-default" data-toggle="modal" data-target="#assign_turno_modal">{!! getStatusHtmlEquipos($data->estado) !!}</button>
+                                {!! getStatusHtmlEquipos($data->estado) !!}
                                 </dd>
                             </dl>
                         </div>
@@ -214,6 +232,8 @@
             @include('frontend.equipos.modals.cotizado_modal')
             @include('frontend.equipos.modals.accidente_modal')
             @include('frontend.equipos.modal_asignar_turnos',['data'=>$data])
+            @include('frontend.equipos.modal_asignar_a_equipo',['data'=>$data])
+           
         </div>
     </div>
 </div>

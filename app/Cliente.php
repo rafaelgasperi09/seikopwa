@@ -2,6 +2,7 @@
 
 namespace App;
 use App\Zona;
+use App\User;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -53,5 +54,25 @@ class Cliente extends BaseModel
 
     public function getFullNameAttribute() {
         return $this->nombre.' ('.$this->equipos->count().' montacargas)'; //Change the format to whichever you desire
+    }
+
+    public function supervisores()
+    {
+        $supervisores= User::whereRaw("FIND_IN_SET(?, crm_clientes_id)", [$this->id])
+            ->whereHas('roles', function ($query) {
+                $query->whereIn('slug', ['supervisorc']); // o usa 'slug' si así identificas roles
+            })->get()->pluck('fullname','id')->prepend('seleccione','');
+
+        return $supervisores;
+    }
+
+    public function operadores()
+    {
+        $operadores= User::whereRaw("FIND_IN_SET(?, crm_clientes_id)", [$this->id])
+            ->whereHas('roles', function ($query) {
+                $query->whereIn('slug', ['operadorc']); // o usa 'slug' si así identificas roles
+            })->get()->pluck('fullname','id')->prepend('seleccione','');
+
+        return $operadores;
     }
 }

@@ -117,4 +117,17 @@ class Equipo extends BaseModel
         return $query;
     }
 
+    public function supervisor()
+    {
+        return $this->belongsTo(User::class,'supervisor_id')->withDefault([
+            'fullname'=>'N/A'
+        ]);
+    }
+
+    public function operador()
+    {
+        return $this->belongsTo(User::class,'operador_id')->withDefault([
+            'fullname'=>'N/A'
+        ]);
+    }
 }

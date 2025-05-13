@@ -37,6 +37,7 @@ Route::put('recovery_password/{id}/{token}', array('as' => 'forgot_password.upda
 
 Route::get('usuarios/{id}/update_password_view', array('as' => 'usuarios.update_password_view', 'uses' => 'UserController@updatePasswordView'))->middleware('sentinel.auth');
 Route::put('usuarios/{id}/password', array('as' => 'usuarios.update_password', 'uses' => 'UserController@updatePassword'))->middleware('sentinel.auth');
+Route::get('usuarios/export', array('as' => 'usuarios.export', 'uses' => 'UserController@export'))->middleware('sentinel.auth');
 /************************************************************************************/
 
 Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), function() {
@@ -71,6 +72,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         
         Route::post('/asignar_turno/{id}', array('as' => 'equipos.asignar_turno', 'uses' => 'EquiposController@asignar_turno'));
 
+        Route::post('/asignar_varios/{id}', array('as' => 'equipos.asignar_varios', 'uses' => 'EquiposController@asignar_varios'));
+
         Route::get('/{sub}/tipo/{id}', array('as' => 'equipos.tipo', 'uses' => 'EquiposController@tipo'));
 
         Route::get('/search/{sub}/{id}', array('as' => 'equipos.search', 'uses' => 'EquiposController@search'));
@@ -94,6 +97,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
             Route::put('/{id}/update', array('as' => 'equipos.update_daily_check', 'uses' => 'EquiposController@updateDailyCheck'));
 
             Route::get('/{id}/delete', array('as' => 'equipos.delete_daily_check', 'uses' => 'EquiposController@deleteRegistroForm'));
+
+            Route::get('/{id}/inoperativo', array('as' => 'equipos.inoperativo_daily_check', 'uses' => 'EquiposController@inoperar_equipo'));
         });
 
         Route::group(array('prefix' => 'mantenimiento_preventivo'), function() {

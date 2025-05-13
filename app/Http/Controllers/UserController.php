@@ -7,19 +7,33 @@ use App\Notifications\NewUser;
 use App\Notifications\GenericMail;
 use App\Rol;
 use App\User;
+use App\Credential;
 use Carbon\Carbon;
 use Cartalyst\Sentinel\Laravel\Facades\Activation;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Sentinel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\GenericExcel;
 
 class UserController extends Controller
 {
 
     public function index(){
 
-        $data = User::IsActive()->whereHas('roles',function ($q){ $q->where('role_users.role_id','<>',1);})->FilterClientes()->paginate(10);
+        $data=User::leftjoin('activations', 'users.id','=','activations.user_id')
+                    ->where('activations.completed',1)
+                    ->WhereHas('roles',function ($q){
+                        $q->where('role_users.role_id','<>',1);
+                        if(current_user()->isCliente()){
+                            $q->where('tipo','cliente');
+                        }
+                    })
+                    ->FilterClientes()
+                    ->selectRaw('users.*,activations.completed')
+                    ->paginate(10);
         return view('frontend.usuarios.index',compact('data'));
 
     }
@@ -35,18 +49,24 @@ class UserController extends Controller
         }
         $where.=')';
         
-        $data=User::leftjoin('activations', 'users.id','=','activations.user_id')->where('activations.completed',1)
-                    
+        $data=User::leftjoin('activations', 'users.id','=','activations.user_id')
+                    ->where('activations.completed',1)
                     ->where('first_name','like',"%".$request->q."%")
                     ->orWhere('last_name','like',"%".$request->q."%")
                     ->orWhere('email','like',"%".$request->q."%")
-                    ->orWhereHas('roles',function ($q) use($request){
+                    ->WhereHas('roles',function ($q) use($request){
+                        $q->where('role_users.role_id','<>',1);
                         $q->where('name','like',"%".$request->q."%");
                         $q->where('long_name','like',"%".$request->q."%");
+                        if(current_user()->isCliente()){
+                            $q->where('tipo','cliente');
+                        }
+
                     })
                     ->when($where<>'()',function($q) use ($where) {
                         $q->whereRaw($where);
                     })
+                    ->FilterClientes()
                     ->selectRaw('users.*,activations.completed')
                     ->paginate(10);
 
@@ -80,9 +100,13 @@ class UserController extends Controller
     }
 
     public function create(){
+        $user=current_user();
+        $roles = Rol::where('id','<>',1)->FilterClientes()->select('name','id','tipo')->get();
 
-        $roles = Rol::where('id','<>',1)->select('name','id','tipo')->get();
         $clientes = Cliente::whereHas('equipos')
+                ->when($user->isCliente(),function($q) use($user){
+                    $q->whereIn('id',explode(',',$user->crm_clientes_id));
+                })
                 ->orderBy('nombre')
                 ->get()
                 ->pluck('full_name','id');
@@ -153,6 +177,8 @@ class UserController extends Controller
         }
 
         if($user->save()){
+            Credential::create(['user_id'=>$user->id,
+                                'encrypted_password'=>Crypt::encrypt($request->password)]);
             $u = User::find($user->id);
             $when = now()->addMinutes(1);
             notifica($u,(new NewUser($u,$request->password))->delay($when));
@@ -198,7 +224,7 @@ class UserController extends Controller
         $user->crm_clientes_id = $clientes;
 
         if($user->save()){
-           
+            
             if($request->has('rol_id'))
                 $user->roles()->sync([$request->rol_id]);
 
@@ -212,6 +238,7 @@ class UserController extends Controller
     }
 
     public function updatePassword(Request $request,$id){
+        
         if(current_user()->id==$id or (current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))){
             $this->validate($request, [
                 'password'         => 'required',
@@ -224,6 +251,15 @@ class UserController extends Controller
             $user->date_last_password_changed = date('Y-m-d');
 
             if($user->save()){
+                $credencial=Credential::where('user_id',$user->id)->first();
+                if($credencial){
+                    $credencial->encrypted_password=Crypt::encrypt($request->password);
+                    $credencial->save();
+                }else{
+                    Credential::create(['user_id'=>$user->id,
+                    'encrypted_password'=>Crypt::encrypt($request->password)]);
+                }
+                               
                 session()->flash('message.success', 'Cambio de contraseña éxitoso.');
             }else{
                 session()->flash('message.error', 'Hubo un error y no se pudo modificar.');
@@ -304,6 +340,47 @@ class UserController extends Controller
             session()->flash('message.success', 'Usuario creado con éxito. Se ha enviado un correo con los datos de acceso.');
 
         
+    }
+
+    
+    public function export(){
+        $cu=current_user();
+        $clientes=explode(',',$cu->crm_clientes_id);
+        $usuarios = User::when($cu->isCliente(),function($q) use($clientes){
+                            $q->where(function($q2) use($clientes){
+                                foreach ($clientes as $id) {
+                                    $q2->orWhereRaw("FIND_IN_SET(?, crm_clientes_id)", [$id]);
+                                }
+                            });
+                        })->get();
+        $data['title']="Reportes de daily check ";
+        $data['subtitle']='';
+        $lista['datos']=true;
+        $data['lista']=array();
+        $line=0;
+        foreach($usuarios as $u){
+            $password='';
+            $credencial=Credential::where('user_id',$u->id)->orderBy('id','desc')->first();
+            if($credencial){
+                $password=$credencial->encrypted_password;
+                $password=Crypt::decrypt($password);
+            }
+            $clientes_user=$u->clientes()->pluck('nombre')->toArray();
+            $clientes_user=implode(',',$clientes_user);
+            $roles_user=$u->roles()->pluck('name')->toArray();
+            $roles_user=implode(',',$roles_user);
+            array_push($data['lista'],array(
+                'line'=>++$line,
+                'nombre'=>$u->fullname,
+                'correo'=>$u->email,
+                'rol'=>$roles_user,
+                'password'=>$password,
+                'clientes'=>$clientes_user,
+            ));
+        }
+        
+
+        return Excel::download(new GenericExcel($data), 'Listado_usuarios.xlsx');
     }
 
 }

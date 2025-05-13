@@ -128,6 +128,16 @@ class User extends Authenticatable
     public function scopeFilterClientes($query)
     {
         $cu=current_user();
+        if(!empty($cu->crm_clientes_id)){
+            $clientes=explode(',',$cu->crm_clientes_id);
+            $query->whereNotNull('crm_clientes_id')
+            ->where(function($q) use($clientes){
+                foreach ($clientes as $id) {
+                    $q->orWhereRaw("FIND_IN_SET(?, crm_clientes_id)", [$id]);
+                }
+            });
+            return $query;
+        }
         if($cu->isSupervisor())
             return $query->whereNull('crm_clientes_id');
 
