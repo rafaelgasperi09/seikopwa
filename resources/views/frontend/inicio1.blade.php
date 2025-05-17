@@ -49,6 +49,7 @@
                 
                 @if( current_user()->isOnGroup('supervisorc') or
                      current_user()->isOnGroup('supervisor-cliente') or
+                     current_user()->isOnGroup('administrador-cliente') or
                      current_user()->isOnGroup('programador'))
 
                     {{--}}DAILY CHECK PENDIENTE DE FIRMA {{--}}

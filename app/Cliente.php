@@ -60,7 +60,7 @@ class Cliente extends BaseModel
     {
         $supervisores= User::whereRaw("FIND_IN_SET(?, crm_clientes_id)", [$this->id])
             ->whereHas('roles', function ($query) {
-                $query->whereIn('slug', ['supervisorc']); // o usa 'slug' si así identificas roles
+                $query->whereIn('slug', ['supervisorc','administrador-cliente']); // o usa 'slug' si así identificas roles
             })->get()->pluck('fullname','id')->prepend('seleccione','');
 
         return $supervisores;

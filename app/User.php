@@ -112,6 +112,7 @@ class User extends Authenticatable
         if($tipo=='cliente'){
             $a=$this->isOnGroup('supervisorc');
             $b=$this->isOnGroup('supervisor-cliente');
+            $b=$this->isOnGroup('administrador-cliente');
             if($a or $b)
                 return true;
         }
