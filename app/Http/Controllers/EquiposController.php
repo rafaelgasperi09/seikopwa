@@ -902,10 +902,16 @@ class EquiposController extends BaseController
 
     }
 
-    public function editTecnicalSupport($id){
+    public function editTecnicalSupport(Request $request,$id){
 
         $data = FormularioRegistro::findOrFail($id);
         $equipo = Equipo::findOrFail($data->equipo_id);
+
+        $equipo_gm=substr($equipo->numero_parte,0,2)=='GM';
+        if(current_user()->isCliente() and $equipo_gm){
+            $request->session()->flash('message.error','No tiene acceso a editar este reporte');
+            return redirect(route('inicio'));
+        }
         $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
 
         $campos = $formulario->campos()->whereIn('nombre',['hora_entrada','hora_salida','tecnico_asignado'])->pluck('id');
@@ -918,10 +924,15 @@ class EquiposController extends BaseController
             ->with('data',$data);
     }
 
-    public function showTecnicalSupport($id){
+    public function showTecnicalSupport(Request $request,$id){
 
         $data = FormularioRegistro::findOrFail($id);
         $equipo = Equipo::findOrFail($data->equipo_id);
+        $equipo_gm=substr($equipo->numero_parte,0,2)=='GM';
+        if(current_user()->isCliente() and $equipo_gm){
+            $request->session()->flash('message.error','No tiene acceso a ver este reporte');
+            return redirect(route('inicio'));
+        }
         $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
 
         $campos = $formulario->campos()->whereIn('nombre',['hora_entrada','hora_salida','tecnico_asignado'])->pluck('id');
