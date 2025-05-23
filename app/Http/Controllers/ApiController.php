@@ -610,7 +610,9 @@ class ApiController extends Controller
                         <h3 class="text-danger text-left">INOPERATIVOS</h3>';
                         if(count($data['g_serv_tec_pr_i'])){
                             foreach($data['g_serv_tec_pr_i'] as $l=>$gstpri){ 
-                                 $result7.='<div class="chip chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
+                                if(count($data['serv_tec_pr']->where('cliente_id',$gstpri->cliente_id)->where('equipo_status','I'))){
+                                /*+++++++++++++++++++++++++++++++++++++++++++*/
+                                    $result7.='<div class="chip chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
                                     <span class="chip-label ">'.$gstpri->cliente()->nombre.' </span>
                                     <i class="chip-icon abrirstpr_i"  id="stpri'.$gstpri->cliente_id.'" >
                                         <span class=" pull-right flechai_stpr flechai_stpr'.$gstpri->cliente_id.'"title="Ver mas">';
@@ -619,45 +621,47 @@ class ApiController extends Controller
                                             else
                                             $result7.='<ion-icon name="chevron-up-outline"></ion-icon></span>';
 
-                             $result7.='</i>
-                                </div>';
-                                foreach($data['serv_tec_pr']->where('cliente_id',$gstpri->cliente_id)->where('equipo_status','I') as $stpri){
-                                    $totales++;
-                                    if($stpri->equipo()){
-                                        if($k<>0 and !$abierta0)
-                                            $display='display:none';
-                                        $result7.='<a href="'. route('equipos.detail',array('id'=>$stpri->equipo_id)) .'?show=rows&tab=3"  
-                                        class="chip chip-media ml-05 mb-05 stprlist_i stpri'.$gstpri->cliente_id.'" style="padding:18px;width:98%; '.$display.'">
-                                            <i class="chip-icon bg-'.getStatusBgColor($stpri->estatus).'">
-                                                '.$stpri->estatus.'
-                                            </i>';
-                                                $fecha_sta=$stpri->estatusHistory()->orderBy('created_at','desc')->first()->created_at;
-                                                $date1 = new DateTime($fecha_sta);
-                                                $date2 = new DateTime(date('Y-m-d h:i:s'));
-                                                $diff = $date1->diff($date2);
-                                                // will output 2 days
-                                                $transcurrido='';
-                                                if($diff->d)
-                                                    $transcurrido=$diff->format('%dd %hh %im');
-                                                else
-                                                        $transcurrido=$diff->format('%hh %im');
-                                            
-                                            $result7.='<span class="chip-label">'.$stpri->equipo()->numero_parte;
-                                                if($stpri->trabajado_por<>'')
-                                                $result7.='<ion-icon size="large" name="checkmark-sharp" role="img" class="md hydrated text-success" style="position: absolute;top: 0px;left: 99px;" aria-label="cube outline"></ion-icon>';
+                                    $result7.='</i>
+                                    </div>';
+                                    foreach($data['serv_tec_pr']->where('cliente_id',$gstpri->cliente_id)->where('equipo_status','I') as $stpri){
+                                        $totales++;
+                                        if($stpri->equipo()){
+                                            if($k<>0 and !$abierta0)
+                                                $display='display:none';
+                                            $result7.='<a href="'. route('equipos.detail',array('id'=>$stpri->equipo_id)) .'?show=rows&tab=3"  
+                                            class="chip chip-media ml-05 mb-05 stprlist_i stpri'.$gstpri->cliente_id.'" style="padding:18px;width:98%; '.$display.'">
+                                                <i class="chip-icon bg-'.getStatusBgColor($stpri->estatus).'">
+                                                    '.$stpri->estatus.'
+                                                </i>';
+                                                    $fecha_sta=$stpri->estatusHistory()->orderBy('created_at','desc')->first()->created_at;
+                                                    $date1 = new DateTime($fecha_sta);
+                                                    $date2 = new DateTime(date('Y-m-d h:i:s'));
+                                                    $diff = $date1->diff($date2);
+                                                    // will output 2 days
+                                                    $transcurrido='';
+                                                    if($diff->d)
+                                                        $transcurrido=$diff->format('%dd %hh %im');
+                                                    else
+                                                            $transcurrido=$diff->format('%hh %im');
                                                 
-                                            $result7.='</span>
-                                            
-                                            <div  class="fecha pull-right" >
-                                                <span title="Fecha de Inicio">
-                                                        '.transletaDate($fecha_sta,true,'').'
-                                                </span><br/>
-                                                <span title="Tiempo transcurrido">
-                                                        Hace '.$transcurrido.'
-                                                </span>
-                                            </div>
-                                        </a>';
+                                                $result7.='<span class="chip-label">'.$stpri->equipo()->numero_parte;
+                                                    if($stpri->trabajado_por<>'')
+                                                    $result7.='<ion-icon size="large" name="checkmark-sharp" role="img" class="md hydrated text-success" style="position: absolute;top: 0px;left: 99px;" aria-label="cube outline"></ion-icon>';
+                                                    
+                                                $result7.='</span>
+                                                
+                                                <div  class="fecha pull-right" >
+                                                    <span title="Fecha de Inicio">
+                                                            '.transletaDate($fecha_sta,true,'').'
+                                                    </span><br/>
+                                                    <span title="Tiempo transcurrido">
+                                                            Hace '.$transcurrido.'
+                                                    </span>
+                                                </div>
+                                            </a>';
+                                        }
                                     }
+                                /*+++++++++++++++++++++++++++++++++++++++++++*/
                                 }
                             }
                         }            
