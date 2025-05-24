@@ -548,60 +548,63 @@ class ApiController extends Controller
                         <h3 class="text-success text-left" cant="'.count($data['g_serv_tec_pr_o']).'">OPERATIVOS</h3>';
                         if(count($data['g_serv_tec_pr_o'])){
                             foreach($data['g_serv_tec_pr_o'] as $k=>$gstpro){
+                                if(count($data['serv_tec_pr']->where('cliente_id',$gstpro->cliente_id)->where('equipo_status','O'))>0){
+                                    /*+++++++++++++++++++++++++++++++++++++++++++*/
+                                    $result7.='<div class="chip chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
+                                        <span class="chip-label ">';
+                                            if($gstpro->cliente())
+                                            $result7.=$gstpro->cliente()->nombre;
+
+                                    $result7.='</span>
+                                            <i class="chip-icon abrirstpr"  id="stpr'.$gstpro->cliente_id.'" >
+                                                <span class=" pull-right flechastpr flechastpr'.$gstpro->cliente_id.'"title="Ver mas">';
+                                                    if($k==0 and !$abierta0)
+                                                        $result7.='<ion-icon name="chevron-down-outline"></ion-icon></span>';
+                                                    else
+                                                        $result7.='<ion-icon name="chevron-up-outline"></ion-icon></span>';
+
+                                    $result7.='</i>
+                                        </div>';
+                                    foreach($data['serv_tec_pr']->where('cliente_id',$gstpro->cliente_id)->where('equipo_status','O') as $stpr){
+                                        if($stpr->equipo()){
+                                            $totales++;
+                                            if($k<>0 and !$abierta0)
+                                                $display='display:none';
+                                            $result7.='<a href="'. route('equipos.detail',array('id'=>$stpr->equipo_id)) .'?show=rows&tab=3"  
+                                            class="chip chip-media ml-05 mb-05 stprlist stpr'.$gstpro->cliente_id.'" style="padding:18px;width:98%; '.$display.'">
+                                                <i class="chip-icon bg-'.getStatusBgColor($stpr->estatus).'">
+                                                    '.$stpr->estatus.'
+                                                </i>';
+                                                
+                                                    $fecha_sta=$stpr->estatusHistory()->where('estatus',$stpr->estatus)->orderBy('created_at','desc')->first()->created_at;
+                                                    $date1 = new DateTime($fecha_sta);
+                                                    $date2 = new DateTime('now', new \DateTimeZone('America/Panama'));
+                                                    $diff = $date1->diff($date2);
+                                                    // will output 2 days
+                                                    $transcurrido='';
+                                                    if($diff->d)
+                                                        $transcurrido=$diff->format('%dd %hh %im');
+                                                    else
+                                                            $transcurrido=$diff->format('%hh %im');
                                 
-                                 $result7.='<div class="chip chip-media ml-05 mb-05" style="width:100%;margin-top:15px !important;font-size:16px">
-                                    <span class="chip-label ">';
-                                        if($gstpro->cliente())
-                                         $result7.=$gstpro->cliente()->nombre;
-
-                            $result7.='</span>
-                                    <i class="chip-icon abrirstpr"  id="stpr'.$gstpro->cliente_id.'" >
-                                        <span class=" pull-right flechastpr flechastpr'.$gstpro->cliente_id.'"title="Ver mas">';
-                                            if($k==0 and !$abierta0)
-                                                $result7.='<ion-icon name="chevron-down-outline"></ion-icon></span>';
-                                            else
-                                                $result7.='<ion-icon name="chevron-up-outline"></ion-icon></span>';
-
-                            $result7.='</i>
-                                </div>';
-                                foreach($data['serv_tec_pr']->where('cliente_id',$gstpro->cliente_id)->where('equipo_status','O') as $stpr){
-                                    if($stpr->equipo()){
-                                        $totales++;
-                                        if($k<>0 and !$abierta0)
-                                            $display='display:none';
-                                        $result7.='<a href="'. route('equipos.detail',array('id'=>$stpr->equipo_id)) .'?show=rows&tab=3"  
-                                        class="chip chip-media ml-05 mb-05 stprlist stpr'.$gstpro->cliente_id.'" style="padding:18px;width:98%; '.$display.'">
-                                            <i class="chip-icon bg-'.getStatusBgColor($stpr->estatus).'">
-                                                '.$stpr->estatus.'
-                                            </i>';
-                                            
-                                                $fecha_sta=$stpr->estatusHistory()->where('estatus',$stpr->estatus)->orderBy('created_at','desc')->first()->created_at;
-                                                $date1 = new DateTime($fecha_sta);
-                                                $date2 = new DateTime('now', new \DateTimeZone('America/Panama'));
-                                                $diff = $date1->diff($date2);
-                                                // will output 2 days
-                                                $transcurrido='';
-                                                if($diff->d)
-                                                    $transcurrido=$diff->format('%dd %hh %im');
-                                                else
-                                                        $transcurrido=$diff->format('%hh %im');
-                             
-                                            $result7.='<span class="chip-label">'.$stpr->equipo()->numero_parte;
-                                                if($stpr->trabajado_por<>'')
-                                                $result7.='<ion-icon size="large" name="checkmark-sharp" role="img" class="md hydrated text-success" style="position: absolute;top: 0px;left: 99px;" aria-label="cube outline"></ion-icon>';
-   
-                                            $result7.='</span>
-                                            
-                                            <div  class="fecha pull-right" >
-                                                <span title="Fecha de Inicio">
-                                                        '.transletaDate($fecha_sta,true,'').'
-                                                </span><br/>
-                                                <span title="Tiempo transcurrido">
-                                                        Hace '.$transcurrido.'
-                                                </span>
-                                            </div>
-                                        </a>';
+                                                $result7.='<span class="chip-label">'.$stpr->equipo()->numero_parte;
+                                                    if($stpr->trabajado_por<>'')
+                                                    $result7.='<ion-icon size="large" name="checkmark-sharp" role="img" class="md hydrated text-success" style="position: absolute;top: 0px;left: 99px;" aria-label="cube outline"></ion-icon>';
+    
+                                                $result7.='</span>
+                                                
+                                                <div  class="fecha pull-right" >
+                                                    <span title="Fecha de Inicio">
+                                                            '.transletaDate($fecha_sta,true,'').'
+                                                    </span><br/>
+                                                    <span title="Tiempo transcurrido">
+                                                            Hace '.$transcurrido.'
+                                                    </span>
+                                                </div>
+                                            </a>';
+                                        }
                                     }
+                                /*+++++++++++++++++++++++++++++++++++++++++++*/
                                 }
                             }
                         }            
