@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Session;
 use Sentinel;
 use Illuminate\Http\Request;
 use Cookie;
+use App\AccessLog;  
+use App\UserAgent;
+
 class LoginController extends Controller
 {
     public function login(Request $request){
@@ -49,6 +52,15 @@ class LoginController extends Controller
 
             if ($auth)
             {
+                $rawAgent = $request->userAgent();
+                $userAgent = UserAgent::firstOrCreate(['agent' => $rawAgent]);
+                
+               AccessLog::create([
+                    'user_id'        => $auth->id,
+                    'user_agent_id'  => $userAgent->id,
+                    'ip_address'     => $request->ip(),
+                    'url'            => $request->fullUrl(),
+                ]);
                 return redirect(route('inicio'));
             }
             else
