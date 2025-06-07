@@ -13,12 +13,17 @@ class LogAccess
     public function handle(Request $request, Closure $next)
     {
         /*
+        
         if ($user = Sentinel::getUser()) {
+
+            $rawAgent = $request->userAgent();
+            $userAgent = UserAgent::firstOrCreate(['agent' => $rawAgent]);
+
             AccessLog::create([
-                'user_id'    => Auth::id(),
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-                'url'        => $request->fullUrl(),
+                'user_id'        => $auth->id,
+                'user_agent_id'  => $userAgent->id,
+                'ip_address'     => $request->header('CF-Connecting-IP', $request->ip()),
+                'url'            => $request->fullUrl(),
             ]);
         }
         */

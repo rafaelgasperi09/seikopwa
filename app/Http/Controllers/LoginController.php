@@ -58,7 +58,7 @@ class LoginController extends Controller
                AccessLog::create([
                     'user_id'        => $auth->id,
                     'user_agent_id'  => $userAgent->id,
-                    'ip_address'     => $request->ip(),
+                    'ip_address'     => $request->header('CF-Connecting-IP', $request->ip()),
                     'url'            => $request->fullUrl(),
                 ]);
                 return redirect(route('inicio'));
