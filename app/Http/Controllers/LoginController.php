@@ -59,7 +59,7 @@ class LoginController extends Controller
                     'user_id'        => $auth->id,
                     'user_agent_id'  => $userAgent->id,
                     'ip_address'     => $request->header('CF-Connecting-IP', $request->ip()),
-                    'url'            => $request->fullUrl(),
+                    //'url'            => $request->fullUrl(),
                 ]);
                 return redirect(route('inicio'));
             }
