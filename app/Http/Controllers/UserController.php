@@ -415,7 +415,7 @@ class UserController extends Controller
     }
 
     public function logs(Request $request){
-          return view('frontend.usuarios.access_log',compact('data'));
+          return view('frontend.usuarios.access_log');
     }
 
     public function logs_csv(Request $request){
