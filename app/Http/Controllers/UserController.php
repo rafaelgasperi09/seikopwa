@@ -6,6 +6,7 @@ use App\Cliente;
 use App\Notifications\NewUser;
 use App\Notifications\GenericMail;
 use App\Rol;
+use App\AccessLog;
 use App\User;
 use App\Credential;
 use Carbon\Carbon;
@@ -17,6 +18,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\GenericExcel;
+use Yajra\DataTables\Facades\DataTables;
+use App\Exports\AccessLogsExport;
 
 class UserController extends Controller
 {
@@ -381,6 +384,43 @@ class UserController extends Controller
         
 
         return Excel::download(new GenericExcel($data), 'Listado_usuarios.xlsx');
+    }
+
+    
+    public function logs_datatable(Request $request){
+         
+            $cu=current_user();
+            $cliente_ids = explode(',', $cu->crm_clientes_id);
+             $data= AccessLog::with('user')
+                ->when($cu->isCliente(), function ($q) use ($cliente_ids) {
+                    $q->whereHas('user', function ($q2) use ($cliente_ids) {
+                        $q2->where(function ($subquery) use ($cliente_ids) {
+                            foreach ($cliente_ids as $i => $id) {
+                                $subquery->orWhereRaw("FIND_IN_SET(?, crm_clientes_id)", [$id]);
+                            }
+                        });
+                    });
+                })->get();
+            return DataTables::of($data)
+            ->addColumn('usuario', function($row) {
+            return $row->user->full_name;
+            })
+            ->addColumn('fecha', function($row) {
+            return \Carbon\Carbon::parse($row->created_at)->format('Y-m-d');
+            })
+            ->addColumn('hora', function($row) {
+            return \Carbon\Carbon::parse($row->created_at)->format('H:i:s');
+            })
+            ->make(true);
+    }
+
+    public function logs(Request $request){
+          return view('frontend.usuarios.access_log',compact('data'));
+    }
+
+    public function logs_csv(Request $request){
+         return Excel::download(new AccessLogsExport, 'access_logs.csv', \Maatwebsite\Excel\Excel::CSV);
+
     }
 
 }

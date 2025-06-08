@@ -231,6 +231,12 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         Route::get('/create', array('as' => 'usuarios.create', 'uses' => 'UserController@create'));
 
+        Route::get('/logs_datatable', array('as' => 'usuarios.logs_datatable', 'uses' => 'UserController@logs_datatable'));
+        
+        Route::get('/logs', array('as' => 'usuarios.logs', 'uses' => 'UserController@logs'))->middleware('hasAccess');
+
+        Route::get('/logs_csv', array('as' => 'usuarios.logs_csv', 'uses' => 'UserController@logs_csv'))->middleware('hasAccess');
+
         Route::get('/search', array('as' => 'usuarios.search', 'uses' => 'UserController@search'));
 
         Route::get('/import', array('as' => 'usuarios.import', 'uses' => 'UserController@import'))->middleware('hasAccess');

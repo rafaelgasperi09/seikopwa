@@ -39,16 +39,18 @@ class EquiposController extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function index(){
+       
         $subEquipos=SubEquipo::orderBy('id','desc')->get();
-
+      
         $tipoEquiposElectricos = Equipo::select('equipos.sub_equipos_id','equipos.tipo_equipos_id','tipo_equipos.display_name')
                          ->FiltroCliente()
                          ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
-                         ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id')
+                         ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id','tipo_equipos.display_name')
                          ->where('equipos.sub_equipos_id','=',2)
                          ->whereNotNull('equipos.tipo_equipos_id')
                          ->get();
         $tipoEquiposArray=array();
+
         foreach($tipoEquiposElectricos as $t){
             $tipoEquiposArray[$t->sub_equipos_id][$t->tipo_equipos_id]=$t->display_name;
             $tipoEquiposArray[$t->sub_equipos_id][$t->tipo_equipos_id]=$t->display_name;
@@ -57,7 +59,7 @@ class EquiposController extends BaseController
         $tipoEquiposCombustion = Equipo::select('equipos.sub_equipos_id','equipos.tipo_motore_id','tipo_motores.display_name')
             ->FiltroCliente()
             ->join('tipo_motores','equipos.tipo_motore_id','=','tipo_motores.id')
-            ->groupBy('equipos.sub_equipos_id','equipos.tipo_motore_id')
+            ->groupBy('equipos.sub_equipos_id','equipos.tipo_motore_id','tipo_motores.display_name')
             ->where('equipos.sub_equipos_id','=',1)
             ->get();
 

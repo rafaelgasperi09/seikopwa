@@ -64,17 +64,14 @@
                         </li>
                     @endif
                     @if(\Sentinel::hasAccess('equipos.index'))
-                    <li>
-                        <a href="{{ route('equipos.index') }}" class="item" title="Equipos">
+                    <li class="has-submenu" title="Equipos">
+                        <a href2="javascript:;"  href="{{ route('equipos.lista') }}" class="item toggle-submenu">
                             <div class="icon-box bg-primary">
                                 <img src="{{url('/images/icons/mcwhite.png')}}" width="22px">
-                                {{--}}<ion-icon name="train-outline" title="equipos"></ion-icon>{{--}}
                             </div>
-                            <div class="in">
-                                Equipos
-                            </div>
+                            <div class="in">Equipos</div>
                         </a>
-                        <ul>
+                        <ul class="submenu" >
                             <li>
                                 <a href="{{ route('equipos.lista') }}" class="item" title="Listado">
                                     <div class="icon-box bg-primary">
@@ -86,9 +83,7 @@
                                     </div>
                                 </a>
                             </li>
-                        </ul>
-                        @if(\Sentinel::hasAccess('equipos.historial'))
-                        <ul>
+                            @if(\Sentinel::hasAccess('equipos.historial'))
                             <li>
                                 <a href="{{ route('equipos.reportes_list') }}" class="item" title="Historial de reportes">
                                     <div class="icon-box bg-primary">
@@ -99,8 +94,6 @@
                                     </div>
                                 </a>
                             </li>
-                        </ul>
-                        <ul>
                             <li>
                                 <a href="{{ route('equipos.daily_check_list') }}" class="item" title="Historial de daily check">
                                     <div class="icon-box bg-primary">
@@ -111,10 +104,11 @@
                                     </div>
                                 </a>
                             </li>
+                              @endif
                         </ul>
-                        @endif
                     </li>
                     @endif
+                       
                     @if(\Sentinel::hasAccess('baterias.index'))
                     <li>
                         <a href="{{ route('baterias.index') }}" class="item"  title="Baterias">
@@ -127,30 +121,53 @@
                         </a>
                     </li>
                     @endif
-                    @if(\Sentinel::hasAccess('usuarios.index'))
-                    <li>
-                        <a href="{{ route('usuarios.index') }}" class="item"  title="Usuarios">
+                    <li class="has-submenu">
+                        <a href="javascript:;" class="item toggle-submenu">
                             <div class="icon-box bg-primary">
-                                <ion-icon name="people-circle-outline"></ion-icon>
+                                <ion-icon name="key-outline"></ion-icon>
                             </div>
-                            <div class="in">
-                                <div>Usuarios</div>
-                            </div>
+                            <div class="in">Seguridad</div>
                         </a>
+                        <ul class="submenu" >
+                            @if(\Sentinel::hasAccess('usuarios.index'))
+                            <li>
+                                <a href="{{ route('usuarios.index') }}" class="item"  title="Usuarios">
+                                    <div class="icon-box bg-primary">
+                                        <ion-icon name="people-circle-outline"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        <div>Usuarios</div>
+                                    </div>
+                                </a>
+                            </li>
+                            @endif
+                            @if(\Sentinel::hasAccess('role.index'))
+                            <li>
+                                <a href="{{ route('role.index') }}" class="item"  title="Roles">
+                                    <div class="icon-box bg-primary">
+                                        <ion-icon name="settings-outline"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        <div>Roles</div>
+                                    </div>
+                                </a>
+                            </li>
+                            @endif
+                            @if(\Sentinel::hasAccess('usuarios.logs'))
+                            <li>
+                                <a href="{{ route('usuarios.logs') }}" class="item"  title="Roles">
+                                    <div class="icon-box bg-primary">
+                                        <ion-icon name="list-outline"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        <div>Logs de acceso</div>
+                                    </div>
+                                </a>
+                            </li>
+                            @endif
+                        </ul>
                     </li>
-                    @endif
-                    @if(\Sentinel::hasAccess('role.index'))
-                    <li>
-                        <a href="{{ route('role.index') }}" class="item"  title="Roles">
-                            <div class="icon-box bg-primary">
-                                <ion-icon name="settings-outline"></ion-icon>
-                            </div>
-                            <div class="in">
-                                <div>Roles</div>
-                            </div>
-                        </a>
-                    </li>
-                    @endif
+                    
                     @if(\Sentinel::hasAccess('equipos.calendar'))
                         <li>
                             <a href="{{ route('equipos.calendar') }}" class="item"  title="Calendario">
@@ -164,16 +181,14 @@
                         </li>
                     @endif
                     @if(\Sentinel::hasAnyAccess(['maestros.clientes.index','maestros.equipos.index','maestros.componentes.index']))
-                        <li>
-                            <a  class="item"  title="Calendario">
-                                <div class="icon-box bg-primary">
-                                    <ion-icon name="file-tray-stacked-outline"></ion-icon>
-                                </div>
-                                <div class="in">
-                                    <div>Maestros</div>
-                                </div>
-                            </a>
-                            <ul>
+                        <li class="has-submenu" title="Maestros">
+                        <a href="javascript:;" class="item toggle-submenu">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="key-outline"></ion-icon>
+                            </div>
+                            <div class="in">Maestros</div>
+                        </a>
+                            <ul class="submenu" >
                                 @if(\Sentinel::hasAccess('maestros.clientes.index'))
                                 <li>
                                     <a href="{{ route('maestros.clientes.index') }}" class="item"  title="Calendario">
@@ -270,12 +285,22 @@
     dmactivo=$('#darkmodesidebar').is(":checked");
     actualizaIcono(dmactivo);
 
+    });
+
+
+    $('.toggle-submenu').on('click', function (e) {
+        e.preventDefault();
+        var $parent = $(this).closest('.has-submenu');
+        var $submenu = $parent.find('.submenu').first();
+
+        // Cierra los demás submenús si quieres comportamiento tipo acordeón:
+        $('.has-submenu').not($parent).removeClass('open').find('.submenu').slideUp();
+
+        // Alterna el estado del actual
+        $submenu.slideToggle(200);
+        $parent.toggleClass('open');
+    });
 });
-});
-
-
-
-
     
 </script>
 @endif

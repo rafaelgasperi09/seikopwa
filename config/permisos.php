@@ -23,6 +23,11 @@ $permisos["permissions"] = array(
       "role.edit"=>"Editar Rol",
       "role.update"=>"Actualizar Rol",
   ),
+  "Log de Acceso"=>array(
+      "usuarios.logs"=>"Listar Logs",
+      "usuarios.logs_csv"=>"Exportar Logs CSV",
+  ),
+
   "Equipos"=>array(
     "equipos.index"=>"Listar Equipos",
     "equipos.see_daily_check"=>"Ver Daily Check",
