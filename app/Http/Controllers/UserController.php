@@ -346,7 +346,7 @@ class UserController extends Controller
     }
 
     
-    public function export(){
+    public function export(Request $request){
         $cu=current_user();
         $clientes=explode(',',$cu->crm_clientes_id);
         $usuarios = User::when($cu->isCliente(),function($q) use($clientes){
@@ -355,7 +355,9 @@ class UserController extends Controller
                                     $q2->orWhereRaw("FIND_IN_SET(?, crm_clientes_id)", [$id]);
                                 }
                             });
-                        })->get();
+                        })
+                        ->get();
+
         $data['title']="Reportes de daily check ";
         $data['subtitle']='';
         $lista['datos']=true;
@@ -388,7 +390,7 @@ class UserController extends Controller
 
     
     public function logs_datatable(Request $request){
-         
+
             $cu=current_user();
             $cliente_ids = explode(',', $cu->crm_clientes_id);
              $data= AccessLog::with('user')
@@ -400,7 +402,22 @@ class UserController extends Controller
                             }
                         });
                     });
-                })->get();
+                })
+                ->when(!empty($request->desde),function($q) use($request){
+                    $q->where('created_at','>=',$request->desde);
+                })
+               ->when(!empty($request->hasta), function($q) use ($request) {
+                    $hasta =\Carbon\Carbon::parse($request->hasta)->endOfDay();
+                    $q->where('created_at', '<', $hasta);
+                })
+                 ->when(!empty($request->created_by),function($q) use($request){
+                    $q->where('user_id',$request->created_by);
+                })
+                 ->when(!empty($request->ip),function($q) use($request){
+                    $q->where('ip_address',$request->ip);
+                })
+                ->get();
+                
             return DataTables::of($data)
             ->addColumn('usuario', function($row) {
             return $row->user->full_name;
@@ -415,11 +432,21 @@ class UserController extends Controller
     }
 
     public function logs(Request $request){
-          return view('frontend.usuarios.access_log');
+      
+        $filtro=false;
+        if(count($request->all()))
+             $filtro=true;
+            return view('frontend.usuarios.access_log',compact('filtro'));
     }
 
     public function logs_csv(Request $request){
-         return Excel::download(new AccessLogsExport, 'access_logs.csv', \Maatwebsite\Excel\Excel::CSV);
+
+        $desde = $request->input('desde');
+        $hasta = $request->input('hasta');
+        $created_by=$request->input('created_by');
+        $ip=$request->input('ip');
+
+         return Excel::download(new AccessLogsExport($desde,$hasta,$created_by,$ip), 'access_logs.csv', \Maatwebsite\Excel\Excel::CSV);
 
     }
 

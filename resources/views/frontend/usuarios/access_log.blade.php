@@ -5,11 +5,17 @@
 <div class="row">
      @if(\Sentinel::hasAccess('usuarios.logs_csv'))
     <div class="col-md-12 text-right">
-        <a href="{{ route('usuarios.logs_csv') }}" class="btn btn-success btn-rounded btn-condensed btn-sm pull-right">
+        <a href="{{ route('usuarios.logs_csv') }}" class="btn btn-success btn-rounded btn-condensed btn-sm pull-right" id="exportbtn">
         <ion-icon name="download-outline" role="img" class="md hydrated" aria-label="download outline"></ion-icon>
         Exportar Logs CSV
-    </a>
+        </a>
+        <a id="mostrarfiltro" type="button" class="btn btn-primary btn-rounded btn-condensed btn-sm pull-right" data-toggle="collapse" href="#filtro" role="button" aria-expanded="true" aria-controls="filtro"> <ion-icon name="funnel-outline" role="img" class="md hydrated" aria-label="funnel outline"></ion-icon> Filtro</a>
     @endif
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 text-right">
+    @include('frontend.usuarios.filtro')
     </div>
 </div>
 <div class="row">
