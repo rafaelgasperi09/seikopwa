@@ -28,6 +28,7 @@
                 <th>Hora</th>
                 <th>Ip</th>
                 <th>Ususario</th>
+                <th>Email</th>
             </tr>
             </thead>
         </table>
@@ -64,6 +65,7 @@
                     {data:'hora'},
                     {data:'ip_address'},
                     {data:'usuario'},
+                    {data:'email'},
                 ],
           
             });

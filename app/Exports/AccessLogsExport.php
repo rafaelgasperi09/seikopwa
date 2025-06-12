@@ -59,6 +59,7 @@ class AccessLogsExport implements FromQuery, WithMapping, WithHeadings
         return [
             $row->id,
             optional($row->user)->full_name, // Aquí mostramos el nombre del usuario
+            optional($row->user)->email, // Aquí mostramos el nombre del usuario
             $row->ip_address,
             $row->created_at->format('Y-m-d'),
             $row->created_at->format('H:i:s'),
@@ -67,6 +68,6 @@ class AccessLogsExport implements FromQuery, WithMapping, WithHeadings
 
     public function headings(): array
     {
-        return ['ID', 'Usuario', 'IP', 'Fecha','Hora'];
+        return ['ID', 'Usuario','Email', 'IP', 'Fecha','Hora'];
     }
 }

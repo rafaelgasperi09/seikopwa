@@ -422,6 +422,9 @@ class UserController extends Controller
             ->addColumn('usuario', function($row) {
             return $row->user->full_name;
             })
+            ->addColumn('email', function($row) {
+            return $row->user->email;
+            })
             ->addColumn('fecha', function($row) {
             return \Carbon\Carbon::parse($row->created_at)->format('Y-m-d');
             })

@@ -36,7 +36,7 @@
                 <div class="col-md-4 col-sm-6 col-12 text-left">
                     <div class="form-group basic">
                         <div class="input-wrapper">
-                            <label class="label" for="name1">Registrado por</label>
+                            <label class="label" for="name1">Ususario</label>
                             {{ Form::text('typeheadfield_created_by',request('typeheadfield_created_by'),array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_created_by','data-field_name'=>'created_by','data-provide'=>'typeahead','data-items'=>10,'placeholder'=>'',"autocomplete"=>"off" )) }}
                             {{ Form::hidden('created_by',request('created_by'),array('id'=>'created_by')) }} 
                         </div>
