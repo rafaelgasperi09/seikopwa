@@ -51,12 +51,12 @@ class User extends Authenticatable
         $this->attributes['password'] = bcrypt($password);
     }
 
-    public function getLastLoginAttribute($attr) {
+   /* public function getLastLoginAttribute($attr) {
         if(isset($attr)){
             return Carbon::parse($attr)->format('d-m-Y'); //Change the format to whichever you desire
         }
 
-    }
+    }*/
 
     public function roles(){
         return $this->belongsToMany(Rol::class,'role_users','user_id','role_id');
