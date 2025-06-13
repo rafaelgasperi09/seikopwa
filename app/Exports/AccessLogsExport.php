@@ -12,14 +12,16 @@ class AccessLogsExport implements FromQuery, WithMapping, WithHeadings
     protected $desde;
     protected $hasta;
     protected $created_by;
+    protected $vemail;
     protected $ip;
     protected $hasta_eod;
 
-    public function __construct($desde, $hasta,$created_by,$ip)
+    public function __construct($desde, $hasta,$created_by,$vemail,$ip)
     {
         $this->desde = $desde;
         $this->hasta = $hasta;
         $this->created_by = $created_by;
+        $this->vemail = $vemail;
         $this->ip = $ip;
         $this->hasta_eod=\Carbon\Carbon::parse($this->hasta)->endOfDay();
     }
@@ -47,6 +49,9 @@ class AccessLogsExport implements FromQuery, WithMapping, WithHeadings
                     })
                 ->when(!empty($this->created_by),function($q) {
                     $q->where('user_id',$this->created_by);
+                })
+                ->when(!empty($this->vemail),function($q) {
+                    $q->where('user_id',$this->vemail);
                 })
                 ->when(!empty($this->ip),function($q) {
                     $q->where('ip_address',$this->ip);

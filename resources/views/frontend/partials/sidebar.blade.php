@@ -121,6 +121,7 @@
                         </a>
                     </li>
                     @endif
+                     @if(\Sentinel::hasAnyAccess(['usuarios.index','role.index','usuarios.logs']))
                     <li class="has-submenu">
                         <a href="javascript:;" class="item toggle-submenu">
                             <div class="icon-box bg-primary">
@@ -167,7 +168,7 @@
                             @endif
                         </ul>
                     </li>
-                    
+                    @endif
                     @if(\Sentinel::hasAccess('equipos.calendar'))
                         <li>
                             <a href="{{ route('equipos.calendar') }}" class="item"  title="Calendario">

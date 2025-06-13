@@ -413,6 +413,9 @@ class UserController extends Controller
                  ->when(!empty($request->created_by),function($q) use($request){
                     $q->where('user_id',$request->created_by);
                 })
+                 ->when(!empty($request->vemail),function($q) use($request){
+                    $q->where('user_id',$request->vemail);
+                })
                  ->when(!empty($request->ip),function($q) use($request){
                     $q->where('ip_address',$request->ip);
                 })
@@ -447,9 +450,10 @@ class UserController extends Controller
         $desde = $request->input('desde');
         $hasta = $request->input('hasta');
         $created_by=$request->input('created_by');
+        $vemail=$request->input('vemail');
         $ip=$request->input('ip');
 
-         return Excel::download(new AccessLogsExport($desde,$hasta,$created_by,$ip), 'access_logs.csv', \Maatwebsite\Excel\Excel::CSV);
+         return Excel::download(new AccessLogsExport($desde,$hasta,$created_by,$vemail,$ip), 'access_logs.csv', \Maatwebsite\Excel\Excel::CSV);
 
     }
 

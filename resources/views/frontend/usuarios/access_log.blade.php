@@ -27,7 +27,7 @@
                 <th>Fecha</th>
                 <th>Hora</th>
                 <th>Ip</th>
-                <th>Ususario</th>
+                <th>Usuario</th>
                 <th>Email</th>
             </tr>
             </thead>

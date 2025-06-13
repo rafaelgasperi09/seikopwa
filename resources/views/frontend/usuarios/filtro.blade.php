@@ -4,7 +4,7 @@
       
         <div class="wide-block ">
             <div class="row">
-                <div class="col-md-4 col-sm-6 col-12">
+                <div class="col-md-2 col-sm-6 col-12">
                     <div class="form-group basic">
                         <div class="input-wrapper">
                             <label class="label" for="name1">IP</label>
@@ -33,12 +33,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6 col-12 text-left">
+                <div class="col-md-3 col-sm-6 col-12 text-left">
                     <div class="form-group basic">
                         <div class="input-wrapper">
-                            <label class="label" for="name1">Ususario</label>
+                            <label class="label" for="name1">Usuario</label>
                             {{ Form::text('typeheadfield_created_by',request('typeheadfield_created_by'),array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_created_by','data-field_name'=>'created_by','data-provide'=>'typeahead','data-items'=>10,'placeholder'=>'',"autocomplete"=>"off" )) }}
                             {{ Form::hidden('created_by',request('created_by'),array('id'=>'created_by')) }} 
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 text-left">
+                    <div class="form-group basic">
+                        <div class="input-wrapper">
+                            <label class="label" for="name1">Email</label>
+                            {{ Form::text('typeheadfield_email',request('typeheadfield_email'),array('class'=>'form-control typeahead typeheadfield','id'=>'typehead_email','data-field_name'=>'created_by','data-provide'=>'typeahead','data-items'=>10,'placeholder'=>'',"autocomplete"=>"off" )) }}
+                            {{ Form::hidden('vemail',request('vemail'),array('id'=>'vemail')) }} 
                         </div>
                     </div>
                 </div>
@@ -83,6 +92,31 @@ var current = $(this).typeahead("getActive");
                 @endforeach
             ],
             autoSelect: true
+        });
+
+    $('#typehead_email').typeahead({
+            items:20,
+            source: [
+                @foreach(\App\User::when($current_user->isCliente(),function($q) use($current_user){
+                    $q->whereRaw('(crm_clientes_id in ('.$current_user->crm_clientes_id.') or crm_clientes_id is null)');
+                })->get()->pluck('email','id') as $key=>$value)
+                    {id: '{{ $key }}', name: '{{ trim($value) }}'},
+                @endforeach
+            ],
+            autoSelect: true
+        });
+
+        $('#typehead_email').change(function() {
+
+            var current = $(this).typeahead("getActive");
+            console.log(' curr :'+current);
+            if (current) {
+                // Some item from your model is active!
+                if (current.name == $(this).val()) {
+                    // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
+                    $('#vemail').val(current.id);
+                }
+            }
         });
 
         $('#typehead_created_by').change(function() {
