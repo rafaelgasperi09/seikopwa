@@ -12,7 +12,7 @@ class FormularioRegistroPolicy
 
     public function before($user, $ability)
     {
-        if ($user->isOnGroup('programador') or $user->isOnGroup('administrador') ) {
+        if ($user->isOnGroup('programador') or $user->isOnGroup('administrador') or $user->isOnGroup('administrador-cliente') ) {
             return true;
         }
     }
@@ -20,7 +20,7 @@ class FormularioRegistroPolicy
     public function edit(User $user,FormularioRegistro $formularoRegistro){
 
         if($formularoRegistro->estatus <> 'C' 
-            && ( $user->isSupervisor() or $user->isOnGroup('administrador-cliente')) )
+            && ( $user->isSupervisor() ) )
             return true;
 
         return false;
