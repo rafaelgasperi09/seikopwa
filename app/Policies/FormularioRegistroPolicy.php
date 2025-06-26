@@ -20,11 +20,11 @@ class FormularioRegistroPolicy
 
     public function edit(User $user,FormularioRegistro $formularoRegistro){
         $clientes=explode(',',current_user()->crm_clientes_id);
-        if(in_array($formularoRegistro->cliente_id,$clientes) or !current_user()->isCliente()){
+        //if(in_array($formularoRegistro->cliente_id,$clientes) or !current_user()->isCliente()){
             if($formularoRegistro->estatus <> 'C' && ( $user->isSupervisor() ) ){
                 return true;
             }
-        }
+        //}
 
         return false;
     }
