@@ -680,7 +680,7 @@ class EquiposController extends BaseController
                 'formulario_registro_id' => 'required',
                 'ok_supervisor'          => 'required',
             ];
-            if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador')){
+            if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador') or current_user()->isOnGroup('administrador-cliente')){
                 unset($validate['ok_supervisor']);
             }
             $this->validate($request,$validate);

@@ -16,6 +16,7 @@
                         $showclear=true;
                         $files=array();
                         if($campo->requerido) $requerido = 'required';
+                       
                         if(!Sentinel::getUser()->hasAccess($campo->permiso)){
                              $readonly='disabled';
                         }
