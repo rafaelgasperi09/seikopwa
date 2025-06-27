@@ -1000,11 +1000,11 @@ class EquiposController extends BaseController
                 ->whereRaw("(roles.slug in ('supervisorc','supervisor-cliente','administrador-cliente'))
                             AND activations.completed=1
                             AND (crm_clientes_id ='$equipo->cliente_id'  
-                            OR crm_clientes_id LIKE '%$equipo->cliente_id,%' 
-                            OR crm_clientes_id LIKE '%,$equipo->cliente_id%' 
+                            OR crm_clientes_id LIKE '$equipo->cliente_id,%' 
+                            OR crm_clientes_id LIKE '%,$equipo->cliente_id' 
                             OR  crm_clientes_id LIKE '%,$equipo->cliente_id,%'
                             OR  users.notificar_siempre=1
-                            )")
+                            ) ")
                 ->get();
                 // crear notificacion al supervisor del cliente
                 $when = now()->addMinutes(1);
