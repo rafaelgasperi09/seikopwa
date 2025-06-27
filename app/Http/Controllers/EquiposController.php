@@ -633,7 +633,7 @@ class EquiposController extends BaseController
 
             $when = now()->addMinutes(1);
             
-            $notis= User::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%' or notificar_siempre=1")->get() ;
+            $notis= User::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '$equipo->cliente_id,%' or crm_clientes_id like '%,$equipo->cliente_id,%' or notificar_siempre=1")->get() ;
             if(!empty($request->supervisor_id)){
                 $notis = User::whereIn('id',[$request->supervisor_id])->get();
              }
@@ -1000,11 +1000,11 @@ class EquiposController extends BaseController
                 ->whereRaw("(roles.slug in ('supervisorc','supervisor-cliente','administrador-cliente'))
                             AND activations.completed=1
                             AND (crm_clientes_id ='$equipo->cliente_id'  
-                            OR crm_clientes_id LIKE '$equipo->cliente_id,%' 
-                            OR crm_clientes_id LIKE '%,$equipo->cliente_id' 
+                            OR crm_clientes_id LIKE '%$equipo->cliente_id,%' 
+                            OR crm_clientes_id LIKE '%,$equipo->cliente_id%' 
                             OR  crm_clientes_id LIKE '%,$equipo->cliente_id,%'
                             OR  users.notificar_siempre=1
-                            ) ")
+                            )")
                 ->get();
                 // crear notificacion al supervisor del cliente
                 $when = now()->addMinutes(1);
