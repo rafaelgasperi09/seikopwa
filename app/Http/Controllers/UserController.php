@@ -92,7 +92,7 @@ class UserController extends Controller
 
     public function profile($id){
         $cu=current_user();
-        dd($cu);
+       
         if($cu->id==$id or ($cu->isOnGroup('programador') or $cu->isOnGroup('administrador') or  $cu->isOnGroup('administrador-cliente'))){
             $data = User::findOrFail($id);
             $roles = Rol::where('id','<>',1)->get()->pluck('full_name','id');
