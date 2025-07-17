@@ -96,7 +96,12 @@ class UserController extends Controller
         if($cu->id==$id or ($cu->isOnGroup('programador') or $cu->isOnGroup('administrador') or  $cu->isOnGroup('administrador-cliente'))){
             $data = User::findOrFail($id);
             $roles = Rol::where('id','<>',1)->get()->pluck('full_name','id');
-            $clientes = Cliente::whereHas('equipos')->orderBy('nombre')->get()->pluck('full_name','id');
+            $cu=current_user();
+            $clientes = Cliente::whereHas('equipos')
+                    ->when($cu->isCliente(),function($q) use($cu){
+                        $q->whereRaw('id in ('.$cu->crm_clientes_id.')');
+                    })
+                    ->orderBy('nombre')->get()->pluck('full_name','id');
             return view('frontend.usuarios.profile',compact('data','roles','clientes'));
         }else{
             return response()->view('frontend.noaccess', [], 403);
