@@ -96,7 +96,7 @@ class UserController extends Controller
         if($cu->id==$id or ($cu->isOnGroup('programador') or $cu->isOnGroup('administrador') or  $cu->isOnGroup('administrador-cliente'))){
             $data = User::findOrFail($id);
             $roles = Rol::where('id','<>',1)->get()->pluck('full_name','id');
-            $cu=current_user();
+            
             $clientes = Cliente::whereHas('equipos')
                     ->when($cu->isCliente(),function($q) use($cu){
                         $q->whereRaw('id in ('.$cu->crm_clientes_id.')');
@@ -112,14 +112,12 @@ class UserController extends Controller
     public function create(){
         $user=current_user();
         $roles = Rol::where('id','<>',1)->FilterClientes()->select('name','id','tipo')->get();
-
+        $cu=current_user();
         $clientes = Cliente::whereHas('equipos')
-                ->when($user->isCliente(),function($q) use($user){
-                    $q->whereIn('id',explode(',',$user->crm_clientes_id));
-                })
-                ->orderBy('nombre')
-                ->get()
-                ->pluck('full_name','id');
+                            ->when($cu->isCliente(),function($q) use($cu){
+                                $q->whereRaw('id in ('.$cu->crm_clientes_id.')');
+                            })
+                            ->orderBy('nombre')->get()->pluck('full_name','id');
 
        /* $users = MontacargaUser::whereNotIn('id',User::whereNotNull('crm_user_id')->pluck('crm_user_id'))
             ->orderBy('name')
