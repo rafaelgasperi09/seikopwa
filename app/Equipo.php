@@ -130,4 +130,13 @@ class Equipo extends BaseModel
             'fullname'=>'N/A'
         ]);
     }
+
+    public function es_gmp()
+    {
+        if (str_starts_with($this->numero_parte, 'GM-')) {
+            return true;
+        }else{
+            return false;
+        } 
+    }
 }

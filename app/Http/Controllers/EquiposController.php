@@ -993,26 +993,30 @@ class EquiposController extends BaseController
             }
             if($model->save())
             {      
+ 
                 registraExtra($model->id);
-                $users = User::Join('role_users','users.id','role_users.user_id')
-                ->Join('roles','role_users.role_id','roles.id')
-                ->Join('activations','users.id','activations.user_id')
-                ->whereRaw("(roles.slug in ('supervisorc','supervisor-cliente','administrador-cliente'))
-                            AND activations.completed=1
-                            AND (crm_clientes_id ='$equipo->cliente_id'  
-                            OR crm_clientes_id LIKE '%$equipo->cliente_id,%' 
-                            OR crm_clientes_id LIKE '%,$equipo->cliente_id%' 
-                            OR  crm_clientes_id LIKE '%,$equipo->cliente_id,%'
-                            OR  users.notificar_siempre=1
-                            )")
-                ->get();
-                // crear notificacion al supervisor del cliente
-                $when = now()->addMinutes(1);
-                foreach($users as $user){
-                    notifica($user,(new NewTecnicalSupport($model))->delay($when));
-                    if(env('APP_ENV')=='local'){
-                        break;
-                    }   
+                if(!$equipo->es_gmp()){
+                    $users = User::Join('role_users','users.id','role_users.user_id')
+                    ->Join('roles','role_users.role_id','roles.id')
+                    ->Join('activations','users.id','activations.user_id')
+                    ->whereRaw("(roles.slug in ('supervisorc','supervisor-cliente','administrador-cliente'))
+                                AND activations.completed=1
+                                AND (crm_clientes_id ='$equipo->cliente_id'  
+                                OR crm_clientes_id LIKE '%$equipo->cliente_id,%' 
+                                OR crm_clientes_id LIKE '%,$equipo->cliente_id%' 
+                                OR  crm_clientes_id LIKE '%,$equipo->cliente_id,%'
+                                OR  users.notificar_siempre=1
+                                )")
+                    ->get();
+                    
+                    // crear notificacion al supervisor del cliente
+                    $when = now()->addMinutes(1);
+                    foreach($users as $user){
+                        notifica($user,(new NewTecnicalSupport($model))->delay($when));
+                        if(env('APP_ENV')=='local'){
+                            break;
+                        }   
+                    }
                 }
                     
             }else{
