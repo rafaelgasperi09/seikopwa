@@ -111,6 +111,36 @@
         </div>
     </div>
     <script>
+	/*$(document).ready(function() {
+    $('#miTabla').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'copy',
+                text: 'Copiar'
+            },
+            {
+                extend: 'excel',
+                text: 'Exportar a Excel'
+            },
+            {
+                extend: 'csv',
+                text: 'Exportar a CSV'
+            },
+            {
+                extend: 'pdf',
+                text: 'Exportar a PDF'
+            },
+            {
+                extend: 'print',
+                text: 'Imprimir'
+            }
+        ],
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+        }
+    });
+});*/
         $('.datatable').DataTable({
             'order':['0','DESC'],
             "responsive": true,
@@ -143,4 +173,23 @@
            window.location.href = "{{route('maestros.equipos.index')}}" + "?eliminados="+$(this).prop('checked');
         });
     </script>
+	<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<!-- DataTables Buttons -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<!-- Librerías para exportar -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 @stop
