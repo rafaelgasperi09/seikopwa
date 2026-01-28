@@ -16,9 +16,9 @@
 
     setTimeout(function(){
         $.ajax({
-            url: '{{secure_url('data_inicio')}}',
+            url: '/data_inicio',
             dataType: "html",
-            data: "tag=equipos_pendientes_daily_check&user_id={{current_user()->id}}",
+            data: "tag=equipos_pendientes_daily_check&user_id={{current_user()->id}}&tipo={{request()->tipo}}",
             type: 'get',
             success: function(data) {
                 $('#epdc_body').html(data);

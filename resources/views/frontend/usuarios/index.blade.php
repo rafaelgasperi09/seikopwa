@@ -9,6 +9,12 @@
                 <ion-icon name="add-circle-outline" class="md hydrated" aria-label="logo android"></ion-icon>
                 Nuevo
             </a>
+            @if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'))
+            <a href="{{ route('usuarios.export') }}" class="btn btn-success ">
+                <ion-icon name="download-outline" class="md hydrated" aria-label="logo android"></ion-icon>
+                Exportar
+            </a>
+            @endif
             @endif
             {{--}}
             <a href="{{ route('usuarios.import') }}" class="btn btn-warning" onclick="$('#ios-add-to-home-screen').modal();">
@@ -18,5 +24,6 @@
             {{--}}
         </div>
     </div>
+    
     @include('frontend.partials.list',array('data'=>$data,'page_view'=>'usuarios.page','page_url'=>'/usuarios/search','search_url'=>'/ususarios/search'))
 @stop

@@ -7,10 +7,7 @@ use App\Formulario;
 use App\FormularioCampo;
 use App\FormularioData;
 use App\FormularioRegistro;
-use App\MontacargaConsecutivo;
-use App\MontacargaCopiaSolicitud;
 use App\MontacargaImagen;
-use App\MontacargaSolicitud;
 
 class FormularioDataObserver
 {

@@ -160,6 +160,22 @@ $arr=array();
     return $arr;
 }
 
+function getStatusHtmlEquipos($status){
+    $color=array(
+        'A'=>'success',
+        'I'=>'danger',
+        ''=>''
+    );
+    $estado=array(
+        'A'=>'Activo',
+        'I'=>'Inactivo',
+        ''=>'N/A'
+    );
+
+    $html='<span class="badge badge-'.$color[$status].'">'.$estado[$status].'</span>';
+    return $html;
+}
+
 function getListUsersByRol($rol_name){
 
     $arr=array();
@@ -337,15 +353,18 @@ function semana_rango($fecha,$semana){
 }
 
 function notifica($user,$notification)
-{   
+{     
+    $when=now()->addMinutes(rand(1,5));
+    
     if(env_local()){
         $user_local=\App\User::find(1);
-        return $user_local->notify($notification);
+      
+        return $user_local->notify($notification->delay($when));
     }   
     if($user->id==48) //no enviar correo a este usuario Rofolfo fuentes
         return true;
     
-    return $user->notify($notification);
+    return $user->notify($notification->delay($when));
 }
 function tipo_form($tipo=''){
     $tipos=array(   ''=>'Seleccione',
@@ -405,4 +424,34 @@ function to_table($data){
     $tabla.='</table>';
 
     return $tabla;
+}
+
+function registraExtra($id){
+    $fr=\App\FormularioExtra::where('formulario_registro_id',$id)->first(); 
+   
+    $datos=DB::select("select * from listado_extra_fields where formulario_registro_id=$id");
+    $datos=end($datos);
+
+    if($fr){
+
+        $fr->prioridad=$datos->prioridad;
+        $fr->horometro=$datos->horometro;
+        $fr->cliente=$datos->cliente;
+        $fr->save();
+    }else{
+        if($datos){
+            \App\FormularioExtra::create([
+                'formulario_registro_id'=>$id,
+                'prioridad'=>$datos->prioridad,
+                'horometro'=>$datos->horometro,
+                'cliente'=>$datos->cliente
+            ]);
+        }
+
+    }
+
+}   
+
+function img_pdf($img_storage){
+return "data:image/png;base64,".base64_encode(file_get_contents($img_storage));
 }

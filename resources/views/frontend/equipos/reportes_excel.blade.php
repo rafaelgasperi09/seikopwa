@@ -14,8 +14,9 @@ $campos=array('id','fecha','hora','tipo','numero_parte','prioridad','user_name',
     <td >{{$c}}</td>
     @endforeach
   </tr>
-  @foreach($data as $data)
+  @foreach($datos as $data)
   <tr>
+
     @foreach($campos as $k)
     <td >
         @if($k=='tipo')

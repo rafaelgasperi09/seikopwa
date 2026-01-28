@@ -6,10 +6,7 @@ use App\FormularioData;
 use App\FormularioRegistro;
 use App\FormularioRegistroEstatus;
 use App\Http\Requests\SaveFormEquipoRequest;
-use App\MontacargaConsecutivo;
-use App\MontacargaCopiaSolicitud;
 use App\MontacargaImagen;
-use App\MontacargaSolicitud;
 use App\Notifications\NewReport;
 use App\Notifications\NewTecnicalSupportAssignTicket;
 use App\Notifications\NewTecnicalSupport;
@@ -23,6 +20,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use App\TipoEquipo;
 use App\Equipo;
+use App\EquiposVw;
 use App\Cliente;
 use App\SubEquipo;
 use Illuminate\Support\Facades\DB;
@@ -34,22 +32,25 @@ use Response;
 use Yajra\DataTables\Facades\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ReportesExport;
+use App\Exports\GenericExcel;
 
 class EquiposController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function index(){
+       
         $subEquipos=SubEquipo::orderBy('id','desc')->get();
-
+      
         $tipoEquiposElectricos = Equipo::select('equipos.sub_equipos_id','equipos.tipo_equipos_id','tipo_equipos.display_name')
                          ->FiltroCliente()
                          ->join('tipo_equipos','equipos.tipo_equipos_id','=','tipo_equipos.id')
-                         ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id')
+                         ->groupBy('equipos.sub_equipos_id','equipos.tipo_equipos_id','tipo_equipos.display_name')
                          ->where('equipos.sub_equipos_id','=',2)
                          ->whereNotNull('equipos.tipo_equipos_id')
                          ->get();
         $tipoEquiposArray=array();
+
         foreach($tipoEquiposElectricos as $t){
             $tipoEquiposArray[$t->sub_equipos_id][$t->tipo_equipos_id]=$t->display_name;
             $tipoEquiposArray[$t->sub_equipos_id][$t->tipo_equipos_id]=$t->display_name;
@@ -58,7 +59,7 @@ class EquiposController extends BaseController
         $tipoEquiposCombustion = Equipo::select('equipos.sub_equipos_id','equipos.tipo_motore_id','tipo_motores.display_name')
             ->FiltroCliente()
             ->join('tipo_motores','equipos.tipo_motore_id','=','tipo_motores.id')
-            ->groupBy('equipos.sub_equipos_id','equipos.tipo_motore_id')
+            ->groupBy('equipos.sub_equipos_id','equipos.tipo_motore_id','tipo_motores.display_name')
             ->where('equipos.sub_equipos_id','=',1)
             ->get();
 
@@ -88,7 +89,7 @@ class EquiposController extends BaseController
             else
                 $filtro.=" cliente_id=$request->cliente_id";
         }
-        $equipos=Equipo::selectRaw('equipos.*')->FiltroCliente()
+        $equipos=Equipo::where('equipos.estado','A')->selectRaw('equipos.*')->FiltroCliente()
         ->leftJoin('contactos','equipos.cliente_id','=','contactos.id')
         ->when($filtro<>'',function($q) use($filtro){
             $q->whereRaw($filtro);
@@ -112,28 +113,20 @@ class EquiposController extends BaseController
         return view('frontend.equipos.lista')->with('equipos',$equipos)->with('datos',$datos)->with('dominio',$dominio)->with('clientes',$clientes)->with('cliente_id',$cliente_id);
     }
 
-    public function reportes_list(Request $request){
-        $filtro='false';
-        return view('frontend.equipos.reportes')->with('filtro',$filtro);
-    }
-
-    public function reportes_datatable(Request $request,$export_datos=false){
-        //dd($request->all());
+    public function reportes_datos(Request $request,$export_datos=false){
         $clientes=explode(',',current_user()->crm_clientes_id);
-        $editar=(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador'));
+       
         $carbon = new \Carbon\Carbon();
         $desde = $carbon->now()->subDays(45)->format('Y-m-d'); //filtro reportes cerrados 45 dias
         $es_cliente=current_user()->isCliente();
 
-        $data = DB::table('formulario_registro as fr')
+        /*$data = DB::table('formulario_registro1 as fr')
                 ->join('formularios as f','fr.formulario_id','f.id')
                 ->join('users as u','fr.creado_por','u.id')
                 ->join('equipos_vw as evw','fr.equipo_id','evw.id')
                 ->join('clientes_vw as cvw','fr.cliente_id','cvw.id')
-                ->leftjoin('formulario_data as fd','fr.id','fd.formulario_registro_id')
-                ->join('formulario_campos as fc','fd.formulario_campo_id','fc.id')
-                ->join('users as usr','fd.user_id','usr.id')     
-                ->selectRaw("  fr.id, 
+                ->join('formulario_extra as fe','fr.id','fe.formulario_registro_id')
+                ->selectRaw("fr.id, 
                                 fr.created_at, 
                                 fr.fecha_inicia, 
                                 fr.fecha_fin, 
@@ -146,14 +139,13 @@ class EquiposController extends BaseController
                                 cvw.nombre AS cliente_nombre, 
                                 evw.numero_parte, 
                                 CONCAT(u.first_name, ' ', u.last_name) AS user_name,
-                                MAX(CASE WHEN fc.tipo = 'firma' AND fc.cambio_estatus = 1 AND fd.valor IS NOT NULL THEN CONCAT(usr.first_name, ' ', usr.last_name) ELSE '' END) AS cliente, 
-                                MAX(CASE WHEN fd.formulario_campo_id IN (968, 969) THEN fd.valor ELSE '' END) AS prioridad, 
-                                MAX(CASE WHEN fc.nombre IN ('horometro', 'lectura_horometro') AND fc.tipo = 'number' THEN fd.valor ELSE '' END) AS horometro")
-                ->whereNull('fr.deleted_at')
+                               fe.cliente,fe.prioridad,fe.horometro")
+                ->whereNull('fr.deleted_at')*/
                 //->whereRaw("(formulario_registro.estatus='C' and formulario_registro.created_at >='$desde' or formulario_registro.estatus<>'C')")
+                $data = DB::table('reportes_list')
                 ->when( $es_cliente ,function ($q) use($request,$clientes){
                     $q->whereIn("cliente_id",$clientes)
-                    ->whereRaw("((f.tipo <> 'serv_tec' and evw.numero_parte like 'GM%') or evw.numero_parte not like 'GM%')");                    
+                    ->whereRaw("((tipo <> 'serv_tec' and numero_parte like 'GM%') or numero_parte not like 'GM%')");                    
                 })
                 ->when(!empty($request->equipo_id) and $request->equipo_id>0 ,function ($q) use($request){
                     $q->where("equipo_id",$request->equipo_id);
@@ -162,26 +154,43 @@ class EquiposController extends BaseController
                     $q->where("cliente_id",$request->cliente_id);
                 })
                 ->when(!empty($request->desde)  ,function ($q) use($request){
-                    $q->where("fr.created_at",'>=',$request->desde);
+                    $q->where("created_at",'>=',$request->desde);
                 })
                 ->when(!empty($request->hasta)  ,function ($q) use($request){
-                    $q->where("fr.created_at",'<=',$request->hasta);
+                    $q->where("created_at",'<=',$request->hasta);
                 })
                 ->when(!empty($request->tipo)  ,function ($q) use($request){
-                    $q->where("f.tipo",$request->tipo);
+                    $q->where("tipo",$request->tipo);
                 })
                 ->when(!empty($request->estado)  ,function ($q) use($request){
-                    $q->where("fr.estatus",$request->estado);
+                    $q->where("estatus",$request->estado);
                 })
                 ->when(!empty($request->created_by)  ,function ($q) use($request){
-                    $q->where("fr.creado_por",$request->created_by);
-                })
-                ->groupBy(DB::raw('fr.id, fr.created_at, fr.fecha_inicia, fr.fecha_fin, fr.estatus, fr.equipo_id,
-                fr.turno_chequeo_diario,u.first_name, u.last_name, f.tipo, cvw.nombre, evw.numero_parte, u.first_name, u.last_name'));
+                    $q->where("creado_por",$request->created_by);
+                });
               
-    if($export_datos){
-        return $data->get();
+        if($export_datos){
+            return $data->get();
+        }
+
+        return $data;
     }
+
+    public function reportes_list(Request $request){
+        $filtro='false';
+        $data='';
+        $cu=current_user();
+        /*$data= $this->reportes_datos($request)->paginate(10);*/
+        $editar=($cu->isOnGroup('programador') or $cu->isOnGroup('administrador'));
+        return view('frontend.equipos.reportes')->with(compact('filtro','data','editar'));
+    }
+
+    public function reportes_datatable(Request $request,$export_datos=false){
+        //dd($request->all());
+    $cu=current_user();
+    $editar=($cu->isOnGroup('programador') or $cu->isOnGroup('administrador'));
+    $data=$this->reportes_datos( $request,$export_datos);
+
     return DataTables::of($data)
         ->editColumn('creado_por', function($row) {
             return $row->first_name.' '.$row->last_name;
@@ -200,7 +209,7 @@ class EquiposController extends BaseController
         ->editColumn('tipo', function($row) {
             return tipo_form($row->tipo);
         })
-        ->addColumn('actions', function($row) use($editar) {
+        ->addColumn('actions', function($row) use($editar,$cu) {
         $url='';
         $url2='';
         $url_edit='';
@@ -209,6 +218,9 @@ class EquiposController extends BaseController
             $url=route('equipos.show_daily_check',$row->id);
             $url2=route('reporte.detalle',['form_montacarga_daily_check',$row->id]);   
             $url_edit=route('equipos.edit_daily_check',$row->id);
+            if($cu->isOnGroup('administrador-cliente') ){
+                $editar=true;
+            }
         }
           
         if($row->tipo=='mant_prev'){
@@ -248,9 +260,9 @@ class EquiposController extends BaseController
     public function reportes_export(Request $request){
         $file='reportes.csv';
        
-        $datos=$this->reportes_datatable($request,true);
-      
-        $headers = array(
+        $datos=$this->reportes_datos($request,true);
+        
+        /*$headers = array(
             "Content-Encoding"        => "UTF-8",
             "Content-type"        => "text/csv",
             "Content-Disposition" => "attachment; filename=$file",
@@ -262,7 +274,7 @@ class EquiposController extends BaseController
         $columns=array('IDREPORTE','FECHA REGISTRO','HORA', 'TIPO','EQUIPO','PRIORIDAD','REGISTRADO POR','CLIENTE','SEMANA','DIA','HOROMETRO','ESTATUS','TURNO');
                         
         $campos=array('id','fecha','hora','tipo','numero_parte','prioridad','user_name','nombre','semana','dia_semana','horometro','estatus','turno_chequeo_diario');
-        $i=0;
+        $i=0;*/
         return Excel::download(new ReportesExport($datos), 'Equipo.xlsx');
         /*
         foreach($datos as $value){
@@ -272,7 +284,7 @@ class EquiposController extends BaseController
             }
             break;
         }
-        */
+        
         $callback = function() use($datos,$file,$columns,$campos) {
 
             $file = fopen('php://output', 'w');
@@ -291,6 +303,7 @@ class EquiposController extends BaseController
         };
         return response()->stream($callback, 200, $headers);
         exit();
+        */
     }
 
     public function tipo($sub,$id){
@@ -490,12 +503,12 @@ class EquiposController extends BaseController
              ->whereRaw('created_at >= CURDATE()')
              ->orderBy('id','DESC')
              ->first();
-        
+
 
          if($formulario_registro){
-            if($formulario_registro->turno_chequeo_diario>=4){
+            if($formulario_registro->turno_chequeo_diario>=$data->turnos){
                 $fecha=Carbon::parse($formulario_registro->created_at)->format('d/M/Y');
-                request()->session()->flash('message.error','Ya ha completado los cuatro turnos para el dia '.$fecha);
+                request()->session()->flash('message.error','Ya ha completado los '.$data->turnos.' turnos para el dia '.$fecha);
                 return redirect()->back();
             }
              $turno = $formulario_registro->turno_chequeo_diario+1;
@@ -520,10 +533,11 @@ class EquiposController extends BaseController
         $equipo = Equipo::findOrFail($data->equipo_id);
         if(!current_user()->can('see',$equipo)){
             request()->session()->flash('message.error','Su usuario no tiene permiso para realizar esta accion.');
-            return redirect(route('equipos.index'));
+            return redirect(route('equipos.detail',$equipo->id));
         }elseif(!current_user()->can('edit',$data)){
             request()->session()->flash('message.error','Este registro no esta disponible para ser modificado.');
-            return redirect(route('equipos.detail',$equipo->id));
+                return redirect( route('equipos.show_daily_check',array('id'=>$id)));
+            
         }
 
         $formulario = Formulario::findOrFail($data->formulario_id);
@@ -572,15 +586,23 @@ class EquiposController extends BaseController
 
     public function storeDailyCheck(Request $request){
 
+        $equipo_id = $request->equipo_id;
+        $formulario_id = $request->formulario_id;
+        $formulario = Formulario::find($formulario_id);
+        $requeridos=['supervisor_id'=>'required',
+                     'operador'=>'required'];
 
-        $this->validate($request, [
-            'supervisor_id'          => 'required'
-        ]);
-
+        /*if($formulario){
+            foreach($formulario->campos as $c){
+                if($c->requerido and !$c->cambio_estatus){
+                    $requeridos[$c->nombre]='required';
+                }
+            }       
+        }*/
+   
+        $this->validate($request, $requeridos);
         try{
-            $equipo_id = $request->equipo_id;
-            $formulario_id = $request->formulario_id;
-            $formulario = Formulario::find($formulario_id);
+   
             $equipo = Equipo::find($equipo_id);
             $model = new FormularioRegistro();
             DB::transaction(function() use($model,$request,$formulario,$equipo){
@@ -600,6 +622,8 @@ class EquiposController extends BaseController
                 if(!$model->save())
                 {
                     Throw new \Exception('Hubo un problema y no se creo el registro!');
+                }else{
+                    registraExtra($model->id);
                 }
 
             });
@@ -609,12 +633,12 @@ class EquiposController extends BaseController
 
             $when = now()->addMinutes(1);
             
-            $notis= User::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '%$equipo->cliente_id,%' or notificar_siempre=1")->get() ;
+            $notis= User::whereRaw("crm_clientes_id ='$equipo->cliente_id' or crm_clientes_id like '%,$equipo->cliente_id%' or crm_clientes_id like '$equipo->cliente_id,%' or crm_clientes_id like '%,$equipo->cliente_id,%' or notificar_siempre=1")->get() ;
             if(!empty($request->supervisor_id)){
                 $notis = User::whereIn('id',[$request->supervisor_id])->get();
              }
             foreach ($notis as $u){
-                if($u->isOnGroup('supervisorc') or $u->isOnGroup('supervisor-cliente') or  $u->isOnGroup('programador')  ){
+                if($u->isSupervisor('cliente') or  $u->isOnGroup('programador')  ){
                     notifica($u,(new NewReport($model,$u,$notis))->delay($when));
                     if(env_local()){
                         break;
@@ -630,6 +654,9 @@ class EquiposController extends BaseController
                     break;
                 }
             }
+
+  
+
             if($not_ok and $model->status=='C'){
                  return redirect(route('equipos.create_tecnical_support_prefilled',[$equipo_id,$model->id]));
             }
@@ -653,7 +680,7 @@ class EquiposController extends BaseController
                 'formulario_registro_id' => 'required',
                 'ok_supervisor'          => 'required',
             ];
-            if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador')){
+            if(current_user()->isOnGroup('programador') or current_user()->isOnGroup('administrador') or current_user()->isOnGroup('administrador-cliente')){
                 unset($validate['ok_supervisor']);
             }
             $this->validate($request,$validate);
@@ -666,10 +693,10 @@ class EquiposController extends BaseController
             $model->updated_at =Carbon::now();
          
             $model->save();
-          
+
     
             $request->session()->flash('message.success', 'Registro guardado con éxito');
-
+            
             if($model->data()->wherein('valor',['M','R'])->count()>0){
                 return redirect(route('equipos.create_tecnical_support_prefilled',[$model->equipo_id,$model->id]));
             }
@@ -790,12 +817,13 @@ class EquiposController extends BaseController
                 if (!$model->save()) {
                     throw new \Exception('Hubo un problema y no se creo el registro!');
                 }else{
-                  $model->createSolicitudMontacarga();
+                    registraExtra($model->id);
+               /*   $model->createSolicitudMontacarga();*/
                 }
             });
 
             //aqui hay que ver a quien notificar
-
+  
             $request->session()->flash('message.success', 'Registro creado con éxito');
             return redirect(route('equipos.detail', $equipo_id));
 
@@ -824,12 +852,12 @@ class EquiposController extends BaseController
             $formulario = Formulario::findOrFail($model->formulario_id);
             $model->updated_at =Carbon::now();
             if($model->save()){
-                $model->createSolicitudMontacarga();
+                /*$model->createSolicitudMontacarga();*/
                 $request->session()->flash('message.success', 'Registro guardado con éxito');
             }else{
                 $request->session()->flash('message.error', 'Hubo algun error y no se pudo actualizar');
             }
-
+  
             return redirect(route('equipos.detail', $model->equipo_id));
 
         } catch (\Exception $e) {
@@ -845,7 +873,7 @@ class EquiposController extends BaseController
             request()->session()->flash('message.error','Este reporte debe estar cerrado para poder imprimirse, ya que debe generar una solicitud');
             return redirect()->back();
         }
-        $pdf = $formularioRegistro->savePdf($formularioRegistro->solicitud(),false);
+        $pdf = $formularioRegistro->savePdf($formularioRegistro,false);
         return $pdf->Output('mantenimiento_preventivo.pdf', 'I');
     }
     /******************* FORM DE SOPORTE TECNICO **************************/
@@ -876,10 +904,16 @@ class EquiposController extends BaseController
 
     }
 
-    public function editTecnicalSupport($id){
+    public function editTecnicalSupport(Request $request,$id){
 
         $data = FormularioRegistro::findOrFail($id);
         $equipo = Equipo::findOrFail($data->equipo_id);
+
+        $equipo_gm=substr($equipo->numero_parte,0,2)=='GM';
+        if(current_user()->isCliente() and $equipo_gm){
+            $request->session()->flash('message.error','No tiene acceso a editar este reporte');
+            return redirect(route('inicio'));
+        }
         $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
 
         $campos = $formulario->campos()->whereIn('nombre',['hora_entrada','hora_salida','tecnico_asignado'])->pluck('id');
@@ -892,10 +926,15 @@ class EquiposController extends BaseController
             ->with('data',$data);
     }
 
-    public function showTecnicalSupport($id){
+    public function showTecnicalSupport(Request $request,$id){
 
         $data = FormularioRegistro::findOrFail($id);
         $equipo = Equipo::findOrFail($data->equipo_id);
+        $equipo_gm=substr($equipo->numero_parte,0,2)=='GM';
+        if(current_user()->isCliente() and $equipo_gm){
+            $request->session()->flash('message.error','No tiene acceso a ver este reporte');
+            return redirect(route('inicio'));
+        }
         $formulario = Formulario::whereNombre('form_montacarga_servicio_tecnico')->first();
 
         $campos = $formulario->campos()->whereIn('nombre',['hora_entrada','hora_salida','tecnico_asignado'])->pluck('id');
@@ -930,8 +969,11 @@ class EquiposController extends BaseController
         $tipo_equipos_id = $request->tipo_equipos_id;
         $formulario = Formulario::find($formulario_id);
         $model = new FormularioRegistro();
-        $equipo = Equipo::findOrFail($equipo_id);
+        
+        $equipo = Equipo::find($equipo_id);
+  
         $status='P';
+
         if($model->status=='C')
             $status='C';
         //DB::transaction(function() use($model,$request,$formulario,$equipo,$status){
@@ -950,27 +992,31 @@ class EquiposController extends BaseController
                 $model->estatus = $status;
             }
             if($model->save())
-            {
-                
-                $users = User::Join('role_users','users.id','role_users.user_id')
-                ->Join('roles','role_users.role_id','roles.id')
-                ->Join('activations','users.id','activations.user_id')
-                ->whereRaw("(roles.slug='supervisorc' or roles.slug='supervisor-cliente')
-                            AND activations.completed=1
-                            AND (crm_clientes_id ='$equipo->cliente_id'  
-                            OR crm_clientes_id LIKE '%$equipo->cliente_id,%' 
-                            OR crm_clientes_id LIKE '%,$equipo->cliente_id%' 
-                            OR  crm_clientes_id LIKE '%,$equipo->cliente_id,%'
-                            OR  users.notificar_siempre=1
-                            )")
-                ->get();
-                // crear notificacion al supervisor del cliente
-                $when = now()->addMinutes(1);
-                foreach($users as $user){
-                    notifica($user,(new NewTecnicalSupport($model))->delay($when));
-                    if(env('APP_ENV')=='local'){
-                        break;
-                    }   
+            {      
+ 
+                registraExtra($model->id);
+                if(!$equipo->es_gmp()){
+                    $users = User::Join('role_users','users.id','role_users.user_id')
+                    ->Join('roles','role_users.role_id','roles.id')
+                    ->Join('activations','users.id','activations.user_id')
+                    ->whereRaw("(roles.slug in ('supervisorc','supervisor-cliente','administrador-cliente'))
+                                AND activations.completed=1
+                                AND (crm_clientes_id ='$equipo->cliente_id'  
+                                OR crm_clientes_id LIKE '%$equipo->cliente_id,%' 
+                                OR crm_clientes_id LIKE '%,$equipo->cliente_id%' 
+                                OR  crm_clientes_id LIKE '%,$equipo->cliente_id,%'
+                                OR  users.notificar_siempre=1
+                                )")
+                    ->get();
+                    
+                    // crear notificacion al supervisor del cliente
+                    $when = now()->addMinutes(1);
+                    foreach($users as $user){
+                        notifica($user,(new NewTecnicalSupport($model))->delay($when));
+                        if(env('APP_ENV')=='local'){
+                            break;
+                        }   
+                    }
                 }
                     
             }else{
@@ -1010,6 +1056,8 @@ class EquiposController extends BaseController
             }
             $model->updated_at =Carbon::now();
             $model->save();
+
+  
             $request->session()->flash('message.success', 'Registro guardado con éxito');
             return redirect(route('equipos.detail', $model->equipo_id));
 
@@ -1384,4 +1432,157 @@ class EquiposController extends BaseController
             ->with('otrosCampos',$otrosDatos)
             ->with('data',$data);
     }
+
+    public function daily_check_list(Request $request){
+        $filtro=false;
+        return view('frontend.equipos.reportes_daily_check')->with('filtro',$filtro);;
+    }
+
+    public function daily_check_list_datatable(Request $request){
+        $filtro='';
+
+        $es_cliente=current_user()->isCliente();
+        $clientes=array();
+        if($es_cliente)
+            $clientes=explode(',',current_user()->crm_clientes_id);
+        
+        $data=DB::table('formulario_registro as fr')
+                ->join('users as u','fr.creado_por','u.id')
+                ->join('equipos_vw as evw','fr.equipo_id','evw.id')
+                ->join('clientes_vw as cvw','fr.cliente_id','cvw.id')
+                ->leftjoin('formulario_data as fd','fr.id','fd.formulario_registro_id')  
+                ->WhereRaw("date_format(fr.created_at,'%Y-%m-%d')>='2024-11-01'")
+                ->where('fr.formulario_id',2)
+                ->whereNull('fr.deleted_at')
+                ->groupBy('fr.created_at','equipo_id' ,'numero_parte','cvw.nombre','fr.id','u.first_name','u.last_name')
+                ->selectRaw("equipo_id,fr.created_at,date_format(fr.created_at,'%Y-%m-%d') as fecha,
+                            date_format(fr.created_at,'%H:%i') as hora,
+                            numero_parte as equipo,cvw.nombre as cliente,fr.id as reporte,
+                            sum(case fd.valor when 'R' then 1 else 0 end ) as valorr,
+                            sum(case fd.valor when 'M' then 1 else 0 end ) as valorm,
+                            sum(case fd.valor when 'OK' then 1 else 0 end ) as valorok,
+                            max(case fd.formulario_campo_id when 968 then fd.valor else '' end) as prioridad,
+                            CONCAT(u.first_name,' ',u.last_name) as registrado_por")
+                ->when( $es_cliente ,function ($q) use($clientes){
+                    $q->whereIn("cliente_id",$clientes);                  
+                })
+                ->when(!empty($request->equipo_id) and $request->equipo_id>0 ,function ($q) use($request){
+                    $q->where("equipo_id",$request->equipo_id);
+                })
+                ->when(!empty($request->cliente_id)  ,function ($q) use($request){
+                    $q->where("cliente_id",$request->cliente_id);
+                })
+                ->when(!empty($request->desde)  ,function ($q) use($request){
+                    $q->where("fr.created_at",'>=',$request->desde);
+                })
+                ->when(!empty($request->hasta)  ,function ($q) use($request){
+                    $q->where("fr.created_at",'<=',$request->hasta);
+                })
+                ->when(!empty($request->tipo)  ,function ($q) use($request){
+                    $q->where("f.tipo",$request->tipo);
+                })
+                ->when(!empty($request->estado)  ,function ($q) use($request){
+                    $q->where("fr.estatus",$request->estado);
+                })
+                ->when(!empty($request->created_by)  ,function ($q) use($request){
+                    $q->where("fr.creado_por",$request->created_by);
+                });
+        if($request->has('datos') && $request->datos=true){
+            return $data->get();
+        }
+        //$data=DB::select($query);
+        return DataTables::of($data)->toJson();
+    }
+
+    public function daily_check_list_export(Request $request){
+        $data['title']="Reportes de daily check ";
+        $data['subtitle']='';
+        $lista=$request->all();
+        $lista['datos']=true;
+        $request_data= (clone $request)->replace($lista);
+
+        $data['lista']=$this->daily_check_list_datatable($request_data);
+
+        return Excel::download(new GenericExcel($data), 'Reporte_daily_check.xlsx');
+    }
+
+    public function asignar_turno(Request $request,$id){
+
+       $equipo1= Equipo::find($id);
+       $equipo1->turnos=$request->turnos;
+       if($equipo1->save()){
+            $request->session()->flash('message.success','Turnos actualizado con exito.');
+       }else{
+            $request->session()->flash('message.error','No se pudo actualizar los turnos.');
+       }
+
+       return redirect(route('equipos.detail',array('id'=>$id)));
+    }
+
+    public function asignar_varios(Request $request,$id){
+
+        $equipo1= Equipo::find($id);
+
+        $equipo1->supervisor_id=$request->supervisor_id;
+        $equipo1->operador_id=$request->operador_id;
+        $equipo1->area=$request->area;
+        if($equipo1->save()){
+             $request->session()->flash('message.success','Datos actualizados con exito.');
+
+        }else{
+             $request->session()->flash('message.error','No se pudo actualizar los datos.');
+        }
+ 
+        return redirect(route('equipos.detail',array('id'=>$id)));
+     }
+
+     public function inoperar_equipo(Request $request,$id){
+        
+        $equipo= Equipo::find($id);
+        $ultimo_hoy=FormularioRegistro::where('equipo_id',$id)->where('formulario_id',2)->where('created_at','>=', Carbon::today())->max('turno_chequeo_diario');
+        $proximo_turno=1;
+        if(!empty($ultimo_hoy))
+            $proximo_turno=$ultimo_hoy;
+        $model = new FormularioRegistro();
+
+        try{
+            DB::transaction(function() use($model, $proximo_turno,$equipo){
+
+                $model->formulario_id = 2;
+                $model->creado_por = Sentinel::getUser()->id;
+                $model->equipo_id = $equipo->id;
+                $model->turno_chequeo_diario =  $proximo_turno;
+                $model->cliente_id = $equipo->cliente_id;
+                $model->estatus = 'P';
+                $model->equipo_status = 'I';
+                $model->repuesto_status = 'L';
+                $model->dia_semana = getDayOfWeek(date('N'));
+                $model->semana = date('W');
+                $model->ano = date('Y');
+    
+                if(!$model->save())
+                {
+                    Throw new \Exception('Hubo un problema y no se creo el registro!');
+                }else{
+                    registraExtra($model->id);
+                    $equipo=Equipo::find($model->equipo_id);
+                    $datos=FormularioData::where('formulario_registro_id',$model->id)->get();
+                    foreach ($datos as $d) {
+                       if($d->tipo=='radio'){
+                        $d->valor='M';
+                        $d->save();
+                       }
+                    }
+
+                }
+            });       
+        }catch (\Exception $e){
+            $request->session()->flash('message.error',$e->getMessage());
+            return redirect(route('inicio'));
+        }
+        return redirect(route('inicio'));
+
+     }
+
+    
 }

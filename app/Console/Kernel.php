@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\notificarChequeoDiario::class,
         \App\Console\Commands\notificarBateriasSinHidratar::class,
         \App\Console\Commands\ImportarEquipos::class,
+        \App\Console\Commands\UbicarFirmasSinArchivo::class,
     ];
 
     /**
@@ -35,9 +36,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('notificar:baterias_no_hidratadas')
              ->dailyAt('07:30')
              ->sendOutputTo(storage_path('logs/notificar_baterias_no_hidratadas-'.$fec.'.log'));
-        $schedule->command('importar:equipos')
+        /*$schedule->command('importar:equipos')
              ->dailyAt('06:30')->dailyAt('12:00')
-             ->sendOutputTo(storage_path('logs/importar-equipos'.$fec.'.log'));;
+             ->sendOutputTo(storage_path('logs/importar-equipos'.$fec.'.log'));;*/
     }
 
     /**

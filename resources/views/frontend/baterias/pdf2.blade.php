@@ -125,7 +125,7 @@ $width=800;$height=1400;
         if($start){
             if(isset($cx[$i]) and !empty($d)){
                 if(in_array($k,['trabajo_realizado_por','trabajo_recibido_por','firma_cliente']) and file_exists(public_path('storage/firmas/'.$d) )){
-                    echo '<img  width="101px" height="30px"  style="position:fixed;z-index:999;left:'.$cx[$i].'px;top:'.$cy[$i].'px"  src="'.public_path('storage/firmas/'.$d).'">';
+                    echo '<img  width="101px" height="30px"  style="position:fixed;z-index:999;left:'.$cx[$i].'px;top:'.$cy[$i].'px"  src="'.img_pdf(public_path('storage/firmas/'.$d)).'">';
                 }  
                 else{
                     echo '<p style="left:'.$cx[$i].'px;top:'.$cy[$i].'px">'.$d.'</p>';

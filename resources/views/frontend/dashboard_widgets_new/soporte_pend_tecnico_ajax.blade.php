@@ -1,7 +1,7 @@
 <div class="card text-white bg-light">
     <div class="card-header">
         <span ><ion-icon name="ticket-outline" size="large" class="text-secondary"></ion-icon>Tickets de soporte técnico<br/>
-        <span class="card-title" id="tot_equipos">{{$totstp}} </span>Pendientes por asignar técnico</span>
+        <span class="card-title" id="tot_equipos_stpat">{{$totstp}}</span> Pendientes por asignar técnico</span>
     </div>
     <div class="card-body text-right" id="soporte_pend_tecnico">
         <div class="spinner-border text-primary text-center" role="status">
@@ -33,9 +33,9 @@
 
     setTimeout(function(){
         $.ajax({
-            url: '{{secure_url('data_inicio')}}',
+            url: '/data_inicio',
             dataType: "html",
-            data: "tag=soporte_pend_tecnico&user_id={{current_user()->id}}",
+            data: "tag=soporte_pend_tecnico&user_id={{current_user()->id}}&tipo={{request()->tipo}}",
             type: 'get',
             success: function(data) {
                 $('#soporte_pend_tecnico').html(data);

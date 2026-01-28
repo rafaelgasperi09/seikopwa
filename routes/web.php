@@ -14,11 +14,9 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', function () {
-
     if(\Sentinel::check()){
         return redirect(route('inicio'));
     }
-
     return view('frontend.login');
 });
 
@@ -39,16 +37,18 @@ Route::put('recovery_password/{id}/{token}', array('as' => 'forgot_password.upda
 
 Route::get('usuarios/{id}/update_password_view', array('as' => 'usuarios.update_password_view', 'uses' => 'UserController@updatePasswordView'))->middleware('sentinel.auth');
 Route::put('usuarios/{id}/password', array('as' => 'usuarios.update_password', 'uses' => 'UserController@updatePassword'))->middleware('sentinel.auth');
+Route::get('usuarios/export', array('as' => 'usuarios.export', 'uses' => 'UserController@export'))->middleware('sentinel.auth');
 /************************************************************************************/
 
 Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), function() {
 
     Route::get('data_inicio', array('as' => 'data_inicio','uses' => 'ApiController@data_inicio'));
     Route::get('logout', array('as' => 'logout','uses' => 'LoginController@logout'));
-    Route::get('/inicio', array('as' => 'inicio', 'uses' => 'DashboardController@index'));
-    Route::get('/inicio2', array('as' => 'inicio2', 'uses' => 'DashboardController@index2'));
+    Route::get('/inicio', array('as' => 'inicio', 'uses' => 'DashboardController@inicio'));
+    Route::get('/inicio1', array('as' => 'inicio1', 'uses' => 'DashboardController@index'));
     Route::get('/dashboard/{id}/detalle', array('as' => 'dashboard.grafico_detalle', 'uses' => 'DashboardController@grafico_detalle'));
     Route::get('/dashboard/{id}', array('as' => 'dashboard.gmp', 'uses' => 'DashboardController@grafica'))->middleware('hasAccess');
+    Route::get('/dashboard/download_excel/{id}', array('as' => 'dashboard.download_excel', 'uses' => 'ApiController@downloadExcel'));
    
     Route::get('/calendar', array('as' => 'equipos.calendar', 'uses' => 'EquiposController@calendar'));
 
@@ -63,6 +63,16 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::get('/reportes_datatable', array('as' => 'equipos.reportes_datatable', 'uses' => 'EquiposController@reportes_datatable'));
    
         Route::get('/reportes_export', array('as' => 'equipos.reportes_export', 'uses' => 'EquiposController@reportes_export'));
+    
+        Route::get('/daily_check_list', array('as' => 'equipos.daily_check_list', 'uses' => 'EquiposController@daily_check_list'));
+        
+        Route::get('/daily_check_list_datatable', array('as' => 'equipos.daily_check_list_datatable', 'uses' => 'EquiposController@daily_check_list_datatable'));
+   
+        Route::get('/daily_check_list_export', array('as' => 'equipos.daily_check_list_export', 'uses' => 'EquiposController@daily_check_list_export'));
+        
+        Route::post('/asignar_turno/{id}', array('as' => 'equipos.asignar_turno', 'uses' => 'EquiposController@asignar_turno'));
+
+        Route::post('/asignar_varios/{id}', array('as' => 'equipos.asignar_varios', 'uses' => 'EquiposController@asignar_varios'));
 
         Route::get('/{sub}/tipo/{id}', array('as' => 'equipos.tipo', 'uses' => 'EquiposController@tipo'));
 
@@ -87,6 +97,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
             Route::put('/{id}/update', array('as' => 'equipos.update_daily_check', 'uses' => 'EquiposController@updateDailyCheck'));
 
             Route::get('/{id}/delete', array('as' => 'equipos.delete_daily_check', 'uses' => 'EquiposController@deleteRegistroForm'));
+
+            Route::get('/{id}/inoperativo', array('as' => 'equipos.inoperativo_daily_check', 'uses' => 'EquiposController@inoperar_equipo'));
         });
 
         Route::group(array('prefix' => 'mantenimiento_preventivo'), function() {
@@ -152,6 +164,7 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
             Route::post('/agregar_status', array('as' => 'equipos.agregar_status', 'uses' => 'EquiposController@agregar_status'));
            
             Route::get('/{id}/delete', array('as' => 'equipos.delete_tecnical_support', 'uses' => 'EquiposController@deleteRegistroForm'));          
+       
 
         });
 
@@ -218,6 +231,12 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
         Route::get('/create', array('as' => 'usuarios.create', 'uses' => 'UserController@create'));
 
+        Route::get('/logs_datatable', array('as' => 'usuarios.logs_datatable', 'uses' => 'UserController@logs_datatable'));
+        
+        Route::get('/logs', array('as' => 'usuarios.logs', 'uses' => 'UserController@logs'))->middleware('hasAccess');
+
+        Route::get('/logs_csv', array('as' => 'usuarios.logs_csv', 'uses' => 'UserController@logs_csv'))->middleware('hasAccess');
+
         Route::get('/search', array('as' => 'usuarios.search', 'uses' => 'UserController@search'));
 
         Route::get('/import', array('as' => 'usuarios.import', 'uses' => 'UserController@import'))->middleware('hasAccess');
@@ -233,6 +252,8 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
         Route::put('/{id}/photo', array('as' => 'usuarios.update_photo', 'uses' => 'UserController@updatePhoto'));
 
         Route::delete('/{id}', array('as' => 'usuarios.delete', 'uses' => 'UserController@delete'))->middleware('hasAccess');
+
+        Route::get('/{id}/activar', array('as' => 'usuarios.activar', 'uses' => 'UserController@activar'));
 
         Route::get('/{id}/notifica', array('as' => 'usuarios.notifica', 'uses' => 'UserController@notifica'));
 
@@ -285,8 +306,36 @@ Route::group(array('middleware' => ['sentinel.auth','passwordIsValid']), functio
 
      Route::post('/push','PushController@store');
 
-
+    Route::group(array('prefix' => 'maestros'), function() {
+        Route::get('/', array('as' => 'maestros.index', 'uses' => 'MaestrosController@index'))->middleware('hasAccess');
+        Route::group(array('prefix' => 'clientes'), function() {
+            Route::get('/', array('as' => 'maestros.clientes.index', 'uses' => 'MaestrosController@clientes'))->middleware('hasAccess');
+            Route::post('store/', array('as' => 'maestros.clientes.store', 'uses' => 'MaestrosController@clientes_store'))->middleware('hasAccess');
+            Route::get('create/', array('as' => 'maestros.clientes.create', 'uses' => 'MaestrosController@clientes_create'));
+            Route::get('edit/{id}', array('as' => 'maestros.clientes.edit', 'uses' => 'MaestrosController@clientes_edit'));
+            Route::post('update/{id}', array('as' => 'maestros.clientes.update', 'uses' => 'MaestrosController@clientes_update'))->middleware('hasAccess');
+            Route::get('delete/{id}', array('as' => 'maestros.clientes.delete', 'uses' => 'MaestrosController@clientes_delete'))->middleware('hasAccess');
+        });
+        Route::group(array('prefix' => 'equipos'), function() {
+            Route::get('/', array('as' => 'maestros.equipos.index', 'uses' => 'MaestrosController@equipos'))->middleware('hasAccess');
+            Route::post('store/', array('as' => 'maestros.equipos.store', 'uses' => 'MaestrosController@equipos_store'))->middleware('hasAccess');
+            Route::get('create/', array('as' => 'maestros.equipos.create', 'uses' => 'MaestrosController@equipos_create'));
+            Route::get('edit/{id}', array('as' => 'maestros.equipos.edit', 'uses' => 'MaestrosController@equipos_edit'));
+            Route::post('update/{id}', array('as' => 'maestros.equipos.update', 'uses' => 'MaestrosController@equipos_update'))->middleware('hasAccess');
+            Route::get('delete/{id}', array('as' => 'maestros.equipos.delete', 'uses' => 'MaestrosController@equipos_delete'))->middleware('hasAccess');
+        });
+        Route::group(array('prefix' => 'componentes'), function() {
+            Route::get('/', array('as' => 'maestros.componentes.index', 'uses' => 'MaestrosController@componentes'))->middleware('hasAccess');
+            Route::post('store/', array('as' => 'maestros.componentes.store', 'uses' => 'MaestrosController@componentes_store'))->middleware('hasAccess');
+            Route::get('create/', array('as' => 'maestros.componentes.create', 'uses' => 'MaestrosController@componentes_create'));
+            Route::get('edit/{id}', array('as' => 'maestros.componentes.edit', 'uses' => 'MaestrosController@componentes_edit'));
+            Route::post('update/{id}', array('as' => 'maestros.componentes.update', 'uses' => 'MaestrosController@componentes_update'))->middleware('hasAccess');
+            Route::get('delete/{id}', array('as' => 'maestros.componentes.delete', 'uses' => 'MaestrosController@componentes_delete'))->middleware('hasAccess');
+        });
+    });
 });
+
+
 
 Route::get('/offline', function () {
     return view('offline');

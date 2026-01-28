@@ -47,7 +47,7 @@ $cFirma='style="border-bottom:1px solid black"';
                     <th>
                     <table align="center" width="100%">
                         <tr>
-                            <td width="120px" ><img align="center" src="{{public_path('/images/logo.png')}}" width="80px"></td>
+                            <td width="120px" ><img align="center" src="{{img_pdf(public_path('/images/logo.png'))}}" width="80px"></td>
                             <td align="center">
                                 <span style="font-size:24px;font-weight:bold">MONTACARGAS Y REPUESTOS, S.A.<span><br/>
                                 <span style="font-size:16px;font-weight:normal">"Satisfacción y confianza"<span><br/>
@@ -422,13 +422,13 @@ $cFirma='style="border-bottom:1px solid black"';
                         <tr>
                             <td {!!$cFirma!!} width="40%">
                                 @if(strlen($datos['det'][0]->trabajo_recibido_por)>0)
-                                <img src="{{storage_path('/app/public/firmas/'.$datos['det'][0]->trabajo_recibido_por)}}" height="60px">
+                                <img src="{{img_pdf(storage_path('app/public/firmas/'.$datos['det'][0]->trabajo_recibido_por))}}" height="60px">
                                 @endif
                             </td>
                             <td>&nbsp;</td>
                             <td {!!$cFirma!!} width="40%">
                             @if(strlen($datos['det'][0]->trabajo_realizado_por)>0)
-                            <img src="{{storage_path('/app/public/firmas/'.$datos['det'][0]->trabajo_realizado_por)}}"  height="60px">
+                            <img src="{{img_pdf(storage_path('app/public/firmas/'.$datos['det'][0]->trabajo_realizado_por))}}"  height="60px">
                             @endif
                             </td>
                         </tr>
@@ -450,7 +450,7 @@ $cFirma='style="border-bottom:1px solid black"';
                         </tr>
                         <tr>
                             <td {!!$cTD!!} colspan="5" ><br/>
-                                <img align="center" src="{{public_path('/storage/mccheck/'.$datos['det'][0]->montacarga_check)}}" width="800px"><br/><br/>
+                                <img align="center" src="{{img_pdf(public_path('/storage/mccheck/'.$datos['det'][0]->montacarga_check))}}" width="800px"><br/><br/>
                             </td>
                         </tr>
                     </thead>

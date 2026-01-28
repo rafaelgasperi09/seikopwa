@@ -18,6 +18,6 @@ class ReportesExport implements FromView
     }
     public function view(): View
     {
-        return view('frontend.equipos.reportes_excel', ['data' => $this->data ]);
+        return view('frontend.equipos.reportes_excel', ['datos' => $this->data ]);
     }
 }

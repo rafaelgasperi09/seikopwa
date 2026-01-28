@@ -12,16 +12,19 @@ class FormularioRegistroPolicy
 
     public function before($user, $ability)
     {
-        if ($user->isOnGroup('programador') or $user->isOnGroup('administrador') ) {
+        if ($user->isOnGroup('programador') or $user->isOnGroup('administrador') or $user->isOnGroup('administrador-cliente') ) {
+            
             return true;
         }
     }
 
     public function edit(User $user,FormularioRegistro $formularoRegistro){
-
-        if($formularoRegistro->estatus <> 'C' 
-            && ($user->isOnGroup('supervisorc') or $user->isSupervisor()))
-            return true;
+        $clientes=explode(',',current_user()->crm_clientes_id);
+        //if(in_array($formularoRegistro->cliente_id,$clientes) or !current_user()->isCliente()){
+            if($formularoRegistro->estatus <> 'C' && ( $user->isSupervisor() ) ){
+                return true;
+            }
+        //}
 
         return false;
     }

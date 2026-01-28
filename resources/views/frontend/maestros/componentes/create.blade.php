@@ -1,0 +1,112 @@
+@extends('frontend.main-layout')
+@section('content')
+    @include('frontend.partials.title', ['title' => 'Componentes', 'subtitle' => 'Crear componente'])
+    <div class="container-fluid">
+        <br/>
+        <div class="container-fluid">
+            <br>
+            {{ Form::open(['method' => 'POST', 'action' => 'MaestrosController@componentes_store', 'role' => 'form', 'class' => 'form-horizontal']) }}
+            
+            @php
+                $clientes = \App\Cliente::pluck('nombre', 'id')->prepend('Seleccione', '');
+                $subEquipos = \App\SubEquipo::pluck('name', 'id')->prepend('Seleccione', '');
+                $proveedores = \App\Cliente::pluck('nombre', 'id')->prepend('Seleccione', '');
+                $tipoComponentes = \App\TipoComponente::pluck('display_name', 'id')->prepend('Seleccione', '');
+                $tipoFiltros = \App\TipoFiltro::pluck('display_name', 'id')->prepend('Seleccione', '');
+                $tipoAditamentos = \App\TipoAditamento::pluck('display_name', 'id')->prepend('Seleccione', '');
+                $tipoEquipoRuedas = \App\TipoEquipoRueda::pluck('display_name', 'id')->prepend('Seleccione', '');
+                $tipoRuedas = \App\TipoRueda::pluck('display_name', 'id')->prepend('Seleccione', '');
+            @endphp
+            
+            @foreach ([
+                'marca' => 'MARCA',
+                'modelo' => 'MODELO',
+                'serie' => 'SERIE',
+                'id_componente' => 'ID COMPONENTE',
+                'numero_parte' => 'NÚMERO DE PARTE',
+                'numero_celda' => 'NÚMERO DE CELDA',
+                'numero_parte_baldwin' => 'NÚMERO PARTE BALDWIN',
+                'numero_parte_millar' => 'NÚMERO PARTE MILLAR',
+                'numero_parte_luberfiner' => 'NÚMERO PARTE LUBERFINER',
+                'numero_parte_fram' => 'NÚMERO PARTE FRAM',
+                'dimension' => 'DIMENSIÓN',
+                'amperaje' => 'AMPERAJE',
+                'voltaje' => 'VOLTAJE',
+                'capacidad_carga' => 'CAPACIDAD DE CARGA',
+                'peso' => 'PESO',
+                'numero_modulo' => 'NÚMERO DE MÓDULO',
+                'entrada_max' => 'ENTRADA MÁXIMA',
+                'salida_max' => 'SALIDA MÁXIMA',
+                'ubicacion' => 'UBICACIÓN',
+                'codigo_superior' => 'CÓDIGO SUPERIOR',
+                'codigo_rhino' => 'CÓDIGO RHINO',
+                'codigo_thombert' => 'CÓDIGO THOMBERT',
+                'sleeve' => 'SLEEVE',
+                'balinera' => 'BALINERA',
+                'pin_roll' => 'PIN ROLL',
+                'bushing' => 'BUSHING',
+                'axle' => 'AXLE',
+                'flatwasher_uno' => 'FLATWASHER 1',
+                'flatwasher_dos' => 'FLATWASHER 2',
+                'flatwasher_tres' => 'FLATWASHER 3',
+                'flatwasher_cuatro' => 'FLATWASHER 4',
+                'fitting' => 'FITTING',
+                'plate_pivot_lh' => 'PLATE PIVOT LH',
+                'plate_pivot_rh' => 'PLATE PIVOT RH',
+                'precio' => 'PRECIO',
+                'precio_alquiler' => 'PRECIO ALQUILER'
+            ] as $field => $label)
+                <div class="form-group boxed col-6">
+                    <div class="input-wrapper">
+                        <label class="label" for="{{ $field }}">{{ $label }}</label>
+                        <input class="form-control" id="{{ $field }}" name="{{ $field }}" type="{{ in_array($field, ['amperaje', 'voltaje', 'capacidad_carga', 'peso', 'precio', 'precio_alquiler']) ? 'number' : 'text' }}">
+                    </div>
+                </div>
+            @endforeach
+            
+            @foreach ([
+                'tipo_componente_id' => $tipoComponentes,
+                'proveedor_id' => $proveedores,
+                'sub_equipo_id' => $subEquipos,
+                'tipo_filtro_id' => $tipoFiltros,
+                'tipo_aditamento_id' => $tipoAditamentos,
+                'tipo_equipo_rueda_id' => $tipoEquipoRuedas,
+                'tipo_rueda_id' => $tipoRuedas,
+                'cliente_id' => $clientes
+            ] as $field => $options)
+                <div class="form-group boxed col-6">
+                    <div class="input-wrapper">
+                        <label class="label" for="{{ $field }}">{{ strtoupper(str_replace('_', ' ', $field)) }}</label>
+                        {{ Form::select($field, $options, null, ['class' => 'form-control']) }}
+                    </div>
+                </div>
+            @endforeach
+            
+            @foreach ([
+                'fecha_creacion' => 'FECHA CREACIÓN',
+                'fecha_inicio_alquiler' => 'FECHA INICIO ALQUILER'
+            ] as $field => $label)
+                <div class="form-group boxed col-6">
+                    <div class="input-wrapper">
+                        <label class="label" for="{{ $field }}">{{ $label }}</label>
+                        <input class="form-control" id="{{ $field }}" name="{{ $field }}" type="date">
+                    </div>
+                </div>
+            @endforeach
+            
+            <div class="form-group boxed col-6">
+                <div class="input-wrapper">
+                    <label class="label" for="descripcion">DESCRIPCIÓN</label>
+                    {{ Form::textarea('descripcion', null, ['class' => 'form-control', 'id' => 'descripcion', 'maxlength' => '255', 'rows' => 3]) }}
+                </div>
+            </div>
+            
+            <div class="form-group boxed col-6 text-right">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <br/><br/><br/>
+            </div>
+            
+            {{ Form::close() }}
+        </div>
+    </div>
+@stop

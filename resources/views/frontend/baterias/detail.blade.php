@@ -41,7 +41,7 @@
         </dl>
         <dl class="row">
             <dt class="col-sm-3">Cliente</dt>
-            <dd class="col-sm-9">{{ $data->cliente->nombre }}</dd>
+            <dd class="col-sm-9">{{ $data->cliente->nombre }} {!! getStatusHtmlEquipos($data->cliente->estado) !!}</dd>
         </dl>
     </div>
 </div>
@@ -78,7 +78,7 @@
                     <div class="right">
                         <a href="{{ route('baterias.download',$data->id) }}" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar PDF</a>
                         <a href="{{ route('baterias.download',$data->id) }}?format=excel" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar Excel</a>
-                        @if(Sentinel::getUser()->hasAccess('baterias.register_in_and_out'))
+                        @if(Sentinel::getUser()->hasAccess('baterias.register_in_and_out') and $data->estado=='A'  and $data->cliente->estado=='A')
                         <a href="{{ route('baterias.register_in_and_out',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                         @endif
                     </div>
@@ -107,7 +107,7 @@
             <div class="tab-pane {{$tab[1]}}" id="servicio_tecnico" role="tabpanel">
                 <div class="section-title">
                     <div class="right">
-                        @if(Sentinel::getUser()->hasAccess('baterias.serv_tec_store'))
+                        @if(Sentinel::getUser()->hasAccess('baterias.serv_tec_store')  and $data->estado=='A'  and $data->cliente->estado=='A')
                         <a href="{{ route('baterias.serv_tec',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                         @endif
                     </div>
@@ -147,7 +147,7 @@
                     <div class="right">
                         <a href="{{ route('baterias.download_hidratacion',$data->id) }}" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar PDF</a>
                         <a href="{{ route('baterias.download_hidratacion',$data->id) }}?format=excel" target="_blank" class="btn btn-primary" > <ion-icon name="download-outline"></ion-icon> Descargar Excel</a>
-                        @if(Sentinel::getUser()->hasAccess('baterias.register_hidratacion'))
+                        @if(Sentinel::getUser()->hasAccess('baterias.register_hidratacion')  and $data->estado=='A' and $data->cliente->estado=='A')
                         <a href="{{ route('baterias.register_hidratacion',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                         @endif
                     </div>

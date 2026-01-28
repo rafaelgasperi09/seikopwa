@@ -23,6 +23,11 @@ $permisos["permissions"] = array(
       "role.edit"=>"Editar Rol",
       "role.update"=>"Actualizar Rol",
   ),
+  "Log de Acceso"=>array(
+      "usuarios.logs"=>"Listar Logs",
+      "usuarios.logs_csv"=>"Exportar Logs CSV",
+  ),
+
   "Equipos"=>array(
     "equipos.index"=>"Listar Equipos",
     "equipos.see_daily_check"=>"Ver Daily Check",
@@ -78,7 +83,20 @@ $permisos["permissions"] = array(
     "sp.parteB"=>"Segunda Parte del proceso (edicion hora entrada)",
     "sp.parteC"=>"Tercera Parte 2 del proceso (edicion hora salida)",
   ),
-  
+  "Maestros"=>array(
+    "maestros.clientes.index"=>"Ver clientes",
+    "maestros.clientes.store"=>"Guardar clientes",
+    "maestros.clientes.update"=>"Actualizar clientes",
+    "maestros.clientes.delete"=>"Borrar clientes",
+    "maestros.equipos.index"=>"Ver Equipos",
+    "maestros.equipos.store"=>"Guardar Equipos",
+    "maestros.equipos.update"=>"Actualizar Equipos",
+    "maestros.equipos.delete"=>"Borrar Equipos",
+    "maestros.componentes.index"=>"Ver Componentes",
+    "maestros.componentes.store"=>"Guardar Componentes",
+    "maestros.componentes.update"=>"Actualizar Componentes",
+    "maestros.componentes.delete"=>"Borrar Componentes",
+  ),
  
 );
 

@@ -8,8 +8,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Componente extends Model
 {
     use SoftDeletes;
-    protected $connection='crm';
+    protected $table = 'componentes';
+    protected $guarded = ['id'];
 
+
+        protected static function booted()
+    {
+            $eliminados=request()->get('eliminados');
+            $estado = 'A';
+            if($eliminados=='true'){
+                $estado='I';
+            }
+            if(!empty(request()->get('estado')) and in_array(request()->get('estado'),['A','I']))
+                $estado = request()->get('estado');
+            $ruta=\Request::route()->getName();
+            
+            self::addGlobalScope('estado', function ($query) use($estado,$ruta){
+               if(!str_contains($ruta,'maestros.componentes.update') and !str_contains($ruta,'maestros.componentes.edit') )
+                    $query->where('componentes.estado',$estado);
+            });
+    
+    }
+    
     public function cliente(){
         return $this->belongsTo(Cliente::class,'cliente_id')->withDefault([
             'nombre'=>'N/A'
@@ -65,5 +85,41 @@ class Componente extends Model
             $horometro=0;
         }
         return $horometro;
+    }
+
+    public function tipoRueda(){
+        return $this->belongsTo(TipoRueda::class,'tipo_rueda_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
+    }
+
+    public function tipoAditamento(){
+        return $this->belongsTo(TipoAditamento::class,'tipo_aditamento_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
+    }
+
+    public function tipoEquipoRueda(){
+        return $this->belongsTo(TipoEquipoRueda::class,'tipo_equipo_rueda_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
+    }
+
+    public function tipoComponente(){
+        return $this->belongsTo(TipoComponente::class,'tipo_componente_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
+    }
+
+    public function subEquipo(){
+        return $this->belongsTo(SubEquipo::class,'sub_equipo_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
+    }
+
+    public function tipoFiltro(){
+        return $this->belongsTo(TipoFiltro::class,'tipo_filtro_id')->withDefault([
+            'display_name'=>'N/A'
+        ]);
     }
 }

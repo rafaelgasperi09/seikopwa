@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ComponenteEquipo extends Model
 {
-    protected $connection='crm';
+
 
     public function equipo(){
         return $this->belongsTo(Equipo::class);

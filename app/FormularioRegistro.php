@@ -164,16 +164,25 @@ class FormularioRegistro extends BaseModel
         }
     }
 
-    public function savePdf($solicitud,$uploadFile=true)
+    public function savePdf($formularioRegistro,$uploadFile=true)
     {
         //$formularioRegistro = FormularioRegistro::find($this->id);
         $equipo = Equipo::find($this->equipo_id);
         $formulario = Formulario::find($this->formulario_id);
         $consecutivo = $horometro = $observacion ='';
-        if($solicitud){
-            $consecutivo = $solicitud->consecutivo_exportable;
-            $horometro = $solicitud->horometro;
-            $observacion = $solicitud->descripcion;
+        if($formularioRegistro){
+            
+            $consecutivo = $formularioRegistro->id;
+            $horometroCampo = $this->formulario()->first()->campos()->where('nombre','horometro')->first();
+            $horoData = $this->data()->whereFormularioCampoId($horometroCampo->id)->first();
+            if($horoData){
+                $horometro = $horoData->valor;
+            }
+            $obsCampo = $this->formulario()->first()->campos()->where('nombre','observacion')->first();
+            $obsData = $this->data()->whereFormularioCampoId($obsCampo->id)->first();
+            if($obsData){
+                $observacion = $obsData->valor;
+            }
         }
           
         
@@ -215,7 +224,7 @@ class FormularioRegistro extends BaseModel
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $pdf->SetXY($x + 3, $y);
-        $clinete = $solicitud->cliente ? $solicitud->cliente->nombre : "";
+        $clinete = $this->cliente() ? $this->cliente()->nombre : "";
         $pdf->Cell(50, 6,  html_entity_decode($clinete), 0, 0, 'L');
         $pdf->Rect($x + 3, $y, 50, 6, 'D', array('all' => $pdf->borderSolid()));
 
@@ -361,11 +370,11 @@ class FormularioRegistro extends BaseModel
                     if( $campo->tipo=='firma' && $this->data()->whereFormularioCampoId($campo->id)->first()){
 
                         if($campo->nombre=='trabajo_recibido_por'){
-                            $firmasPath[1] =  storage_path('/app/public/firmas/'.$this->data()->whereFormularioCampoId($campo->id)->first()->valor);
+                            $firmasPath[1] =  storage_path('app/public/firmas/'.$this->data()->whereFormularioCampoId($campo->id)->first()->valor);
                         }
 
                         if($campo->nombre=='trabajo_realizado_por'){
-                            $firmasPath[2] =  storage_path('/app/public/firmas/'.$this->data()->whereFormularioCampoId($campo->id)->first()->valor);
+                            $firmasPath[2] =  storage_path('app/public/firmas/'.$this->data()->whereFormularioCampoId($campo->id)->first()->valor);
                             $nombreTecnico=$this->data()->whereFormularioCampoId($campo->id)->first()->user_id;
                             $nombreTecnico=User::find( $nombreTecnico)->full_name;
                           
@@ -517,7 +526,7 @@ class FormularioRegistro extends BaseModel
         $y = $pdf->GetY();
         $w = $pdf->getPageWidth() ;
         $pdf->SetXY($x, $y - 6);
-        $pdf->MultiCell(265, 30, $solicitud->descripcion, 1, 'L');
+        $pdf->MultiCell(265, 30, $observacion, 1, 'L');
         $pdf->Ln();
 
         $pdf->SetFont('helvetica', 'B', 14);
@@ -594,6 +603,8 @@ class FormularioRegistro extends BaseModel
                 AND fr.semana=$formularioRegistro->semana
                 AND fr.ano=$formularioRegistro->ano
                 AND fr.equipo_id=$this->equipo_id
+                AND fr.deleted_at is null
+                AND fd.deleted_at is null
                 GROUP BY fr.semana,fr.ano,fd.formulario_campo_id,fc.nombre,fc.tipo ";
        
         $data=\DB::select(DB::Raw($dataQuery));

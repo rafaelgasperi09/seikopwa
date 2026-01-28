@@ -18,7 +18,7 @@
                         <div class="wide-block pt-2 pb-2" id="detail">
                             <dl class="row">
                                 <dt class="col-sm-3">Estado</dt>
-                                <dd class="col-sm-9">{{ $data->estado->display_name }}</dd>
+                                <dd class="col-sm-9">{{ $data->Estado->display_name }}</dd>
                             </dl>
                             <dl class="row">
                                 <dt class="col-sm-3">Tipo</dt>
@@ -57,13 +57,42 @@
                             </dl>
                             <dl class="row">
                                 <dt class="col-sm-3">Cliente</dt>
-                                <dd class="col-sm-9">{{ $data->cliente->nombre }}</dd>
+                                <dd class="col-sm-9">{{ $data->cliente->nombre }}({{$data->cliente_id}})  {!! getStatusHtmlEquipos($data->cliente->estado) !!}</dd>
                             </dl>
                             <dl class="row">
                                 <dt class="col-sm-3">Descripción</dt>
                                 <dd class="col-sm-9">{{ $data->descripcion }}</dd>
                             </dl>
-
+                            <dl class="row">
+                                <dt class="col-sm-3">Turnos</dt>
+                                <dd class="col-sm-9">
+                                <button type="button" id="turnos" class="btn btn-text-default" data-toggle="modal" data-target="#assign_turno_modal">{{ $data->turnos }}</button>
+                                </dd>
+                            </dl>
+                            <dl class="row">
+                                <dt class="col-sm-3">Asignado a</dt>
+                                <dd class="col-sm-6">
+                                    <table class="table">
+                                        <tr>
+                                            <th width="35%">Supervisor Operador</th>
+                                            <th width="35%">Operador</th>
+                                            <th>Area</th>   
+                                            <th> <button type="button" id="turnos" class="badge badge-primary" data-toggle="modal" data-target="#assign_user_modal">ASIGNAR</button></th>   
+                                        </tr>
+                                        <tr>
+                                            <td>{{$data->supervisor->fullname}}</td>
+                                            <td>{{$data->operador->fullname}}</td>
+                                            <td>{{$data->area}}</td>
+                                        </tr>
+                                    </table>
+                                </dd>
+                            </dl>
+                            <dl class="row">
+                                <dt class="col-sm-3">Estado</dt>
+                                <dd class="col-sm-9">
+                                {!! getStatusHtmlEquipos($data->estado) !!}
+                                </dd>
+                            </dl>
                         </div>
                 </div>
             </div>
@@ -116,7 +145,7 @@
                         <div class="tab-pane  {{$tab_content['t1']}} " id="dailycheck" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Daily Check
-                                    @if(\Sentinel::hasAccess('equipos.create_daily_check'))
+                                    @if(\Sentinel::hasAccess('equipos.create_daily_check')  and $data->estado=='A' and $data->cliente->estado=='A')
                                     <div class="right">
                                         <a href="{{ route('equipos.create_daily_check',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                                     </div>
@@ -134,11 +163,11 @@
                         <div class="tab-pane  {{$tab_content['t2']}}" id="mant_prev" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Mantenimiento Preventivo
-                                    @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev'))
+                                    @if(!empty($data->tipo_equipos_id) && \Sentinel::hasAccess('equipos.create_mant_prev')  and $data->estado=='A' and $data->cliente->estado=='A')
                                         <div class="right">
                                             <a href="{{ route('equipos.create_mant_prev',[$data->id,$data->tipo_equipos_id])}}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                                         </div>
-                                    @elseif(!empty($data->tipo_motore_id)  && \Sentinel::hasAccess('equipos.create_mant_prev'))
+                                    @elseif(!empty($data->tipo_motore_id)  && \Sentinel::hasAccess('equipos.create_mant_prev')  and $data->estado=='A' and $data->cliente->estado=='A')
                                         <div class="right">
                                             <a href="{{ route('equipos.create_mant_prev',[$data->id,2])}}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                                         </div>
@@ -159,7 +188,7 @@
                         <div class="tab-pane   {{$tab_content['t3']}}" id="serv_tec" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Reporte Servicio Técnico
-                                    @if(\Sentinel::hasAccess('equipos.create_tecnical_support'))
+                                    @if(\Sentinel::hasAccess('equipos.create_tecnical_support')  and $data->estado=='A' and $data->cliente->estado=='A')
                                     <div class="right">
                                         <a href="{{ route('equipos.create_tecnical_support',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                                     </div>
@@ -178,7 +207,7 @@
                         <div class="tab-pane   {{$tab_content['t4']}}" id="entrega" role="tabpanel">
                             <div class="section full mt-1">
                                 <div class="section-title">Control de entrega de montacargas para alquiler
-                                    @if(\Sentinel::hasAccess('equipos.create_control_entrega'))
+                                    @if(\Sentinel::hasAccess('equipos.create_control_entrega')  and $data->estado=='A' and $data->cliente->estado=='A')
                                     <div class="right">
                                         <a href="{{ route('equipos.create_control_entrega',$data->id) }}" class="btn btn-success" > <ion-icon name="add-circle-outline"></ion-icon> Nuevo Registro</a>
                                     </div>
@@ -202,6 +231,9 @@
             @include('frontend.equipos.modals.asigna_supervisor_gmp')
             @include('frontend.equipos.modals.cotizado_modal')
             @include('frontend.equipos.modals.accidente_modal')
+            @include('frontend.equipos.modal_asignar_turnos',['data'=>$data])
+            @include('frontend.equipos.modal_asignar_a_equipo',['data'=>$data])
+           
         </div>
     </div>
 </div>

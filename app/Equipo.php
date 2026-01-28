@@ -8,9 +8,30 @@ use DB;
 class Equipo extends BaseModel
 {
     use SoftDeletes;
-    protected $connection='crm';
-    protected $table = 'equipos';
 
+    protected $table = 'equipos';
+    protected $guarded = ['id'];
+
+    protected static function booted()
+    {
+            $eliminados=request()->get('eliminados');
+            $estado = 'A';
+            if($eliminados=='true'){
+                $estado='I';
+            }
+       
+            if(!empty(request()->get('estado')) and in_array(request()->get('estado'),['A','I']))
+                $estado = request()->get('estado');
+
+            $ruta=\Request::route()->getName();
+            
+            self::addGlobalScope('estado', function ($query) use($estado,$ruta){
+                 if(!str_contains($ruta,'maestros.equipos.update') and !str_contains($ruta,'maestros.equipos.edit')  and !str_contains($ruta,'inicio')  )
+                    $query->where('equipos.estado',$estado);
+            });
+
+    
+    }
     public function tipo(){
         return $this->belongsTo(TipoEquipo::class,'tipo_equipos_id')->withDefault([
             'display_name'=>'N/A',
@@ -26,13 +47,20 @@ class Equipo extends BaseModel
         return $this->belongsTo(Marca::class,'marca_id');
     }
 
-    public function estado(){
+    public function Estado(){
         return $this->belongsTo(Estado::class,'estado_id');
+    }
+    public function funcion_hidraulica(){
+        return $this->belongsTo(FuncionHidraulica::class,'funcion_hidraulica_id')
+        ->withDefault([
+            'display_name'=>'N/A'
+        ]);;
     }
 
     public function cliente(){
         return $this->belongsTo(Cliente::class,'cliente_id')->withDefault([
-            'nombre'=>'N/A'
+            'nombre'=>'N/A',
+            'estado'=>''
         ]);
     }
 
@@ -89,4 +117,26 @@ class Equipo extends BaseModel
         return $query;
     }
 
+    public function supervisor()
+    {
+        return $this->belongsTo(User::class,'supervisor_id')->withDefault([
+            'fullname'=>'N/A'
+        ]);
+    }
+
+    public function operador()
+    {
+        return $this->belongsTo(User::class,'operador_id')->withDefault([
+            'fullname'=>'N/A'
+        ]);
+    }
+
+    public function es_gmp()
+    {
+        if (str_starts_with($this->numero_parte, 'GM-')) {
+            return true;
+        }else{
+            return false;
+        } 
+    }
 }

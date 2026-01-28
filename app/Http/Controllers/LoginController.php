@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Sentinel;
 use Illuminate\Http\Request;
+use Cookie;
+use App\AccessLog;  
+use App\UserAgent;
 
 class LoginController extends Controller
 {
@@ -49,6 +52,15 @@ class LoginController extends Controller
 
             if ($auth)
             {
+                $rawAgent = $request->userAgent();
+                $userAgent = UserAgent::firstOrCreate(['agent' => $rawAgent]);
+                
+               AccessLog::create([
+                    'user_id'        => $auth->id,
+                    'user_agent_id'  => $userAgent->id,
+                    'ip_address'     => $request->header('CF-Connecting-IP', $request->ip()),
+                    //'url'            => $request->fullUrl(),
+                ]);
                 return redirect(route('inicio'));
             }
             else
@@ -92,12 +104,36 @@ class LoginController extends Controller
         ]);
     }
 
-    public function logout(){
+    public function logout(Request $request)
+    {
+        // Desloguear en Sentinel
+        Sentinel::logout(null, true); // true elimina la sesión persistente en cookies
+
+        // Limpiar la sesión de Laravel
         Session::flush();
-        Sentinel::logout();
-        return redirect(route('login'));
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Borrar cookies manualmente si es necesario
+        Cookie::queue(Cookie::forget('cartalyst_sentinel'));
+
+        return redirect('/')->withHeaders([
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Expires' => 'Sat, 01 Jan 2000 00:00:00 GMT'
+        ]);
     }
 
+    protected function authenticated(Request $request, $user)
+    {
+        if ( !$user->activated ) {
+            auth()->logout();
+
+            return back()->withErrors(['email' => 'Your account is not activated yet, please verify your Account.']);
+        }
+
+        return redirect()->intended($this->redirectPath());
+    }
 
 
 }

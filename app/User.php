@@ -51,12 +51,12 @@ class User extends Authenticatable
         $this->attributes['password'] = bcrypt($password);
     }
 
-    public function getLastLoginAttribute($attr) {
+   /* public function getLastLoginAttribute($attr) {
         if(isset($attr)){
             return Carbon::parse($attr)->format('d-m-Y'); //Change the format to whichever you desire
         }
 
-    }
+    }*/
 
     public function roles(){
         return $this->belongsToMany(Rol::class,'role_users','user_id','role_id');
@@ -112,6 +112,7 @@ class User extends Authenticatable
         if($tipo=='cliente'){
             $a=$this->isOnGroup('supervisorc');
             $b=$this->isOnGroup('supervisor-cliente');
+            $b=$this->isOnGroup('administrador-cliente');
             if($a or $b)
                 return true;
         }
@@ -128,6 +129,16 @@ class User extends Authenticatable
     public function scopeFilterClientes($query)
     {
         $cu=current_user();
+        if(!empty($cu->crm_clientes_id)){
+            $clientes=explode(',',$cu->crm_clientes_id);
+            $query->whereNotNull('crm_clientes_id')
+            ->where(function($q) use($clientes){
+                foreach ($clientes as $id) {
+                    $q->orWhereRaw("FIND_IN_SET(?, crm_clientes_id)", [$id]);
+                }
+            });
+            return $query;
+        }
         if($cu->isSupervisor())
             return $query->whereNull('crm_clientes_id');
 

@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Cliente;
-use App\MontacargaUser;
 use App\User;
 use App\EquiposVw;
 use App\ClientesVw;
@@ -52,11 +51,12 @@ class ImportarEquipos extends Command
         e.modelo       AS modelo,
         e.serie        AS serie,
         c.descripcion  AS cliente,
+        e.turnos,
         e.updated_at 
-      FROM (montacarga.equipos e
-         JOIN montacarga.contactos c)
+      FROM (equipos e
+         JOIN contactos c)
       WHERE e.cliente_id = c.id ';
-        $data=\DB::connection('crm')->select(DB::Raw($dataQuery));
+        $data=\DB::select(DB::Raw($dataQuery));
         $data=json_decode(json_encode($data), true);
         $registros=EquiposVw::get()->count();
         foreach($data as $d){

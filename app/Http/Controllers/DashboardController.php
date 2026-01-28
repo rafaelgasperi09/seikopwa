@@ -21,12 +21,12 @@ class DashboardController extends Controller
         $userFilter=$filtro;
         $filtro_cliente=$filtro;
         if(current_user()->crm_clientes_id){
-              $filtro_cliente=' cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).')';
+              $filtro_cliente=' equipos.cliente_id in ('.limpiar_lista(current_user()->crm_clientes_id).')';
               $userFilter=$filtro_cliente.' and '.$filtro;
         }
           
 
-       $idqeuipos=DB::connection('crm')->select(DB::raw('SELECT id FROM montacarga.equipos WHERE '.$userFilter));
+       $idqeuipos=DB::select(DB::raw('SELECT id FROM equipos WHERE '.$userFilter));
        $lista=array();
        
        foreach($idqeuipos as $k=>$i){
@@ -37,10 +37,10 @@ class DashboardController extends Controller
         $lista='0';
        
 
-       // $equipos=DB::connection('crm')->select(DB::raw('SELECT * FROM montacarga.equipos WHERE cliente_id in ('.$lista.')'));
-       $r=FormularioRegistro::selectRaw('formulario_registro.*,equipos_vw.numero_parte')
+      
+       $r=FormularioRegistro::selectRaw('formulario_registro.*,equipos.numero_parte')
         ->join('formularios','formulario_registro.formulario_id','formularios.id')
-        ->join('equipos_vw','formulario_registro.equipo_id','equipos_vw.id')
+        ->join('equipos','formulario_registro.equipo_id','equipos.id')
          ->whereNotNull('equipo_id')
         ->where('formularios.tipo',$formType)
         ->whereRaw("(formulario_registro.estatus='C' and TIMESTAMPDIFF(DAY,formulario_registro.created_at,now())<=45 or formulario_registro.estatus<>'C')")
@@ -55,18 +55,20 @@ class DashboardController extends Controller
         });
 
 
-      /*if($formType=='serv_tec' and $status=='A')
-      dd($r->get());*/
 
         if($group_cliente)
         {
             $clientes= clone $r;
-            $clientes=$clientes->groupBy('cliente_id')->select('cliente_id')->get();
+
+        $groupby='equipos.cliente_id';
+        /*if($formType=='serv_tec' and $status=='PR' and $filterExtra=" equipo_status='I'"  and current_user()->id==1)
+            $groupby='equipos.cliente_id';*/
+            $clientes=$clientes->groupBy('equipos.cliente_id')->select('equipos.cliente_id')->get();
             return $clientes;
         }
 
         if(empty($pluck)){
-            return  $r->orderBy('cliente_id','asc')->orderBy('created_at','desc')->get();
+            return  $r->orderBy('equipos.cliente_id','asc')->orderBy('created_at','desc')->get();
 
         }else{
             return $r->pluck('equipo_id');
@@ -170,9 +172,10 @@ class DashboardController extends Controller
           $cond1=''; 
         if( current_user()->isOnGroup('supervisorc') or  
             current_user()->isOnGroup('supervisor-cliente') or  
+            current_user()->isOnGroup('administrador-cliente') or  
             current_user()->isOnGroup('programador') ){
             //daily check pendientes de firma supervisor
-            if(current_user()->isOnGroup('supervisorc')){
+            if(current_user()->isOnGroup('supervisorc') or current_user()->isOnGroup('administrador-cliente')){
              $lista=DB::select(DB::Raw("SELECT fd.id FROM formulario_data fd,formulario_campos fc,
                                     formulario_registro fr 
                                     WHERE fd.formulario_campo_id=fc.id 
@@ -282,7 +285,7 @@ class DashboardController extends Controller
         if(!empty($return) and isset($data[$return]))
             return $data[$return];
 
-        return view('frontend.inicio',compact('data'));
+        return view('frontend.inicio1',compact('data'));
     }
 
     function grafica(Request $request,$id){
@@ -366,7 +369,7 @@ class DashboardController extends Controller
                         WHERE e.deleted_at IS NULL $cond  $filtro0
                         ORDER BY e.numero_parte)X order by X.tipo desc,X.numero_parte";
 
-            $res0=DB::connection('crm')->select(DB::Raw($query0));
+            $res0=DB::select(DB::Raw($query0));
             $tabla=to_table($res0);
             return $tabla;
         }
@@ -394,7 +397,7 @@ class DashboardController extends Controller
              ";
         }
 
-        $res0=DB::connection('crm')->select(DB::Raw($query0));
+        $res0=DB::select(DB::Raw($query0));
 
         $data=array();
         foreach($res0 as $r){
@@ -413,7 +416,7 @@ class DashboardController extends Controller
                     SUM( CASE fr.repuesto_status WHEN 'E' THEN 1 ELSE 0 END) AS en_espera,
                     SUM( CASE fr.repuesto_status WHEN 'L' THEN 1 ELSE 0 END) AS listo
                     FROM formulario_registro fr
-                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e ,
+                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos e ,
                     (SELECT equipo_id,cliente_id,MAX(id) AS id FROM formulario_registro
                     WHERE  formulario_id=10 AND deleted_at IS NULL
                     GROUP BY equipo_id,cliente_id)X  
@@ -434,7 +437,7 @@ class DashboardController extends Controller
         SUM( CASE fr.repuesto_status WHEN 'E' THEN 1 ELSE 0 END) AS en_espera,
         SUM( CASE fr.repuesto_status WHEN 'L' THEN 1 ELSE 0 END) AS listo
         FROM formulario_registro fr
-        LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e ,
+        LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos e ,
         (SELECT equipo_id,cliente_id,MAX(id) AS id FROM formulario_registro
         WHERE  formulario_id=10 AND deleted_at IS NULL
         GROUP BY equipo_id,cliente_id)X  
@@ -471,7 +474,7 @@ class DashboardController extends Controller
                     SUM( CASE fr.estatus WHEN 'PR' THEN 1 ELSE 0 END) AS proceso,
                     SUM( CASE fr.estatus WHEN 'C' THEN 1 ELSE 0 END) AS cerrado
                     FROM formulario_registro fr
-                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e 
+                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos e 
                     WHERE   fr.equipo_id=e.id 
                     AND fr.deleted_at IS NULL
                     AND fr.formulario_id=10 
@@ -490,7 +493,7 @@ class DashboardController extends Controller
         SUM( CASE fr.estatus WHEN 'PR' THEN 1 ELSE 0 END) AS proceso,
         SUM( CASE fr.estatus WHEN 'C' THEN 1 ELSE 0 END) AS cerrado
         FROM formulario_registro fr
-        LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e 
+        LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos e 
         WHERE   fr.equipo_id=e.id 
         AND fr.deleted_at IS NULL
         AND fr.formulario_id=10 
@@ -516,7 +519,7 @@ class DashboardController extends Controller
                     SUM( CASE fr.cotizacion WHEN 'A' THEN 1 ELSE 0 END) AS aprobada,
                     SUM( CASE IFNULL(fr.cotizacion,'N') WHEN 'N' THEN 1 ELSE 0 END) AS no_apobada
                     FROM formulario_registro fr
-                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e ,
+                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos e ,
                     (SELECT equipo_id,cliente_id,MAX(id) AS id FROM formulario_registro
                     WHERE  formulario_id=10 AND deleted_at IS NULL
                     GROUP BY equipo_id,cliente_id)X  
@@ -535,7 +538,7 @@ class DashboardController extends Controller
                 SUM( CASE fr.cotizacion WHEN 'A' THEN 1 ELSE 0 END) AS aprobada,
                 SUM( CASE ifnull(fr.cotizacion,'N') when 'N' THEN 1 ELSE 0 END) AS no_apobada
                 FROM formulario_registro fr
-                LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e ,
+                LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos e ,
                 (SELECT equipo_id,cliente_id,MAX(id) AS id FROM formulario_registro
                 WHERE  formulario_id=10 AND deleted_at IS NULL
                 GROUP BY equipo_id,cliente_id)X  
@@ -561,7 +564,7 @@ class DashboardController extends Controller
                     SUM( CASE fr.estatus WHEN 'P' THEN 1 ELSE 0 END) AS pendientes,
                     SUM( CASE fr.estatus WHEN 'C' THEN 1 ELSE 0 END) AS cerrado
                     FROM formulario_registro fr
-                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e ,formularios f
+                    LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos e ,formularios f
                     WHERE   fr.equipo_id=e.id 
                     AND fr.deleted_at IS NULL
                     AND fr.formulario_id=f.id
@@ -579,7 +582,7 @@ class DashboardController extends Controller
         SUM( CASE fr.estatus WHEN 'P' THEN 1 ELSE 0 END) AS pendientes,
         SUM( CASE fr.estatus WHEN 'C' THEN 1 ELSE 0 END) AS cerrado
         FROM formulario_registro fr
-        LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e ,formularios f
+        LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos e ,formularios f
         WHERE   fr.equipo_id=e.id 
         AND fr.deleted_at IS NULL
         AND fr.formulario_id=f.id
@@ -604,7 +607,7 @@ class DashboardController extends Controller
                             SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propias,
                             SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquiladas
                             FROM formulario_registro fr
-                            LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e 
+                            LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos e 
                             WHERE   fr.equipo_id=e.id 
                             AND fr.deleted_at IS NULL
                             AND fr.formulario_id=10
@@ -621,7 +624,7 @@ class DashboardController extends Controller
         SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte NOT LIKE 'GM%') THEN 1 ELSE 0 END) AS propias,
         SUM( case WHEN ( fr.accidente ='S' and  e.numero_parte LIKE 'GM%') THEN 1 ELSE 0 END) AS alquiladas
         FROM formulario_registro fr
-        LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos_vw e 
+        LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id, equipos e 
         WHERE   fr.equipo_id=e.id 
         AND fr.deleted_at IS NULL
         AND fr.formulario_id=10
@@ -643,7 +646,7 @@ class DashboardController extends Controller
             $query6="SELECT CONCAT(u.first_name,' ',u.last_name) AS nombre,
                         e.numero_parte as equipo,
                         COUNT(*) AS total 
-                        FROM formulario_registro fr , equipos_vw e ,users u,role_users ru
+                        FROM formulario_registro fr , equipos e ,users u,role_users ru
                         WHERE fr.equipo_id = e.id AND fr.trabajado_por = u.id 
                         AND u.id = ru.user_id 
                         AND trabajado_por IS NOT NULL 
@@ -659,7 +662,7 @@ class DashboardController extends Controller
             return $tabla;
         }
         $query6="SELECT CONCAT(u.first_name,' ',u.last_name) AS nombre,COUNT(*) AS total 
-        FROM formulario_registro fr , equipos_vw e ,users u,role_users ru
+        FROM formulario_registro fr , equipos e ,users u,role_users ru
         WHERE fr.equipo_id = e.id AND fr.trabajado_por = u.id 
         AND u.id = ru.user_id 
         AND trabajado_por IS NOT NULL 
@@ -681,7 +684,7 @@ class DashboardController extends Controller
         if($request->has('grafica') and $request->grafica=='chart8'){
    
             $query7="SELECT  CONCAT(u.first_name,' ',u.last_name) AS nombre,e.numero_parte,COUNT(*) AS total 
-                    FROM formulario_registro fr , equipos_vw e ,users u,role_users ru
+                    FROM formulario_registro fr , equipos e ,users u,role_users ru
                     WHERE fr.equipo_id = e.id AND fr.trabajado_por = u.id 
                     AND u.id = ru.user_id 
                     AND trabajado_por IS NOT NULL 
@@ -697,7 +700,7 @@ class DashboardController extends Controller
             return $tabla;
         }
         $query7="SELECT CONCAT(u.first_name,' ',u.last_name) AS nombre,COUNT(*) AS total 
-        FROM formulario_registro fr , equipos_vw e ,users u,role_users ru
+        FROM formulario_registro fr , equipos e ,users u,role_users ru
         WHERE fr.equipo_id = e.id AND fr.trabajado_por = u.id 
         AND u.id = ru.user_id 
         AND trabajado_por IS NOT NULL 
@@ -725,7 +728,7 @@ class DashboardController extends Controller
                     SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 1 ELSE 0 END) AS turno1,
                     SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 2 ELSE 0 END) AS turno2,
                     SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 3 ELSE 0 END) AS turno3
-                    FROM equipos_vw e LEFT JOIN formulario_registro fr ON fr.equipo_id=e.id
+                    FROM equipos e LEFT JOIN formulario_registro fr ON fr.equipo_id=e.id
                     LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id
                     WHERE fr.formulario_id=2
                     AND fr.deleted_at IS NULL
@@ -743,7 +746,7 @@ class DashboardController extends Controller
            SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 1 ELSE 0 END) AS turno1,
            SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 2 ELSE 0 END) AS turno2,
            SUM( CASE WHEN fr.turno_chequeo_diario=1 THEN 3 ELSE 0 END) AS turno3
-           FROM equipos_vw e LEFT JOIN formulario_registro fr ON fr.equipo_id=e.id
+           FROM equipos e LEFT JOIN formulario_registro fr ON fr.equipo_id=e.id
            LEFT JOIN clientes_vw c ON  fr.cliente_id=c.id
            WHERE fr.formulario_id=2
             AND fr.deleted_at IS NULL
@@ -763,19 +766,20 @@ class DashboardController extends Controller
 
         $query9="SELECT COUNT(*) AS total FROM equipos e
          WHERE e.deleted_at is null  $filtro0";
-        $res9=DB::connection('crm')->select(DB::Raw($query9));
+        $res9=DB::select(DB::Raw($query9));
         $res9=end($res9);
  
 
         //PROBAR QUERY
         $query10="		SELECT DATE_FORMAT(fr.created_at,'%d-%b')  AS fecha,COUNT(*) AS total 
-        FROM formulario_registro fr,formularios f,equipos_vw e
+        FROM formulario_registro fr,formularios f,equipos e
         WHERE fr.`formulario_id`=f.`id`
         AND fr.equipo_id=e.id
         AND f.`tipo`='daily_check'
         $filtro
         AND DATE_FORMAT(fr.created_at,'%Y%m%d') between '$fdesde'  and '$fhasta'
         GROUP BY DATE_FORMAT(fr.created_at,'%d-%b')";
+        
         $res10=DB::select(DB::Raw($query10));
        
         $res10=collect($res10)->pluck('total','fecha')->toArray();
@@ -886,12 +890,12 @@ class DashboardController extends Controller
         }
     }
 
-    public function index2(Request $request){
+    public function inicio(Request $request){
     $data=array();
     $data['tipo']='gmp';
     if(current_user()->isCliente())
         $data['tipo']='cliente';
-
-      return view('frontend.inicio2',compact('data'));
+    
+      return view('frontend.inicio',compact('data'));
     }
 }

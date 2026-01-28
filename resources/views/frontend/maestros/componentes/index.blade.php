@@ -1,0 +1,184 @@
+@extends('frontend.main-layout')
+@section('content')
+    @include('frontend.partials.title',array('title'=>'Maestros','subtitle'=>'Listado de Componentes'))
+    <div class="section full mt-1">
+    <br/>
+        <div class="table-responsive">
+            <table class="table datatable table-bordered table-striped table-actions">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>MARCA</th>
+                    <th>MODELO</th>
+                    <th>SERIE</th>
+                    <th>ID_COMPONENTE</th>
+                    <th>NUMERO_PARTE</th>
+                    <th>NUMERO_CELDA</th>
+                    <th>NUMERO_PARTE_BALDWIN</th>
+                    <th>NUMERO_PARTE_MILLAR</th>
+                    <th>NUMERO_PARTE_LUBERFINER</th>
+                    <th>NUMERO_PARTE_FRAM</th>
+                    <th>DIMENSION</th>
+                    <th>AMPERAJE</th>
+                    <th>VOLTAJE</th>
+                    <th>CAPACIDAD_CARGA</th>
+                    <th>PESO</th>
+                    <th>FECHA_CREACION</th>
+                    <th>DIA</th>
+                    <th>MES</th>
+                    <th>ANNIO</th>
+                    <th>NUMERO_MODULO</th>
+                    <th>ENTRADA_MAX</th>
+                    <th>SALIDA_MAX</th>
+                    <th>UBICACION</th>
+                    <th>CODIGO_SUPERIOR</th>
+                    <th>CODIGO_RHINO</th>
+                    <th>CODIGO_THOMBERT</th>
+                    <th>SLEEVE</th>
+                    <th>BALINERA</th>
+                    <th>PIN_ROLL</th>
+                    <th>BUSHING</th>
+                    <th>AXLE</th>
+                    <th>FLATWASHER_UNO</th>
+                    <th>FLATWASHER_DOS</th>
+                    <th>FLATWASHER_TRES</th>
+                    <th>FLATWASHER_CUATRO</th>
+                    <th>FITTING</th>
+                    <th>PLATE_PIVOT_LH</th>
+                    <th>PLATE_PIVOT_RH</th>
+                    <th>DESCRIPCION</th>
+                    <th>TIPO_COMPONENTE</th>
+                    <th>SUB_EQUIPO</th>
+                    <th>TIPO_FILTRO_ID</th>
+                    <th>TIPO_ADITAMENTO</th>
+                    <th>TIPO_EQUIPO_RUEDA</th>
+                    <th>TIPO_RUEDA</th>
+                    <th>USUARIO_ID</th>
+                    <th>CREATED_AT</th>
+                    <th>UPDATED_AT</th>
+                    <th>DELETED_AT</th>
+                    <th>PRECIO</th>
+                    <th>PRECIO_ALQUILER</th>
+                    <th>FECHA_INICIO_ALQUILER</th>
+                    <th>CLIENTE_ID</th>
+                    <th>DIA_ADQUISICION</th>
+                    <th>MES_ADQUISICION</th>
+                    <th>ANNIO_ADQUISICION</th>
+                    <th>CUENTA</th>
+                    <th>ACCIONES</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @foreach($data as $d)
+                        <tr>
+                            <td>{{$d->id}}</td>
+                            <td>{{$d->marca}}</td>
+                            <td>{{$d->modelo}}</td>
+                            <td>{{$d->serie}}</td>
+                            <td>{{$d->id_componente}}</td>
+                            <td>{{$d->numero_parte}}</td>
+                            <td>{{$d->numero_celda}}</td>
+                            <td>{{$d->numero_parte_baldwin}}</td>
+                            <td>{{$d->numero_parte_millar}}</td>
+                            <td>{{$d->numero_parte_luberfiner}}</td>
+                            <td>{{$d->numero_parte_fram}}</td>
+                            <td>{{$d->dimension}}</td>
+                            <td>{{$d->amperaje}}</td>
+                            <td>{{$d->voltaje}}</td>
+                            <td>{{$d->capacidad_carga}}</td>
+                            <td>{{$d->peso}}</td>
+                            <td>{{$d->fecha_creacion}}</td>
+                            <td>{{$d->dia}}</td>
+                            <td>{{$d->mes}}</td>
+                            <td>{{$d->annio}}</td>
+                            <td>{{$d->numero_modulo}}</td>
+                            <td>{{$d->entrada_max}}</td>
+                            <td>{{$d->salida_max}}</td>
+                            <td>{{$d->ubicacion}}</td>
+                            <td>{{$d->codigo_superior}}</td>
+                            <td>{{$d->codigo_rhino}}</td>
+                            <td>{{$d->codigo_thombert}}</td>
+                            <td>{{$d->sleeve}}</td>
+                            <td>{{$d->balinera}}</td>
+                            <td>{{$d->pin_roll}}</td>
+                            <td>{{$d->bushing}}</td>
+                            <td>{{$d->axle}}</td>
+                            <td>{{$d->flatwasher_uno}}</td>
+                            <td>{{$d->flatwasher_dos}}</td>
+                            <td>{{$d->flatwasher_tres}}</td>
+                            <td>{{$d->flatwasher_cuatro}}</td>
+                            <td>{{$d->fitting}}</td>
+                            <td>{{$d->plate_pivot_lh}}</td>
+                            <td>{{$d->plate_pivot_rh}}</td>
+                            <td>{{$d->descripcion}}</td>
+                            <td>{{$d->tipoComponente->display_name}}</td>
+                            <td>{{$d->subEquipo->display_name}}</td>
+                            <td>{{$d->tipoFiltro->display_name}}</td>
+                            <td>{{$d->tipoAditamento->display_name}}</td>
+                            <td>{{$d->tipoEquipoRueda->display_name}}</td>
+                            <td>{{$d->tipoRueda->display_name}}</td>
+                            <td>{{$d->usuario_id}}</td>
+                            <td>{{$d->created_at}}</td>
+                            <td>{{$d->updated_at}}</td>
+                            <td>{{$d->deleted_at}}</td>
+                            <td>{{$d->precio}}</td>
+                            <td>{{$d->precio_alquiler}}</td>
+                            <td>{{$d->fecha_inicio_alquiler}}</td>
+                            <td>{{$d->cliente_id}}</td>
+                            <td>{{$d->dia_adquisicion}}</td>
+                            <td>{{$d->mes_adquisicion}}</td>
+                            <td>{{$d->annio_adquisicion}}</td>
+                            <td>{{$d->cuenta}}</td>
+                            <td>
+                                <a href="{{route('maestros.componentes.edit',['id'=>$d->id,'estado'=>$d->estado])}}" class="btn btn-success btn-sm mr-1" title="Editar">
+                                    <ion-icon name="pencil-outline" role="img" class="md hydrated" aria-label="pencil outline"></ion-icon>
+                                </a>
+                                @if(\Sentinel::hasAccess('maestros.componentes.delete') and $d->estado=='A')
+                                <a href="{{route('maestros.componentes.delete',$d->id)}}" class="btn btn-danger btn-sm mr-1" title="Eliminar">
+                                    <ion-icon name="trash-outline" role="img" class="md hydrated" aria-label="pencil outline"></ion-icon>
+                                </a>
+                                @endif
+                            </td>
+                        </tr>
+                       
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        
+        $('.datatable').DataTable({
+            'order':['0','DESC'],
+            "responsive": true,
+        });
+
+        
+        @php
+        $checked='';
+        if(request()->get('eliminados')=='true')
+            $checked='checked="checked"';
+        @endphp
+        var button='<span style="float:right">\
+            <div class="row">\
+                <div class="col-md-6">\
+                    <a href="{{route('maestros.componentes.create')}}" class="btn btn-success ">\
+                    <ion-icon name="add-circle-outline"></ion-icon>Agregar nuevo\
+                    </a>\
+                </div>\
+                 <div class="col-md-6">\
+                   <div class="custom-control custom-switch col-12">\
+                        <input name="eliminados"  type="checkbox" {{$checked}} class="custom-control-input eliminados" id="customSwitch_eliminados">\
+                        <label class="custom-control-label" for="customSwitch_eliminados"></label>\
+                        <div style="font-size:10px">Ver eliminados</div>\
+                    </div>\
+                </div>\
+            </div>\
+            </span>';
+        $('.title').append(button);
+        $('.eliminados').click(function(){
+           // alert($(this).prop('checked'));
+           window.location.href = "{{route('maestros.componentes.index')}}" + "?eliminados="+$(this).prop('checked');
+        });
+    </script>
+@stop
